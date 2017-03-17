@@ -5,15 +5,14 @@ import styles from "./style.css"
 
 export default class Link extends React.Component {
 
-  diagonalPath() {
-    d3.svg.diagonal().projection(d => {
-      return [d.y, d.x]
-    })
+  diagonalPath(linkData) {
+    const diagonal = d3.svg.diagonal().projection(d => [d.y, d.x])
+    return diagonal(linkData)
   }
 
   render() {
     return (
-      <path className={styles.linkBase} d={"M0,0C0,71.9140625 -671.837109375,71.9140625 -671.837109375,143.828125"}></path>
+      <path className={styles.linkBase} d={this.diagonalPath(this.props.linkData)}></path>
     )
   }
 }

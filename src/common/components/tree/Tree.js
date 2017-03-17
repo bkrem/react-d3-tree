@@ -29,7 +29,7 @@ export default class Tree extends React.Component {
 
   generateTree(rawData) {
     const tree = d3.layout.tree()
-      .nodeSize([50 + 40, 50 + 40])
+      .nodeSize([100 + 40, 100 + 40])
       .separation(d => {
         return d._children ? 1.2 : 0.9
       })
