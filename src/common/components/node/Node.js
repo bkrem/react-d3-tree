@@ -5,23 +5,33 @@ import styles from "./style.css"
 export default class Node extends React.Component {
 
   static defaultProps = {
-    primaryLabelColor: "#000",
-    secondaryLabelsColor: "#000",
+    primaryLabelStyle: {fill: "#000"},
+    secondaryLabelsStyle: {fill: "#000"},
+    circleRadius: 10,
+    circleStyle: {
+      stroke: "#000",
+      strokeWidth: 3,
+      fill: "grey"
+    },
   }
 
   static propTypes = {
+    nodeData: PropTypes.object.isRequired,
     primaryLabel: PropTypes.string,
-    primaryLabelColor: PropTypes.string,
+    primaryLabelStyle: PropTypes.object,
     secondaryLabels: PropTypes.object,
-    secondaryLabelsColor: PropTypes.string,
+    secondaryLabelsStyle: PropTypes.object,
     textAnchor: PropTypes.string,
+    circleRadius: PropTypes.number,
+    circleStyle: PropTypes.object,
   }
 
   render() {
+    const {nodeData} = this.props
     return (
-      <g className={styles.node} transform="translate(0,0)">
+      <g className={styles.node} transform={`translate(${nodeData.y},${nodeData.x})`}>
         <text
-          className={styles.primaryLabel}
+          className={styles.primaryLabelBase}
           textAnchor={this.props.textAnchor}
           style={{fill: this.props.primaryLabelColor}}
           x="10"
@@ -31,16 +41,16 @@ export default class Node extends React.Component {
           {this.props.primaryLabel}
         </text>
 
-        <circle r="10" style={{stroke: "rgb(0, 0, 0)", strokeWidth: 3, fill: "grey"}}></circle>
+        <circle r={this.props.circleRadius} style={this.props.circleStyle} />
 
         <text
-          className={styles.secondaryLabels}
+          className={styles.secondaryLabelsBase}
           y="0"
           textAnchor={this.props.textAnchor}
-          style={{fill: this.props.secondaryLabelsColor}}
+          style={this.props.secondaryLabelsStyle}
         >
-          {Object.keys(this.props.secondaryLabels).map(labelKey =>
-            <tspan x="10" dy="1.2em">
+          {Object.keys(this.props.secondaryLabels).map((labelKey, i) =>
+            <tspan x="10" dy="1.2em" key={labelKey + i}>
               {labelKey}: {this.props.secondaryLabels[labelKey]}
             </tspan>
           )}
