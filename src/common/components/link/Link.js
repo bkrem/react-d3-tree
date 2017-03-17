@@ -10,6 +10,11 @@ export default class Link extends React.Component {
     return diagonal(linkData)
   }
 
+  elbowPath(d) {
+    return "M" + d.source.y + "," + d.source.x +
+				"V" + d.target.x + "H" + d.target.y
+  }
+
   render() {
     return (
       <path className={styles.linkBase} d={this.diagonalPath(this.props.linkData)}></path>

@@ -49,7 +49,6 @@ export default class Tree extends React.Component {
 
   render() {
     const {nodes, links} = this.generateTree(this.props.rawData)
-    console.log(links)
     return (
       <div className={styles.treeContainer}>
         <svg width="100%" height="100%">
