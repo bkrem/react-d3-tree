@@ -5,6 +5,7 @@ module.exports = {
     },
     "globals": {
       'require': false,
+      "module": false,
       "process": false,
       "__dirname": false
     },
@@ -34,6 +35,7 @@ module.exports = {
             "error",
             "double"
         ],
+        "react/jsx-uses-vars": [2],
         "semi": [
             "error",
             "never"
