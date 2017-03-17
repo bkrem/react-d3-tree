@@ -1,14 +1,12 @@
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import React from "react"
+import { Route, IndexRoute } from "react-router"
 
-import App from './App';
-import LoginPage from '../../pages/login/page';
-import HomePage from '../../pages/home/page';
+import App from "./App"
+import PlaygroundPage from "../../pages/playground/page"
 
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={LoginPage} />
-    <Route path="home" component={HomePage} />
+    <IndexRoute component={PlaygroundPage} />
   </Route>
-);
+)
