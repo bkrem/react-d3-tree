@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require("webpack")
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 /**
  * This is the Webpack configuration file for local development. It contains
@@ -35,26 +35,26 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('style.css', { allChunks: true })
+    new ExtractTextPlugin("style.css", { allChunks: true })
   ],
 
   // Transform source code using Babel and React Hot Loader
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: ["react-hot", "babel-loader"] },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader') }
+      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader") }
     ]
   },
 
   // Automatically transform files with these extensions
   resolve: {
-    extensions: ['', '.js', '.jsx', '.css']
+    extensions: ["", ".js", ".jsx", ".css"]
   },
 
   // Additional plugins for CSS post processing using postcss-loader
   postcss: [
-    require('autoprefixer'), // Automatically include vendor prefixes
-    require('postcss-nested') // Enable nested rules, like in Sass
+    require("autoprefixer"), // Automatically include vendor prefixes
+    require("postcss-nested") // Enable nested rules, like in Sass
   ]
 
 }
