@@ -57,7 +57,7 @@
     "babel-core": "^6.5.2",
     "babel-polyfill": "^6.5.0",
     "babel-runtime": "^6.5.0",
-    "d3": "^4.7.3",
+    "d3": "3.5.17",
     "express": "^4.12.3",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
