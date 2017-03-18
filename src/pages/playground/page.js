@@ -32,7 +32,7 @@ const treeData = [
 const PlaygroundPage = () => {
   return (
     <div id={styles.playground}>
-      <Tree rawData={treeData} />
+      <Tree data={treeData} />
     </div>
   )
 }

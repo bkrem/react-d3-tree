@@ -17,6 +17,7 @@ export default class Node extends React.Component {
 
   static propTypes = {
     nodeData: PropTypes.object.isRequired,
+    orientation: PropTypes.oneOf(["horizontal", "vertical"]).isRequired,
     primaryLabel: PropTypes.string,
     primaryLabelStyle: PropTypes.object,
     secondaryLabels: PropTypes.object,

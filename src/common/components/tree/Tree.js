@@ -13,8 +13,13 @@ const mockSecondaryLabels = {
 
 export default class Tree extends React.Component {
 
+  static defaultProps = {
+    orientation: "horizontal",
+  }
+
   static propTypes = {
-    rawData: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    orientation: PropTypes.oneOf(["horizontal", "vertical"]).isRequired
   }
 
   /*
@@ -27,28 +32,34 @@ export default class Tree extends React.Component {
   }
   */
 
-  generateTree(rawData) {
+  generateTree(data) {
     const tree = d3.layout.tree()
       .nodeSize([100 + 40, 100 + 40])
       .separation(d => {
         return d._children ? 1.2 : 0.9
       })
-      //.children(function(d) {
-      //  return d.collapsed ? null : d._children
-      //})
+      .children(function(d) {
+        //return d.collapsed ? null : d._children
+        return d.children
+      })
 
-    const root = rawData[0]
+    const root = data[0]
     const nodes = tree.nodes(root)
-    nodes.forEach(node =>
-      node.children ? node._children = node.children : null
-    )
     const links = tree.links(nodes)
+
+    // FIXME Ineffectual; write a recursive walk on `data` to add these
+    // properties before `tree.nodes()` is called.
+    //nodes.forEach(node => {
+    //  node.collapsed = false
+    //  node.children ? node._children = node.children : null
+    //})
 
     return {nodes, links}
   }
 
   render() {
-    const {nodes, links} = this.generateTree(this.props.rawData)
+    const {data, orientation} = this.props
+    const {nodes, links} = this.generateTree(data)
     return (
       <div className={styles.treeContainer}>
         <svg width="100%" height="100%">
@@ -56,6 +67,7 @@ export default class Tree extends React.Component {
             {nodes.map((nodeData, i) =>
               <Node
                 key={nodeData.name + i}
+                orientation={orientation}
                 textAnchor="start"
                 nodeData={nodeData}
                 primaryLabel={nodeData.name}
@@ -65,6 +77,7 @@ export default class Tree extends React.Component {
             {links.map((linkData, i) =>
               <Link
                 key={"link-" + i}
+                orientation={orientation}
                 linkData={linkData}
               />
             )}
