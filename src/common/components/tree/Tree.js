@@ -32,6 +32,17 @@ export default class Tree extends React.Component {
   }
   */
 
+  assignCustomProperties(data) {
+    return data.map(node => {
+      node._collapsed = false
+      if (node.children && node.children.length > 0) {
+        node.children = this.assignCustomProperties(node.children)
+        node._children = node.children
+      }
+      return node
+    })
+  }
+
   generateTree(data) {
     const tree = d3.layout.tree()
       .nodeSize([100 + 40, 100 + 40])
@@ -39,8 +50,7 @@ export default class Tree extends React.Component {
         return d._children ? 1.2 : 0.9
       })
       .children(function(d) {
-        //return d.collapsed ? null : d._children
-        return d.children
+        return d._collapsed ? null : d._children
       })
 
     const root = data[0]
@@ -59,7 +69,8 @@ export default class Tree extends React.Component {
 
   render() {
     const {data, orientation} = this.props
-    const {nodes, links} = this.generateTree(data)
+    const treeData = this.assignCustomProperties(data)
+    const {nodes, links} = this.generateTree(treeData)
     return (
       <div className={styles.treeContainer}>
         <svg width="100%" height="100%">
