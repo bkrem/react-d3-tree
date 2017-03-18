@@ -1,7 +1,16 @@
-.primaryLabelBase {
+.nodeBase {
+  cursor: pointer;
+}
 
+.leafNodeBase {
+  composes: nodeBase;
+}
+
+.primaryLabelBase {
+  fill: #000;
 }
 
 .secondaryLabelsBase {
-
+  fill: #777;
+  font-size: smaller;
 }

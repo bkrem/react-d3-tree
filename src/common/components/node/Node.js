@@ -5,13 +5,16 @@ import styles from "./style.css"
 export default class Node extends React.Component {
 
   static defaultProps = {
-    primaryLabelStyle: {fill: "#000"},
-    secondaryLabelsStyle: {fill: "#000"},
     circleRadius: 10,
     circleStyle: {
       stroke: "#000",
-      strokeWidth: 3,
+      strokeWidth: 2,
       fill: "grey"
+    },
+    leafCircleStyle: {
+      stroke: "#000",
+      strokeWidth: 2,
+      fill: "transparent"
     },
   }
 
@@ -34,7 +37,10 @@ export default class Node extends React.Component {
       `translate(${nodeData.x},${nodeData.y})`
 
     return (
-      <g className={styles.node} transform={transform}>
+      <g
+        className={nodeData.children ? styles.nodeBase : styles.leafNodeBase}
+        transform={transform}
+      >
         <text
           className={styles.primaryLabelBase}
           textAnchor={this.props.textAnchor}
@@ -46,7 +52,10 @@ export default class Node extends React.Component {
           {this.props.primaryLabel}
         </text>
 
-        <circle r={this.props.circleRadius} style={this.props.circleStyle} />
+        <circle
+          r={this.props.circleRadius}
+          style={nodeData.children ? this.props.circleStyle : this.props.leafCircleStyle}
+        />
 
         <text
           className={styles.secondaryLabelsBase}
