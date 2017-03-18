@@ -28,9 +28,13 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const {nodeData} = this.props
+    const {nodeData, orientation} = this.props
+    const transform = orientation === "horizontal" ?
+      `translate(${nodeData.y},${nodeData.x})` :
+      `translate(${nodeData.x},${nodeData.y})`
+
     return (
-      <g className={styles.node} transform={`translate(${nodeData.y},${nodeData.x})`}>
+      <g className={styles.node} transform={transform}>
         <text
           className={styles.primaryLabelBase}
           textAnchor={this.props.textAnchor}
