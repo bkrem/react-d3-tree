@@ -1,15 +1,15 @@
-import React, { PropTypes } from "react"
-import * as d3 from "d3"
+import React, { PropTypes } from "react";
+import * as d3 from "d3";
 
-import styles from "./style.css"
-import Node from "../node/Node"
-import Link from "../link/Link"
+import styles from "./style.css";
+import Node from "../node/Node";
+import Link from "../link/Link";
 
 const mockSecondaryLabels = {
   keyA: "val A",
   keyB: "val B",
   keyC: "val C",
-}
+};
 
 export default class Tree extends React.Component {
 
@@ -34,28 +34,28 @@ export default class Tree extends React.Component {
 
   assignCustomProperties(data) {
     return data.map(node => {
-      node._collapsed = false
+      node._collapsed = false;
       if (node.children && node.children.length > 0) {
-        node.children = this.assignCustomProperties(node.children)
-        node._children = node.children
+        node.children = this.assignCustomProperties(node.children);
+        node._children = node.children;
       }
-      return node
-    })
+      return node;
+    });
   }
 
   generateTree(data) {
     const tree = d3.layout.tree()
       .nodeSize([100 + 40, 100 + 40])
       .separation(d => {
-        return d._children ? 1.2 : 0.9
+        return d._children ? 1.2 : 0.9;
       })
       .children(function(d) {
-        return d._collapsed ? null : d._children
-      })
+        return d._collapsed ? null : d._children;
+      });
 
-    const root = data[0]
-    const nodes = tree.nodes(root)
-    const links = tree.links(nodes)
+    const root = data[0];
+    const nodes = tree.nodes(root);
+    const links = tree.links(nodes);
 
     // FIXME Ineffectual; write a recursive walk on `data` to add these
     // properties before `tree.nodes()` is called.
@@ -64,13 +64,13 @@ export default class Tree extends React.Component {
     //  node.children ? node._children = node.children : null
     //})
 
-    return {nodes, links}
+    return {nodes, links};
   }
 
   render() {
-    const {data, orientation} = this.props
-    const treeData = this.assignCustomProperties(data)
-    const {nodes, links} = this.generateTree(treeData)
+    const {data, orientation} = this.props;
+    const treeData = this.assignCustomProperties(data);
+    const {nodes, links} = this.generateTree(treeData);
     return (
       <div className={styles.treeContainer}>
         <svg width="100%" height="100%">
@@ -95,6 +95,6 @@ export default class Tree extends React.Component {
           </g>
         </svg>
       </div>
-    )
+    );
   }
 }

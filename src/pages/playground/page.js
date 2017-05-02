@@ -1,6 +1,6 @@
 import React from "react" // eslint-disable-line
-import styles from "./style.css"
-import Tree from "../../common/components/tree/Tree"
+import styles from "./style.css";
+import Tree from "../../common/components/tree/Tree";
 
 const treeData = [
   {
@@ -27,14 +27,17 @@ const treeData = [
       }
     ]
   }
-]
+];
 
-const PlaygroundPage = () => {
-  return (
-    <div id={styles.playground}>
-      <Tree data={treeData} />
-    </div>
-  )
+class PlaygroundPage extends React.Component {
+  render() {
+    return (
+      <div id={styles.playground}>
+        <button  />
+        <Tree data={treeData} />
+      </div>
+    );
+  }
 }
 
-export default PlaygroundPage
+export default PlaygroundPage;

@@ -38,7 +38,7 @@ module.exports = {
         "react/jsx-uses-vars": [2],
         "semi": [
             "error",
-            "never"
+            "always"
         ]
     }
 };

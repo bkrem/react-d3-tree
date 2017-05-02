@@ -1,9 +1,8 @@
-import React, { PropTypes } from "react"
+import React, { PropTypes } from "react";
 
-import styles from "./style.css"
+import styles from "./style.css";
 
 export default class Node extends React.Component {
-
   static defaultProps = {
     circleRadius: 10,
     circleStyle: {
@@ -20,7 +19,10 @@ export default class Node extends React.Component {
 
   static propTypes = {
     nodeData: PropTypes.object.isRequired,
-    orientation: PropTypes.oneOf(["horizontal", "vertical"]).isRequired,
+    orientation: PropTypes.oneOf([
+      "horizontal",
+      "vertical"
+    ]).isRequired,
     primaryLabel: PropTypes.string,
     primaryLabelStyle: PropTypes.object,
     secondaryLabels: PropTypes.object,
@@ -30,11 +32,20 @@ export default class Node extends React.Component {
     circleStyle: PropTypes.object,
   }
 
+  collapseNode(node) {
+    node._collapsed = true;
+    if (node._children && node._children.length > 0) {
+      node._children.forEach(child => {
+        this.collapseNode(child);
+      });
+    }
+  }
+
   render() {
-    const {nodeData, orientation} = this.props
+    const {nodeData, orientation} = this.props;
     const transform = orientation === "horizontal" ?
       `translate(${nodeData.y},${nodeData.x})` :
-      `translate(${nodeData.x},${nodeData.y})`
+      `translate(${nodeData.x},${nodeData.y})`;
 
     return (
       <g
@@ -70,6 +81,6 @@ export default class Node extends React.Component {
           )}
         </text>
       </g>
-    )
+    );
   }
 }
