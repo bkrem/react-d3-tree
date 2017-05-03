@@ -56,13 +56,14 @@ module.exports = {
     "newline-per-chained-call": 0,
     "no-confusing-arrow": 0,
     "no-console": 1,
+    "no-param-reassign": "warn",
     "no-use-before-define": 0,
     "no-underscore-dangle": [
       "error",
       {
         "allow": [
-          "_id",
-          "_json"
+          "_children",
+          "_collapsed"
         ]
       }
     ],
@@ -77,9 +78,5 @@ module.exports = {
     "react/jsx-no-target-blank": 0,
     "react/require-extension": 0,
     "react/self-closing-comp": 0,
-    "redux-saga/no-yield-in-race": 2,
-    "redux-saga/yield-effects": 2,
-    "require-yield": 0,
-    "import/no-webpack-loader-syntax": 0
   },
 };
