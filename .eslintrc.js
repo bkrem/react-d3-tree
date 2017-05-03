@@ -67,6 +67,7 @@ module.exports = {
         ]
       }
     ],
+    "no-unused-expressions": "warn",
     "prefer-template": 2,
     "class-methods-use-this": 0,
     "react/forbid-prop-types": 0,

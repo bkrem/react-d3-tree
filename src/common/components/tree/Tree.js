@@ -92,6 +92,7 @@ export default class Tree extends React.Component {
       if (node._children && node._children.length > 0) {
         return this.findTargetNode(nodeId, node._children);
       }
+      return null;
     })[0];
   }
 
@@ -111,6 +112,7 @@ export default class Tree extends React.Component {
   handleNodeToggle(nodeId) {
     const data = clone(this.state.data);
     const targetNode = this.findTargetNode(nodeId, data);
+    console.log(targetNode);
     targetNode._collapsed
       ? this.expandNode(targetNode)
       : this.collapseNode(targetNode);
@@ -124,9 +126,9 @@ export default class Tree extends React.Component {
       <div className={styles.treeContainer}>
         <svg width="100%" height="100%">
           <g transform="translate(200,200)">
-            {nodes.map((nodeData, i) =>
+            {nodes.map((nodeData) =>
               <Node
-                key={nodeData.name + i}
+                key={nodeData.id}
                 orientation={orientation}
                 textAnchor="start"
                 nodeData={nodeData}
@@ -135,9 +137,9 @@ export default class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
               />
             )}
-            {links.map((linkData, i) =>
+            {links.map((linkData) =>
               <Link
-                key={`link-${i}`}
+                key={uuid()}
                 orientation={orientation}
                 linkData={linkData}
               />
