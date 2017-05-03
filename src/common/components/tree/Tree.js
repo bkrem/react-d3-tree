@@ -15,18 +15,6 @@ const mockSecondaryLabels = {
 
 export default class Tree extends React.Component {
 
-  static defaultProps = {
-    orientation: 'horizontal',
-  }
-
-  static propTypes = {
-    data: PropTypes.array.isRequired,
-    orientation: PropTypes.oneOf([
-      'horizontal',
-      'vertical',
-    ]).isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -112,7 +100,6 @@ export default class Tree extends React.Component {
   handleNodeToggle(nodeId) {
     const data = clone(this.state.data);
     const targetNode = this.findTargetNode(nodeId, data);
-    console.log(targetNode);
     targetNode._collapsed
       ? this.expandNode(targetNode)
       : this.collapseNode(targetNode);
@@ -120,7 +107,7 @@ export default class Tree extends React.Component {
   }
 
   render() {
-    const { orientation } = this.props;
+    const { orientation, pathFunc } = this.props;
     const { nodes, links } = this.generateTree();
     return (
       <div className={styles.treeContainer}>
@@ -141,6 +128,7 @@ export default class Tree extends React.Component {
               <Link
                 key={uuid()}
                 orientation={orientation}
+                pathFunc={pathFunc}
                 linkData={linkData}
               />
             )}
@@ -150,3 +138,20 @@ export default class Tree extends React.Component {
     );
   }
 }
+
+Tree.defaultProps = {
+  orientation: 'horizontal',
+  pathFunc: 'diagonal',
+};
+
+Tree.propTypes = {
+  data: PropTypes.array.isRequired,
+  orientation: PropTypes.oneOf([
+    'horizontal',
+    'vertical',
+  ]).isRequired,
+  pathFunc: PropTypes.oneOf([
+    'diagonal',
+    'elbow',
+  ]).isRequired,
+};

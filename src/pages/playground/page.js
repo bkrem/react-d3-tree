@@ -81,9 +81,11 @@ class PlaygroundPage extends React.Component {
     this.state = {
       data: treeData,
       orientation: 'horizontal',
+      pathFunc: 'diagonal',
     };
     this.setTreeData = this.setTreeData.bind(this);
     this.setOrientation = this.setOrientation.bind(this);
+    this.setPathFunc = this.setPathFunc.bind(this);
   }
 
   setTreeData(data) {
@@ -92,6 +94,10 @@ class PlaygroundPage extends React.Component {
 
   setOrientation(orientation) {
     this.setState({ orientation });
+  }
+
+  setPathFunc(pathFunc) {
+    this.setState({ pathFunc });
   }
 
   render() {
@@ -105,9 +111,14 @@ class PlaygroundPage extends React.Component {
           <button onClick={() => this.setOrientation('horizontal')}>{'Left => Right'}</button>
           <button onClick={() => this.setOrientation('vertical')}>{'Top => Bottom'}</button>
         </div>
+        <div>
+          <button onClick={() => this.setPathFunc('diagonal')}>{'Paths: Diagonal'}</button>
+          <button onClick={() => this.setPathFunc('elbow')}>{'Paths: Elbow'}</button>
+        </div>
         <Tree
           data={this.state.data}
           orientation={this.state.orientation}
+          pathFunc={this.state.pathFunc}
         />
       </div>
     );
