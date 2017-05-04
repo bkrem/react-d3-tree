@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf lib/*",
     "build": "npm run clean && webpack --progress --colors --env build",
-    "dev": "webpack --progress --colors --watch --env dev",
+    "dev": "npm run clean && webpack --progress --colors --watch --env dev",
     "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
     "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   },

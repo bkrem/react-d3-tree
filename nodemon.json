@@ -4,5 +4,5 @@
       "src",
       "nodemon.json"
     ],
-    "exec": "npm run build"
+    "exec": "npm run dev"
 }
