@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
+import { layout } from 'd3';
 import clone from 'clone';
 import uuid from 'uuid';
-import * as d3 from 'd3';
 
 import Node from '../Node';
 import Link from '../Link';
@@ -12,11 +12,17 @@ export default class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      initialRender: true,
       data: this.assignCustomProperties(clone(this.props.data)),
     };
     this.findTargetNode = this.findTargetNode.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
+  }
+
+  componentDidMount() {
+    // TODO find better way of setting initialDepth, re-render here is suboptimal
+    this.setState({ initialRender: false }); // eslint-disable-line
   }
 
   componentWillReceiveProps(nextProps) {
@@ -25,29 +31,24 @@ export default class Tree extends React.Component {
     }
   }
 
+  setInitialTreeDepth(nodeSet, initialDepth) {
+    console.log('setInitialTreeDepth: ', initialDepth);
+    nodeSet.forEach((n) => {
+      n._collapsed = n.depth >= initialDepth;
+    });
+  }
+
   assignCustomProperties(data) {
     return data.map((node) => {
       node.id = uuid.v4();
       node._collapsed = false;
+      // if there are children, recursively assign properties to them too
       if (node.children && node.children.length > 0) {
         node.children = this.assignCustomProperties(node.children);
         node._children = node.children;
       }
       return node;
     });
-  }
-
-  generateTree() {
-    const tree = d3.layout.tree()
-      .nodeSize([100 + 40, 100 + 40])
-      .separation((d) => d._children ? 1.2 : 0.9)
-      .children((d) => d._collapsed ? null : d._children);
-
-    const rootNode = this.state.data[0];
-    const nodes = tree.nodes(rootNode);
-    const links = tree.links(nodes);
-
-    return { nodes, links };
   }
 
   // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
@@ -91,6 +92,25 @@ export default class Tree extends React.Component {
     }
   }
 
+  generateTree() {
+    const { initialDepth } = this.props;
+    const tree = layout.tree()
+      .nodeSize([100 + 40, 100 + 40])
+      .separation((d) => d._children ? 1.2 : 0.9)
+      .children((d) => d._collapsed ? null : d._children);
+
+    const rootNode = this.state.data[0];
+    const nodes = tree.nodes(rootNode);
+    const links = tree.links(nodes);
+
+    // set `initialDepth` on first render if specified
+    if (initialDepth !== undefined && this.state.initialRender) {
+      this.setInitialTreeDepth(nodes, initialDepth);
+    }
+
+    return { nodes, links };
+  }
+
   render() {
     const { orientation, translate, pathFunc } = this.props;
     const { nodes, links } = this.generateTree();
@@ -98,6 +118,7 @@ export default class Tree extends React.Component {
       <div className="treeContainer">
         <svg width="100%" height="100%">
           <g transform={`translate(${translate.x},${translate.y})`}>
+
             {nodes.map((nodeData) =>
               <Node
                 key={nodeData.id}
@@ -109,6 +130,7 @@ export default class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
               />
             )}
+
             {links.map((linkData) =>
               <Link
                 key={uuid.v4()}
@@ -117,6 +139,7 @@ export default class Tree extends React.Component {
                 linkData={linkData}
               />
             )}
+
           </g>
         </svg>
       </div>
@@ -129,6 +152,7 @@ Tree.defaultProps = {
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
   collapsible: true,
+  initialDepth: undefined,
 };
 
 Tree.propTypes = {
@@ -146,4 +170,5 @@ Tree.propTypes = {
     'elbow',
   ]),
   collapsible: PropTypes.bool,
+  initialDepth: PropTypes.number,
 };
