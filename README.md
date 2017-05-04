@@ -42,11 +42,11 @@ class MyComponent extends Component {
     return (
       <div>
       
-        ...
+        // ...
       
         <Tree data={myTreeData} />
         
-        ...
+        // ...
         
       </div>
     );
