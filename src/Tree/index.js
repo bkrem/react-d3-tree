@@ -96,7 +96,7 @@ export default class Tree extends React.Component {
     return (
       <div className="treeContainer">
         <svg width="100%" height="100%">
-          <g transform="translate(200,200)">
+          <g transform="translate(200,500)">
             {nodes.map((nodeData) =>
               <Node
                 key={nodeData.id}
@@ -133,9 +133,9 @@ Tree.propTypes = {
   orientation: PropTypes.oneOf([
     'horizontal',
     'vertical',
-  ]).isRequired,
+  ]),
   pathFunc: PropTypes.oneOf([
     'diagonal',
     'elbow',
-  ]).isRequired,
+  ]),
 };
