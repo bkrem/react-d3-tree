@@ -7,12 +7,6 @@ import Node from '../Node';
 import Link from '../Link';
 import './style.css';
 
-const mockSecondaryLabels = {
-  keyA: 'val A',
-  keyB: 'val B',
-  keyC: 'val C',
-};
-
 export default class Tree extends React.Component {
 
   constructor(props) {
@@ -31,17 +25,6 @@ export default class Tree extends React.Component {
     }
   }
 
-
-  /*
-  zoom(treeOffset) {
-    return d3.behavior.zoom().scaleExtent([0.1, 1]).on("zoom", function() {
-      svg.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")")
-    })
-  // Offset so that first pan and zoom does not jump back to the origin
-    .translate([treeOffset.x, treeOffset.y])
-  }
-  */
-
   assignCustomProperties(data) {
     return data.map((node) => {
       node.id = uuid.v4();
@@ -50,6 +33,7 @@ export default class Tree extends React.Component {
         node.children = this.assignCustomProperties(node.children);
         node._children = node.children;
       }
+      console.log(node);
       return node;
     });
   }
@@ -120,7 +104,7 @@ export default class Tree extends React.Component {
                 textAnchor="start"
                 nodeData={nodeData}
                 primaryLabel={nodeData.name}
-                secondaryLabels={mockSecondaryLabels}
+                secondaryLabels={nodeData.attributes}
                 onClick={this.handleNodeToggle}
               />
             )}
