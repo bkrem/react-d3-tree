@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import * as d3 from 'd3';
 
-import styles from './style.css';
+import './style.css';
 
 export default class Link extends React.PureComponent {
 
@@ -33,7 +33,7 @@ export default class Link extends React.PureComponent {
   render() {
     return (
       <path
-        className={styles.linkBase}
+        className="linkBase"
         d={this.generatePathDescription()}
       />
     );

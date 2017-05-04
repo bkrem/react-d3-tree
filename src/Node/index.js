@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { PropTypes } from 'react';
 
-import styles from './style.css';
+import './style.css';
 
 export default class Node extends React.Component {
   static defaultProps = {
@@ -42,12 +43,12 @@ export default class Node extends React.Component {
     return (
       <g
         id={nodeData.id}
-        className={nodeData.children ? styles.nodeBase : styles.leafNodeBase}
+        className={nodeData.children ? "nodeBase" : "leafNodeBase"}
         transform={transform}
         onClick={() => this.props.onClick(nodeData.id)}
       >
         <text
-          className={styles.primaryLabelBase}
+          className="primaryLabelBase"
           textAnchor={this.props.textAnchor}
           style={{ fill: this.props.primaryLabelColor }}
           x="10"
@@ -63,7 +64,7 @@ export default class Node extends React.Component {
         />
 
         <text
-          className={styles.secondaryLabelsBase}
+          className="secondaryLabelsBase"
           y="0"
           textAnchor={this.props.textAnchor}
           style={this.props.secondaryLabelsStyle}

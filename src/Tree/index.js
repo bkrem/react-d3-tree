@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import clone from 'clone';
-import uuid from 'uuid/v4';
+import uuid from 'uuid';
 import * as d3 from 'd3';
 
-import styles from './style.css';
-import Node from '../node/Node';
-import Link from '../link/Link';
+import Node from '../Node';
+import Link from '../Link';
+import './style.css';
 
 const mockSecondaryLabels = {
   keyA: 'val A',
@@ -44,7 +44,7 @@ export default class Tree extends React.Component {
 
   assignCustomProperties(data) {
     return data.map((node) => {
-      node.id = uuid();
+      node.id = uuid.v4();
       node._collapsed = false;
       if (node.children && node.children.length > 0) {
         node.children = this.assignCustomProperties(node.children);
@@ -110,7 +110,7 @@ export default class Tree extends React.Component {
     const { orientation, pathFunc } = this.props;
     const { nodes, links } = this.generateTree();
     return (
-      <div className={styles.treeContainer}>
+      <div className="treeContainer">
         <svg width="100%" height="100%">
           <g transform="translate(200,200)">
             {nodes.map((nodeData) =>
@@ -126,7 +126,7 @@ export default class Tree extends React.Component {
             )}
             {links.map((linkData) =>
               <Link
-                key={uuid()}
+                key={uuid.v4()}
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}

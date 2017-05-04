@@ -3,7 +3,7 @@
 }
 
 .leafNodeBase {
-  composes: nodeBase;
+  cursor: pointer;
 }
 
 .primaryLabelBase {
