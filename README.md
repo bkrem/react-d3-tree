@@ -12,7 +12,7 @@ import Tree from 'react-d3-tree';
 
 const myTreeData = [
   {
-    name: 'Top Level TD1',
+    name: 'Top Level',
     parent: 'null',
     attributes: {
       keyA: 'val A',
