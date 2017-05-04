@@ -12,7 +12,7 @@ function Node(props) {
   return (
     <g
       id={nodeData.id}
-      className={nodeData.children ? 'nodeBase' : 'leafNodeBase'}
+      className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
       transform={transform}
       onClick={() => props.onClick(nodeData.id)}
     >
@@ -29,7 +29,7 @@ function Node(props) {
 
       <circle
         r={props.circleRadius}
-        style={nodeData.children ? props.circleStyle : props.leafCircleStyle}
+        style={nodeData._children ? props.circleStyle : props.leafCircleStyle}
       />
 
       <text
