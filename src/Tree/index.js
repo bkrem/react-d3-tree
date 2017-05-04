@@ -33,7 +33,6 @@ export default class Tree extends React.Component {
         node.children = this.assignCustomProperties(node.children);
         node._children = node.children;
       }
-      console.log(node);
       return node;
     });
   }
@@ -82,12 +81,14 @@ export default class Tree extends React.Component {
   }
 
   handleNodeToggle(nodeId) {
-    const data = clone(this.state.data);
-    const targetNode = this.findTargetNode(nodeId, data);
-    targetNode._collapsed
-      ? this.expandNode(targetNode)
-      : this.collapseNode(targetNode);
-    this.setState({ data });
+    if (this.props.collapsible) {
+      const data = clone(this.state.data);
+      const targetNode = this.findTargetNode(nodeId, data);
+      targetNode._collapsed
+        ? this.expandNode(targetNode)
+        : this.collapseNode(targetNode);
+      this.setState({ data });
+    }
   }
 
   render() {
@@ -127,6 +128,7 @@ Tree.defaultProps = {
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
+  collapsible: true,
 };
 
 Tree.propTypes = {
@@ -143,4 +145,5 @@ Tree.propTypes = {
     'diagonal',
     'elbow',
   ]),
+  collapsible: PropTypes.bool,
 };
