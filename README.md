@@ -7,3 +7,4 @@
 | `orientation` | `string` (enum) | `horizontal` `vertical` |           | `horizontal`   | `horizontal` - Tree expands left-to-right. `vertical` - Tree expands top-to-bottom                                                              |
 | `translate`   | `object`        |                         |           | `{x: 0, y: 0}` | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner)          |
 | `pathFunc`    | `string` (enum) | `diagonal` `elbow`      |           | `diagonal`     | `diagonal` - Renders smooth, curved paths between parent-child nodes. `elbow` - Renders sharp curves at right angles between parent-child nodes |
+| `collapsible` | `bool`          |                         |           | `true`         | Sets whether the tree's nodes can be collapsed by clicking them                                                                                 |
