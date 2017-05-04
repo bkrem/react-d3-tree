@@ -2,7 +2,7 @@
   "name": "react-d3-tree",
   "version": "0.1.0",
   "description": "React component to create interactive D3 tree hierarchies",
-  "main": "lib/react-d3-tree.js",
+  "main": "lib/react-d3-tree.min.js",
   "scripts": {
     "clean": "rm -rf lib/*",
     "build": "npm run clean && webpack --progress --colors --env build",
