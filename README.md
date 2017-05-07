@@ -50,7 +50,7 @@ class MyComponent extends Component {
 }
 ```
 
-## Options
+## Props
 | Property       | Type            | Options                 | Required? | Default        | Description                                                                                                                                     |
 |----------------|-----------------|-------------------------|-----------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | `data`         | `object`        |                         | required  | `undefined`    | Hierarchical object; contains (at least) `name` and `parent` keys.                                                                  |
