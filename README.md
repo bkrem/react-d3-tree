@@ -1,4 +1,5 @@
 # React D3 Tree
+[![Build Status](https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master)](https://travis-ci.org/bkrem/react-d3-tree)
 
 ## Installation
 To install via NPM, run:
