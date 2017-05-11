@@ -8,7 +8,8 @@
     "build": "npm run clean && webpack --progress --colors --env build",
     "dev": "npm run clean && webpack --progress --colors --watch --env dev",
     "lint": "eslint --ignore-path .gitignore . --ignore-pattern lib",
-    "test": "jest --coverage",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:clean": "rimraf ./coverage",
     "test:watch": "jest --watchAll"
   },
