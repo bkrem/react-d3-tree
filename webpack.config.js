@@ -9,7 +9,7 @@ const libraryName = 'react-d3-tree';
 
 const plugins = [];
 
-let outputFile;
+var outputFile; // eslint-disable-line
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
