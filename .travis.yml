@@ -1,0 +1,17 @@
+language: node_js
+
+node_js:
+  - 7
+  - 6
+  - 5
+
+script:
+  - npm run lint
+  - npm run test
+  - npm run build
+
+notifications:
+  email:
+    on_failure: change
+
+# after_success: 'npm run coveralls'
