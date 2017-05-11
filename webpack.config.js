@@ -2,14 +2,14 @@
 
 const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const env = require('yargs').argv.env; // use --env with webpack 2
 
 const libraryName = 'react-d3-tree';
 
-let plugins = [],
-  outputFile;
+const plugins = [];
+
+let outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
