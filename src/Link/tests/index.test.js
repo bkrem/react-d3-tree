@@ -46,7 +46,7 @@ describe('<Link />', () => {
     );
 
     expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
-    expect(elbowComponent.instance().elbowPath).toHaveBeenCalledWith();
+    expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
   });
 
   // it('should return an appropriate diagonalPath according to `props.orientation`', () => {
