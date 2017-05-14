@@ -6,6 +6,11 @@ import './style.css';
 
 class Node extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   componentDidMount() {
     const { x, y } = this.props.nodeData;
 
@@ -45,6 +50,10 @@ class Node extends React.Component {
     .each('end', done);
   }
 
+  handleClick() {
+    this.props.onClick(this.props.nodeData.id);
+  }
+
   render() {
     const { nodeData } = this.props;
     return (
@@ -53,7 +62,7 @@ class Node extends React.Component {
         ref={(n) => { this.node = n; }}
         className={nodeData._children ? 'node nodeBase' : 'node leafNodeBase'}
         transform={this.setTransformOrientation(nodeData.x, nodeData.y)}
-        onClick={() => this.props.onClick(nodeData.id)}
+        onClick={this.handleClick}
       >
         <text
           className="primaryLabelBase"
