@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import { layout } from 'd3';
 import clone from 'clone';
 import uuid from 'uuid';
@@ -117,8 +118,10 @@ export default class Tree extends React.Component {
     return (
       <div className="treeContainer">
         <svg width="100%" height="100%">
-          <g transform={`translate(${translate.x},${translate.y})`}>
-
+          <TransitionGroup
+            component="g"
+            transform={`translate(${translate.x},${translate.y})`}
+          >
             {nodes.map((nodeData) =>
               <Node
                 key={nodeData.id}
@@ -139,8 +142,7 @@ export default class Tree extends React.Component {
                 linkData={linkData}
               />
             )}
-
-          </g>
+          </TransitionGroup>
         </svg>
       </div>
     );

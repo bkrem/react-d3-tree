@@ -1,51 +1,91 @@
 import React, { PropTypes } from 'react';
 import uuid from 'uuid';
+import { select } from 'd3';
 
 import './style.css';
 
-function Node(props) {
-  const { nodeData, orientation } = props;
-  const transform = orientation === 'horizontal' ?
-    `translate(${nodeData.y},${nodeData.x})` :
-    `translate(${nodeData.x},${nodeData.y})`;
+class Node extends React.Component {
 
-  return (
-    <g
-      id={nodeData.id}
-      className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
-      transform={transform}
-      onClick={() => props.onClick(nodeData.id)}
-    >
-      <text
-        className="primaryLabelBase"
-        textAnchor={props.textAnchor}
-        style={props.primaryLabelStyle}
-        x="10"
-        y="-10"
-        dy=".35em"
+  componentDidMount() {
+    const { x, y } = this.props.nodeData;
+
+    select(this.node)
+    .transition()
+    .duration(500)
+    .attr('transform', () => this.setTransformOrientation(x, y));
+  }
+
+  // FIXME unstable re-rendering when regressing to parent coordinates
+  setTransformOrientation(x, y) {
+    const { orientation } = this.props;
+    let transform;
+
+    if (orientation === 'horizontal') {
+      // transform = nodeData.parent !== 'null' ?
+      //   `translate(${nodeData.parent.y},${nodeData.parent.x})` :
+      //   `translate(${nodeData.y},${nodeData.x})`;
+      transform = `translate(${y},${x})`;
+    } else {
+      // transform = nodeData.parent !== 'null' ?
+      //   `translate(${nodeData.parent.x},${nodeData.parent.y})` :
+      //   `translate(${nodeData.x},${nodeData.y})`;
+      transform = `translate(${x},${y})`;
+    }
+
+    return transform;
+  }
+
+  componentWillLeave(done) {
+    const { parent } = this.props.nodeData;
+
+    select(this.node)
+    .transition()
+    .duration(500)
+    .attr('transform', () => this.setTransformOrientation(parent.x, parent.y))
+    .each('end', done);
+  }
+
+  render() {
+    const { nodeData } = this.props;
+    return (
+      <g
+        id={nodeData.id}
+        ref={(n) => { this.node = n; }}
+        className={nodeData._children ? 'node nodeBase' : 'node leafNodeBase'}
+        transform={this.setTransformOrientation(nodeData.x, nodeData.y)}
+        onClick={() => this.props.onClick(nodeData.id)}
       >
-        {props.primaryLabel}
-      </text>
+        <text
+          className="primaryLabelBase"
+          textAnchor={this.props.textAnchor}
+          style={this.props.primaryLabelStyle}
+          x="10"
+          y="-10"
+          dy=".35em"
+        >
+          {this.props.primaryLabel}
+        </text>
 
-      <circle
-        r={props.circleRadius}
-        style={nodeData._children ? props.circleStyle : props.leafCircleStyle}
-      />
+        <circle
+          r={this.props.circleRadius}
+          style={nodeData._children ? this.props.circleStyle : this.props.leafCircleStyle}
+        />
 
-      <text
-        className="secondaryLabelsBase"
-        y="0"
-        textAnchor={props.textAnchor}
-        style={props.secondaryLabelsStyle}
-      >
-        {props.secondaryLabels && Object.keys(props.secondaryLabels).map((labelKey) =>
-          <tspan x="10" dy="1.2em" key={uuid.v4()}>
-            {labelKey}: {props.secondaryLabels[labelKey]}
-          </tspan>
-        )}
-      </text>
-    </g>
-  );
+        <text
+          className="secondaryLabelsBase"
+          y="0"
+          textAnchor={this.props.textAnchor}
+          style={this.props.secondaryLabelsStyle}
+        >
+          {this.props.secondaryLabels && Object.keys(this.props.secondaryLabels).map((labelKey) =>
+            <tspan x="10" dy="1.2em" key={uuid.v4()}>
+              {labelKey}: {this.props.secondaryLabels[labelKey]}
+            </tspan>
+          )}
+        </text>
+      </g>
+    );
+  }
 }
 
 Node.defaultProps = {
