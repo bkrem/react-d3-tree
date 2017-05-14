@@ -60,7 +60,7 @@ class Node extends React.Component {
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
-        className={nodeData._children ? 'node nodeBase' : 'node leafNodeBase'}
+        className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.setTransformOrientation(nodeData.x, nodeData.y)}
         onClick={this.handleClick}
       >
