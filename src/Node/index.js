@@ -17,7 +17,7 @@ class Node extends React.Component {
     select(this.node)
     .transition()
     .duration(500)
-    .attr('transform', () => this.setTransformOrientation(x, y));
+    .attr('transform', this.setTransformOrientation(x, y));
   }
 
   // FIXME unstable re-rendering when regressing to parent coordinates
@@ -46,7 +46,7 @@ class Node extends React.Component {
     select(this.node)
     .transition()
     .duration(500)
-    .attr('transform', () => this.setTransformOrientation(parent.x, parent.y))
+    .attr('transform', this.setTransformOrientation(parent.x, parent.y))
     .each('end', done);
   }
 
