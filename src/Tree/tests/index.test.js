@@ -1,4 +1,5 @@
 import React from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import { shallow, mount } from 'enzyme';
 
 import Node from '../../Node';
@@ -33,7 +34,7 @@ describe('<Tree />', () => {
     },
   ];
 
-  // Clear method spies on prototype before next test
+  // Clear method spies on prototype before each test
   afterEach(() => jest.clearAllMocks());
 
   it('builds a tree on each render', () => {
@@ -71,8 +72,7 @@ describe('<Tree />', () => {
         translate={fixture}
       />
     );
-
-    expect(renderedComponent.find('g').prop('transform')).toBe(expected);
+    expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(expected);
   });
 
   it('passes `props.orientation` to its <Node /> and <Link /> children', () => {
