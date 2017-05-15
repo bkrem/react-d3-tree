@@ -1,6 +1,8 @@
 # React D3 Tree
 [![Build Status](https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master)](https://travis-ci.org/bkrem/react-d3-tree)
 
+React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated & interactive tree graph by leveraging the [D3](https://d3js.org/) library's `tree` layout. 
+
 ## Installation
 To install via NPM, run:
 ```bash
