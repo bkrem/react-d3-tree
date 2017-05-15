@@ -7,24 +7,25 @@ export default class Link extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.generatePathDescription = this.generatePathDescription.bind(this);
+    this.expandPath = this.expandPath.bind(this);
   }
 
   componentDidMount() {
+    console.log('mounted:', this.props.linkData.target.name);
     select(this.link)
     .transition()
     .duration(500)
-    .attr('d', this.generatePathDescription());
+    .attr('d', this.expandPath());
   }
 
   componentWillLeave() {
     const { orientation, linkData } = this.props;
-    const o = { x: linkData.source.x, y: linkData.source.y };
-    console.log(linkData);
+    const origin = { x: linkData.source.x, y: linkData.source.y };
+    console.log('Leaving:', linkData.target.name);
     select(this.link)
     .transition()
     .duration(500)
-    .attr('d', this.diagonalPath({ source: o, target: o }, orientation));
+    .attr('d', this.diagonalPath({ source: origin, target: origin }, orientation));
   }
 
   diagonalPath(linkData, orientation) {
@@ -40,7 +41,7 @@ export default class Link extends React.PureComponent {
       `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
   }
 
-  generatePathDescription() {
+  expandPath() {
     const { linkData, orientation, pathFunc } = this.props;
     return pathFunc === 'diagonal'
       ? this.diagonalPath(linkData, orientation)
@@ -48,11 +49,13 @@ export default class Link extends React.PureComponent {
   }
 
   render() {
+    const { linkData } = this.props;
+    const origin = { x: linkData.source.y, y: linkData.source.x };
     return (
       <path
         ref={(l) => { this.link = l; }}
         className="linkBase"
-        d={this.generatePathDescription()}
+        d={this.diagonalPath({ source: origin, target: origin })}
       />
     );
   }
