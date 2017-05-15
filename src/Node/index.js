@@ -4,7 +4,7 @@ import { select } from 'd3';
 
 import './style.css';
 
-class Node extends React.Component {
+export default class Node extends React.Component {
 
   constructor(props) {
     super(props);
@@ -129,5 +129,3 @@ Node.propTypes = {
   leafCircleStyle: PropTypes.object,
 };
 /* eslint-enable */
-
-export default Node;
