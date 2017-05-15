@@ -15,6 +15,9 @@ describe('<Link />', () => {
     },
   };
 
+  // Clear method spies on prototype before each test
+  afterEach(() => jest.clearAllMocks());
+
   it('should apply the base className', () => {
     const renderedComponent = shallow(
       <Link
