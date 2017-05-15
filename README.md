@@ -49,7 +49,9 @@ class MyComponent extends Component {
     return (
       {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
       <div id="treeWrapper" style={{width: '50em', height: '20em'}}> 
+      
         <Tree data={myTreeData} />
+        
       </div>
     );
   }
