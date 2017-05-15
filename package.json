@@ -4,7 +4,7 @@
   "description": "React component to create interactive D3 tree hierarchies",
   "main": "lib/react-d3-tree.min.js",
   "scripts": {
-    "clean": "rm -rf lib/*",
+    "clean": "rimraf lib/*",
     "build": "npm run clean && webpack --progress --colors --env build",
     "dev": "npm run clean && webpack --progress --colors --watch --env dev",
     "lint": "eslint --ignore-path .gitignore . --ignore-pattern lib",
