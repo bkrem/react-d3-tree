@@ -102,16 +102,31 @@ describe('<Tree />', () => {
     ).toBe(true);
   });
 
-  it('collapses a node when it is clicked', () => {
+  it('collapses a node\'s children when it is clicked in an expanded state', () => {
     jest.spyOn(Tree.prototype, 'handleNodeToggle');
     jest.spyOn(Tree.prototype, 'collapseNode');
     const renderedComponent = mount(
       <Tree data={mockData} />
     );
-    renderedComponent.find(Node).first().simulate('click');
+    renderedComponent.find(Node).first().simulate('click'); // collapse
 
     expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(1);
     expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+  });
+
+  it('expands a node\'s children when it is clicked in a collapsed state', () => {
+    jest.spyOn(Tree.prototype, 'handleNodeToggle');
+    jest.spyOn(Tree.prototype, 'collapseNode');
+    jest.spyOn(Tree.prototype, 'expandNode');
+    const renderedComponent = mount(
+      <Tree data={mockData} />
+    );
+    renderedComponent.find(Node).first().simulate('click'); // collapse
+    renderedComponent.find(Node).first().simulate('click'); // re-expand
+
+    expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
+    expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+    expect(Tree.prototype.expandNode).toHaveBeenCalled();
   });
 
   it('does not collapse a node if `props.collapsible` is false', () => {
@@ -123,9 +138,21 @@ describe('<Tree />', () => {
         collapsible={false}
       />
     );
-
     renderedComponent.find(Node).first().simulate('click');
+
     expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(1);
     expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(0);
+  });
+
+  it('sets tree depth to `props.initialDepth` if specified', () => {
+    jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
+    mount(
+      <Tree
+        data={mockData}
+        initialDepth={1}
+      />
+    );
+
+    expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
   });
 });
