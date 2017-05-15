@@ -10,7 +10,8 @@
     "lint": "eslint --ignore-path .gitignore . --ignore-pattern lib",
     "test": "jest --coverage",
     "test:clean": "rimraf ./coverage",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "jest": {
     "collectCoverageFrom": [
