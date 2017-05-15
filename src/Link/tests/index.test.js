@@ -52,14 +52,12 @@ describe('<Link />', () => {
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
   });
 
-  // it('should return an appropriate diagonalPath according to `props.orientation`', () => {
-  //   jest.spyOn(Link.prototype, 'diagonalPath');
-  //   const renderedComponent = shallow(
-  //     <Link
-  //       linkData={linkData}
-  //       pathFunc="diagonal"
-  //       orientation="horizontal"
-  //     />
-  //   );
-  // });
+  it('should return an appropriate elbowPath according to `props.orientation`', () => {
+    expect(
+      Link.prototype.elbowPath(linkData, 'horizontal')
+    ).toBe(`M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`);
+    expect(
+      Link.prototype.elbowPath(linkData, 'vertical')
+    ).toBe(`M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`);
+  });
 });
