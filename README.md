@@ -61,7 +61,7 @@ class MyComponent extends Component {
 ## Props
 | Property       | Type            | Options                 | Required? | Default        | Description                                                                                                                                     |
 |----------------|-----------------|-------------------------|-----------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `data`         | `object`        |                         | required  | `undefined`    | Hierarchical object; contains (at least) `name` and `parent` keys.                                                                  |
+| `data`         | `array`         |                         | required  | `undefined`    | Single-element array containing hierarchical object (see `myTreeData` above); contains (at least) `name` and `parent` keys.                                                                  |
 | `orientation`  | `string` (enum) | `horizontal` `vertical` |           | `horizontal`   | `horizontal` - Tree expands left-to-right. `vertical` - Tree expands top-to-bottom                                                              |
 | `translate`    | `object`        |                         |           | `{x: 0, y: 0}` | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner)          |
 | `pathFunc`     | `string` (enum) | `diagonal` `elbow`      |           | `diagonal`     | `diagonal` - Renders smooth, curved edges between parent-child nodes. `elbow` - Renders sharp edges at right angles between parent-child nodes |
