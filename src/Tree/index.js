@@ -15,7 +15,7 @@ export default class Tree extends React.Component {
       initialRender: true,
       data: this.assignCustomProperties(clone(this.props.data)),
     };
-    this.findTargetNode = this.findTargetNode.bind(this);
+    this.findNodesById = this.findNodesById.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
   }
@@ -52,20 +52,22 @@ export default class Tree extends React.Component {
   }
 
   // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
-  findTargetNode(nodeId, nodeSet) {
-    const hits = nodeSet.filter((node) => node.id === nodeId);
-
+  findNodesById(nodeId, nodeSet, hits) {
     if (hits.length > 0) {
-      const targetNode = hits[0];
-      return targetNode;
+      return hits;
     }
 
-    return nodeSet.map((node) => {
+    hits = hits.concat(nodeSet.filter((node) => node.id === nodeId));
+
+    nodeSet.forEach((node) => {
       if (node._children && node._children.length > 0) {
-        return this.findTargetNode(nodeId, node._children);
+        hits = this.findNodesById(nodeId, node._children, hits);
+        return hits;
       }
-      return null;
-    })[0];
+      return hits;
+    });
+
+    return hits;
   }
 
   collapseNode(node) {
@@ -84,7 +86,8 @@ export default class Tree extends React.Component {
   handleNodeToggle(nodeId) {
     if (this.props.collapsible) {
       const data = clone(this.state.data);
-      const targetNode = this.findTargetNode(nodeId, data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
