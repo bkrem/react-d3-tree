@@ -11,12 +11,14 @@
     "test": "npm run lint && jest --coverage",
     "test:clean": "rimraf ./coverage",
     "test:watch": "jest --watchAll",
+    "show:cov": "open coverage/lcov-report/index.html",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!src/index.js",
+      "!src/util/*",
       "!src/**/*.test.{js,jsx}",
       "!playground/*"
     ],
