@@ -16,7 +16,7 @@ export default class Tree extends React.Component {
       data: this.assignInternalProperties(clone(this.props.data)),
       zoom: undefined,
     };
-    this.findTargetNode = this.findTargetNode.bind(this);
+    this.findNodesById = this.findNodesById.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
   }
@@ -100,29 +100,31 @@ export default class Tree extends React.Component {
 
 
   /**
-   * findTargetNode - Recursively walks a set of nodes (`nodeSet`) and its
-   * children until a `node.id` that matches `nodeId` param is found.
+   * findNodesById - Description
    *
-   * @param {string} nodeId  The `node.id` being searched for
+   * @param {string} nodeId The `node.id` being searched for
    * @param {array} nodeSet Array of `node` objects
+   * @param {array} hits Accumulator for matches, passed between recursive calls
    *
-   * @return {object} Returns the targeted `node` object
+   * @return {array} Set of nodes matching `nodeId`
    */
    // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
-  findTargetNode(nodeId, nodeSet) {
-    const hits = nodeSet.filter((node) => node.id === nodeId);
-
+  findNodesById(nodeId, nodeSet, hits) {
     if (hits.length > 0) {
-      const targetNode = hits[0];
-      return targetNode;
+      return hits;
     }
 
-    return nodeSet.map((node) => {
+    hits = hits.concat(nodeSet.filter((node) => node.id === nodeId));
+
+    nodeSet.forEach((node) => {
       if (node._children && node._children.length > 0) {
-        return this.findTargetNode(nodeId, node._children);
+        hits = this.findNodesById(nodeId, node._children, hits);
+        return hits;
       }
-      return null;
-    })[0];
+      return hits;
+    });
+
+    return hits;
   }
 
 
@@ -169,7 +171,8 @@ export default class Tree extends React.Component {
   handleNodeToggle(nodeId) {
     if (this.props.collapsible) {
       const data = clone(this.state.data);
-      const targetNode = this.findTargetNode(nodeId, data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
