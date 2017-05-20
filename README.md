@@ -1,9 +1,6 @@
 # React D3 Tree
 [![Build Status](https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master)](https://travis-ci.org/bkrem/react-d3-tree)
-[![Coverage Status](https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master)](https://coveralls.io/github/bkrem/react-d3-tree?branch=master)
-
-> :construction: :construction:  
-> This library is work-in-progress, meaning breaking changes/major version bumps are likely until indicated otherwise.  
+[![Coverage Status](https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master)](https://coveralls.io/github/bkrem/react-d3-tree?branch=master) 
 
 React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated & interactive tree graph by leveraging [D3](https://d3js.org/)'s `tree` layout.
 
@@ -62,11 +59,13 @@ class MyComponent extends Component {
 ```
 
 ## Props
-| Property       | Type            | Options                 | Required? | Default        | Description                                                                                                                                     |
-|----------------|-----------------|-------------------------|-----------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `data`         | `array`         |                         | required  | `undefined`    | Single-element array containing hierarchical object (see `myTreeData` above); contains (at least) `name` and `parent` keys.                                                                  |
-| `orientation`  | `string` (enum) | `horizontal` `vertical` |           | `horizontal`   | `horizontal` - Tree expands left-to-right. `vertical` - Tree expands top-to-bottom                                                              |
-| `translate`    | `object`        |                         |           | `{x: 0, y: 0}` | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner)          |
-| `pathFunc`     | `string` (enum) | `diagonal` `elbow`      |           | `diagonal`     | `diagonal` - Renders smooth, curved edges between parent-child nodes. `elbow` - Renders sharp edges at right angles between parent-child nodes |
-| `collapsible`  | `bool`          |                         |           | `true`         | Sets whether the tree's nodes can be collapsed by clicking them                                                                                 |
-| `initialDepth` | `number`        | `0` or greater          |           | `undefined`    | Sets the maximum node depth to which the tree is expanded on its initial render; tree renders to full depth if prop is omitted.                   |
+| Property       | Type            | Options                 | Required? | Default                 | Description                                                                                                                                     |
+|----------------|-----------------|-------------------------|-----------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `data`         | `array`         |                         | required  | `undefined`             | Single-element array containing hierarchical object (see `myTreeData` above); contains (at least) `name` and `parent` keys.                     |
+| `orientation`  | `string` (enum) | `horizontal` `vertical` |           | `horizontal`            | `horizontal` - Tree expands left-to-right. `vertical` - Tree expands top-to-bottom                                                              |
+| `translate`    | `object`        |                         |           | `{x: 0, y: 0}`          | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner)          |
+| `pathFunc`     | `string` (enum) | `diagonal` `elbow`      |           | `diagonal`              | `diagonal` - Renders smooth, curved edges between parent-child nodes. `elbow` - Renders sharp edges at right angles between parent-child nodes  |
+| `collapsible`  | `bool`          |                         |           | `true`                  | Toggles ability to collapse/expand the tree's nodes by clicking them                                                                            |
+| `initialDepth` | `number`        | `0` or greater          |           | `undefined`             | Sets the maximum node depth to which the tree is expanded on its initial render; tree renders to full depth if prop is omitted.                 |
+| `zoomable`     | `bool`          |                         |           | `true`                  | Toggles ability to zoom in/out on the Tree by scaling the SVG element according to `props.scaleExtent`                                          |
+| `scaleExtent` | `object`         |                         |           | `{min: 0.1, max: 1}`    | Sets the minimum/maximum extent to which the tree can be scaled if `props.zoomable` is true                                                     |
