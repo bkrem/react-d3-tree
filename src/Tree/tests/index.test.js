@@ -155,4 +155,23 @@ describe('<Tree />', () => {
 
     expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
   });
+
+  it('allows zooming in/out according to `props.scaleExtent` if `props.zoomable`', () => {
+    const zoomableComponent = mount(
+      <Tree
+        data={mockData}
+      />
+    );
+    const nonZoomableComponent = mount(
+      <Tree
+        data={mockData}
+        zoomable={false}
+      />
+    );
+
+    zoomableComponent.find('svg').simulate('touchmove');
+
+    expect(zoomableComponent.find('svg').prop('transform')).toBeDefined();
+    expect(nonZoomableComponent.find('svg').prop('transform')).toBeUndefined();
+  });
 });
