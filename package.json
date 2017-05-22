@@ -8,10 +8,11 @@
     "build": "npm run clean && webpack --progress --colors --env build",
     "dev": "npm run clean && webpack --progress --colors --watch --env dev",
     "lint": "eslint .",
-    "test": "npm run lint && jest --coverage",
+    "test": "npm run lint && jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
     "test:watch": "jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "show:cov": "open coverage/lcov-report/index.html"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -63,6 +64,7 @@
     "react-addons-test-utils": "15.4.2",
     "react-dom": "15.4.2",
     "regenerator-runtime": "^0.10.5",
+    "rimraf": "^2.6.1",
     "style-loader": "^0.17.0",
     "webpack": "2.4.1",
     "yargs": "7.1.0"
