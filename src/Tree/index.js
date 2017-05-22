@@ -206,7 +206,7 @@ export default class Tree extends React.Component {
   }
 
   render() {
-    const { orientation, translate, pathFunc } = this.props;
+    const { orientation, translate, pathFunc, depthFactor } = this.props;
     const { nodes, links } = this.generateTree();
     return (
       <div className="treeContainer">
@@ -225,6 +225,7 @@ export default class Tree extends React.Component {
               <Node
                 key={nodeData.id}
                 orientation={orientation}
+                depthFactor={depthFactor}
                 textAnchor="start"
                 nodeData={nodeData}
                 primaryLabel={nodeData.name}
@@ -253,6 +254,7 @@ Tree.defaultProps = {
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
+  depthFactor: undefined,
   collapsible: true,
   initialDepth: undefined,
   zoomable: true,
@@ -273,6 +275,7 @@ Tree.propTypes = {
     'diagonal',
     'elbow',
   ]),
+  depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,
   zoomable: PropTypes.bool,
