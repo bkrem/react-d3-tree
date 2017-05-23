@@ -1,8 +1,15 @@
 # React D3 Tree
 [![Build Status](https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master)](https://travis-ci.org/bkrem/react-d3-tree)
-[![Coverage Status](https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master)](https://coveralls.io/github/bkrem/react-d3-tree?branch=master) 
+[![Coverage Status](https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master)](https://coveralls.io/github/bkrem/react-d3-tree?branch=master)
+[![npm](https://img.shields.io/npm/v/react-d3-tree.svg)](https://www.npmjs.com/package/react-d3-tree)
 
 React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated & interactive tree graph by leveraging [D3](https://d3js.org/)'s `tree` layout.
+
+## Contents
+- [Demo](#demo)
+- [Installation](#installation)
+- [Minimal example](#minimal-example)
+- [Props](#props)
 
 ## Demo
 - Current release (stable): https://bkrem.github.io/react-d3-tree/ 
