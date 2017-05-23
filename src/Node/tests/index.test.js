@@ -7,11 +7,12 @@ describe('<Node />', () => {
   const nodeData = {
     id: 'abc123',
     name: 'mockNode',
+    depth: 3,
     x: 123,
     y: 321,
   };
 
-  it('should have the correct `id` attribute value', () => {
+  it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(
       <Node
         nodeData={nodeData}
@@ -22,7 +23,7 @@ describe('<Node />', () => {
     expect(renderedComponent.find('g').prop('id')).toBe(nodeData.id);
   });
 
-  it('should apply correct base className if `nodeData._children` is defined', () => {
+  it('applies correct base className if `nodeData._children` is defined', () => {
     const noChildrenComponent = shallow(
       <Node
         nodeData={nodeData}
@@ -40,7 +41,7 @@ describe('<Node />', () => {
     expect(withChildrenComponent.prop('className')).toBe('nodeBase');
   });
 
-  it('should apply correct <circle> style prop if `nodeData._children` is defined', () => {
+  it('applies correct <circle> style prop if `nodeData._children` is defined', () => {
     const leafCircleStyle = { fill: 'blue' };
     const circleStyle = { fill: 'green' };
     const noChildrenComponent = shallow(
@@ -64,7 +65,7 @@ describe('<Node />', () => {
     expect(withChildrenComponent.find('circle').prop('style')).toBe(circleStyle);
   });
 
-  it('should apply correct `transform` prop, depending on parent `orientation`', () => {
+  it('applies correct `transform` prop, depending on parent `orientation`', () => {
     const horizontalTransform = `translate(${nodeData.y},${nodeData.x})`;
     const verticalTransform = `translate(${nodeData.x},${nodeData.y})`;
     const horizontalComponent = shallow(
@@ -96,7 +97,7 @@ describe('<Node />', () => {
     expect(renderedComponent.prop('onClick')).toBeDefined();
   });
 
-  it('should handle click events and pass the nodeId to onClick handler', () => {
+  it('handles click events and pass the nodeId to onClick handler', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = shallow(
       <Node
@@ -110,7 +111,7 @@ describe('<Node />', () => {
     expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
   });
 
-  it('should map each `props.secondaryLabels` to a <tspan> element', () => {
+  it('maps each `props.secondaryLabels` to a <tspan> element', () => {
     const fixture = { keyA: 'valA', keyB: 'valB' };
     const renderedComponent = shallow(
       <Node
@@ -129,5 +130,19 @@ describe('<Node />', () => {
     expect(textNode.findWhere((n) =>
       n.text() === `keyB: ${fixture.keyB}`).length
     ).toBe(1);
+  });
+
+  it('mutates a node\'s `y` property according to `depthFactor`, when specified', () => {
+    const depthFactor = 100;
+    const expectedY = nodeData.depth * depthFactor;
+    const renderedComponent = shallow(
+      <Node
+        nodeData={nodeData}
+        orientation="vertical"
+        depthFactor={depthFactor}
+      />
+    );
+
+    expect(renderedComponent.prop('transform')).toBe(`translate(${nodeData.x},${expectedY})`);
   });
 });

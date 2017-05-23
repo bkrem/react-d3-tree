@@ -4,7 +4,13 @@ import uuid from 'uuid';
 import './style.css';
 
 function Node(props) {
-  const { nodeData, orientation } = props;
+  const { nodeData, orientation, depthFactor } = props;
+
+  // Normalise node position for fixed depth
+  if (depthFactor) {
+    nodeData.y = nodeData.depth * depthFactor;
+  }
+
   const transform = orientation === 'horizontal' ?
     `translate(${nodeData.y},${nodeData.x})` :
     `translate(${nodeData.x},${nodeData.y})`;
@@ -70,6 +76,7 @@ Node.propTypes = {
     'vertical',
   ]).isRequired,
   onClick: PropTypes.func,
+  depthFactor: PropTypes.number,
   primaryLabel: PropTypes.string,
   primaryLabelStyle: PropTypes.object,
   secondaryLabels: PropTypes.object,
