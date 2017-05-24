@@ -2,6 +2,15 @@ import { csv, json } from 'd3';
 import uuid from 'uuid';
 
 
+/**
+ * _transformToHierarchy - Transforms a flat array of parent-child links
+ * into a hierarchy.
+ *
+ * @param {array<object>} links           Set of parent-child link objects
+ * @param {array<string>|undefined} attributeFields Set of `link` fields to be used as attributes
+ *
+ * @return {array<object>} Single-element array containing the root node object.
+ */
 function _transformToHierarchy(links, attributeFields) {
   const nodesByName = {};
 
@@ -54,10 +63,18 @@ function _transformToHierarchy(links, attributeFields) {
 }
 
 
-function parseCSV(csvFile, attributeFields) {
+/**
+ * parseCSV - Parses a CSV file into a hierarchy structure.
+ *
+ * @param {string} csvFilePath     Path to CSV file to be parsed.
+ * @param {array<string>|undefined} attributeFields Set of `link` fields to be used as attributes
+ *
+ * @return {Promise} Returns hierarchy array if resolved, error object if rejected.
+ */
+function parseCSV(csvFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      csv(csvFile, (data) => resolve(_transformToHierarchy(data, attributeFields))); // lol hello Lisp
+      csv(csvFilePath, (data) => resolve(_transformToHierarchy(data, attributeFields))); // lol hello Lisp
     } catch (err) {
       reject(err);
     }
@@ -65,10 +82,17 @@ function parseCSV(csvFile, attributeFields) {
 }
 
 
-function parseJSON(jsonFile) {
+/**
+ * parseJSON - Parses a hierarchical JSON file that requires no further transformation.
+ *
+ * @param {string} jsonFilePath Path to JSON file to be parsed.
+ *
+ * @return {Promise} Returns hierarchy array if resolved, error object if rejected.
+ */
+function parseJSON(jsonFilePath) {
   return new Promise((resolve, reject) => {
     try {
-      json(jsonFile, (data) => resolve([data]));
+      json(jsonFilePath, (data) => resolve([data]));
     } catch (err) {
       reject(err);
     }
@@ -76,10 +100,18 @@ function parseJSON(jsonFile) {
 }
 
 
-function parseFlatJSON(jsonFile, attributeFields) {
+/**
+ * parseFlatJSON - Parses a flat JSON file into a hierarchy structure.
+ *
+ * @param {string} jsonFilePath Path to flat JSON file to be parsed.
+ * @param {array<string>|undefined} attributeFields Set of `link` fields to be used as attributes
+ *
+ * @return {Promise} Returns hierarchy array if resolved, error object if rejected.
+ */
+function parseFlatJSON(jsonFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      json(jsonFile, (data) => resolve(_transformToHierarchy(data, attributeFields)));
+      json(jsonFilePath, (data) => resolve(_transformToHierarchy(data, attributeFields)));
     } catch (err) {
       reject(err);
     }
