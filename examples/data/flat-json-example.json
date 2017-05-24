@@ -1,0 +1,116 @@
+[{
+  "parent": "CSVNode1",
+  "child": "CSVNode2",
+  "attributeA": "22",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode1",
+  "child": "CSVNode3",
+  "attributeA": "23",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode4",
+  "attributeA": "1",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode5",
+  "attributeA": "2",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode6",
+  "attributeA": "3",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode7",
+  "attributeA": "4",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode8",
+  "attributeA": "5",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode9",
+  "attributeA": "6",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode10",
+  "attributeA": "7",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode4",
+  "child": "CSVNode11",
+  "attributeA": "8",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode7",
+  "child": "CSVNode12",
+  "attributeA": "9",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode9",
+  "child": "CSVNode13",
+  "attributeA": "10",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode10",
+  "child": "CSVNode14",
+  "attributeA": "11",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode11",
+  "child": "CSVNode15",
+  "attributeA": "12",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode3",
+  "child": "CSVNode16",
+  "attributeA": "13",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode17",
+  "attributeA": "14",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode18",
+  "attributeA": "15",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode19",
+  "attributeA": "16",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode20",
+  "attributeA": "17",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode17",
+  "child": "CSVNode21",
+  "attributeA": "18",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode18",
+  "child": "CSVNode22",
+  "attributeA": "19",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode19",
+  "child": "CSVNode23",
+  "attributeA": "20",
+  "attributeB": "someValue"
+}, {
+  "parent": "CSVNode20",
+  "child": "CSVNode24",
+  "attributeA": "21",
+  "attributeB": "someValue"
+}]
