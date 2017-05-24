@@ -1,17 +1,18 @@
-import { csv } from 'd3';
+import { csv, json } from 'd3';
 import uuid from 'uuid';
 
-function _formatJSON(links) {
+
+function _transformToHierarchy(links, attributeFields) {
   const nodesByName = {};
 
-  function assignNode(name) {
+  const assignNode = (name) => {
     if (!nodesByName[name]) {
       nodesByName[name] = { name };
     }
     return nodesByName[name];
-  }
+  };
 
-  function assignNodeWithAttributes(name, attributes) {
+  const assignNodeWithAttributes = (name, attributes) => {
     if (!nodesByName[name]) {
       nodesByName[name] = {
         name,
@@ -19,10 +20,19 @@ function _formatJSON(links) {
       };
     }
     return nodesByName[name];
-  }
+  };
 
   // Create nodes for each unique source and target.
   links.forEach((link) => {
+    // if `attributeFields` is defined, create/overwrite current `link.attributes`
+    if (attributeFields) {
+      const customAttributes = {};
+      attributeFields.forEach((field) => {
+        customAttributes[field] = link[field];
+      });
+      link.attributes = customAttributes;
+    }
+
     link.source = assignNode(link.parent);
     link.target = assignNodeWithAttributes(link.child, link.attributes);
     const parent = link.source;
@@ -38,19 +48,38 @@ function _formatJSON(links) {
     parent._children ? parent._children.push(child) : parent._children = [child];
   });
 
-  return links;
-}
-
-function _extractRootNode(links) {
-  // Locate all node relations where `source` has an undefined `parent` field.
+  // Extract & return the root node
   const rootLinks = links.filter((link) => !link.source.parent);
   return [rootLinks[0].source];
 }
 
-function parseCSV(csvFile) {
+
+function parseCSV(csvFile, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      csv(csvFile, (json) => resolve(_extractRootNode(_formatJSON(json)))); // lol hello Lisp
+      csv(csvFile, (data) => resolve(_transformToHierarchy(data, attributeFields))); // lol hello Lisp
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+
+function parseJSON(jsonFile) {
+  return new Promise((resolve, reject) => {
+    try {
+      json(jsonFile, (data) => resolve([data]));
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+
+function parseFlatJSON(jsonFile, attributeFields) {
+  return new Promise((resolve, reject) => {
+    try {
+      json(jsonFile, (data) => resolve(_transformToHierarchy(data, attributeFields)));
     } catch (err) {
       reject(err);
     }
@@ -59,4 +88,6 @@ function parseCSV(csvFile) {
 
 export default {
   parseCSV,
+  parseJSON,
+  parseFlatJSON,
 };
