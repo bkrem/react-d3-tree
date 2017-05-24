@@ -1,4 +1,4 @@
-parent,child,attribute A,attribute B
+parent,child,CSV Attribute A,CSV Attribute B
 "CSVNode1","CSVNode2",22,someValue
 "CSVNode1","CSVNode3",23,someValue
 "CSVNode2","CSVNode4",1,someValue
