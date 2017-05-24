@@ -1,7 +1,9 @@
 import Tree from './Tree';
 import * as treeUtil from './util';
 
-export default {
+export {
   Tree,
   treeUtil,
 };
+
+export default Tree;
