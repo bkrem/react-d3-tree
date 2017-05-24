@@ -118,8 +118,22 @@ function parseFlatJSON(jsonFilePath, attributeFields) {
   });
 }
 
+
+/**
+ * generateHierarchy - Generates a hierarchical array from
+ * a flat array of links.
+ *
+ * @param {array<object>} flatArray Flat array of `link` objects
+ *
+ * @return {array<object>} Hierarchical single-element array.
+ */
+function generateHierarchy(flatArray) {
+  return _transformToHierarchy(flatArray);
+}
+
 export default {
   parseCSV,
   parseJSON,
   parseFlatJSON,
+  generateHierarchy,
 };
