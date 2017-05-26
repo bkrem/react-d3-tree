@@ -14,7 +14,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "docs:react": "react-docgen src -e src/**/*.test.js$|scripts/buildDocs.sh",
-    "docs:util": "jsdoc src/util/index.js -d docs/util/",
+    "docs:util": "jsdoc src/util/index.js README.md -d docs/util/",
     "docs": "npm run docs:react && npm run docs:util"
   },
   "jest": {
