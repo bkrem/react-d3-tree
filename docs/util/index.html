@@ -42,6 +42,187 @@
 
 
 
+    <section>
+        <article><h1>React D3 Tree</h1><p><a href="https://travis-ci.org/bkrem/react-d3-tree"><img src="https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master"><img src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://badge.fury.io/js/react-d3-tree"><img src="https://badge.fury.io/js/react-d3-tree.svg" alt="npm version"></a></p>
+<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated &amp; interactive tree graph by leveraging <a href="https://d3js.org/">D3</a>'s <code>tree</code> layout.</p>
+<h2>Contents</h2><ul>
+<li><a href="#demo">Demo</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#minimal-example">Minimal example</a></li>
+<li><a href="#props">Props</a></li>
+</ul>
+<h2>Demo</h2><ul>
+<li>Current release (stable): https://bkrem.github.io/react-d3-tree/ </li>
+</ul>
+<h2>Installation</h2><p>To install via NPM, run:</p>
+<pre class="prettyprint source lang-bash"><code>npm i --save react-d3-tree</code></pre><h2>Minimal example</h2><pre class="prettyprint source lang-jsx"><code>import Tree from 'react-d3-tree';
+
+const myTreeData = [
+  {
+    name: 'Top Level',
+    parent: 'null',
+    attributes: {
+      keyA: 'val A',
+      keyB: 'val B',
+      keyC: 'val C',
+    },
+    children: [
+      {
+        name: 'Level 2: A',
+        parent: 'Top Level',
+        attributes: {
+          keyA: 'val A',
+          keyB: 'val B',
+          keyC: 'val C',
+        },
+      },
+      {
+        name: 'Level 2: B',
+        parent: 'Top Level',
+      },
+    ],
+  },
+];
+
+class MyComponent extends Component {
+  render() {
+    return (
+      {/* &lt;Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
+      &lt;div id=&quot;treeWrapper&quot; style={{width: '50em', height: '20em'}}> 
+
+        &lt;Tree data={myTreeData} />
+
+      &lt;/div>
+    );
+  }
+}</code></pre><h2>Props</h2><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Options</th>
+<th>Required?</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td><code>array</code></td>
+<td></td>
+<td>required</td>
+<td><code>undefined</code></td>
+<td>Single-element array containing hierarchical object (see <code>myTreeData</code> above). <br /> Contains (at least) <code>name</code> and <code>parent</code> keys.</td>
+</tr>
+<tr>
+<td><code>orientation</code></td>
+<td><code>string</code> (enum)</td>
+<td><code>horizontal</code> <code>vertical</code></td>
+<td></td>
+<td><code>horizontal</code></td>
+<td><code>horizontal</code> - Tree expands left-to-right. <br /><br /> <code>vertical</code> - Tree expands top-to-bottom.</td>
+</tr>
+<tr>
+<td><code>translate</code></td>
+<td><code>object</code></td>
+<td></td>
+<td></td>
+<td><code>{x: 0, y: 0}</code></td>
+<td>Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner).</td>
+</tr>
+<tr>
+<td><code>pathFunc</code></td>
+<td><code>string</code> (enum)</td>
+<td><code>diagonal</code> <code>elbow</code></td>
+<td></td>
+<td><code>diagonal</code></td>
+<td><code>diagonal</code> - Renders smooth, curved edges between parent-child nodes. <br /><br /> <code>elbow</code> - Renders sharp edges at right angles between parent-child nodes.</td>
+</tr>
+<tr>
+<td><code>collapsible</code></td>
+<td><code>bool</code></td>
+<td></td>
+<td></td>
+<td><code>true</code></td>
+<td>Toggles ability to collapse/expand the tree's nodes by clicking them.</td>
+</tr>
+<tr>
+<td><code>initialDepth</code></td>
+<td><code>number</code></td>
+<td><code>0..n</code></td>
+<td></td>
+<td><code>undefined</code></td>
+<td>Sets the maximum node depth to which the tree is expanded on its initial render. <br /> Tree renders to full depth if prop is omitted.</td>
+</tr>
+<tr>
+<td><code>zoomable</code></td>
+<td><code>bool</code></td>
+<td></td>
+<td></td>
+<td><code>true</code></td>
+<td>Toggles ability to zoom in/out on the Tree by scaling the SVG element according to <code>props.scaleExtent</code>.</td>
+</tr>
+<tr>
+<td><code>scaleExtent</code></td>
+<td><code>object</code></td>
+<td></td>
+<td></td>
+<td><code>{min: 0.1, max: 1}</code></td>
+<td>Sets the minimum/maximum extent to which the tree can be scaled if <code>props.zoomable</code> is true.</td>
+</tr>
+<tr>
+<td><code>depthFactor</code></td>
+<td><code>number</code></td>
+<td><code>-n..0..n</code></td>
+<td></td>
+<td><code>undefined</code></td>
+<td>Ensures the tree takes up a fixed amount of space (<code>node.y = node.depth * depthFactor</code>), regardless of tree depth. <br /> <strong>TIP</strong>: Negative values invert the tree's direction.</td>
+</tr>
+</tbody>
+</table>
+<h2>External data sources</h2><p>Statically hosted JSON or CSV files can be used as data sources via the additional <code>treeUtil</code> module.</p>
+<h3>Example</h3><pre class="prettyprint source lang-jsx"><code>import { Tree, treeUtil } from 'react-d3-tree';
+
+const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/feature/add-csv-to-json-transform/examples/data/csv-example.csv';
+
+constructor() {
+  super();
+
+  this.state = {
+    data: undefined,
+  };
+
+  componentWillMount() {
+    treeUtil.parseCSV(csvSource)
+    .then((data) => {
+      this.setState({ data })
+    })
+    .catch((err) => console.error(err));
+  }
+
+class MyComponent extends Component {
+  render() {
+    return (
+      {/* &lt;Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
+      &lt;div id=&quot;treeWrapper&quot; style={{width: '50em', height: '20em'}}> 
+
+        &lt;Tree data={this.state.data} />
+
+      &lt;/div>
+    );
+  }
+}</code></pre><h4><code>treeUtil</code></h4><p><code>treeUtil</code> exposes the following methods for parsing external data sources:  </p>
+<ul>
+<li><code>parseCSV</code></li>
+</ul>
+<p>### 
+To make </p>
+<p>If your data doesn't happen to already be in the hierarchical structure shown in the <a href="#minimal-example">minimal example</a>, </p></article>
+    </section>
+
 
 
 
@@ -50,13 +231,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_transformToHierarchy">_transformToHierarchy</a></li><li><a href="global.html#generateHierarchy">generateHierarchy</a></li><li><a href="global.html#parseCSV">parseCSV</a></li><li><a href="global.html#parseFlatJSON">parseFlatJSON</a></li><li><a href="global.html#parseJSON">parseJSON</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#generateHierarchy">generateHierarchy</a></li><li><a href="global.html#parseCSV">parseCSV</a></li><li><a href="global.html#parseFlatJSON">parseFlatJSON</a></li><li><a href="global.html#parseJSON">parseJSON</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri May 26 2017 14:11:54 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri May 26 2017 14:28:21 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

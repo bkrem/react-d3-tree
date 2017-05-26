@@ -5,7 +5,7 @@ import uuid from 'uuid';
 /**
  * _transformToHierarchy - Transforms a flat array of parent-child links
  * into a hierarchy.
- *
+ * @private
  * @param {array<object>} links           Set of parent-child link objects
  * @param {array<string>|undefined} attributeFields Set of `link` fields to be used as attributes
  *
