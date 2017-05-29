@@ -123,12 +123,4 @@ class MyComponent extends Component {
 }
 ```
 
-#### `treeUtil`
-`treeUtil` exposes the following methods for parsing external data sources:  
-- `parseCSV`
-
-### 
-To make 
-
-
-If your data doesn't happen to already be in the hierarchical structure shown in the [minimal example](#minimal-example), 
+For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).
