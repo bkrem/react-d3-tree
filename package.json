@@ -15,7 +15,6 @@
     "show:cov": "open coverage/lcov-report/index.html",
     "docs:react": "react-docgen src -e src/**/*.test.js$|scripts/buildDocs.sh",
     "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
-    "docs:md": "jsdoc2md src/util/index.js",
     "docs": "npm run docs:react && npm run docs:util",
     "docs:clean": "rimraf docs/components/* && rimraf docs/util/*"
   },
