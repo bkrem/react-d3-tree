@@ -14,8 +14,10 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "docs:react": "react-docgen src -e src/**/*.test.js$|scripts/buildDocs.sh",
-    "docs:util": "jsdoc src/util/index.js README.md -d docs/util/",
-    "docs": "npm run docs:react && npm run docs:util"
+    "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
+    "docs:md": "jsdoc2md src/util/index.js",
+    "docs": "npm run docs:react && npm run docs:util",
+    "docs:clean": "rimraf docs/components/* && rimraf docs/util/*"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -63,7 +65,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
     "jest": "^19.0.2",
-    "jsdoc": "^3.4.3",
+    "jsdoc-to-markdown": "^3.0.0",
     "postcss-loader": "^1.3.3",
     "react": "15.4.2",
     "react-addons-test-utils": "15.4.2",
