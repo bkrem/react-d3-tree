@@ -23,6 +23,11 @@ To install via NPM, run:
 npm i --save react-d3-tree
 ```
 
+Or if Yarn is more your thing:
+```bash
+yarn add react-d3-tree
+```
+
 
 ## Minimal example
 ```jsx
