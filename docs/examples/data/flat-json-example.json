@@ -1,0 +1,116 @@
+[{
+  "parent": "CSVNode1",
+  "child": "CSVNode2",
+  "FlatJSON Attribute A": "22",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode1",
+  "child": "CSVNode3",
+  "FlatJSON Attribute A": "23",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode4",
+  "FlatJSON Attribute A": "1",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode5",
+  "FlatJSON Attribute A": "2",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode6",
+  "FlatJSON Attribute A": "3",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode7",
+  "FlatJSON Attribute A": "4",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode8",
+  "FlatJSON Attribute A": "5",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode9",
+  "FlatJSON Attribute A": "6",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode2",
+  "child": "CSVNode10",
+  "FlatJSON Attribute A": "7",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode4",
+  "child": "CSVNode11",
+  "FlatJSON Attribute A": "8",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode7",
+  "child": "CSVNode12",
+  "FlatJSON Attribute A": "9",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode9",
+  "child": "CSVNode13",
+  "FlatJSON Attribute A": "10",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode10",
+  "child": "CSVNode14",
+  "FlatJSON Attribute A": "11",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode11",
+  "child": "CSVNode15",
+  "FlatJSON Attribute A": "12",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode3",
+  "child": "CSVNode16",
+  "FlatJSON Attribute A": "13",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode17",
+  "FlatJSON Attribute A": "14",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode18",
+  "FlatJSON Attribute A": "15",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode19",
+  "FlatJSON Attribute A": "16",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode16",
+  "child": "CSVNode20",
+  "FlatJSON Attribute A": "17",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode17",
+  "child": "CSVNode21",
+  "FlatJSON Attribute A": "18",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode18",
+  "child": "CSVNode22",
+  "FlatJSON Attribute A": "19",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode19",
+  "child": "CSVNode23",
+  "FlatJSON Attribute A": "20",
+  "FlatJSON Attribute B": "someValue"
+}, {
+  "parent": "CSVNode20",
+  "child": "CSVNode24",
+  "FlatJSON Attribute A": "21",
+  "FlatJSON Attribute B": "someValue"
+}]

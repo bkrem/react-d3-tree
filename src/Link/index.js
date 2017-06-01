@@ -19,7 +19,7 @@ export default class Link extends React.PureComponent {
   }
 
   componentWillLeave() {
-    const { orientation, linkData } = this.props;
+    const { linkData } = this.props;
     console.log('Leaving:\n', `${linkData.source.name}-->${linkData.target.name}`);
     select(this.link)
     .transition()

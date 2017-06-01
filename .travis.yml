@@ -1,6 +1,7 @@
 language: node_js
 
 node_js:
+  - 8
   - 7
   - 6
   - 5
@@ -12,7 +13,8 @@ script:
 
 notifications:
   email:
-    on_failure: change
+    on_success: change
+    on_failure: always
 
 after_success: 'npm run coveralls'
 

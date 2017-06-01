@@ -55,7 +55,11 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData } = this.props;
+    const { nodeData, depthFactor } = this.props;
+
+    if (depthFactor) {
+      nodeData.y = nodeData.depth * depthFactor;
+    }
     return (
       <g
         id={nodeData.id}
@@ -119,6 +123,7 @@ Node.propTypes = {
     'vertical',
   ]).isRequired,
   onClick: PropTypes.func,
+  depthFactor: PropTypes.number,
   primaryLabel: PropTypes.string,
   primaryLabelStyle: PropTypes.object,
   secondaryLabels: PropTypes.object,
