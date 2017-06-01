@@ -9,8 +9,9 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 ## Contents
 - [Demo](#demo)
 - [Installation](#installation)
-- [Minimal example](#minimal-example)
+- [Usage](#usage)
 - [Props](#props)
+- [External data sources](#external-data-sources)
 
 
 ## Demo
@@ -29,7 +30,7 @@ yarn add react-d3-tree
 ```
 
 
-## Minimal example
+## Usage
 ```jsx
 import Tree from 'react-d3-tree';
 
