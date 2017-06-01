@@ -17,6 +17,12 @@ defaultValue: `true`
 type: `array`
 
 
+### `depthFactor`
+
+type: `number`
+defaultValue: `undefined`
+
+
 ### `initialDepth`
 
 type: `number`
@@ -35,8 +41,20 @@ type: `enum('diagonal'|'elbow')`
 defaultValue: `'diagonal'`
 
 
+### `scaleExtent`
+
+type: `shape[object Object]`
+defaultValue: `{ min: 0.1, max: 1 }`
+
+
 ### `translate`
 
 type: `shape[object Object]`
 defaultValue: `{ x: 0, y: 0 }`
+
+
+### `zoomable`
+
+type: `bool`
+defaultValue: `true`
 
