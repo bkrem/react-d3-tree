@@ -11,6 +11,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Installation](#installation)
 - [Minimal example](#minimal-example)
 - [Props](#props)
+- [External data sources](#external-data-sources)
 
 
 ## Demo
