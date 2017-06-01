@@ -123,5 +123,5 @@ class MyComponent extends Component {
 }
 ```
 
-For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).
+For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).  
 For examples of each data type that can be parsed with `treeUtil`, please check the [data source examples](docs/examples/data).
