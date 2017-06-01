@@ -1,0 +1,24 @@
+parent,child,CSV Attribute A,CSV Attribute B
+"CSVNode1","CSVNode2",22,someValue
+"CSVNode1","CSVNode3",23,someValue
+"CSVNode2","CSVNode4",1,someValue
+"CSVNode2","CSVNode5",2,someValue
+"CSVNode2","CSVNode6",3,someValue
+"CSVNode2","CSVNode7",4,someValue
+"CSVNode2","CSVNode8",5,someValue
+"CSVNode2","CSVNode9",6,someValue
+"CSVNode2","CSVNode10",7,someValue
+"CSVNode4","CSVNode11",8,someValue
+"CSVNode7","CSVNode12",9,someValue
+"CSVNode9","CSVNode13",10,someValue
+"CSVNode10","CSVNode14",11,someValue
+"CSVNode11","CSVNode15",12,someValue
+"CSVNode3","CSVNode16",13,someValue
+"CSVNode16","CSVNode17",14,someValue
+"CSVNode16","CSVNode18",15,someValue
+"CSVNode16","CSVNode19",16,someValue
+"CSVNode16","CSVNode20",17,someValue
+"CSVNode17","CSVNode21",18,someValue
+"CSVNode18","CSVNode22",19,someValue
+"CSVNode19","CSVNode23",20,someValue
+"CSVNode20","CSVNode24",21,someValue

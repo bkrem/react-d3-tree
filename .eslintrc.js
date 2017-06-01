@@ -58,15 +58,7 @@ module.exports = {
     "no-console": 1,
     "no-param-reassign": "warn",
     "no-use-before-define": 0,
-    "no-underscore-dangle": [
-      "error",
-      {
-        "allow": [
-          "_children",
-          "_collapsed"
-        ]
-      }
-    ],
+    "no-underscore-dangle": "off",
     "no-unused-expressions": "warn",
     "prefer-template": 2,
     "class-methods-use-this": 0,
@@ -79,5 +71,6 @@ module.exports = {
     "react/jsx-no-target-blank": 0,
     "react/require-extension": 0,
     "react/self-closing-comp": 0,
+    "require-jsdoc": "warn"
   },
 };

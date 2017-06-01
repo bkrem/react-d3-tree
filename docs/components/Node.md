@@ -22,6 +22,11 @@ defaultValue: `{
 }`
 
 
+### `depthFactor`
+
+type: `number`
+
+
 ### `leafCircleStyle`
 
 type: `object`
