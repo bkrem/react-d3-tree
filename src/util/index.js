@@ -67,7 +67,7 @@ function _transformToHierarchy(links, attributeFields) {
  * parseCSV - Parses a CSV file into a hierarchy structure.
  *
  * @param {string} csvFilePath     Path to CSV file to be parsed.
- * @param {array<string>|undefined} attributeFields Set of `link` fields to be used as attributes
+ * @param {array<string>|undefined} attributeFields Set of column names to be used as attributes (optional)
  *
  * @return {Promise} Returns hierarchy array if resolved, error object if rejected.
  */

@@ -27,7 +27,7 @@ parseCSV - Parses a CSV file into a hierarchy structure.
 | Param | Type | Description |
 | --- | --- | --- |
 | csvFilePath | <code>string</code> | Path to CSV file to be parsed. |
-| attributeFields | <code>array.&lt;string&gt;</code> OR <code>undefined</code> | Set of `link` fields to be used as attributes |
+| attributeFields | <code>array.&lt;string&gt;</code> OR <code>undefined</code> | Set of column names to be used as attributes (optional) |
 
 <a name="parseJSON"></a>
 
@@ -66,3 +66,4 @@ a flat array of links.
 | Param | Type | Description |
 | --- | --- | --- |
 | flatArray | <code>array.&lt;object&gt;</code> | Flat array of `link` objects |
+
