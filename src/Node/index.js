@@ -12,7 +12,13 @@ export default class Node extends React.Component {
   }
 
   componentDidMount() {
-    const { x, y } = this.props.nodeData;
+    const { x, y, parent } = this.props.nodeData;
+    console.log(this.props.nodeData);
+    const originX = parent ? parent.x : 0;
+    const originY = parent ? parent.y : 0;
+
+    select(this.node)
+    .attr('transform', this.setTransformOrientation(originX, originY));
 
     select(this.node)
     .transition()
