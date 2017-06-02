@@ -98,7 +98,7 @@ Statically hosted JSON or CSV files can be used as data sources via the addition
 ```jsx
 import { Tree, treeUtil } from 'react-d3-tree';
 
-const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/feature/add-csv-to-json-transform/examples/data/csv-example.csv';
+const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/master/docs/examples/data/csv-example.csv';
 
 constructor() {
   super();
