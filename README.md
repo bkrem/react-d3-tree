@@ -95,7 +95,7 @@ Statically hosted JSON or CSV files can be used as data sources via the addition
 ```jsx
 import { Tree, treeUtil } from 'react-d3-tree';
 
-const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/feature/add-csv-to-json-transform/examples/data/csv-example.csv';
+const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/master/docs/examples/data/csv-example.csv';
 
 constructor() {
   super();
@@ -103,14 +103,15 @@ constructor() {
   this.state = {
     data: undefined,
   };
-  
-  componentWillMount() {
-    treeUtil.parseCSV(csvSource)
-    .then((data) => {
-      this.setState({ data })
-    })
-    .catch((err) => console.error(err));
-  }
+}
+
+componentWillMount() {
+  treeUtil.parseCSV(csvSource)
+  .then((data) => {
+    this.setState({ data })
+  })
+  .catch((err) => console.error(err));
+}
 
 class MyComponent extends Component {
   render() {
