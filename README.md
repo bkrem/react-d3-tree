@@ -106,14 +106,15 @@ constructor() {
   this.state = {
     data: undefined,
   };
-  
-  componentWillMount() {
-    treeUtil.parseCSV(csvSource)
-    .then((data) => {
-      this.setState({ data })
-    })
-    .catch((err) => console.error(err));
-  }
+}
+
+componentWillMount() {
+  treeUtil.parseCSV(csvSource)
+  .then((data) => {
+    this.setState({ data })
+  })
+  .catch((err) => console.error(err));
+}
 
 class MyComponent extends Component {
   render() {
