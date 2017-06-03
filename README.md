@@ -37,7 +37,6 @@ import Tree from 'react-d3-tree';
 const myTreeData = [
   {
     name: 'Top Level',
-    parent: 'null',
     attributes: {
       keyA: 'val A',
       keyB: 'val B',
@@ -46,7 +45,6 @@ const myTreeData = [
     children: [
       {
         name: 'Level 2: A',
-        parent: 'Top Level',
         attributes: {
           keyA: 'val A',
           keyB: 'val B',
@@ -55,7 +53,6 @@ const myTreeData = [
       },
       {
         name: 'Level 2: B',
-        parent: 'Top Level',
       },
     ],
   },
@@ -79,7 +76,7 @@ class MyComponent extends Component {
 ## Props
 | Property       | Type            | Options                 | Required? | Default                 | Description                                                                                                                                                                     |
 |----------------|-----------------|-------------------------|-----------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `data`         | `array`         |                         | required  | `undefined`             | Single-element array containing hierarchical object (see `myTreeData` above). <br /> Contains (at least) `name` and `parent` keys.                                              |
+| `data`         | `array`         |                         | required  | `undefined`             | Single-element array containing hierarchical object (see `myTreeData` above). <br /> Must contain (at least) `name` key.                                              |
 | `orientation`  | `string` (enum) | `horizontal` `vertical` |           | `horizontal`            | `horizontal` - Tree expands left-to-right. <br /><br /> `vertical` - Tree expands top-to-bottom.                                                                                |
 | `translate`    | `object`        |                         |           | `{x: 0, y: 0}`          | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner).                                         |
 | `pathFunc`     | `string` (enum) | `diagonal` `elbow`      |           | `diagonal`              | `diagonal` - Renders smooth, curved edges between parent-child nodes. <br /><br /> `elbow` - Renders sharp edges at right angles between parent-child nodes.                    |
