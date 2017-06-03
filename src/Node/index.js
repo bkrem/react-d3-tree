@@ -13,7 +13,6 @@ export default class Node extends React.Component {
 
   componentDidMount() {
     const { x, y, parent } = this.props.nodeData;
-    console.log(this.props.nodeData);
     const originX = parent ? parent.x : 0;
     const originY = parent ? parent.y : 0;
 
@@ -48,11 +47,13 @@ export default class Node extends React.Component {
 
   componentWillLeave(done) {
     const { parent } = this.props.nodeData;
+    const originX = parent ? parent.x : 0;
+    const originY = parent ? parent.y : 0;
 
     select(this.node)
     .transition()
     .duration(500)
-    .attr('transform', this.setTransformOrientation(parent.x, parent.y))
+    .attr('transform', this.setTransformOrientation(originX, originY))
     .each('end', done);
   }
 
