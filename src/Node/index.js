@@ -42,17 +42,22 @@ export default class Node extends React.Component {
     return transform;
   }
 
-  applyTransform(transform, done = () => {}) {
+  applyTransform(transform, opacity = 1, done = () => {}) {
     const { enabled, duration } = this.props.transitions;
     if (enabled) {
       select(this.node)
       .transition()
       .duration(duration)
       .attr('transform', transform)
+      .style('opacity', opacity)
       .each('end', done);
     } else {
       done();
     }
+  }
+
+  handleClick() {
+    this.props.onClick(this.props.nodeData.id);
   }
 
   componentWillLeave(done) {
@@ -61,16 +66,14 @@ export default class Node extends React.Component {
     const originY = parent ? parent.y : 0;
     const transform = this.setTransformOrientation(originX, originY);
 
-    this.applyTransform(transform, done);
-  }
-
-  handleClick() {
-    this.props.onClick(this.props.nodeData.id);
+    this.applyTransform(transform, 0, done);
+    // this.applyOpacity(0, done);
   }
 
   render() {
     const { nodeData, depthFactor, transitions } = this.props;
-    const transform = transitions.enabled ?
+
+    const transform = transitions.enabled && this.state.transform ?
       this.state.transform :
       this.setTransformOrientation(nodeData.x, nodeData.y);
 
@@ -82,6 +85,7 @@ export default class Node extends React.Component {
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
+        style={transitions.enabled ? undefined : { opacity: 1 }}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={transform}
         onClick={this.handleClick}

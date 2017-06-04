@@ -5,26 +5,25 @@ import './style.css';
 
 export default class Link extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.expandPath = this.expandPath.bind(this);
-  }
-
   componentDidMount() {
-    console.log('mounted:\n', `${this.props.linkData.source.name}-->${this.props.linkData.target.name}`);
-    select(this.link)
-    .transition()
-    .duration(500)
-    .attr('d', this.expandPath());
+    this.applyOpacity(1);
   }
 
-  componentWillLeave() {
-    const { linkData } = this.props;
-    console.log('Leaving:\n', `${linkData.source.name}-->${linkData.target.name}`);
-    select(this.link)
-    .transition()
-    .duration(500)
-    .attr('d', this.collapsePath());
+  componentWillLeave(done) {
+    this.applyOpacity(0, done);
+  }
+
+  applyOpacity(opacity, done = () => {}) {
+    const { enabled, duration } = this.props.transitions;
+    if (enabled) {
+      select(this.link)
+      .transition()
+      .duration(duration)
+      .style('opacity', opacity)
+      .each('end', done);
+    } else {
+      done();
+    }
   }
 
   diagonalPath(linkData, orientation) {
@@ -57,11 +56,13 @@ export default class Link extends React.PureComponent {
   }
 
   render() {
+    const { transitions } = this.props;
     return (
       <path
         ref={(l) => { this.link = l; }}
         className="linkBase"
-        d={this.collapsePath()}
+        style={transitions.enabled ? undefined : { opacity: 1 }}
+        d={this.expandPath()}
       />
     );
   }
@@ -77,4 +78,5 @@ Link.propTypes = {
     'diagonal',
     'elbow',
   ]).isRequired,
+  transitions: PropTypes.object.isRequired,
 };

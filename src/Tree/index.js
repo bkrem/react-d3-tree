@@ -212,6 +212,7 @@ export default class Tree extends React.Component {
   render() {
     const { orientation, translate, pathFunc, depthFactor, transitions } = this.props;
     const { nodes, links } = this.generateTree();
+
     return (
       <div className="treeContainer">
         <svg width="100%" height="100%">
@@ -239,6 +240,7 @@ export default class Tree extends React.Component {
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}
+                transitions={transitions}
               />
             )}
           </TransitionGroup>
