@@ -8,53 +8,55 @@ export default class Node extends React.Component {
 
   constructor(props) {
     super(props);
+    const { parent } = props.nodeData;
+    const originX = parent ? parent.x : 0;
+    const originY = parent ? parent.y : 0;
+
+    this.state = {
+      transform: this.setTransformOrientation(originX, originY),
+    };
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
-    const { x, y, parent } = this.props.nodeData;
-    const originX = parent ? parent.x : 0;
-    const originY = parent ? parent.y : 0;
+    const { x, y } = this.props.nodeData;
+    const transform = this.setTransformOrientation(x, y);
 
-    select(this.node)
-    .attr('transform', this.setTransformOrientation(originX, originY));
+    this.applyTransform(transform);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.nodeData.x !== this.props.nodeData.x ||
+      nextProps.nodeData.y !== this.props.nodeData.y) {
+      const transform = this.setTransformOrientation(nextProps.nodeData.x, nextProps.nodeData.y);
+      this.applyTransform(transform);
+    }
+  }
+
+  setTransformOrientation(x, y) {
+    const { orientation } = this.props;
+    const transform = orientation === 'horizontal' ?
+      `translate(${y},${x})` :
+      `translate(${x},${y})`;
+    return transform;
+  }
+
+  applyTransform(transform, done) {
     select(this.node)
     .transition()
     .duration(500)
-    .attr('transform', this.setTransformOrientation(x, y));
-  }
-
-  // FIXME unstable re-rendering when regressing to parent coordinates
-  setTransformOrientation(x, y) {
-    const { orientation } = this.props;
-    let transform;
-
-    if (orientation === 'horizontal') {
-      // transform = nodeData.parent !== 'null' ?
-      //   `translate(${nodeData.parent.y},${nodeData.parent.x})` :
-      //   `translate(${nodeData.y},${nodeData.x})`;
-      transform = `translate(${y},${x})`;
-    } else {
-      // transform = nodeData.parent !== 'null' ?
-      //   `translate(${nodeData.parent.x},${nodeData.parent.y})` :
-      //   `translate(${nodeData.x},${nodeData.y})`;
-      transform = `translate(${x},${y})`;
-    }
-
-    return transform;
+    .attr('transform', transform)
+    .each('end', done);
   }
 
   componentWillLeave(done) {
     const { parent } = this.props.nodeData;
     const originX = parent ? parent.x : 0;
     const originY = parent ? parent.y : 0;
+    const transform = this.setTransformOrientation(originX, originY);
 
-    select(this.node)
-    .transition()
-    .duration(500)
-    .attr('transform', this.setTransformOrientation(originX, originY))
-    .each('end', done);
+    this.applyTransform(transform, done);
   }
 
   handleClick() {
@@ -72,7 +74,7 @@ export default class Node extends React.Component {
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
-        transform={this.setTransformOrientation(nodeData.x, nodeData.y)}
+        transform={this.state.transform}
         onClick={this.handleClick}
       >
         <text
