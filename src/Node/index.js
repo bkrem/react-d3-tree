@@ -14,6 +14,9 @@ export default class Node extends React.Component {
 
     this.state = {
       transform: this.setTransformOrientation(originX, originY),
+      initialStyle: {
+        opacity: 0,
+      },
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -73,6 +76,7 @@ export default class Node extends React.Component {
   render() {
     const { nodeData, transitionDuration } = this.props;
 
+    // FIXME unstable when transitionDuration undefined
     const transform = transitionDuration && transitionDuration > 0 ?
       this.state.transform :
       this.setTransformOrientation(nodeData.x, nodeData.y);
@@ -81,6 +85,7 @@ export default class Node extends React.Component {
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
+        style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={transform}
         onClick={this.handleClick}
