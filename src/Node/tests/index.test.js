@@ -12,12 +12,18 @@ describe('<Node />', () => {
     y: 321,
   };
 
+  const mockProps = {
+    nodeData,
+    orientation: 'horizontal',
+    transitions: {
+      enabled: true,
+      duration: 500,
+    },
+  };
+
   it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(
-      <Node
-        nodeData={nodeData}
-        orientation="horizontal"
-      />
+      <Node {...mockProps} />
     );
 
     expect(renderedComponent.find('g').prop('id')).toBe(nodeData.id);
@@ -25,15 +31,12 @@ describe('<Node />', () => {
 
   it('applies correct base className if `nodeData._children` is defined', () => {
     const noChildrenComponent = shallow(
-      <Node
-        nodeData={nodeData}
-        orientation="horizontal"
-      />
+      <Node {...mockProps} />
     );
     const withChildrenComponent = shallow(
       <Node
+        {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
-        orientation="horizontal"
       />
     );
 
@@ -46,16 +49,15 @@ describe('<Node />', () => {
     const circleStyle = { fill: 'green' };
     const noChildrenComponent = shallow(
       <Node
-        nodeData={nodeData}
-        orientation="horizontal"
+        {...mockProps}
         leafCircleStyle={leafCircleStyle}
         circleStyle={circleStyle}
       />
     );
     const withChildrenComponent = shallow(
       <Node
+        {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
-        orientation="horizontal"
         leafCircleStyle={leafCircleStyle}
         circleStyle={circleStyle}
       />
@@ -69,14 +71,11 @@ describe('<Node />', () => {
     const horizontalTransform = `translate(${nodeData.y},${nodeData.x})`;
     const verticalTransform = `translate(${nodeData.x},${nodeData.y})`;
     const horizontalComponent = shallow(
-      <Node
-        nodeData={nodeData}
-        orientation="horizontal"
-      />
+      <Node {...mockProps} />
     );
     const verticalComponent = shallow(
       <Node
-        nodeData={nodeData}
+        {...mockProps}
         orientation="vertical"
       />
     );
@@ -88,8 +87,7 @@ describe('<Node />', () => {
   it('should take an `onClick` prop', () => {
     const renderedComponent = shallow(
       <Node
-        nodeData={nodeData}
-        orientation="horizontal"
+        {...mockProps}
         onClick={() => {}}
       />
     );
@@ -101,8 +99,7 @@ describe('<Node />', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = shallow(
       <Node
-        nodeData={nodeData}
-        orientation="horizontal"
+        {...mockProps}
         onClick={onClickSpy}
       />
     );
@@ -115,8 +112,7 @@ describe('<Node />', () => {
     const fixture = { keyA: 'valA', keyB: 'valB' };
     const renderedComponent = shallow(
       <Node
-        nodeData={nodeData}
-        orientation="horizontal"
+        {...mockProps}
         secondaryLabels={fixture}
       />
     );
@@ -137,7 +133,7 @@ describe('<Node />', () => {
     const expectedY = nodeData.depth * depthFactor;
     const renderedComponent = shallow(
       <Node
-        nodeData={nodeData}
+        {...mockProps}
         orientation="vertical"
         depthFactor={depthFactor}
       />
