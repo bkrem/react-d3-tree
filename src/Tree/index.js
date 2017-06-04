@@ -215,7 +215,7 @@ export default class Tree extends React.Component {
 
     return (
       <div className="treeContainer">
-        <svg width="100%" height="100%">
+        <svg className="svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
             transform={`translate(${translate.x},${translate.y})`}
