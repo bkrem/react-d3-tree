@@ -47,17 +47,14 @@ export default class Node extends React.Component {
   }
 
   applyTransform(transform, opacity = 1, done = () => {}) {
-    const { enabled, duration } = this.props.transitions;
-    if (enabled) {
-      select(this.node)
-      .transition()
-      .duration(duration)
-      .attr('transform', transform)
-      .style('opacity', opacity)
-      .each('end', done);
-    } else {
-      done();
-    }
+    const { transitionDuration } = this.props;
+
+    select(this.node)
+    .transition()
+    .duration(transitionDuration)
+    .attr('transform', transform)
+    .style('opacity', opacity)
+    .each('end', done);
   }
 
   handleClick() {
@@ -71,13 +68,12 @@ export default class Node extends React.Component {
     const transform = this.setTransformOrientation(originX, originY);
 
     this.applyTransform(transform, 0, done);
-    // this.applyOpacity(0, done);
   }
 
   render() {
-    const { nodeData, transitions } = this.props;
+    const { nodeData, transitionDuration } = this.props;
 
-    const transform = transitions.enabled && this.state.transform ?
+    const transform = transitionDuration && transitionDuration > 0 ?
       this.state.transform :
       this.setTransformOrientation(nodeData.x, nodeData.y);
 
@@ -144,7 +140,7 @@ Node.propTypes = {
     'horizontal',
     'vertical',
   ]).isRequired,
-  transitions: PropTypes.object.isRequired,
+  transitionDuration: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   depthFactor: PropTypes.number,
   primaryLabel: PropTypes.string,

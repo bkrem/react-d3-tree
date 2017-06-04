@@ -210,7 +210,7 @@ export default class Tree extends React.Component {
   }
 
   render() {
-    const { orientation, translate, pathFunc, depthFactor, transitions } = this.props;
+    const { orientation, translate, pathFunc, depthFactor, transitionDuration } = this.props;
     const { nodes, links } = this.generateTree();
 
     return (
@@ -225,7 +225,7 @@ export default class Tree extends React.Component {
                 key={nodeData.id}
                 orientation={orientation}
                 depthFactor={depthFactor}
-                transitions={transitions}
+                transitionDuration={transitionDuration}
                 textAnchor="start"
                 nodeData={nodeData}
                 primaryLabel={nodeData.name}
@@ -240,7 +240,7 @@ export default class Tree extends React.Component {
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}
-                transitions={transitions}
+                transitionDuration={transitionDuration}
               />
             )}
           </TransitionGroup>
@@ -254,10 +254,7 @@ Tree.defaultProps = {
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
-  transitions: {
-    enabled: false,
-    duration: 500,
-  },
+  transitionDuration: 500,
   depthFactor: undefined,
   collapsible: true,
   initialDepth: undefined,
@@ -279,10 +276,7 @@ Tree.propTypes = {
     'diagonal',
     'elbow',
   ]),
-  transitions: PropTypes.shape({
-    enabled: PropTypes.bool.isRequired,
-    duration: PropTypes.number,
-  }),
+  transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,

@@ -5,6 +5,15 @@ import './style.css';
 
 export default class Link extends React.PureComponent {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialStyle: {
+        opacity: 0,
+      },
+    };
+  }
+
   componentDidMount() {
     this.applyOpacity(1);
   }
@@ -14,16 +23,13 @@ export default class Link extends React.PureComponent {
   }
 
   applyOpacity(opacity, done = () => {}) {
-    const { enabled, duration } = this.props.transitions;
-    if (enabled) {
-      select(this.link)
-      .transition()
-      .duration(duration)
-      .style('opacity', opacity)
-      .each('end', done);
-    } else {
-      done();
-    }
+    const { transitionDuration } = this.props;
+
+    select(this.link)
+    .transition()
+    .duration(transitionDuration)
+    .style('opacity', opacity)
+    .each('end', done);
   }
 
   diagonalPath(linkData, orientation) {
@@ -59,6 +65,7 @@ export default class Link extends React.PureComponent {
     return (
       <path
         ref={(l) => { this.link = l; }}
+        style={this.state.initialStyle}
         className="linkBase"
         d={this.expandPath()}
       />
@@ -76,5 +83,5 @@ Link.propTypes = {
     'diagonal',
     'elbow',
   ]).isRequired,
-  transitions: PropTypes.object.isRequired,
+  transitionDuration: PropTypes.number.isRequired,
 };
