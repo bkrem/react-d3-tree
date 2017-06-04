@@ -35,11 +35,15 @@ export default class Node extends React.Component {
   }
 
   setTransformOrientation(x, y) {
-    const { orientation } = this.props;
-    const transform = orientation === 'horizontal' ?
+    const { orientation, nodeData, depthFactor } = this.props;
+
+    if (depthFactor) {
+      y = nodeData.depth * depthFactor;
+    }
+
+    return orientation === 'horizontal' ?
       `translate(${y},${x})` :
       `translate(${x},${y})`;
-    return transform;
   }
 
   applyTransform(transform, opacity = 1, done = () => {}) {
@@ -71,16 +75,12 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, depthFactor, transitions } = this.props;
+    const { nodeData, transitions } = this.props;
 
     const transform = transitions.enabled && this.state.transform ?
       this.state.transform :
       this.setTransformOrientation(nodeData.x, nodeData.y);
 
-
-    if (depthFactor) {
-      nodeData.y = nodeData.depth * depthFactor;
-    }
     return (
       <g
         id={nodeData.id}
