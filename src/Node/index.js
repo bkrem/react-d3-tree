@@ -42,12 +42,17 @@ export default class Node extends React.Component {
     return transform;
   }
 
-  applyTransform(transform, done) {
-    select(this.node)
-    .transition()
-    .duration(500)
-    .attr('transform', transform)
-    .each('end', done);
+  applyTransform(transform, done = () => {}) {
+    const { enabled, duration } = this.props.transitions;
+    if (enabled) {
+      select(this.node)
+      .transition()
+      .duration(duration)
+      .attr('transform', transform)
+      .each('end', done);
+    } else {
+      done();
+    }
   }
 
   componentWillLeave(done) {
@@ -64,7 +69,11 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, depthFactor } = this.props;
+    const { nodeData, depthFactor, transitions } = this.props;
+    const transform = transitions.enabled ?
+      this.state.transform :
+      this.setTransformOrientation(nodeData.x, nodeData.y);
+
 
     if (depthFactor) {
       nodeData.y = nodeData.depth * depthFactor;
@@ -74,7 +83,7 @@ export default class Node extends React.Component {
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
-        transform={this.state.transform}
+        transform={transform}
         onClick={this.handleClick}
       >
         <text
@@ -111,6 +120,7 @@ export default class Node extends React.Component {
 }
 
 Node.defaultProps = {
+  depthFactor: undefined,
   circleRadius: 10,
   circleStyle: {
     stroke: '#000',
@@ -124,14 +134,15 @@ Node.defaultProps = {
   },
 };
 
-/* eslint-disable*/
+/* eslint-disable */
 Node.propTypes = {
   nodeData: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf([
     'horizontal',
     'vertical',
   ]).isRequired,
-  onClick: PropTypes.func,
+  transitions: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
   depthFactor: PropTypes.number,
   primaryLabel: PropTypes.string,
   primaryLabelStyle: PropTypes.object,
