@@ -85,7 +85,6 @@ export default class Node extends React.Component {
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
-        style={transitions.enabled ? undefined : { opacity: 1 }}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={transform}
         onClick={this.handleClick}

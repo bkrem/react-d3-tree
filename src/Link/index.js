@@ -56,12 +56,10 @@ export default class Link extends React.PureComponent {
   }
 
   render() {
-    const { transitions } = this.props;
     return (
       <path
         ref={(l) => { this.link = l; }}
         className="linkBase"
-        style={transitions.enabled ? undefined : { opacity: 1 }}
         d={this.expandPath()}
       />
     );
