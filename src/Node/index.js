@@ -74,12 +74,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, transitionDuration } = this.props;
-
-    // FIXME unstable when transitionDuration undefined
-    const transform = transitionDuration && transitionDuration > 0 ?
-      this.state.transform :
-      this.setTransformOrientation(nodeData.x, nodeData.y);
+    const { nodeData } = this.props;
 
     return (
       <g
@@ -87,7 +82,7 @@ export default class Node extends React.Component {
         ref={(n) => { this.node = n; }}
         style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
-        transform={transform}
+        transform={this.state.transform}
         onClick={this.handleClick}
       >
         <text
