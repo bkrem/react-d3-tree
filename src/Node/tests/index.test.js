@@ -170,7 +170,7 @@ describe('<Node />', () => {
   });
 
 
-  it('updates its transform attribute if either the `x` or `y` prop changes', () => {
+  it('applies updated transform if either the `x` or `y` prop changes', () => {
     // jest.spyOn(Node.prototype, 'applyTransform');
     const updatedProps = {
       ...mockProps,

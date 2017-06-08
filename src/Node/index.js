@@ -29,12 +29,9 @@ export default class Node extends React.Component {
     this.applyTransform(transform);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.nodeData.x !== this.props.nodeData.x ||
-      nextProps.nodeData.y !== this.props.nodeData.y) {
-      const transform = this.setTransformOrientation(nextProps.nodeData.x, nextProps.nodeData.y);
-      this.applyTransform(transform);
-    }
+  componentWillUpdate(nextProps) {
+    const transform = this.setTransformOrientation(nextProps.nodeData.x, nextProps.nodeData.y);
+    this.applyTransform(transform);
   }
 
   setTransformOrientation(x, y) {
