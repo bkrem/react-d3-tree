@@ -45,16 +45,7 @@ export default class Link extends React.PureComponent {
       `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
   }
 
-  collapsePath() {
-    const { linkData, orientation, pathFunc } = this.props;
-    const origin = { x: linkData.source.x, y: linkData.source.y };
-    const pathDescriptor = { source: origin, target: origin };
-    return pathFunc === 'diagonal'
-      ? this.diagonalPath(pathDescriptor, orientation)
-      : this.elbowPath(pathDescriptor, orientation);
-  }
-
-  expandPath() {
+  drawPath() {
     const { linkData, orientation, pathFunc } = this.props;
     return pathFunc === 'diagonal'
       ? this.diagonalPath(linkData, orientation)
@@ -67,7 +58,7 @@ export default class Link extends React.PureComponent {
         ref={(l) => { this.link = l; }}
         style={this.state.initialStyle}
         className="linkBase"
-        d={this.expandPath()}
+        d={this.drawPath()}
       />
     );
   }
