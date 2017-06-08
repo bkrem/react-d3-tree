@@ -192,7 +192,7 @@ export default class Tree extends React.Component {
    * @return {object} Object containing `nodes` and `links` fields.
    */
   generateTree() {
-    const { initialDepth } = this.props;
+    const { initialDepth, depthFactor } = this.props;
     const tree = layout.tree()
       .nodeSize([100 + 40, 100 + 40])
       .separation((d) => d._children ? 1.2 : 0.9)
@@ -205,6 +205,10 @@ export default class Tree extends React.Component {
     // set `initialDepth` on first render if specified
     if (initialDepth !== undefined && this.state.initialRender) {
       this.setInitialTreeDepth(nodes, initialDepth);
+    }
+
+    if (depthFactor) {
+      nodes.forEach((node) => { node.y = node.depth * depthFactor; });
     }
 
     return { nodes, links };

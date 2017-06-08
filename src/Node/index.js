@@ -35,13 +35,7 @@ export default class Node extends React.Component {
   }
 
   setTransformOrientation(x, y) {
-    const { orientation, nodeData, depthFactor } = this.props;
-
-    if (depthFactor) {
-      y = nodeData.depth * depthFactor;
-    }
-
-    return orientation === 'horizontal' ?
+    return this.props.orientation === 'horizontal' ?
       `translate(${y},${x})` :
       `translate(${x},${y})`;
   }
