@@ -23,8 +23,12 @@ describe('<Node />', () => {
     onClick: () => {},
   };
 
+
+  jest.spyOn(Node.prototype, 'applyTransform');
+
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
+
 
   it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(
@@ -33,6 +37,7 @@ describe('<Node />', () => {
 
     expect(renderedComponent.find('g').prop('id')).toBe(nodeData.id);
   });
+
 
   it('applies correct base className if `nodeData._children` is defined', () => {
     const noChildrenComponent = shallow(
@@ -48,6 +53,7 @@ describe('<Node />', () => {
     expect(noChildrenComponent.prop('className')).toBe('leafNodeBase');
     expect(withChildrenComponent.prop('className')).toBe('nodeBase');
   });
+
 
   it('applies correct <circle> style prop if `nodeData._children` is defined', () => {
     const leafCircleStyle = { fill: 'blue' };
@@ -72,6 +78,7 @@ describe('<Node />', () => {
     expect(withChildrenComponent.find('circle').prop('style')).toBe(circleStyle);
   });
 
+
   it('applies correct `transform` prop based on its `orientation`', () => {
     const horizontalTransform = `translate(${nodeData.parent.y},${nodeData.parent.x})`;
     const verticalTransform = `translate(${nodeData.parent.x},${nodeData.parent.y})`;
@@ -88,6 +95,7 @@ describe('<Node />', () => {
     expect(verticalComponent.find('g').prop('transform')).toBe(verticalTransform);
   });
 
+
   it('should take an `onClick` prop', () => {
     const renderedComponent = shallow(
       <Node
@@ -98,6 +106,7 @@ describe('<Node />', () => {
 
     expect(renderedComponent.prop('onClick')).toBeDefined();
   });
+
 
   it('handles click events and passes its nodeId to onClick handler', () => {
     const onClickSpy = jest.fn();
@@ -111,6 +120,7 @@ describe('<Node />', () => {
     renderedComponent.simulate('click');
     expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
   });
+
 
   it('maps each `props.secondaryLabels` to a <tspan> element', () => {
     const fixture = { keyA: 'valA', keyB: 'valB' };
@@ -132,6 +142,7 @@ describe('<Node />', () => {
     ).toBe(1);
   });
 
+
   it('mutates the node\'s `y` property according to `depthFactor`, when specified', () => {
     const depthFactor = 100;
     const expectedY = nodeData.depth * depthFactor;
@@ -146,8 +157,8 @@ describe('<Node />', () => {
     expect(renderedComponent.prop('transform')).toBe(`translate(${nodeData.parent.x},${expectedY})`);
   });
 
+
   it('applies its own x/y coords on `transform` once mounted', () => {
-    jest.spyOn(Node.prototype, 'applyTransform');
     const fixture = `translate(${nodeData.y},${nodeData.x})`;
     const renderedComponent = mount(
       <Node
@@ -158,8 +169,9 @@ describe('<Node />', () => {
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(fixture);
   });
 
+
   it('updates its transform attribute if either the `x` or `y` prop changes', () => {
-    jest.spyOn(Node.prototype, 'applyTransform');
+    // jest.spyOn(Node.prototype, 'applyTransform');
     const updatedProps = {
       ...mockProps,
       nodeData: {
