@@ -194,6 +194,7 @@ describe('<Node />', () => {
   });
 
   // TODO Find a way to meaningfully test `componentWillLeave`
+
   // it('regresses to its parent coords when unmounting/leaving', () => {
   //   jest.spyOn(Node.prototype, 'applyTransform');
   //   const fixture = `translate(${nodeData.parent.y},${nodeData.parent.x})`;
