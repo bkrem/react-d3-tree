@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { TransitionGroup } from 'react-transition-group';
-import { layout, behavior, event, select } from 'd3';
+import { layout } from 'd3';
 import clone from 'clone';
 import uuid from 'uuid';
 
@@ -24,8 +24,6 @@ export default class Tree extends React.Component {
 
 
   componentDidMount() {
-    this.bindZoomListener();
-
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
@@ -56,6 +54,7 @@ export default class Tree extends React.Component {
   }
 
 
+  // TODO Refactor zoom functionality & reimplement
   /**
    * bindZoomListener - If `props.zoomable`, binds a listener for
    * "zoom" events to the SVG and sets scaleExtent to min/max
@@ -63,20 +62,20 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  bindZoomListener() {
-    const { zoomable, scaleExtent } = this.props;
-    const svg = select('.svg');
-
-    if (zoomable) {
-      this.setState({ zoom: 'scale(1)' });
-      svg.call(behavior.zoom()
-        .scaleExtent([scaleExtent.min, scaleExtent.max])
-        .on('zoom', () => {
-          this.setState({ zoom: `scale(${event.scale})` });
-        })
-      );
-    }
-  }
+  // bindZoomListener() {
+  //   const { zoomable, scaleExtent } = this.props;
+  //   const svg = select('.svg');
+  //
+  //   if (zoomable) {
+  //     this.setState({ zoom: 'scale(1)' });
+  //     svg.call(behavior.zoom()
+  //       .scaleExtent([scaleExtent.min, scaleExtent.max])
+  //       .on('zoom', () => {
+  //         this.setState({ zoom: `scale(${event.scale})` });
+  //       })
+  //     );
+  //   }
+  // }
 
 
   /**
@@ -260,8 +259,8 @@ Tree.defaultProps = {
   depthFactor: undefined,
   collapsible: true,
   initialDepth: undefined,
-  zoomable: true,
-  scaleExtent: { min: 0.1, max: 1 },
+  // zoomable: true,
+  // scaleExtent: { min: 0.1, max: 1 },
 };
 
 Tree.propTypes = {
@@ -282,9 +281,9 @@ Tree.propTypes = {
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,
-  zoomable: PropTypes.bool,
-  scaleExtent: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
-  }),
+  // zoomable: PropTypes.bool,
+  // scaleExtent: PropTypes.shape({
+  //   min: PropTypes.number,
+  //   max: PropTypes.number,
+  // }),
 };
