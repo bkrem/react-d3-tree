@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import * as d3 from 'd3';
+import { svg, select } from 'd3';
 
 import './style.css';
 
@@ -7,11 +7,33 @@ export default class Link extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.generatePathDescription = this.generatePathDescription.bind(this);
+    this.state = {
+      initialStyle: {
+        opacity: 0,
+      },
+    };
+  }
+
+  componentDidMount() {
+    this.applyOpacity(1);
+  }
+
+  componentWillLeave(done) {
+    this.applyOpacity(0, done);
+  }
+
+  applyOpacity(opacity, done = () => {}) {
+    const { transitionDuration } = this.props;
+
+    select(this.link)
+    .transition()
+    .duration(transitionDuration)
+    .style('opacity', opacity)
+    .each('end', done);
   }
 
   diagonalPath(linkData, orientation) {
-    const diagonal = d3.svg.diagonal().projection((d) =>
+    const diagonal = svg.diagonal().projection((d) =>
       orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]
     );
     return diagonal(linkData);
@@ -23,7 +45,7 @@ export default class Link extends React.PureComponent {
       `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
   }
 
-  generatePathDescription() {
+  drawPath() {
     const { linkData, orientation, pathFunc } = this.props;
     return pathFunc === 'diagonal'
       ? this.diagonalPath(linkData, orientation)
@@ -33,8 +55,10 @@ export default class Link extends React.PureComponent {
   render() {
     return (
       <path
+        ref={(l) => { this.link = l; }}
+        style={this.state.initialStyle}
         className="linkBase"
-        d={this.generatePathDescription()}
+        d={this.drawPath()}
       />
     );
   }
@@ -50,4 +74,5 @@ Link.propTypes = {
     'diagonal',
     'elbow',
   ]).isRequired,
+  transitionDuration: PropTypes.number.isRequired,
 };

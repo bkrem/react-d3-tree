@@ -1,4 +1,5 @@
 import React from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import { shallow, mount } from 'enzyme';
 
 import Node from '../../Node';
@@ -33,16 +34,47 @@ describe('<Tree />', () => {
     },
   ];
 
-  // Clear method spies on prototype before next test
+  const mockData2 = [
+    {
+      name: 'Top Level',
+      parent: 'null',
+      attributes: {
+        keyA: 'val A',
+        keyB: 'val B',
+        keyC: 'val C',
+      },
+      children: [
+        {
+          name: 'Level 2: A',
+          parent: 'Top Level',
+          attributes: {
+            keyA: 'val A',
+            keyB: 'val B',
+            keyC: 'val C',
+          },
+        },
+      ],
+    },
+  ];
+
+  jest.spyOn(Tree.prototype, 'generateTree');
+  jest.spyOn(Tree.prototype, 'assignInternalProperties');
+  jest.spyOn(Tree.prototype, 'handleNodeToggle');
+  jest.spyOn(Tree.prototype, 'collapseNode');
+  jest.spyOn(Tree.prototype, 'expandNode');
+  jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
+
+  // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
 
+
   it('builds a tree on each render', () => {
-    jest.spyOn(Tree.prototype, 'generateTree');
     const renderedComponent = shallow(
       <Tree data={mockData} />
     );
     expect(renderedComponent.instance().generateTree).toHaveBeenCalled();
   });
+
 
   it('maps every node onto a <Node />', () => {
     const nodeCount = 3; // 1 top level node + 2 child nodes in mockData
@@ -53,6 +85,7 @@ describe('<Tree />', () => {
     expect(renderedComponent.find(Node).length).toBe(nodeCount);
   });
 
+
   it('maps every parent-child relation onto a <Link />', () => {
     const linkCount = 2;
     const renderedComponent = shallow(
@@ -61,6 +94,28 @@ describe('<Tree />', () => {
 
     expect(renderedComponent.find(Link).length).toBe(linkCount);
   });
+
+
+  it('reassigns internal props if `props.data` changes', () => {
+    // `assignInternalProperties` recurses by depth: 1 level -> 1 call
+    const mockDataDepth = 2;
+    const mockData2Depth = 2;
+    const nextProps = {
+      data: mockData2,
+    };
+    const renderedComponent = mount(
+      <Tree data={mockData} />
+    );
+
+    expect(renderedComponent.instance().assignInternalProperties)
+    .toHaveBeenCalledTimes(mockDataDepth);
+
+    renderedComponent.setProps(nextProps);
+
+    expect(renderedComponent.instance().assignInternalProperties)
+    .toHaveBeenCalledTimes(mockDataDepth + mockData2Depth);
+  });
+
 
   it('applies the `translate` prop when specified', () => {
     const fixture = { x: 123, y: 321 };
@@ -71,9 +126,27 @@ describe('<Tree />', () => {
         translate={fixture}
       />
     );
-
-    expect(renderedComponent.find('g').prop('transform')).toBe(expected);
+    expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(expected);
   });
+
+
+  it('mutates each node\'s `y` prop according to `depthFactor` when specified', () => {
+    const depthFactor = 100;
+    // const expectedY = nodeData.depth * depthFactor;
+    const renderedComponent = shallow(
+      <Tree
+        data={mockData}
+        orientation="vertical"
+        depthFactor={depthFactor}
+      />
+    );
+
+    const { nodes } = renderedComponent.instance().generateTree(mockData);
+    nodes.forEach((node) => {
+      expect(node.y).toBe(node.depth * depthFactor);
+    });
+  });
+
 
   it('passes `props.orientation` to its <Node /> and <Link /> children', () => {
     const fixture = 'vertical';
@@ -92,6 +165,7 @@ describe('<Tree />', () => {
     ).toBe(true);
   });
 
+
   it('passes `handleNodeToggle()` to its <Node /> children as onClick prop', () => {
     const renderedComponent = shallow(
       <Tree data={mockData} />
@@ -102,9 +176,8 @@ describe('<Tree />', () => {
     ).toBe(true);
   });
 
+
   it('collapses a node\'s children when it is clicked in an expanded state', () => {
-    jest.spyOn(Tree.prototype, 'handleNodeToggle');
-    jest.spyOn(Tree.prototype, 'collapseNode');
     const renderedComponent = mount(
       <Tree data={mockData} />
     );
@@ -114,10 +187,8 @@ describe('<Tree />', () => {
     expect(Tree.prototype.collapseNode).toHaveBeenCalled();
   });
 
+
   it('expands a node\'s children when it is clicked in a collapsed state', () => {
-    jest.spyOn(Tree.prototype, 'handleNodeToggle');
-    jest.spyOn(Tree.prototype, 'collapseNode');
-    jest.spyOn(Tree.prototype, 'expandNode');
     const renderedComponent = mount(
       <Tree data={mockData} />
     );
@@ -129,9 +200,8 @@ describe('<Tree />', () => {
     expect(Tree.prototype.expandNode).toHaveBeenCalled();
   });
 
+
   it('does not collapse a node if `props.collapsible` is false', () => {
-    jest.spyOn(Tree.prototype, 'handleNodeToggle');
-    jest.spyOn(Tree.prototype, 'collapseNode');
     const renderedComponent = mount(
       <Tree
         data={mockData}
@@ -144,8 +214,8 @@ describe('<Tree />', () => {
     expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(0);
   });
 
+
   it('sets tree depth to `props.initialDepth` if specified', () => {
-    jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
     mount(
       <Tree
         data={mockData}
@@ -156,22 +226,23 @@ describe('<Tree />', () => {
     expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
   });
 
-  it('allows zooming in/out according to `props.scaleExtent` if `props.zoomable`', () => {
-    const zoomableComponent = mount(
-      <Tree
-        data={mockData}
-      />
-    );
-    const nonZoomableComponent = mount(
-      <Tree
-        data={mockData}
-        zoomable={false}
-      />
-    );
 
-    zoomableComponent.find('svg').simulate('touchmove');
-
-    expect(zoomableComponent.find('svg').prop('transform')).toBeDefined();
-    expect(nonZoomableComponent.find('svg').prop('transform')).toBeUndefined();
-  });
+  // it('allows zooming in/out according to `props.scaleExtent` if `props.zoomable`', () => {
+  //   const zoomableComponent = mount(
+  //     <Tree
+  //       data={mockData}
+  //     />
+  //   );
+  //   const nonZoomableComponent = mount(
+  //     <Tree
+  //       data={mockData}
+  //       zoomable={false}
+  //     />
+  //   );
+  //
+  //   zoomableComponent.find('svg').simulate('touchmove');
+  //
+  //   expect(zoomableComponent.find('svg').prop('transform')).toBeDefined();
+  //   expect(nonZoomableComponent.find('svg').prop('transform')).toBeUndefined();
+  // });
 });
