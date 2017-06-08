@@ -1,60 +1,116 @@
 import React, { PropTypes } from 'react';
 import uuid from 'uuid';
+import { select } from 'd3';
 
 import './style.css';
 
-function Node(props) {
-  const { nodeData, orientation, depthFactor } = props;
+export default class Node extends React.Component {
 
-  // Normalise node position for fixed depth
-  if (depthFactor) {
-    nodeData.y = nodeData.depth * depthFactor;
+  constructor(props) {
+    super(props);
+    const { parent } = props.nodeData;
+    const originX = parent ? parent.x : 0;
+    const originY = parent ? parent.y : 0;
+
+    this.state = {
+      transform: this.setTransformOrientation(originX, originY),
+      initialStyle: {
+        opacity: 0,
+      },
+    };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  const transform = orientation === 'horizontal' ?
-    `translate(${nodeData.y},${nodeData.x})` :
-    `translate(${nodeData.x},${nodeData.y})`;
+  componentDidMount() {
+    const { x, y } = this.props.nodeData;
+    const transform = this.setTransformOrientation(x, y);
 
-  return (
-    <g
-      id={nodeData.id}
-      className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
-      transform={transform}
-      onClick={() => props.onClick(nodeData.id)}
-    >
-      <text
-        className="primaryLabelBase"
-        textAnchor={props.textAnchor}
-        style={props.primaryLabelStyle}
-        x="10"
-        y="-10"
-        dy=".35em"
+    this.applyTransform(transform);
+  }
+
+  componentWillUpdate(nextProps) {
+    const transform = this.setTransformOrientation(nextProps.nodeData.x, nextProps.nodeData.y);
+    this.applyTransform(transform);
+  }
+
+  setTransformOrientation(x, y) {
+    return this.props.orientation === 'horizontal' ?
+      `translate(${y},${x})` :
+      `translate(${x},${y})`;
+  }
+
+  applyTransform(transform, opacity = 1, done = () => {}) {
+    const { transitionDuration } = this.props;
+
+    select(this.node)
+    .transition()
+    .duration(transitionDuration)
+    .attr('transform', transform)
+    .style('opacity', opacity)
+    .each('end', done);
+  }
+
+  handleClick() {
+    this.props.onClick(this.props.nodeData.id);
+  }
+
+  componentWillLeave(done) {
+    const { parent } = this.props.nodeData;
+    const originX = parent ? parent.x : 0;
+    const originY = parent ? parent.y : 0;
+    const transform = this.setTransformOrientation(originX, originY);
+
+    this.applyTransform(transform, 0, done);
+  }
+
+  render() {
+    const { nodeData } = this.props;
+
+    return (
+      <g
+        id={nodeData.id}
+        ref={(n) => { this.node = n; }}
+        style={this.state.initialStyle}
+        className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
+        transform={this.state.transform}
+        onClick={this.handleClick}
       >
-        {props.primaryLabel}
-      </text>
+        <text
+          className="primaryLabelBase"
+          textAnchor={this.props.textAnchor}
+          style={this.props.primaryLabelStyle}
+          x="10"
+          y="-10"
+          dy=".35em"
+        >
+          {this.props.primaryLabel}
+        </text>
 
-      <circle
-        r={props.circleRadius}
-        style={nodeData._children ? props.circleStyle : props.leafCircleStyle}
-      />
+        <circle
+          r={this.props.circleRadius}
+          style={nodeData._children ? this.props.circleStyle : this.props.leafCircleStyle}
+        />
 
-      <text
-        className="secondaryLabelsBase"
-        y="0"
-        textAnchor={props.textAnchor}
-        style={props.secondaryLabelsStyle}
-      >
-        {props.secondaryLabels && Object.keys(props.secondaryLabels).map((labelKey) =>
-          <tspan x="10" dy="1.2em" key={uuid.v4()}>
-            {labelKey}: {props.secondaryLabels[labelKey]}
-          </tspan>
-        )}
-      </text>
-    </g>
-  );
+        <text
+          className="secondaryLabelsBase"
+          y="0"
+          textAnchor={this.props.textAnchor}
+          style={this.props.secondaryLabelsStyle}
+        >
+          {this.props.secondaryLabels && Object.keys(this.props.secondaryLabels).map((labelKey) =>
+            <tspan x="10" dy="1.2em" key={uuid.v4()}>
+              {labelKey}: {this.props.secondaryLabels[labelKey]}
+            </tspan>
+          )}
+        </text>
+      </g>
+    );
+  }
 }
 
 Node.defaultProps = {
+  depthFactor: undefined,
   circleRadius: 10,
   circleStyle: {
     stroke: '#000',
@@ -68,14 +124,15 @@ Node.defaultProps = {
   },
 };
 
-/* eslint-disable*/
+/* eslint-disable */
 Node.propTypes = {
   nodeData: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf([
     'horizontal',
     'vertical',
   ]).isRequired,
-  onClick: PropTypes.func,
+  transitionDuration: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
   depthFactor: PropTypes.number,
   primaryLabel: PropTypes.string,
   primaryLabelStyle: PropTypes.object,
@@ -87,5 +144,3 @@ Node.propTypes = {
   leafCircleStyle: PropTypes.object,
 };
 /* eslint-enable */
-
-export default Node;

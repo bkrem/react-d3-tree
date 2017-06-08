@@ -32,6 +32,7 @@ const config = {
     'clone',
     'd3',
     'react',
+    'react-transition-group',
     'uuid',
   ],
   module: {

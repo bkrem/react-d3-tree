@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import Link from '../index';
 
@@ -15,36 +15,39 @@ describe('<Link />', () => {
     },
   };
 
-  // Clear method spies on prototype before next test
+  const mockProps = {
+    linkData,
+    pathFunc: 'diagonal',
+    orientation: 'horizontal',
+    transitionDuration: 500,
+  };
+
+
+  jest.spyOn(Link.prototype, 'diagonalPath');
+  jest.spyOn(Link.prototype, 'elbowPath');
+  jest.spyOn(Link.prototype, 'applyOpacity');
+
+  // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
 
-  it('should apply the base className', () => {
+
+  it('applies the base className', () => {
     const renderedComponent = shallow(
-      <Link
-        linkData={linkData}
-        pathFunc="diagonal"
-        orientation="horizontal"
-      />
+      <Link {...mockProps} />
     );
 
     expect(renderedComponent.prop('className')).toBe('linkBase');
   });
 
-  it('should call the appropriate path func based on `props.pathFunc`', () => {
-    jest.spyOn(Link.prototype, 'diagonalPath');
-    jest.spyOn(Link.prototype, 'elbowPath');
+
+  it('calls the appropriate path func based on `props.pathFunc`', () => {
     const diagonalComponent = shallow(
-      <Link
-        linkData={linkData}
-        pathFunc="diagonal"
-        orientation="horizontal"
-      />
+      <Link {...mockProps} />
     );
     const elbowComponent = shallow(
       <Link
-        linkData={linkData}
+        {...mockProps}
         pathFunc="elbow"
-        orientation="horizontal"
       />
     );
 
@@ -52,7 +55,8 @@ describe('<Link />', () => {
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
   });
 
-  it('should return an appropriate elbowPath according to `props.orientation`', () => {
+
+  it('returns an appropriate elbowPath according to `props.orientation`', () => {
     expect(
       Link.prototype.elbowPath(linkData, 'horizontal')
     ).toBe(`M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`);
@@ -60,4 +64,16 @@ describe('<Link />', () => {
       Link.prototype.elbowPath(linkData, 'vertical')
     ).toBe(`M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`);
   });
+
+
+  it('fades in once it has been mounted', () => {
+    const fixture = 1;
+    const renderedComponent = mount(
+      <Link {...mockProps} />
+    );
+
+    expect(renderedComponent.instance().applyOpacity).toHaveBeenCalledWith(fixture);
+  });
+
+  // TODO Find a way to meaningfully test `componentWillLeave`
 });

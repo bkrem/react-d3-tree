@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import { layout, behavior, event, select } from 'd3';
+import { TransitionGroup } from 'react-transition-group';
+import { layout } from 'd3';
 import clone from 'clone';
 import uuid from 'uuid';
 
@@ -13,7 +14,7 @@ export default class Tree extends React.Component {
     super(props);
     this.state = {
       initialRender: true,
-      data: this.assignInternalProperties(clone(this.props.data)),
+      data: this.assignInternalProperties(clone(props.data)),
       zoom: undefined,
     };
     this.findNodesById = this.findNodesById.bind(this);
@@ -21,12 +22,12 @@ export default class Tree extends React.Component {
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
   }
 
-  componentDidMount() {
-    this.bindZoomListener();
 
+  componentDidMount() {
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
+
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
@@ -53,6 +54,7 @@ export default class Tree extends React.Component {
   }
 
 
+  // TODO Refactor zoom functionality & reimplement
   /**
    * bindZoomListener - If `props.zoomable`, binds a listener for
    * "zoom" events to the SVG and sets scaleExtent to min/max
@@ -60,20 +62,20 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  bindZoomListener() {
-    const { zoomable, scaleExtent } = this.props;
-    const svg = select('.svg');
-
-    if (zoomable) {
-      this.setState({ zoom: 'scale(1)' });
-      svg.call(behavior.zoom()
-        .scaleExtent([scaleExtent.min, scaleExtent.max])
-        .on('zoom', () => {
-          this.setState({ zoom: `scale(${event.scale})` });
-        })
-      );
-    }
-  }
+  // bindZoomListener() {
+  //   const { zoomable, scaleExtent } = this.props;
+  //   const svg = select('.svg');
+  //
+  //   if (zoomable) {
+  //     this.setState({ zoom: 'scale(1)' });
+  //     svg.call(behavior.zoom()
+  //       .scaleExtent([scaleExtent.min, scaleExtent.max])
+  //       .on('zoom', () => {
+  //         this.setState({ zoom: `scale(${event.scale})` });
+  //       })
+  //     );
+  //   }
+  // }
 
 
   /**
@@ -190,7 +192,7 @@ export default class Tree extends React.Component {
    * @return {object} Object containing `nodes` and `links` fields.
    */
   generateTree() {
-    const { initialDepth } = this.props;
+    const { initialDepth, depthFactor } = this.props;
     const tree = layout.tree()
       .nodeSize([100 + 40, 100 + 40])
       .separation((d) => d._children ? 1.2 : 0.9)
@@ -205,30 +207,30 @@ export default class Tree extends React.Component {
       this.setInitialTreeDepth(nodes, initialDepth);
     }
 
+    if (depthFactor) {
+      nodes.forEach((node) => { node.y = node.depth * depthFactor; });
+    }
+
     return { nodes, links };
   }
 
   render() {
-    const { orientation, translate, pathFunc, depthFactor } = this.props;
+    const { orientation, translate, pathFunc, depthFactor, transitionDuration } = this.props;
     const { nodes, links } = this.generateTree();
+
     return (
       <div className="treeContainer">
-        <svg
-          className="svg"
-          width="100%"
-          height="100%"
-          transform={this.state.zoom}
-        >
-          <g
-            className="gWrapper"
+        <svg className="svg" width="100%" height="100%">
+          <TransitionGroup
+            component="g"
             transform={`translate(${translate.x},${translate.y})`}
           >
-
             {nodes.map((nodeData) =>
               <Node
                 key={nodeData.id}
                 orientation={orientation}
                 depthFactor={depthFactor}
+                transitionDuration={transitionDuration}
                 textAnchor="start"
                 nodeData={nodeData}
                 primaryLabel={nodeData.name}
@@ -243,10 +245,10 @@ export default class Tree extends React.Component {
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}
+                transitionDuration={transitionDuration}
               />
             )}
-
-          </g>
+          </TransitionGroup>
         </svg>
       </div>
     );
@@ -257,11 +259,12 @@ Tree.defaultProps = {
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
+  transitionDuration: 500,
   depthFactor: undefined,
   collapsible: true,
   initialDepth: undefined,
-  zoomable: true,
-  scaleExtent: { min: 0.1, max: 1 },
+  // zoomable: true,
+  // scaleExtent: { min: 0.1, max: 1 },
 };
 
 Tree.propTypes = {
@@ -278,12 +281,13 @@ Tree.propTypes = {
     'diagonal',
     'elbow',
   ]),
+  transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,
-  zoomable: PropTypes.bool,
-  scaleExtent: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
-  }),
+  // zoomable: PropTypes.bool,
+  // scaleExtent: PropTypes.shape({
+  //   min: PropTypes.number,
+  //   max: PropTypes.number,
+  // }),
 };
