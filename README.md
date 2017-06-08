@@ -86,7 +86,7 @@ class MyComponent extends Component {
 | `collapsible`         | `bool`          |                         |           | `true`                  | Toggles ability to collapse/expand the tree's nodes by clicking them.                                                                                                           |
 | `initialDepth`        | `number`        | `0..n`                  |           | `undefined`             | Sets the maximum node depth to which the tree is expanded on its initial render. <br /> Tree renders to full depth if prop is omitted.                                          |
 | `depthFactor`         | `number`        | `-n..0..n`              |           | `undefined`             | Ensures the tree takes up a fixed amount of space (`node.y = node.depth * depthFactor`), regardless of tree depth. <br /> **TIP**: Negative values invert the tree's direction. |
-| `transitionDuration`  | `number`        | `0..n`                  |           | `500`                   | Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to `0` to deactivate animations completely                                 |
+| `transitionDuration`  | `number`        | `0..n`                  |           | `500`                   | Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to `0` to deactivate animations completely.                                |
 
 ## External data sources
 Statically hosted JSON or CSV files can be used as data sources via the additional `treeUtil` module.
