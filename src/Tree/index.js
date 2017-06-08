@@ -14,7 +14,7 @@ export default class Tree extends React.Component {
     super(props);
     this.state = {
       initialRender: true,
-      data: this.assignInternalProperties(clone(this.props.data)),
+      data: this.assignInternalProperties(clone(props.data)),
       zoom: undefined,
     };
     this.findNodesById = this.findNodesById.bind(this);
@@ -22,12 +22,14 @@ export default class Tree extends React.Component {
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
   }
 
+
   componentDidMount() {
     this.bindZoomListener();
 
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
+
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
