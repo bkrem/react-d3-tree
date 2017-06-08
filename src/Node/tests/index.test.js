@@ -143,21 +143,6 @@ describe('<Node />', () => {
   });
 
 
-  it('mutates the node\'s `y` property according to `depthFactor`, when specified', () => {
-    const depthFactor = 100;
-    const expectedY = nodeData.depth * depthFactor;
-    const renderedComponent = shallow(
-      <Node
-        {...mockProps}
-        orientation="vertical"
-        depthFactor={depthFactor}
-      />
-    );
-
-    expect(renderedComponent.prop('transform')).toBe(`translate(${nodeData.parent.x},${expectedY})`);
-  });
-
-
   it('applies its own x/y coords on `transform` once mounted', () => {
     const fixture = `translate(${nodeData.y},${nodeData.x})`;
     const renderedComponent = mount(

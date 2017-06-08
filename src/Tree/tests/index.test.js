@@ -130,6 +130,24 @@ describe('<Tree />', () => {
   });
 
 
+  it('mutates each node\'s `y` prop according to `depthFactor` when specified', () => {
+    const depthFactor = 100;
+    // const expectedY = nodeData.depth * depthFactor;
+    const renderedComponent = shallow(
+      <Tree
+        data={mockData}
+        orientation="vertical"
+        depthFactor={depthFactor}
+      />
+    );
+
+    const { nodes } = renderedComponent.instance().generateTree(mockData);
+    nodes.forEach((node) => {
+      expect(node.y).toBe(node.depth * depthFactor);
+    });
+  });
+
+
   it('passes `props.orientation` to its <Node /> and <Link /> children', () => {
     const fixture = 'vertical';
     const renderedComponent = shallow(
