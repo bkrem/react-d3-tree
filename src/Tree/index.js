@@ -219,11 +219,18 @@ export default class Tree extends React.Component {
   }
 
   render() {
-    const { orientation, translate, pathFunc, depthFactor, transitionDuration } = this.props;
     const { nodes, links } = this.generateTree();
+    const {
+      orientation,
+      translate,
+      pathFunc,
+      depthFactor,
+      transitionDuration,
+      zoomable,
+    } = this.props;
 
     return (
-      <div className="rd3t-tree-container">
+      <div className={`rd3t-tree-container ${zoomable ? 'grabbable' : undefined}`}>
         <svg className="rd3t-svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
