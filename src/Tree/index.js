@@ -54,7 +54,6 @@ export default class Tree extends React.Component {
   }
 
 
-  // TODO Refactor zoom functionality & reimplement
   /**
    * bindZoomListener - If `props.zoomable`, binds a listener for
    * "zoom" events to the SVG and sets scaleExtent to min/max
