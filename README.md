@@ -15,7 +15,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 
 
 ## Demo
-- Current release (stable): https://bkrem.github.io/react-d3-tree/ 
+- Current release: https://bkrem.github.io/react-d3-tree/ 
 
 
 ## Installation
