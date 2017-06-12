@@ -32,6 +32,7 @@ yarn add react-d3-tree
 
 ## Usage
 ```jsx
+import React from 'react';
 import Tree from 'react-d3-tree';
 
 const myTreeData = [
@@ -58,7 +59,7 @@ const myTreeData = [
   },
 ];
 
-class MyComponent extends Component {
+class MyComponent extends React.Component {
   render() {
     return (
       {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
@@ -93,6 +94,7 @@ Statically hosted JSON or CSV files can be used as data sources via the addition
 ### Example
 
 ```jsx
+import React from 'react';
 import { Tree, treeUtil } from 'react-d3-tree';
 
 const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/master/docs/examples/data/csv-example.csv';
@@ -113,7 +115,7 @@ componentWillMount() {
   .catch((err) => console.error(err));
 }
 
-class MyComponent extends Component {
+class MyComponent extends React.Component {
   render() {
     return (
       {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
