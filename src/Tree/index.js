@@ -36,6 +36,13 @@ export default class Tree extends React.Component {
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
     }
+
+    // If zoom-specific props change -> rebind listener with new values
+    if (this.props.translate !== nextProps.translate ||
+    this.props.scaleExtent !== nextProps.scaleExtent) {
+      console.log(nextProps.translate, nextProps.scaleExtent);
+      this.bindZoomListener();
+    }
   }
 
 
