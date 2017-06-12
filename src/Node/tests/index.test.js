@@ -18,9 +18,11 @@ describe('<Node />', () => {
 
   const mockProps = {
     nodeData,
+    name: nodeData.name,
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
+    styles: {},
   };
 
 
@@ -56,26 +58,25 @@ describe('<Node />', () => {
 
 
   it('applies correct <circle> style prop if `nodeData._children` is defined', () => {
-    const leafCircleStyle = { fill: 'blue' };
-    const circleStyle = { fill: 'green' };
+    const leafCircle = { fill: 'blue' };
+    const circle = { fill: 'green' };
+    const styles = { circle, leafCircle };
     const noChildrenComponent = shallow(
       <Node
         {...mockProps}
-        leafCircleStyle={leafCircleStyle}
-        circleStyle={circleStyle}
+        styles={styles}
       />
     );
     const withChildrenComponent = shallow(
       <Node
         {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
-        leafCircleStyle={leafCircleStyle}
-        circleStyle={circleStyle}
+        styles={styles}
       />
     );
 
-    expect(noChildrenComponent.find('circle').prop('style')).toBe(leafCircleStyle);
-    expect(withChildrenComponent.find('circle').prop('style')).toBe(circleStyle);
+    expect(noChildrenComponent.find('circle').prop('style')).toBe(leafCircle);
+    expect(withChildrenComponent.find('circle').prop('style')).toBe(circle);
   });
 
 
@@ -122,17 +123,17 @@ describe('<Node />', () => {
   });
 
 
-  it('maps each `props.secondaryLabels` to a <tspan> element', () => {
+  it('maps each `props.attributes` to a <tspan> element', () => {
     const fixture = { keyA: 'valA', keyB: 'valB' };
     const renderedComponent = shallow(
       <Node
         {...mockProps}
-        secondaryLabels={fixture}
+        attributes={fixture}
       />
     );
     const textNode = renderedComponent
       .find('text')
-      .findWhere((n) => n.prop('className') === 'secondaryLabelsBase');
+      .findWhere((n) => n.prop('className') === 'nodeAttributesBase');
 
     expect(textNode.findWhere((n) =>
       n.text() === `keyA: ${fixture.keyA}`).length

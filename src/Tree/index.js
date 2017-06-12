@@ -230,9 +230,9 @@ export default class Tree extends React.Component {
       orientation,
       translate,
       pathFunc,
-      depthFactor,
       transitionDuration,
       zoomable,
+      styles,
     } = this.props;
 
     return (
@@ -247,13 +247,13 @@ export default class Tree extends React.Component {
               <Node
                 key={nodeData.id}
                 orientation={orientation}
-                depthFactor={depthFactor}
                 transitionDuration={transitionDuration}
                 textAnchor="start"
                 nodeData={nodeData}
-                primaryLabel={nodeData.name}
-                secondaryLabels={nodeData.attributes}
+                name={nodeData.name}
+                attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
+                styles={styles.nodes}
               />
             )}
 
@@ -264,6 +264,7 @@ export default class Tree extends React.Component {
                 pathFunc={pathFunc}
                 linkData={linkData}
                 transitionDuration={transitionDuration}
+                styles={styles.links}
               />
             )}
           </TransitionGroup>
@@ -283,6 +284,10 @@ Tree.defaultProps = {
   initialDepth: undefined,
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
+  styles: {
+    nodes: {},
+    links: {},
+  },
 };
 
 Tree.propTypes = {
@@ -307,5 +312,9 @@ Tree.propTypes = {
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,
+  }),
+  styles: PropTypes.shape({
+    nodes: PropTypes.object,
+    links: PropTypes.object,
   }),
 };

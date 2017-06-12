@@ -65,44 +65,50 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData } = this.props;
+    const { nodeData, styles } = this.props;
+    const nodeStyle = nodeData._children ?
+      { ...this.state.initialStyle, ...styles.node } :
+      { ...this.state.initialStyle, ...styles.leafNode };
 
     return (
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
-        style={this.state.initialStyle}
+        style={nodeStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.state.transform}
         onClick={this.handleClick}
       >
         <text
-          className="primaryLabelBase"
+          className="nodeNameBase"
           textAnchor={this.props.textAnchor}
-          style={this.props.primaryLabelStyle}
+          style={styles.name}
           x="10"
           y="-10"
           dy=".35em"
         >
-          {this.props.primaryLabel}
+          {this.props.name}
         </text>
 
         <circle
           r={this.props.circleRadius}
-          style={nodeData._children ? this.props.circleStyle : this.props.leafCircleStyle}
+          style={nodeData._children ? styles.circle : styles.leafCircle}
         />
 
         <text
-          className="secondaryLabelsBase"
+          className="nodeAttributesBase"
           y="0"
           textAnchor={this.props.textAnchor}
-          style={this.props.secondaryLabelsStyle}
+          style={styles.attributes}
         >
-          {this.props.secondaryLabels && Object.keys(this.props.secondaryLabels).map((labelKey) =>
-            <tspan x="10" dy="1.2em" key={uuid.v4()}>
-              {labelKey}: {this.props.secondaryLabels[labelKey]}
-            </tspan>
-          )}
+          {
+            this.props.attributes &&
+            Object.keys(this.props.attributes).map((labelKey) =>
+              <tspan x="10" dy="1.2em" key={uuid.v4()}>
+                {labelKey}: {this.props.attributes[labelKey]}
+              </tspan>
+            )
+          }
         </text>
       </g>
     );
@@ -110,21 +116,11 @@ export default class Node extends React.Component {
 }
 
 Node.defaultProps = {
-  depthFactor: undefined,
   circleRadius: 10,
-  circleStyle: {
-    stroke: '#000',
-    strokeWidth: 2,
-    fill: 'grey',
-  },
-  leafCircleStyle: {
-    stroke: '#000',
-    strokeWidth: 2,
-    fill: 'transparent',
-  },
+  textAnchor: 'start',
+  attributes: undefined,
 };
 
-/* eslint-disable */
 Node.propTypes = {
   nodeData: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf([
@@ -133,14 +129,9 @@ Node.propTypes = {
   ]).isRequired,
   transitionDuration: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
-  depthFactor: PropTypes.number,
-  primaryLabel: PropTypes.string,
-  primaryLabelStyle: PropTypes.object,
-  secondaryLabels: PropTypes.object,
-  secondaryLabelsStyle: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  attributes: PropTypes.object,
   textAnchor: PropTypes.string,
   circleRadius: PropTypes.number,
-  circleStyle: PropTypes.object,
-  leafCircleStyle: PropTypes.object,
+  styles: PropTypes.object.isRequired,
 };
-/* eslint-enable */
