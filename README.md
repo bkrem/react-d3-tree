@@ -87,6 +87,7 @@ class MyComponent extends Component {
 | `zoomable`            | `bool`          |                         |           | `true`                  | Toggles ability to zoom in/out on the Tree by scaling it according to `props.scaleExtent`.                                                                                      |
 | `scaleExtent`         | `object`        |                         |           | `{min: 0.1, max: 1}`    | Sets the minimum/maximum extent to which the tree can be scaled if `props.zoomable` is true.                                                                                    |
 | `transitionDuration`  | `number`        | `0..n`                  |           | `500`                   | Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to `0` to deactivate animations completely.                                |
+| `styles`              | `object`        | see [Styling](#styling) |           | `Node`/`Link` CSS files | Overrides and/or enhances the tree's default styling.                                                                                                                           |
 
 
 ## Styling
