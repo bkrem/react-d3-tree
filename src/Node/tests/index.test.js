@@ -57,69 +57,93 @@ describe('<Node />', () => {
   });
 
 
-  it('applies correct node styles depending on `nodeData._children`', () => {
-    const initialStyle = { opacity: 0 }; // state.initialStyle
-    const fixture = {
-      node: { ...initialStyle, fill: 'blue' },
-      leafNode: { ...initialStyle, fill: 'green' },
-    };
-    const leafNodeComponent = shallow(
-      <Node
-        {...mockProps}
-        styles={fixture}
-      />
-    );
-    const nodeComponent = shallow(
-      <Node
-        {...mockProps}
-        nodeData={{ ...nodeData, _children: [] }}
-        styles={fixture}
-      />
-    );
-
-    expect(leafNodeComponent.prop('style')).toEqual(fixture.leafNode);
-    expect(nodeComponent.prop('style')).toEqual(fixture.node);
-  });
-
-
   it('applies correct <circle> styles depending on `nodeData._children`', () => {
-    const leafCircle = { fill: 'blue' };
-    const circle = { fill: 'green' };
-    const styles = { circle, leafCircle };
-    const leafNodeComponent = shallow(
-      <Node
-        {...mockProps}
-        styles={styles}
-      />
-    );
-    const nodeComponent = shallow(
-      <Node
-        {...mockProps}
-        nodeData={{ ...nodeData, _children: [] }}
-        styles={styles}
-      />
-    );
-
-    expect(leafNodeComponent.find('circle').prop('style')).toBe(leafCircle);
-    expect(nodeComponent.find('circle').prop('style')).toBe(circle);
-  });
-
-
-  it('applies correct node attributes styles', () => {
     const fixture = {
-      attributes: {
-        stroke: '#000',
-        strokeWidth: 12,
+      leafNode: {
+        circle: { fill: 'blue' },
+      },
+      node: {
+        circle: { fill: 'green' },
       },
     };
-    const renderedComponent = shallow(
+    const leafNodeComponent = shallow(
       <Node
         {...mockProps}
         styles={fixture}
       />
     );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
 
-    expect(renderedComponent.find('.nodeAttributesBase').prop('style')).toBe(fixture.attributes);
+    expect(leafNodeComponent.find('circle').prop('style'))
+    .toBe(fixture.leafNode.circle);
+    expect(nodeComponent.find('circle').prop('style'))
+    .toBe(fixture.node.circle);
+  });
+
+
+  it('applies correct node name styles depending on `nodeData._children`', () => {
+    const fixture = {
+      node: {
+        name: { stroke: '#000' },
+      },
+      leafNode: {
+        name: { stroke: '#fff' },
+      },
+    };
+    const leafNodeComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
+
+    expect(leafNodeComponent.find('.nodeNameBase').prop('style'))
+    .toBe(fixture.leafNode.name);
+    expect(nodeComponent.find('.nodeNameBase').prop('style'))
+    .toBe(fixture.node.name);
+  });
+
+
+  it('applies correct node attributes styles depending on `nodeData._children`', () => {
+    const fixture = {
+      node: {
+        attributes: { stroke: '#000' },
+      },
+      leafNode: {
+        attributes: { stroke: '#fff' },
+      },
+    };
+    const leafNodeComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
+
+    expect(leafNodeComponent.find('.nodeAttributesBase').prop('style'))
+    .toBe(fixture.leafNode.attributes);
+    expect(nodeComponent.find('.nodeAttributesBase').prop('style'))
+    .toBe(fixture.node.attributes);
   });
 
 
@@ -195,7 +219,8 @@ describe('<Node />', () => {
       />
     );
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(fixture);
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(fixture);
   });
 
 
@@ -217,9 +242,13 @@ describe('<Node />', () => {
       />
     );
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(initialTransform);
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(initialTransform);
+
     renderedComponent.setProps(updatedProps);
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(updatedTransform);
+
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(updatedTransform);
   });
 
   // TODO Find a way to meaningfully test `componentWillLeave`

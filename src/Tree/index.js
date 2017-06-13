@@ -285,7 +285,18 @@ Tree.defaultProps = {
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
   styles: {
-    nodes: {},
+    nodes: {
+      node: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+      leafNode: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+    },
     links: {},
   },
 };

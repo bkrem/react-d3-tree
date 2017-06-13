@@ -66,15 +66,12 @@ export default class Node extends React.Component {
 
   render() {
     const { nodeData, styles } = this.props;
-    const nodeStyle = nodeData._children ?
-      { ...this.state.initialStyle, ...styles.node } :
-      { ...this.state.initialStyle, ...styles.leafNode };
-
+    const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
         id={nodeData.id}
         ref={(n) => { this.node = n; }}
-        style={nodeStyle}
+        style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.state.transform}
         onClick={this.handleClick}
@@ -82,7 +79,7 @@ export default class Node extends React.Component {
         <text
           className="nodeNameBase"
           textAnchor={this.props.textAnchor}
-          style={styles.name}
+          style={nodeStyle.name}
           x="10"
           y="-10"
           dy=".35em"
@@ -92,14 +89,14 @@ export default class Node extends React.Component {
 
         <circle
           r={this.props.circleRadius}
-          style={nodeData._children ? styles.circle : styles.leafCircle}
+          style={nodeStyle.circle}
         />
 
         <text
           className="nodeAttributesBase"
           y="0"
           textAnchor={this.props.textAnchor}
-          style={styles.attributes}
+          style={nodeStyle.attributes}
         >
           {
             this.props.attributes &&
