@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';
+import deepEqual from 'deep-equal';
 import uuid from 'uuid';
 
 import Node from '../Node';
@@ -31,16 +32,15 @@ export default class Tree extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
-    if (this.props.data !== nextProps.data) {
+    if (!deepEqual(this.props.data, nextProps.data)) {
       this.setState({
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
     }
 
     // If zoom-specific props change -> rebind listener with new values
-    if (this.props.translate !== nextProps.translate ||
-    this.props.scaleExtent !== nextProps.scaleExtent) {
-      console.log(nextProps.translate, nextProps.scaleExtent);
+    if (!deepEqual(this.props.translate, nextProps.translate)
+    || !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)) {
       this.bindZoomListener(nextProps);
     }
   }

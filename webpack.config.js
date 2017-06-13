@@ -34,6 +34,7 @@ const config = {
     'react',
     'react-transition-group',
     'uuid',
+    'deep-equal',
   ],
   module: {
     rules: [
