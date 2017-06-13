@@ -20,6 +20,7 @@ describe('<Link />', () => {
     pathFunc: 'diagonal',
     orientation: 'horizontal',
     transitionDuration: 500,
+    styles: {},
   };
 
 
