@@ -23,7 +23,7 @@ export default class Tree extends React.Component {
 
 
   componentDidMount() {
-    this.bindZoomListener();
+    this.bindZoomListener(this.props);
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
@@ -41,7 +41,7 @@ export default class Tree extends React.Component {
     if (this.props.translate !== nextProps.translate ||
     this.props.scaleExtent !== nextProps.scaleExtent) {
       console.log(nextProps.translate, nextProps.scaleExtent);
-      this.bindZoomListener();
+      this.bindZoomListener(nextProps);
     }
   }
 
@@ -68,8 +68,8 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  bindZoomListener() {
-    const { zoomable, scaleExtent, translate } = this.props;
+  bindZoomListener(props) {
+    const { zoomable, scaleExtent, translate } = props;
     const svg = select('.rd3t-svg');
     const g = select('.rd3t-g');
 
