@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';

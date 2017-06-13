@@ -33,6 +33,7 @@ const config = {
     'd3',
     'react',
     'react-transition-group',
+    'prop-types',
     'uuid',
     'deep-equal',
   ],
