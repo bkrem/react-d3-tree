@@ -42,32 +42,57 @@ describe('<Node />', () => {
 
 
   it('applies correct base className if `nodeData._children` is defined', () => {
-    const noChildrenComponent = shallow(
+    const leafNodeComponent = shallow(
       <Node {...mockProps} />
     );
-    const withChildrenComponent = shallow(
+    const nodeComponent = shallow(
       <Node
         {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
       />
     );
 
-    expect(noChildrenComponent.prop('className')).toBe('leafNodeBase');
-    expect(withChildrenComponent.prop('className')).toBe('nodeBase');
+    expect(leafNodeComponent.prop('className')).toBe('leafNodeBase');
+    expect(nodeComponent.prop('className')).toBe('nodeBase');
   });
 
 
-  it('applies correct <circle> style prop if `nodeData._children` is defined', () => {
+  it('applies correct node styles depending on `nodeData._children`', () => {
+    const initialStyle = { opacity: 0 }; // state.initialStyle
+    const fixture = {
+      node: { ...initialStyle, fill: 'blue' },
+      leafNode: { ...initialStyle, fill: 'green' },
+    };
+    const leafNodeComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
+
+    expect(leafNodeComponent.prop('style')).toEqual(fixture.leafNode);
+    expect(nodeComponent.prop('style')).toEqual(fixture.node);
+  });
+
+
+  it('applies correct <circle> styles depending on `nodeData._children`', () => {
     const leafCircle = { fill: 'blue' };
     const circle = { fill: 'green' };
     const styles = { circle, leafCircle };
-    const noChildrenComponent = shallow(
+    const leafNodeComponent = shallow(
       <Node
         {...mockProps}
         styles={styles}
       />
     );
-    const withChildrenComponent = shallow(
+    const nodeComponent = shallow(
       <Node
         {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
@@ -75,8 +100,26 @@ describe('<Node />', () => {
       />
     );
 
-    expect(noChildrenComponent.find('circle').prop('style')).toBe(leafCircle);
-    expect(withChildrenComponent.find('circle').prop('style')).toBe(circle);
+    expect(leafNodeComponent.find('circle').prop('style')).toBe(leafCircle);
+    expect(nodeComponent.find('circle').prop('style')).toBe(circle);
+  });
+
+
+  it('applies correct node attributes styles', () => {
+    const fixture = {
+      attributes: {
+        stroke: '#000',
+        strokeWidth: 12,
+      },
+    };
+    const renderedComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+
+    expect(renderedComponent.find('.nodeAttributesBase').prop('style')).toBe(fixture.attributes);
   });
 
 

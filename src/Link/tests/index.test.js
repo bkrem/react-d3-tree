@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 
 import Link from '../index';
 
+// TODO Find a way to meaningfully test `componentWillLeave`
 describe('<Link />', () => {
   const linkData = {
     source: {
@@ -41,6 +42,20 @@ describe('<Link />', () => {
   });
 
 
+  it('applies `props.styles` when defined', () => {
+    const initialStyle = { opacity: 0 }; // state.initialStyle
+    const fixture = { ...initialStyle, stroke: '#777', strokeWidth: 2 };
+    const renderedComponent = shallow(
+      <Link
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+
+    expect(renderedComponent.prop('style')).toEqual(fixture);
+  });
+
+
   it('calls the appropriate path func based on `props.pathFunc`', () => {
     const diagonalComponent = shallow(
       <Link {...mockProps} />
@@ -75,6 +90,4 @@ describe('<Link />', () => {
 
     expect(renderedComponent.instance().applyOpacity).toHaveBeenCalledWith(fixture);
   });
-
-  // TODO Find a way to meaningfully test `componentWillLeave`
 });
