@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';
+import deepEqual from 'deep-equal';
 import uuid from 'uuid';
 
 import Node from '../Node';
@@ -23,7 +24,7 @@ export default class Tree extends React.Component {
 
 
   componentDidMount() {
-    this.bindZoomListener();
+    this.bindZoomListener(this.props);
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
@@ -31,10 +32,16 @@ export default class Tree extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
-    if (this.props.data !== nextProps.data) {
+    if (!deepEqual(this.props.data, nextProps.data)) {
       this.setState({
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
+    }
+
+    // If zoom-specific props change -> rebind listener with new values
+    if (!deepEqual(this.props.translate, nextProps.translate)
+    || !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)) {
+      this.bindZoomListener(nextProps);
     }
   }
 
@@ -61,8 +68,8 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  bindZoomListener() {
-    const { zoomable, scaleExtent, translate } = this.props;
+  bindZoomListener(props) {
+    const { zoomable, scaleExtent, translate } = props;
     const svg = select('.rd3t-svg');
     const g = select('.rd3t-g');
 
@@ -223,9 +230,9 @@ export default class Tree extends React.Component {
       orientation,
       translate,
       pathFunc,
-      depthFactor,
       transitionDuration,
       zoomable,
+      styles,
     } = this.props;
 
     return (
@@ -240,13 +247,13 @@ export default class Tree extends React.Component {
               <Node
                 key={nodeData.id}
                 orientation={orientation}
-                depthFactor={depthFactor}
                 transitionDuration={transitionDuration}
                 textAnchor="start"
                 nodeData={nodeData}
-                primaryLabel={nodeData.name}
-                secondaryLabels={nodeData.attributes}
+                name={nodeData.name}
+                attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
+                styles={styles.nodes}
               />
             )}
 
@@ -257,6 +264,7 @@ export default class Tree extends React.Component {
                 pathFunc={pathFunc}
                 linkData={linkData}
                 transitionDuration={transitionDuration}
+                styles={styles.links}
               />
             )}
           </TransitionGroup>
@@ -276,6 +284,21 @@ Tree.defaultProps = {
   initialDepth: undefined,
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
+  styles: {
+    nodes: {
+      node: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+      leafNode: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+    },
+    links: {},
+  },
 };
 
 Tree.propTypes = {
@@ -300,5 +323,9 @@ Tree.propTypes = {
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,
+  }),
+  styles: PropTypes.shape({
+    nodes: PropTypes.object,
+    links: PropTypes.object,
   }),
 };

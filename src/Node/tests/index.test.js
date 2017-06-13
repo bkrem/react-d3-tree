@@ -18,9 +18,11 @@ describe('<Node />', () => {
 
   const mockProps = {
     nodeData,
+    name: nodeData.name,
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
+    styles: {},
   };
 
 
@@ -40,42 +42,108 @@ describe('<Node />', () => {
 
 
   it('applies correct base className if `nodeData._children` is defined', () => {
-    const noChildrenComponent = shallow(
+    const leafNodeComponent = shallow(
       <Node {...mockProps} />
     );
-    const withChildrenComponent = shallow(
+    const nodeComponent = shallow(
       <Node
         {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
       />
     );
 
-    expect(noChildrenComponent.prop('className')).toBe('leafNodeBase');
-    expect(withChildrenComponent.prop('className')).toBe('nodeBase');
+    expect(leafNodeComponent.prop('className')).toBe('leafNodeBase');
+    expect(nodeComponent.prop('className')).toBe('nodeBase');
   });
 
 
-  it('applies correct <circle> style prop if `nodeData._children` is defined', () => {
-    const leafCircleStyle = { fill: 'blue' };
-    const circleStyle = { fill: 'green' };
-    const noChildrenComponent = shallow(
+  it('applies correct <circle> styles depending on `nodeData._children`', () => {
+    const fixture = {
+      leafNode: {
+        circle: { fill: 'blue' },
+      },
+      node: {
+        circle: { fill: 'green' },
+      },
+    };
+    const leafNodeComponent = shallow(
       <Node
         {...mockProps}
-        leafCircleStyle={leafCircleStyle}
-        circleStyle={circleStyle}
+        styles={fixture}
       />
     );
-    const withChildrenComponent = shallow(
+    const nodeComponent = shallow(
       <Node
         {...mockProps}
         nodeData={{ ...nodeData, _children: [] }}
-        leafCircleStyle={leafCircleStyle}
-        circleStyle={circleStyle}
+        styles={fixture}
       />
     );
 
-    expect(noChildrenComponent.find('circle').prop('style')).toBe(leafCircleStyle);
-    expect(withChildrenComponent.find('circle').prop('style')).toBe(circleStyle);
+    expect(leafNodeComponent.find('circle').prop('style'))
+    .toBe(fixture.leafNode.circle);
+    expect(nodeComponent.find('circle').prop('style'))
+    .toBe(fixture.node.circle);
+  });
+
+
+  it('applies correct node name styles depending on `nodeData._children`', () => {
+    const fixture = {
+      node: {
+        name: { stroke: '#000' },
+      },
+      leafNode: {
+        name: { stroke: '#fff' },
+      },
+    };
+    const leafNodeComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
+
+    expect(leafNodeComponent.find('.nodeNameBase').prop('style'))
+    .toBe(fixture.leafNode.name);
+    expect(nodeComponent.find('.nodeNameBase').prop('style'))
+    .toBe(fixture.node.name);
+  });
+
+
+  it('applies correct node attributes styles depending on `nodeData._children`', () => {
+    const fixture = {
+      node: {
+        attributes: { stroke: '#000' },
+      },
+      leafNode: {
+        attributes: { stroke: '#fff' },
+      },
+    };
+    const leafNodeComponent = shallow(
+      <Node
+        {...mockProps}
+        styles={fixture}
+      />
+    );
+    const nodeComponent = shallow(
+      <Node
+        {...mockProps}
+        nodeData={{ ...nodeData, _children: [] }}
+        styles={fixture}
+      />
+    );
+
+    expect(leafNodeComponent.find('.nodeAttributesBase').prop('style'))
+    .toBe(fixture.leafNode.attributes);
+    expect(nodeComponent.find('.nodeAttributesBase').prop('style'))
+    .toBe(fixture.node.attributes);
   });
 
 
@@ -122,17 +190,17 @@ describe('<Node />', () => {
   });
 
 
-  it('maps each `props.secondaryLabels` to a <tspan> element', () => {
+  it('maps each `props.attributes` to a <tspan> element', () => {
     const fixture = { keyA: 'valA', keyB: 'valB' };
     const renderedComponent = shallow(
       <Node
         {...mockProps}
-        secondaryLabels={fixture}
+        attributes={fixture}
       />
     );
     const textNode = renderedComponent
       .find('text')
-      .findWhere((n) => n.prop('className') === 'secondaryLabelsBase');
+      .findWhere((n) => n.prop('className') === 'nodeAttributesBase');
 
     expect(textNode.findWhere((n) =>
       n.text() === `keyA: ${fixture.keyA}`).length
@@ -151,7 +219,8 @@ describe('<Node />', () => {
       />
     );
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(fixture);
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(fixture);
   });
 
 
@@ -173,9 +242,13 @@ describe('<Node />', () => {
       />
     );
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(initialTransform);
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(initialTransform);
+
     renderedComponent.setProps(updatedProps);
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(updatedTransform);
+
+    expect(renderedComponent.instance().applyTransform)
+    .toHaveBeenCalledWith(updatedTransform);
   });
 
   // TODO Find a way to meaningfully test `componentWillLeave`

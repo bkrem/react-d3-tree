@@ -53,10 +53,11 @@ export default class Link extends React.PureComponent {
   }
 
   render() {
+    const { styles } = this.props;
     return (
       <path
         ref={(l) => { this.link = l; }}
-        style={this.state.initialStyle}
+        style={{ ...this.state.initialStyle, ...styles }}
         className="linkBase"
         d={this.drawPath()}
       />
@@ -75,4 +76,5 @@ Link.propTypes = {
     'elbow',
   ]).isRequired,
   transitionDuration: PropTypes.number.isRequired,
+  styles: PropTypes.object.isRequired,
 };

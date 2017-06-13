@@ -11,6 +11,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
+- [Styling](#styling)
 - [External data sources](#external-data-sources)
 
 
@@ -86,6 +87,39 @@ class MyComponent extends Component {
 | `zoomable`            | `bool`          |                         |           | `true`                  | Toggles ability to zoom in/out on the Tree by scaling it according to `props.scaleExtent`.                                                                                      |
 | `scaleExtent`         | `object`        |                         |           | `{min: 0.1, max: 1}`    | Sets the minimum/maximum extent to which the tree can be scaled if `props.zoomable` is true.                                                                                    |
 | `transitionDuration`  | `number`        | `0..n`                  |           | `500`                   | Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to `0` to deactivate animations completely.                                |
+| `styles`              | `object`        | see [Styling](#styling) |           | `Node`/`Link` CSS files | Overrides and/or enhances the tree's default styling.                                                                                                                           |
+
+
+## Styling
+The tree's `styles` prop may be used to override any of the tree's default styling.
+The following object shape is expected by `styles`:
+```js
+{
+  links: <svgStyleObject>,
+  nodes: {
+    node: {
+      circle: <svgStyleObject>,
+      name: <svgStyleObject>,
+      attributes: <svgStyleObject>,
+    },
+    leafNode: {
+      circle: <svgStyleObject>,
+      name: <svgStyleObject>,
+      attributes: <svgStyleObject>,
+    },
+  },
+}
+```
+where `<svgStyleObject>` is any object containing CSS-like properties that are compatible with an `<svg>` element's `style` attribute, for example:
+```js
+{
+  stroke: 'blue',
+  strokeWidth: 3,
+}
+```
+
+For more information on the SVG `style` attribute, [check this out](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/style).
+
 
 ## External data sources
 Statically hosted JSON or CSV files can be used as data sources via the additional `treeUtil` module.
