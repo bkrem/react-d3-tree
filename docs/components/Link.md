@@ -20,3 +20,13 @@ type: `enum('horizontal'|'vertical')`
 
 type: `enum('diagonal'|'elbow')`
 
+
+### `styles` (required)
+
+type: `object`
+
+
+### `transitionDuration` (required)
+
+type: `number`
+

@@ -6,35 +6,21 @@
 Props
 -----
 
+### `attributes`
+
+type: `object`
+defaultValue: `undefined`
+
+
 ### `circleRadius`
 
 type: `number`
 defaultValue: `10`
 
 
-### `circleStyle`
+### `name` (required)
 
-type: `object`
-defaultValue: `{
-  stroke: '#000',
-  strokeWidth: 2,
-  fill: 'grey',
-}`
-
-
-### `depthFactor`
-
-type: `number`
-
-
-### `leafCircleStyle`
-
-type: `object`
-defaultValue: `{
-  stroke: '#000',
-  strokeWidth: 2,
-  fill: 'transparent',
-}`
+type: `string`
 
 
 ### `nodeData` (required)
@@ -42,7 +28,7 @@ defaultValue: `{
 type: `object`
 
 
-### `onClick`
+### `onClick` (required)
 
 type: `func`
 
@@ -52,22 +38,7 @@ type: `func`
 type: `enum('horizontal'|'vertical')`
 
 
-### `primaryLabel`
-
-type: `string`
-
-
-### `primaryLabelStyle`
-
-type: `object`
-
-
-### `secondaryLabels`
-
-type: `object`
-
-
-### `secondaryLabelsStyle`
+### `styles` (required)
 
 type: `object`
 
@@ -75,4 +46,10 @@ type: `object`
 ### `textAnchor`
 
 type: `string`
+defaultValue: `'start'`
+
+
+### `transitionDuration` (required)
+
+type: `number`
 
