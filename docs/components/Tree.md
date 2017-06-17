@@ -47,6 +47,32 @@ type: `shape[object Object]`
 defaultValue: `{ min: 0.1, max: 1 }`
 
 
+### `styles`
+
+type: `shape[object Object]`
+defaultValue: `{
+  nodes: {
+    node: {
+      circle: {},
+      name: {},
+      attributes: {},
+    },
+    leafNode: {
+      circle: {},
+      name: {},
+      attributes: {},
+    },
+  },
+  links: {},
+}`
+
+
+### `transitionDuration`
+
+type: `number`
+defaultValue: `500`
+
+
 ### `translate`
 
 type: `shape[object Object]`
