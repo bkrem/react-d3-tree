@@ -203,10 +203,11 @@ export default class Tree extends React.Component {
    * @return {object} Object containing `nodes` and `links` fields.
    */
   generateTree() {
-    const { initialDepth, depthFactor } = this.props;
+    const { initialDepth, depthFactor, separation } = this.props;
+    console.log(separation);
     const tree = layout.tree()
       .nodeSize([100 + 40, 100 + 40])
-      .separation((d) => d._children ? 1.2 : 0.9)
+      .separation((d) => d._children ? separation.node : separation.leafNode)
       .children((d) => d._collapsed ? null : d._children);
 
     const rootNode = this.state.data[0];
@@ -285,6 +286,7 @@ Tree.defaultProps = {
   initialDepth: undefined,
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
+  separation: { node: 1.2, leafNode: 0.9 },
   styles: {
     nodes: {
       node: {
@@ -324,6 +326,10 @@ Tree.propTypes = {
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,
+  }),
+  separation: PropTypes.shape({
+    node: PropTypes.number,
+    leafNode: PropTypes.number,
   }),
   styles: PropTypes.shape({
     nodes: PropTypes.object,
