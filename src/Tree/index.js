@@ -204,9 +204,8 @@ export default class Tree extends React.Component {
    */
   generateTree() {
     const { initialDepth, depthFactor, separation } = this.props;
-    console.log(separation);
     const tree = layout.tree()
-      .nodeSize([100 + 40, 100 + 40])
+      .nodeSize([140, 140])
       .separation((d) => d._children ? separation.node : separation.leafNode)
       .children((d) => d._collapsed ? null : d._children);
 
