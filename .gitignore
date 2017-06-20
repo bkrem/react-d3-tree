@@ -32,3 +32,6 @@ node_modules
 
 # ignore playground dir
 playground
+
+# ignore Webpack stats output
+stats.json
