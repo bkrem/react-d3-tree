@@ -227,22 +227,20 @@ describe('<Tree />', () => {
   });
 
 
-  // it('allows zooming in/out according to `props.scaleExtent` if `props.zoomable`', () => {
-  //   const zoomableComponent = mount(
-  //     <Tree
-  //       data={mockData}
-  //     />
-  //   );
-  //   const nonZoomableComponent = mount(
-  //     <Tree
-  //       data={mockData}
-  //       zoomable={false}
-  //     />
-  //   );
-  //
-  //   zoomableComponent.find('svg').simulate('touchmove');
-  //
-  //   expect(zoomableComponent.find('svg').prop('transform')).toBeDefined();
-  //   expect(nonZoomableComponent.find('svg').prop('transform')).toBeUndefined();
-  // });
+  it('adds the `.rd3t-grabbable` class if `props.zoomable`', () => {
+    const zoomableComponent = shallow(
+      <Tree
+        data={mockData}
+      />
+    );
+    const nonZoomableComponent = shallow(
+      <Tree
+        data={mockData}
+        zoomable={false}
+      />
+    );
+
+    expect(zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(true);
+    expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(false);
+  });
 });
