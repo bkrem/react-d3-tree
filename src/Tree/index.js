@@ -197,16 +197,29 @@ export default class Tree extends React.Component {
   /**
    * generateTree - Generates tree elements (`nodes` and `links`) by
    * grabbing the rootNode from `this.state.data[0]`.
-   * Restricts tree depth to `props.initial` if defined and this is
+   * Restricts tree depth to `props.initialDepth` if defined and if this is
    * the initial render of the tree.
    *
-   * @return {object} Object containing `nodes` and `links` fields.
+   * @return {object} Object containing `nodes` and `links`.
    */
   generateTree() {
-    const { initialDepth, depthFactor, separation } = this.props;
+    const {
+      initialDepth,
+      depthFactor,
+      separation,
+      nodeSize,
+      orientation,
+    } = this.props;
+
     const tree = layout.tree()
-      .nodeSize([140, 140])
-      .separation((d) => d._children ? separation.node : separation.leafNode)
+      .nodeSize(orientation === 'horizontal' ?
+        [nodeSize.y, nodeSize.x] :
+        [nodeSize.x, nodeSize.y]
+      )
+      .separation((a, b) => deepEqual(a.parent, b.parent) ?
+        separation.node :
+        separation.leafNode
+      )
       .children((d) => d._collapsed ? null : d._children);
 
     const rootNode = this.state.data[0];
@@ -285,6 +298,7 @@ Tree.defaultProps = {
   initialDepth: undefined,
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
+  nodeSize: { x: 140, y: 140 },
   separation: { node: 1.2, leafNode: 0.9 },
   styles: {
     nodes: {
@@ -325,6 +339,10 @@ Tree.propTypes = {
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,
+  }),
+  nodeSize: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
   }),
   separation: PropTypes.shape({
     node: PropTypes.number,
