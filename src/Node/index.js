@@ -114,7 +114,6 @@ export default class Node extends React.Component {
 }
 
 Node.defaultProps = {
-  circleRadius: 10,
   textAnchor: 'start',
   attributes: undefined,
 };
@@ -130,6 +129,6 @@ Node.propTypes = {
   name: PropTypes.string.isRequired,
   attributes: PropTypes.object,
   textAnchor: PropTypes.string,
-  circleRadius: PropTypes.number,
+  circleRadius: PropTypes.number.isRequired,
   styles: PropTypes.object.isRequired,
 };
