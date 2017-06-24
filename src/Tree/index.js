@@ -246,6 +246,7 @@ export default class Tree extends React.Component {
       pathFunc,
       transitionDuration,
       zoomable,
+      circleRadius,
       styles,
     } = this.props;
 
@@ -267,6 +268,7 @@ export default class Tree extends React.Component {
                 name={nodeData.name}
                 attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
+                circleRadius={circleRadius}
                 styles={styles.nodes}
               />
             )}
@@ -300,6 +302,7 @@ Tree.defaultProps = {
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
+  circleRadius: 10,
   styles: {
     nodes: {
       node: {
@@ -348,6 +351,7 @@ Tree.propTypes = {
     siblings: PropTypes.number,
     nonSiblings: PropTypes.number,
   }),
+  circleRadius: PropTypes.number,
   styles: PropTypes.shape({
     nodes: PropTypes.object,
     links: PropTypes.object,

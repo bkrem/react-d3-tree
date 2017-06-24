@@ -22,6 +22,7 @@ describe('<Node />', () => {
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
+    circleRadius: 10,
     styles: {},
   };
 
