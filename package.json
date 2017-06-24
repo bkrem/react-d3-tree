@@ -17,7 +17,9 @@
     "docs": "npm run docs:react && npm run docs:util",
     "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
     "docs:clean": "rimraf docs/components/* && rimraf docs/util/*",
-    "release": "npm run test && npm run build && npm run docs && git commit -a && np"
+    "release": "npm run test && npm run build && npm run docs && git commit -a && np",
+    "preanalyze": "rimraf stats.json",
+    "analyze": "webpack --config webpack.config.js --env build --profile --json > stats.json && echo '==> http://webpack.github.io/analyse/'"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -29,10 +31,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "statements": 90,
-        "branches": 82,
+        "statements": 95,
+        "branches": 84,
         "functions": 90,
-        "lines": 90
+        "lines": 95
       }
     },
     "moduleNameMapper": {
