@@ -299,7 +299,7 @@ Tree.defaultProps = {
   zoomable: true,
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
-  separation: { node: 1.2, leafNode: 0.9 },
+  separation: { siblings: 1, nonSiblings: 2 },
   styles: {
     nodes: {
       node: {
