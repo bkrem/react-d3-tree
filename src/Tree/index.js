@@ -217,8 +217,8 @@ export default class Tree extends React.Component {
         [nodeSize.x, nodeSize.y]
       )
       .separation((a, b) => deepEqual(a.parent, b.parent) ?
-        separation.node :
-        separation.leafNode
+        separation.siblings :
+        separation.nonSiblings
       )
       .children((d) => d._collapsed ? null : d._children);
 
@@ -250,7 +250,7 @@ export default class Tree extends React.Component {
     } = this.props;
 
     return (
-      <div className={`rd3t-tree-container ${zoomable ? 'grabbable' : undefined}`}>
+      <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className="rd3t-svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
@@ -345,8 +345,8 @@ Tree.propTypes = {
     y: PropTypes.number,
   }),
   separation: PropTypes.shape({
-    node: PropTypes.number,
-    leafNode: PropTypes.number,
+    siblings: PropTypes.number,
+    nonSiblings: PropTypes.number,
   }),
   styles: PropTypes.shape({
     nodes: PropTypes.object,

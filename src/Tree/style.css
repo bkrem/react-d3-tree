@@ -3,13 +3,13 @@
   height: 100%;
 }
 
-.grabbable {
+.rd3t-grabbable {
   cursor: move; /* fallback if grab cursor is unsupported */
   cursor: grab;
   cursor: -moz-grab;
   cursor: -webkit-grab;
 }
-.grabbable:active {
+.rd3t-grabbable:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
