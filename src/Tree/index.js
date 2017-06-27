@@ -189,7 +189,7 @@ export default class Tree extends React.Component {
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
-      this.setState({ data });
+      this.setState({ data }, this.props.onClick);
     }
   }
 
@@ -291,6 +291,7 @@ export default class Tree extends React.Component {
 }
 
 Tree.defaultProps = {
+  onClick: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
@@ -322,6 +323,7 @@ Tree.defaultProps = {
 
 Tree.propTypes = {
   data: PropTypes.array.isRequired,
+  onClick: PropTypes.func,
   orientation: PropTypes.oneOf([
     'horizontal',
     'vertical',

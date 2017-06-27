@@ -5,58 +5,9 @@ import { shallow, mount } from 'enzyme';
 import Node from '../../Node';
 import Link from '../../Link';
 import Tree from '../index';
+import { mockData, mockData2 } from './mockData';
 
 describe('<Tree />', () => {
-  const mockData = [
-    {
-      name: 'Top Level',
-      parent: 'null',
-      attributes: {
-        keyA: 'val A',
-        keyB: 'val B',
-        keyC: 'val C',
-      },
-      children: [
-        {
-          name: 'Level 2: A',
-          parent: 'Top Level',
-          attributes: {
-            keyA: 'val A',
-            keyB: 'val B',
-            keyC: 'val C',
-          },
-        },
-        {
-          name: 'Level 2: B',
-          parent: 'Top Level',
-        },
-      ],
-    },
-  ];
-
-  const mockData2 = [
-    {
-      name: 'Top Level',
-      parent: 'null',
-      attributes: {
-        keyA: 'val A',
-        keyB: 'val B',
-        keyC: 'val C',
-      },
-      children: [
-        {
-          name: 'Level 2: A',
-          parent: 'Top Level',
-          attributes: {
-            keyA: 'val A',
-            keyB: 'val B',
-            keyC: 'val C',
-          },
-        },
-      ],
-    },
-  ];
-
   jest.spyOn(Tree.prototype, 'generateTree');
   jest.spyOn(Tree.prototype, 'assignInternalProperties');
   jest.spyOn(Tree.prototype, 'handleNodeToggle');
@@ -242,5 +193,20 @@ describe('<Tree />', () => {
 
     expect(zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(true);
     expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(false);
+  });
+
+
+  it('calls the onClick callback when a node is toggled', () => {
+    const onClickSpy = jest.fn();
+    const renderedComponent = mount(
+      <Tree
+        data={mockData}
+        onClick={onClickSpy}
+      />
+    );
+
+    renderedComponent.find(Node).first().simulate('click');
+
+    expect(onClickSpy).toHaveBeenCalledTimes(1);
   });
 });
