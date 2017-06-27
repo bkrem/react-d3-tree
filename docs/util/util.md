@@ -27,7 +27,7 @@ parseCSV - Parses a CSV file into a hierarchy structure.
 | Param | Type | Description |
 | --- | --- | --- |
 | csvFilePath | <code>string</code> | Path to CSV file to be parsed. |
-| attributeFields | <code>array.&lt;string&gt;</code> OR <code>undefined</code> | Set of column names to be used as attributes (optional) |
+| attributeFields | <code>array.&lt;string&gt;</code> \| <code>undefined</code> | Set of column names to be used as attributes (optional) |
 
 <a name="parseJSON"></a>
 
@@ -52,7 +52,7 @@ parseFlatJSON - Parses a flat JSON file into a hierarchy structure.
 | Param | Type | Description |
 | --- | --- | --- |
 | jsonFilePath | <code>string</code> | Path to flat JSON file to be parsed. |
-| attributeFields | <code>array.&lt;string&gt;</code> OR <code>undefined</code> | Set of `link` fields to be used as attributes |
+| attributeFields | <code>array.&lt;string&gt;</code> \| <code>undefined</code> | Set of `link` fields to be used as attributes |
 
 <a name="generateHierarchy"></a>
 

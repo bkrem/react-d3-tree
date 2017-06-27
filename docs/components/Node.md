@@ -12,10 +12,9 @@ type: `object`
 defaultValue: `undefined`
 
 
-### `circleRadius`
+### `circleRadius` (required)
 
 type: `number`
-defaultValue: `10`
 
 
 ### `name` (required)
