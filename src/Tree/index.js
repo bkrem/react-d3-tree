@@ -176,6 +176,7 @@ export default class Tree extends React.Component {
    * handleNodeToggle - Finds the node matching `nodeId` and
    * expands/collapses it, depending on the current state of
    * its `_collapsed` property.
+   * Passes a copy of the target node to the top-level onClick handler.
    *
    * @param {string} nodeId A node object's `id` field.
    *
@@ -189,7 +190,9 @@ export default class Tree extends React.Component {
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
-      this.setState({ data }, this.props.onClick);
+      this.setState({ data }, () => {
+        this.props.onClick(clone(targetNode));
+      });
     }
   }
 
@@ -291,7 +294,7 @@ export default class Tree extends React.Component {
 }
 
 Tree.defaultProps = {
-  onClick: undefined,
+  onClick: () => {},
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',

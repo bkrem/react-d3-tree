@@ -209,4 +209,19 @@ describe('<Tree />', () => {
 
     expect(onClickSpy).toHaveBeenCalledTimes(1);
   });
+
+
+  it('passes the clicked node\'s data to the onClick callback', () => {
+    const onClickSpy = jest.fn();
+    const renderedComponent = mount(
+      <Tree
+        data={mockData}
+        onClick={onClickSpy}
+      />
+    );
+
+    renderedComponent.find(Node).first().simulate('click');
+
+    expect(onClickSpy).toHaveBeenCalledWith(renderedComponent.find(Node).first().prop('nodeData'));
+  });
 });
