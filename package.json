@@ -91,7 +91,13 @@
     "react",
     "d3",
     "tree",
-    "component"
+    "component",
+    "graph",
+    "svg",
+    "hierarchical-data",
+    "hierarchy",
+    "d3-visualization",
+    "chart"
   ],
   "author": "Ben Kremer",
   "license": "MIT",
