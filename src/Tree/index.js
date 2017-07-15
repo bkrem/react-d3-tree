@@ -21,6 +21,7 @@ export default class Tree extends React.Component {
     this.findNodesById = this.findNodesById.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
+    this.handleOnClickCb = this.handleOnClickCb.bind(this);
   }
 
 
@@ -176,7 +177,8 @@ export default class Tree extends React.Component {
    * handleNodeToggle - Finds the node matching `nodeId` and
    * expands/collapses it, depending on the current state of
    * its `_collapsed` property.
-   * Passes a copy of the target node to the top-level onClick handler.
+   * `setState` callback receives targetNode and handles
+   * `props.onClick` if defined.
    *
    * @param {string} nodeId A node object's `id` field.
    *
@@ -190,9 +192,22 @@ export default class Tree extends React.Component {
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
-      this.setState({ data }, () => {
-        this.props.onClick(clone(targetNode));
-      });
+      this.setState({ data }, () => this.handleOnClickCb(targetNode));
+    }
+  }
+
+
+  /**
+   * handleOnClickCb - Handles the user-defined `onClick` function
+   *
+   * @param {object} targetNode Description
+   *
+   * @return {void}
+   */
+  handleOnClickCb(targetNode) {
+    const { onClick } = this.props;
+    if (onClick && typeof onClick === 'function') {
+      onClick(clone(targetNode));
     }
   }
 
@@ -294,7 +309,7 @@ export default class Tree extends React.Component {
 }
 
 Tree.defaultProps = {
-  onClick: () => {},
+  onClick: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',

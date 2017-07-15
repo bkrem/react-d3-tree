@@ -211,7 +211,7 @@ describe('<Tree />', () => {
   });
 
 
-  it('passes the clicked node\'s data to the onClick callback', () => {
+  it('clones the clicked node\'s data & passes it to the onClick callback if defined', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = mount(
       <Tree
