@@ -44,7 +44,7 @@ defaultValue: `{ x: 140, y: 140 }`
 ### `onClick`
 
 type: `func`
-defaultValue: `() => {}`
+defaultValue: `undefined`
 
 
 ### `orientation`
