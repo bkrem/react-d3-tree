@@ -66,6 +66,10 @@ export default class Link extends React.PureComponent {
   }
 }
 
+Link.defaultProps = {
+  styles: {},
+};
+
 Link.propTypes = {
   linkData: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf([
@@ -77,5 +81,5 @@ Link.propTypes = {
     'elbow',
   ]).isRequired,
   transitionDuration: PropTypes.number.isRequired,
-  styles: PropTypes.object.isRequired,
+  styles: PropTypes.object,
 };

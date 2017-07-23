@@ -325,21 +325,7 @@ Tree.defaultProps = {
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
   circleRadius: 10,
-  styles: {
-    nodes: {
-      node: {
-        circle: {},
-        name: {},
-        attributes: {},
-      },
-      leafNode: {
-        circle: {},
-        name: {},
-        attributes: {},
-      },
-    },
-    links: {},
-  },
+  styles: {},
 };
 
 Tree.propTypes = {
