@@ -74,21 +74,7 @@ defaultValue: `{ siblings: 1, nonSiblings: 2 }`
 ### `styles`
 
 type: `shape[object Object]`
-defaultValue: `{
-  nodes: {
-    node: {
-      circle: {},
-      name: {},
-      attributes: {},
-    },
-    leafNode: {
-      circle: {},
-      name: {},
-      attributes: {},
-    },
-  },
-  links: {},
-}`
+defaultValue: `{}`
 
 
 ### `transitionDuration`
