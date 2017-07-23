@@ -40,6 +40,26 @@ export default class Link extends React.PureComponent {
     return diagonal(linkData);
   }
 
+  straightPath(linkData, orientation) {
+    const straight = svg.line().interpolate('basis')
+      .x((d) => d.x)
+      .y((d) => d.y);
+
+    let data = [
+      { x: linkData.source.x, y: linkData.source.y },
+      { x: linkData.target.x, y: linkData.target.y },
+    ];
+
+    if (orientation === 'horizontal') {
+      data = [
+        { x: linkData.source.y, y: linkData.source.x },
+        { x: linkData.target.y, y: linkData.target.x },
+      ];
+    }
+
+    return straight(data);
+  }
+
   elbowPath(d, orientation) {
     return orientation === 'horizontal' ?
       `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}` :
@@ -48,9 +68,17 @@ export default class Link extends React.PureComponent {
 
   drawPath() {
     const { linkData, orientation, pathFunc } = this.props;
-    return pathFunc === 'diagonal'
-      ? this.diagonalPath(linkData, orientation)
-      : this.elbowPath(linkData, orientation);
+
+    switch (pathFunc) {
+      case 'diagonal':
+        return this.diagonalPath(linkData, orientation);
+      case 'elbow':
+        return this.elbowPath(linkData, orientation);
+      case 'straight':
+        return this.straightPath(linkData, orientation);
+      default:
+        return this.elbowPath(linkData, orientation);
+    }
   }
 
   render() {
