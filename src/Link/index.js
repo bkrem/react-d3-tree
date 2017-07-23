@@ -69,16 +69,15 @@ export default class Link extends React.PureComponent {
   drawPath() {
     const { linkData, orientation, pathFunc } = this.props;
 
-    switch (pathFunc) {
-      case 'diagonal':
-        return this.diagonalPath(linkData, orientation);
-      case 'elbow':
-        return this.elbowPath(linkData, orientation);
-      case 'straight':
-        return this.straightPath(linkData, orientation);
-      default:
-        return this.elbowPath(linkData, orientation);
+    if (pathFunc === 'elbow') {
+      return this.elbowPath(linkData, orientation);
     }
+
+    if (pathFunc === 'straight') {
+      return this.straightPath(linkData, orientation);
+    }
+
+    return this.diagonalPath(linkData, orientation);
   }
 
   render() {

@@ -25,6 +25,7 @@ describe('<Link />', () => {
   };
 
 
+  jest.spyOn(Link.prototype, 'drawPath');
   jest.spyOn(Link.prototype, 'diagonalPath');
   jest.spyOn(Link.prototype, 'elbowPath');
   jest.spyOn(Link.prototype, 'straightPath');
@@ -77,6 +78,7 @@ describe('<Link />', () => {
     expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
     expect(straightComponent.instance().straightPath).toHaveBeenCalled();
+    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(3);
   });
 
 
