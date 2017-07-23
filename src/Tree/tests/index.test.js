@@ -211,6 +211,22 @@ describe('<Tree />', () => {
   });
 
 
+  it('calls the onClick callback when `props.collapsible` is false', () => {
+    const onClickSpy = jest.fn();
+    const renderedComponent = mount(
+      <Tree
+        data={mockData}
+        collapsible={false}
+        onClick={onClickSpy}
+      />
+    );
+
+    renderedComponent.find(Node).first().simulate('click');
+
+    expect(onClickSpy).toHaveBeenCalledTimes(1);
+  });
+
+
   it('clones the clicked node\'s data & passes it to the onClick callback if defined', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = mount(
