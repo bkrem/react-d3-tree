@@ -90,6 +90,16 @@ describe('<Link />', () => {
   });
 
 
+  it('returns an appropriate straightPath according to `props.orientation`', () => {
+    expect(
+      Link.prototype.straightPath(linkData, 'horizontal')
+    ).toBe(`M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`);
+    expect(
+      Link.prototype.straightPath(linkData, 'vertical')
+    ).toBe(`M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`);
+  });
+
+
   it('fades in once it has been mounted', () => {
     const fixture = 1;
     const renderedComponent = mount(
