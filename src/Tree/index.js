@@ -185,14 +185,17 @@ export default class Tree extends React.Component {
    * @return {void}
    */
   handleNodeToggle(nodeId) {
+    const data = clone(this.state.data);
+    const matches = this.findNodesById(nodeId, data, []);
+    const targetNode = matches[0];
+
     if (this.props.collapsible) {
-      const data = clone(this.state.data);
-      const matches = this.findNodesById(nodeId, data, []);
-      const targetNode = matches[0];
       targetNode._collapsed
         ? this.expandNode(targetNode)
         : this.collapseNode(targetNode);
       this.setState({ data }, () => this.handleOnClickCb(targetNode));
+    } else {
+      this.handleOnClickCb(targetNode);
     }
   }
 
