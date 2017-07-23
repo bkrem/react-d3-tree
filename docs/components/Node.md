@@ -37,9 +37,21 @@ type: `func`
 type: `enum('horizontal'|'vertical')`
 
 
-### `styles` (required)
+### `styles`
 
 type: `object`
+defaultValue: `{
+  node: {
+    circle: {},
+    name: {},
+    attributes: {},
+  },
+  leafNode: {
+    circle: {},
+    name: {},
+    attributes: {},
+  },
+}`
 
 
 ### `textAnchor`

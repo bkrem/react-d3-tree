@@ -21,9 +21,10 @@ type: `enum('horizontal'|'vertical')`
 type: `enum('diagonal'|'elbow')`
 
 
-### `styles` (required)
+### `styles`
 
 type: `object`
+defaultValue: `{}`
 
 
 ### `transitionDuration` (required)
