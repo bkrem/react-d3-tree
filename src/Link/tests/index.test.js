@@ -27,6 +27,7 @@ describe('<Link />', () => {
 
   jest.spyOn(Link.prototype, 'diagonalPath');
   jest.spyOn(Link.prototype, 'elbowPath');
+  jest.spyOn(Link.prototype, 'straightPath');
   jest.spyOn(Link.prototype, 'applyOpacity');
 
   // Clear method spies on prototype after each test
@@ -66,9 +67,16 @@ describe('<Link />', () => {
         pathFunc="elbow"
       />
     );
+    const straightComponent = shallow(
+      <Link
+        {...mockProps}
+        pathFunc="straight"
+      />
+    );
 
     expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
+    expect(straightComponent.instance().straightPath).toHaveBeenCalled();
   });
 
 

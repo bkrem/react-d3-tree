@@ -107,6 +107,7 @@ Link.propTypes = {
   pathFunc: PropTypes.oneOf([
     'diagonal',
     'elbow',
+    'straight',
   ]).isRequired,
   transitionDuration: PropTypes.number.isRequired,
   styles: PropTypes.object,

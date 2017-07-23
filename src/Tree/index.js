@@ -342,6 +342,7 @@ Tree.propTypes = {
   pathFunc: PropTypes.oneOf([
     'diagonal',
     'elbow',
+    'straight',
   ]),
   transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
