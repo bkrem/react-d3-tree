@@ -55,7 +55,7 @@ defaultValue: `'horizontal'`
 
 ### `pathFunc`
 
-type: `enum('diagonal'|'elbow')`
+type: `enum('diagonal'|'elbow'|'straight')`
 defaultValue: `'diagonal'`
 
 
