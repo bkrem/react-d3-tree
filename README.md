@@ -18,7 +18,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 
 
 ## Demo
-- Current release: https://bkrem.github.io/react-d3-tree/ 
+- Current release: https://bkrem.github.io/react-d3-tree/
 
 
 ## Installation
@@ -66,10 +66,10 @@ class MyComponent extends React.Component {
   render() {
     return (
       {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
-      <div id="treeWrapper" style={{width: '50em', height: '20em'}}> 
-      
+      <div id="treeWrapper" style={{width: '50em', height: '20em'}}>
+
         <Tree data={myTreeData} />
-        
+
       </div>
     );
   }
@@ -84,7 +84,7 @@ class MyComponent extends React.Component {
 | `onClick`            | `func`          |                                       |           | `undefined`                     | Callback function to be called whenever a node is clicked. <br /><br /> The clicked node's data object is passed to the callback function as the first parameter.               |
 | `orientation`        | `string` (enum) | `horizontal` `vertical`               |           | `horizontal`                    | `horizontal` - Tree expands left-to-right. <br /><br /> `vertical` - Tree expands top-to-bottom.                                                                                |
 | `translate`          | `object`        |                                       |           | `{x: 0, y: 0}`                  | Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner).                                         |
-| `pathFunc`           | `string` (enum) | `diagonal` `elbow`                    |           | `diagonal`                      | `diagonal` - Renders smooth, curved edges between parent-child nodes. <br /><br /> `elbow` - Renders sharp edges at right angles between parent-child nodes.                    |
+| `pathFunc`           | `string` (enum) | `diagonal` `elbow` `straight`         |           | `diagonal`                      | `diagonal` - Renders smooth, curved edges between parent-child nodes. <br /><br /> `elbow` - Renders sharp edges at right angles between parent-child nodes.  <br /><br /> `straight` - Renders straight lines between parent-child nodes.                  |
 | `collapsible`        | `bool`          |                                       |           | `true`                          | Toggles ability to collapse/expand the tree's nodes by clicking them.                                                                                                           |
 | `initialDepth`       | `number`        | `0..n`                                |           | `undefined`                     | Sets the maximum node depth to which the tree is expanded on its initial render. <br /> Tree renders to full depth if prop is omitted.                                          |
 | `depthFactor`        | `number`        | `-n..0..n`                            |           | `undefined`                     | Ensures the tree takes up a fixed amount of space (`node.y = node.depth * depthFactor`), regardless of tree depth. <br /> **TIP**: Negative values invert the tree's direction. |
@@ -159,10 +159,10 @@ class MyComponent extends React.Component {
   render() {
     return (
       {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
-      <div id="treeWrapper" style={{width: '50em', height: '20em'}}> 
-      
+      <div id="treeWrapper" style={{width: '50em', height: '20em'}}>
+
         <Tree data={this.state.data} />
-        
+
       </div>
     );
   }

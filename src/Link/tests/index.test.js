@@ -25,8 +25,10 @@ describe('<Link />', () => {
   };
 
 
+  jest.spyOn(Link.prototype, 'drawPath');
   jest.spyOn(Link.prototype, 'diagonalPath');
   jest.spyOn(Link.prototype, 'elbowPath');
+  jest.spyOn(Link.prototype, 'straightPath');
   jest.spyOn(Link.prototype, 'applyOpacity');
 
   // Clear method spies on prototype after each test
@@ -66,9 +68,17 @@ describe('<Link />', () => {
         pathFunc="elbow"
       />
     );
+    const straightComponent = shallow(
+      <Link
+        {...mockProps}
+        pathFunc="straight"
+      />
+    );
 
     expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
+    expect(straightComponent.instance().straightPath).toHaveBeenCalled();
+    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(3);
   });
 
 
@@ -79,6 +89,16 @@ describe('<Link />', () => {
     expect(
       Link.prototype.elbowPath(linkData, 'vertical')
     ).toBe(`M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`);
+  });
+
+
+  it('returns an appropriate straightPath according to `props.orientation`', () => {
+    expect(
+      Link.prototype.straightPath(linkData, 'horizontal')
+    ).toBe(`M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`);
+    expect(
+      Link.prototype.straightPath(linkData, 'vertical')
+    ).toBe(`M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`);
   });
 
 
