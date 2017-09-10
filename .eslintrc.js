@@ -21,7 +21,7 @@ module.exports = {
   "rules": {
     "arrow-parens": [
       "error",
-      "always"
+      "as-needed"
     ],
     "arrow-body-style": [
       2,

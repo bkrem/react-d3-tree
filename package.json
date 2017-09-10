@@ -5,6 +5,7 @@
   "main": "lib/react-d3-tree.min.js",
   "scripts": {
     "clean:lib": "rimraf lib/*",
+    "precommit": "lint-staged",
     "build": "yarn clean:lib && webpack --progress --colors --env build",
     "dev": "yarn clean:lib && webpack --progress --colors --watch --env dev",
     "lint": "eslint .",
@@ -20,6 +21,13 @@
     "release": "yarn test && yarn build && yarn docs && git commit -a && np",
     "preanalyze": "rimraf stats.json",
     "analyze": "webpack --config webpack.config.js --env build --profile --json > stats.json && echo '==> http://webpack.github.io/analyse/'"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint",
+      "prettier --write --single-quote --trailing-comma=all",
+      "git add"
+    ]
   },
   "jest": {
     "collectCoverageFrom": [
@@ -69,10 +77,13 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
+    "husky": "^0.14.3",
     "jest": "^19.0.2",
     "jsdoc-to-markdown": "^3.0.0",
+    "lint-staged": "^4.1.3",
     "np": "^2.16.0",
     "postcss-loader": "^1.3.3",
+    "prettier": "^1.6.1",
     "react": "^15.6.0",
     "react-docgen": "^2.16.0",
     "react-dom": "^15.6.0",
