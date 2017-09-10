@@ -1,7 +1,6 @@
 import { csv, json } from 'd3';
 import uuid from 'uuid';
 
-
 /**
  * _transformToHierarchy - Transforms a flat array of parent-child links
  * into a hierarchy.
@@ -14,7 +13,7 @@ import uuid from 'uuid';
 function _transformToHierarchy(links, attributeFields) {
   const nodesByName = {};
 
-  const assignNode = (name) => {
+  const assignNode = name => {
     if (!nodesByName[name]) {
       nodesByName[name] = { name };
     }
@@ -32,11 +31,11 @@ function _transformToHierarchy(links, attributeFields) {
   };
 
   // Create nodes for each unique source and target.
-  links.forEach((link) => {
+  links.forEach(link => {
     // if `attributeFields` is defined, create/overwrite current `link.attributes`
     if (attributeFields) {
       const customAttributes = {};
-      attributeFields.forEach((field) => {
+      attributeFields.forEach(field => {
         customAttributes[field] = link[field];
       });
       link.attributes = customAttributes;
@@ -54,14 +53,15 @@ function _transformToHierarchy(links, attributeFields) {
     parent._collapsed = child._collapsed = false; // eslint-disable-line
     // NOTE We assign to a custom `_children` field instead of D3's reserved
     // `children` to avoid update anomalies when collapsing/re-expanding nodes.
-    parent._children ? parent._children.push(child) : parent._children = [child];
+    parent._children
+      ? parent._children.push(child)
+      : (parent._children = [child]);
   });
 
   // Extract & return the root node
-  const rootLinks = links.filter((link) => !link.source.parent);
+  const rootLinks = links.filter(link => !link.source.parent);
   return [rootLinks[0].source];
 }
-
 
 /**
  * parseCSV - Parses a CSV file into a hierarchy structure.
@@ -74,13 +74,14 @@ function _transformToHierarchy(links, attributeFields) {
 function parseCSV(csvFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      csv(csvFilePath, (data) => resolve(_transformToHierarchy(data, attributeFields))); // lol hello Lisp
+      csv(csvFilePath, data =>
+        resolve(_transformToHierarchy(data, attributeFields)),
+      ); // lol hello Lisp
     } catch (err) {
       reject(err);
     }
   });
 }
-
 
 /**
  * parseJSON - Parses a hierarchical JSON file that requires no further transformation.
@@ -92,13 +93,12 @@ function parseCSV(csvFilePath, attributeFields) {
 function parseJSON(jsonFilePath) {
   return new Promise((resolve, reject) => {
     try {
-      json(jsonFilePath, (data) => resolve([data]));
+      json(jsonFilePath, data => resolve([data]));
     } catch (err) {
       reject(err);
     }
   });
 }
-
 
 /**
  * parseFlatJSON - Parses a flat JSON file into a hierarchy structure.
@@ -111,13 +111,14 @@ function parseJSON(jsonFilePath) {
 function parseFlatJSON(jsonFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      json(jsonFilePath, (data) => resolve(_transformToHierarchy(data, attributeFields)));
+      json(jsonFilePath, data =>
+        resolve(_transformToHierarchy(data, attributeFields)),
+      );
     } catch (err) {
       reject(err);
     }
   });
 }
-
 
 /**
  * generateHierarchy - Generates a hierarchical array from

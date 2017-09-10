@@ -6,7 +6,6 @@ import { select } from 'd3';
 import './style.css';
 
 export default class Node extends React.Component {
-
   constructor(props) {
     super(props);
     const { parent } = props.nodeData;
@@ -31,25 +30,28 @@ export default class Node extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    const transform = this.setTransformOrientation(nextProps.nodeData.x, nextProps.nodeData.y);
+    const transform = this.setTransformOrientation(
+      nextProps.nodeData.x,
+      nextProps.nodeData.y,
+    );
     this.applyTransform(transform);
   }
 
   setTransformOrientation(x, y) {
-    return this.props.orientation === 'horizontal' ?
-      `translate(${y},${x})` :
-      `translate(${x},${y})`;
+    return this.props.orientation === 'horizontal'
+      ? `translate(${y},${x})`
+      : `translate(${x},${y})`;
   }
 
   applyTransform(transform, opacity = 1, done = () => {}) {
     const { transitionDuration } = this.props;
 
     select(this.node)
-    .transition()
-    .duration(transitionDuration)
-    .attr('transform', transform)
-    .style('opacity', opacity)
-    .each('end', done);
+      .transition()
+      .duration(transitionDuration)
+      .attr('transform', transform)
+      .style('opacity', opacity)
+      .each('end', done);
   }
 
   handleClick() {
@@ -67,11 +69,15 @@ export default class Node extends React.Component {
 
   render() {
     const { nodeData, styles } = this.props;
-    const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
+    const nodeStyle = nodeData._children
+      ? { ...styles.node }
+      : { ...styles.leafNode };
     return (
       <g
         id={nodeData.id}
-        ref={(n) => { this.node = n; }}
+        ref={n => {
+          this.node = n;
+        }}
         style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.state.transform}
@@ -88,10 +94,7 @@ export default class Node extends React.Component {
           {this.props.name}
         </text>
 
-        <circle
-          r={this.props.circleRadius}
-          style={nodeStyle.circle}
-        />
+        <circle r={this.props.circleRadius} style={nodeStyle.circle} />
 
         <text
           className="nodeAttributesBase"
@@ -99,14 +102,12 @@ export default class Node extends React.Component {
           textAnchor={this.props.textAnchor}
           style={nodeStyle.attributes}
         >
-          {
-            this.props.attributes &&
-            Object.keys(this.props.attributes).map((labelKey) =>
+          {this.props.attributes &&
+            Object.keys(this.props.attributes).map(labelKey => (
               <tspan x="10" dy="1.2em" key={uuid.v4()}>
                 {labelKey}: {this.props.attributes[labelKey]}
               </tspan>
-            )
-          }
+            ))}
         </text>
       </g>
     );
@@ -132,10 +133,7 @@ Node.defaultProps = {
 
 Node.propTypes = {
   nodeData: PropTypes.object.isRequired,
-  orientation: PropTypes.oneOf([
-    'horizontal',
-    'vertical',
-  ]).isRequired,
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
   transitionDuration: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,

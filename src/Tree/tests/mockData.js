@@ -48,7 +48,4 @@ const mockData2 = [
   },
 ];
 
-export {
-  mockData,
-  mockData2,
-};
+export { mockData, mockData2 };

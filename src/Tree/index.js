@@ -11,7 +11,6 @@ import Link from '../Link';
 import './style.css';
 
 export default class Tree extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,13 +23,11 @@ export default class Tree extends React.Component {
     this.handleOnClickCb = this.handleOnClickCb.bind(this);
   }
 
-
   componentDidMount() {
     this.bindZoomListener(this.props);
     // TODO find better way of setting initialDepth, re-render here is suboptimal
     this.setState({ initialRender: false }); // eslint-disable-line
   }
-
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
@@ -41,12 +38,13 @@ export default class Tree extends React.Component {
     }
 
     // If zoom-specific props change -> rebind listener with new values
-    if (!deepEqual(this.props.translate, nextProps.translate)
-    || !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)) {
+    if (
+      !deepEqual(this.props.translate, nextProps.translate) ||
+      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)
+    ) {
       this.bindZoomListener(nextProps);
     }
   }
-
 
   /**
    * setInitialTreeDepth - Description
@@ -57,11 +55,10 @@ export default class Tree extends React.Component {
    * @return {void}
    */
   setInitialTreeDepth(nodeSet, initialDepth) {
-    nodeSet.forEach((n) => {
+    nodeSet.forEach(n => {
       n._collapsed = n.depth >= initialDepth;
     });
   }
-
 
   /**
    * bindZoomListener - If `props.zoomable`, binds a listener for
@@ -76,19 +73,21 @@ export default class Tree extends React.Component {
     const g = select('.rd3t-g');
 
     if (zoomable) {
-      svg.call(behavior.zoom()
-        .scaleExtent([scaleExtent.min, scaleExtent.max])
-        .on('zoom', () => {
-          g.attr('transform',
-            `translate(${event.translate}) scale(${event.scale})`
-          );
-        })
-        // Offset so that first pan and zoom does not jump back to [0,0] coords
-        .translate([translate.x, translate.y])
+      svg.call(
+        behavior
+          .zoom()
+          .scaleExtent([scaleExtent.min, scaleExtent.max])
+          .on('zoom', () => {
+            g.attr(
+              'transform',
+              `translate(${event.translate}) scale(${event.scale})`,
+            );
+          })
+          // Offset so that first pan and zoom does not jump back to [0,0] coords
+          .translate([translate.x, translate.y]),
       );
     }
   }
-
 
   /**
    * assignInternalProperties - Assigns internal properties to each node in the
@@ -100,7 +99,7 @@ export default class Tree extends React.Component {
    * @return {array} `data` array with internal properties added
    */
   assignInternalProperties(data) {
-    return data.map((node) => {
+    return data.map(node => {
       node.id = uuid.v4();
       node._collapsed = false;
       // if there are children, recursively assign properties to them too
@@ -112,7 +111,6 @@ export default class Tree extends React.Component {
     });
   }
 
-
   /**
    * findNodesById - Description
    *
@@ -122,15 +120,15 @@ export default class Tree extends React.Component {
    *
    * @return {array} Set of nodes matching `nodeId`
    */
-   // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
+  // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
   findNodesById(nodeId, nodeSet, hits) {
     if (hits.length > 0) {
       return hits;
     }
 
-    hits = hits.concat(nodeSet.filter((node) => node.id === nodeId));
+    hits = hits.concat(nodeSet.filter(node => node.id === nodeId));
 
-    nodeSet.forEach((node) => {
+    nodeSet.forEach(node => {
       if (node._children && node._children.length > 0) {
         hits = this.findNodesById(nodeId, node._children, hits);
         return hits;
@@ -140,7 +138,6 @@ export default class Tree extends React.Component {
 
     return hits;
   }
-
 
   /**
    * collapseNode - Recursively sets the `_collapsed` property of
@@ -153,12 +150,11 @@ export default class Tree extends React.Component {
   collapseNode(node) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
-      node._children.forEach((child) => {
+      node._children.forEach(child => {
         this.collapseNode(child);
       });
     }
   }
-
 
   /**
    * expandNode - Sets the `_collapsed` property of
@@ -171,7 +167,6 @@ export default class Tree extends React.Component {
   expandNode(node) {
     node._collapsed = false;
   }
-
 
   /**
    * handleNodeToggle - Finds the node matching `nodeId` and
@@ -199,7 +194,6 @@ export default class Tree extends React.Component {
     }
   }
 
-
   /**
    * handleOnClickCb - Handles the user-defined `onClick` function
    *
@@ -213,7 +207,6 @@ export default class Tree extends React.Component {
       onClick(clone(targetNode));
     }
   }
-
 
   /**
    * generateTree - Generates tree elements (`nodes` and `links`) by
@@ -232,16 +225,20 @@ export default class Tree extends React.Component {
       orientation,
     } = this.props;
 
-    const tree = layout.tree()
-      .nodeSize(orientation === 'horizontal' ?
-        [nodeSize.y, nodeSize.x] :
-        [nodeSize.x, nodeSize.y]
+    const tree = layout
+      .tree()
+      .nodeSize(
+        orientation === 'horizontal'
+          ? [nodeSize.y, nodeSize.x]
+          : [nodeSize.x, nodeSize.y],
       )
-      .separation((a, b) => deepEqual(a.parent, b.parent) ?
-        separation.siblings :
-        separation.nonSiblings
+      .separation(
+        (a, b) =>
+          deepEqual(a.parent, b.parent)
+            ? separation.siblings
+            : separation.nonSiblings,
       )
-      .children((d) => d._collapsed ? null : d._children);
+      .children(d => (d._collapsed ? null : d._children));
 
     const rootNode = this.state.data[0];
     const nodes = tree.nodes(rootNode);
@@ -253,7 +250,9 @@ export default class Tree extends React.Component {
     }
 
     if (depthFactor) {
-      nodes.forEach((node) => { node.y = node.depth * depthFactor; });
+      nodes.forEach(node => {
+        node.y = node.depth * depthFactor;
+      });
     }
 
     return { nodes, links };
@@ -272,14 +271,18 @@ export default class Tree extends React.Component {
     } = this.props;
 
     return (
-      <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
+      <div
+        className={`rd3t-tree-container ${zoomable
+          ? 'rd3t-grabbable'
+          : undefined}`}
+      >
         <svg className="rd3t-svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
             className="rd3t-g"
             transform={`translate(${translate.x},${translate.y})`}
           >
-            {links.map((linkData) =>
+            {links.map(linkData => (
               <Link
                 key={uuid.v4()}
                 orientation={orientation}
@@ -288,9 +291,9 @@ export default class Tree extends React.Component {
                 transitionDuration={transitionDuration}
                 styles={styles.links}
               />
-            )}
+            ))}
 
-            {nodes.map((nodeData) =>
+            {nodes.map(nodeData => (
               <Node
                 key={nodeData.id}
                 orientation={orientation}
@@ -303,7 +306,7 @@ export default class Tree extends React.Component {
                 circleRadius={circleRadius}
                 styles={styles.nodes}
               />
-            )}
+            ))}
           </TransitionGroup>
         </svg>
       </div>
@@ -331,19 +334,12 @@ Tree.defaultProps = {
 Tree.propTypes = {
   data: PropTypes.array.isRequired,
   onClick: PropTypes.func,
-  orientation: PropTypes.oneOf([
-    'horizontal',
-    'vertical',
-  ]),
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
   }),
-  pathFunc: PropTypes.oneOf([
-    'diagonal',
-    'elbow',
-    'straight',
-  ]),
+  pathFunc: PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
   transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
