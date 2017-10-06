@@ -68,7 +68,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, styles } = this.props;
+    const { nodeData, nodeSvgShape, styles } = this.props;
     const nodeStyle = nodeData._children
       ? { ...styles.node }
       : { ...styles.leafNode };
@@ -83,6 +83,16 @@ export default class Node extends React.Component {
         transform={this.state.transform}
         onClick={this.handleClick}
       >
+        {/* TODO: DEPRECATE <circle /> */}
+        {this.props.circleRadius ? (
+          <circle r={this.props.circleRadius} style={nodeStyle.circle} />
+        ) : (
+          React.createElement(nodeSvgShape.shape, {
+            ...nodeSvgShape.shapeProps,
+            ...nodeStyle.circle,
+          })
+        )}
+
         <text
           className="nodeNameBase"
           textAnchor={this.props.textAnchor}
@@ -93,9 +103,6 @@ export default class Node extends React.Component {
         >
           {this.props.name}
         </text>
-
-        <circle r={this.props.circleRadius} style={nodeStyle.circle} />
-
         <text
           className="nodeAttributesBase"
           y="0"
@@ -117,6 +124,7 @@ export default class Node extends React.Component {
 Node.defaultProps = {
   textAnchor: 'start',
   attributes: undefined,
+  circleRadius: undefined,
   styles: {
     node: {
       circle: {},
@@ -133,12 +141,13 @@ Node.defaultProps = {
 
 Node.propTypes = {
   nodeData: PropTypes.object.isRequired,
+  nodeSvgShape: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
   transitionDuration: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   attributes: PropTypes.object,
   textAnchor: PropTypes.string,
-  circleRadius: PropTypes.number.isRequired,
+  circleRadius: PropTypes.number,
   styles: PropTypes.object,
 };

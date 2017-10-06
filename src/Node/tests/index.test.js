@@ -18,11 +18,16 @@ describe('<Node />', () => {
 
   const mockProps = {
     nodeData,
+    nodeSvgShape: {
+      shape: 'circle',
+      shapeProps: {
+        r: 10,
+      },
+    },
     name: nodeData.name,
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
-    circleRadius: 10,
     styles: {},
   };
 
@@ -65,11 +70,11 @@ describe('<Node />', () => {
       />,
     );
 
-    expect(leafNodeComponent.find('circle').prop('style')).toBe(
-      fixture.leafNode.circle,
+    expect(leafNodeComponent.find('circle').prop('fill')).toBe(
+      fixture.leafNode.circle.fill,
     );
-    expect(nodeComponent.find('circle').prop('style')).toBe(
-      fixture.node.circle,
+    expect(nodeComponent.find('circle').prop('fill')).toBe(
+      fixture.node.circle.fill,
     );
   });
 
@@ -213,7 +218,26 @@ describe('<Node />', () => {
     );
   });
 
-  // TODO Find a way to meaningfully test `componentWillLeave`
+  it('allows passing SVG shape elements + shapeProps to be used as the node element', () => {
+    const fixture = { shape: 'ellipsis', shapeProps: { rx: 20, ry: 10 } };
+    const props = { ...mockProps, nodeSvgShape: fixture };
+    const renderedComponent = shallow(<Node {...props} />);
+
+    expect(renderedComponent.find(fixture.shape).length).toBe(1);
+    expect(renderedComponent.find(fixture.shape).props()).toEqual(
+      fixture.shapeProps,
+    );
+  });
+
+  // TODO: DEPRECATE in v2
+  it('falls back to legacy `<circle />` prop only if `circleRadius` is defined', () => {
+    const props = { ...mockProps, circleRadius: 99 };
+    const renderedComponent = shallow(<Node {...props} />);
+
+    expect(renderedComponent.find('circle').prop('r')).toBe(99);
+  });
+
+  // TODO: Find a way to meaningfully test `componentWillLeave`
 
   // it('regresses to its parent coords when unmounting/leaving', () => {
   //   jest.spyOn(Node.prototype, 'applyTransform');

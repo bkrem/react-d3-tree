@@ -261,6 +261,7 @@ export default class Tree extends React.Component {
   render() {
     const { nodes, links } = this.generateTree();
     const {
+      nodeSvgShape,
       orientation,
       translate,
       pathFunc,
@@ -296,6 +297,7 @@ export default class Tree extends React.Component {
             {nodes.map(nodeData => (
               <Node
                 key={nodeData.id}
+                nodeSvgShape={nodeSvgShape}
                 orientation={orientation}
                 transitionDuration={transitionDuration}
                 textAnchor="start"
@@ -315,6 +317,12 @@ export default class Tree extends React.Component {
 }
 
 Tree.defaultProps = {
+  nodeSvgShape: {
+    shape: 'circle',
+    shapeProps: {
+      r: 10,
+    },
+  },
   onClick: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
@@ -327,12 +335,16 @@ Tree.defaultProps = {
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
-  circleRadius: 10,
+  circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
 };
 
 Tree.propTypes = {
   data: PropTypes.array.isRequired,
+  nodeSvgShape: PropTypes.shape({
+    shape: PropTypes.string,
+    shapeProps: PropTypes.object,
+  }),
   onClick: PropTypes.func,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
