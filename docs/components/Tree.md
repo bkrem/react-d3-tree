@@ -9,7 +9,7 @@ Props
 ### `circleRadius`
 
 type: `number`
-defaultValue: `10`
+defaultValue: `undefined`
 
 
 ### `collapsible`
@@ -39,6 +39,17 @@ defaultValue: `undefined`
 
 type: `shape[object Object]`
 defaultValue: `{ x: 140, y: 140 }`
+
+
+### `nodeSvgShape`
+
+type: `shape[object Object]`
+defaultValue: `{
+  shape: 'circle',
+  shapeProps: {
+    r: 10,
+  },
+}`
 
 
 ### `onClick`
@@ -75,6 +86,16 @@ defaultValue: `{ siblings: 1, nonSiblings: 2 }`
 
 type: `shape[object Object]`
 defaultValue: `{}`
+
+
+### `textLayout`
+
+type: `object`
+defaultValue: `{
+  textAnchor: 'start',
+  x: 10,
+  y: -10,
+}`
 
 
 ### `transitionDuration`

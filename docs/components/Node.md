@@ -12,9 +12,10 @@ type: `object`
 defaultValue: `undefined`
 
 
-### `circleRadius` (required)
+### `circleRadius`
 
 type: `number`
+defaultValue: `undefined`
 
 
 ### `name` (required)
@@ -23,6 +24,11 @@ type: `string`
 
 
 ### `nodeData` (required)
+
+type: `object`
+
+
+### `nodeSvgShape` (required)
 
 type: `object`
 
@@ -56,8 +62,12 @@ defaultValue: `{
 
 ### `textAnchor`
 
-type: `string`
 defaultValue: `'start'`
+
+
+### `textLayout` (required)
+
+type: `object`
 
 
 ### `transitionDuration` (required)
