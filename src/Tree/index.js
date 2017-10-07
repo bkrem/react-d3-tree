@@ -267,6 +267,7 @@ export default class Tree extends React.Component {
       pathFunc,
       transitionDuration,
       zoomable,
+      textLayout,
       circleRadius,
       styles,
     } = this.props;
@@ -300,11 +301,11 @@ export default class Tree extends React.Component {
                 nodeSvgShape={nodeSvgShape}
                 orientation={orientation}
                 transitionDuration={transitionDuration}
-                textAnchor="start"
                 nodeData={nodeData}
                 name={nodeData.name}
                 attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
+                textLayout={textLayout}
                 circleRadius={circleRadius}
                 styles={styles.nodes}
               />
@@ -335,6 +336,11 @@ Tree.defaultProps = {
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
+  textLayout: {
+    textAnchor: 'start',
+    x: 10,
+    y: -10,
+  },
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
 };
@@ -369,6 +375,7 @@ Tree.propTypes = {
     siblings: PropTypes.number,
     nonSiblings: PropTypes.number,
   }),
+  textLayout: PropTypes.object,
   circleRadius: PropTypes.number,
   styles: PropTypes.shape({
     nodes: PropTypes.object,

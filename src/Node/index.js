@@ -68,7 +68,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, nodeSvgShape, styles } = this.props;
+    const { nodeData, nodeSvgShape, textLayout, styles } = this.props;
     const nodeStyle = nodeData._children
       ? { ...styles.node }
       : { ...styles.leafNode };
@@ -95,23 +95,23 @@ export default class Node extends React.Component {
 
         <text
           className="nodeNameBase"
-          textAnchor={this.props.textAnchor}
           style={nodeStyle.name}
-          x="10"
-          y="-10"
+          textAnchor={textLayout.textAnchor}
+          x={textLayout.x}
+          y={textLayout.y}
           dy=".35em"
         >
           {this.props.name}
         </text>
         <text
           className="nodeAttributesBase"
-          y="0"
-          textAnchor={this.props.textAnchor}
+          y={textLayout.y + 10}
+          textAnchor={textLayout.textAnchor}
           style={nodeStyle.attributes}
         >
           {this.props.attributes &&
             Object.keys(this.props.attributes).map(labelKey => (
-              <tspan x="10" dy="1.2em" key={uuid.v4()}>
+              <tspan x={textLayout.x} dy="1.2em" key={uuid.v4()}>
                 {labelKey}: {this.props.attributes[labelKey]}
               </tspan>
             ))}
@@ -147,7 +147,7 @@ Node.propTypes = {
   onClick: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   attributes: PropTypes.object,
-  textAnchor: PropTypes.string,
+  textLayout: PropTypes.object.isRequired,
   circleRadius: PropTypes.number,
   styles: PropTypes.object,
 };

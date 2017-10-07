@@ -13,11 +13,13 @@
 }
 
 .nodeNameBase {
+  fill: #000;
   stroke: #000;
   stroke-width: 1;
 }
 
 .nodeAttributesBase {
+  fill: #777;
   stroke: #777;
   stroke-width: 1;
   font-size: smaller;

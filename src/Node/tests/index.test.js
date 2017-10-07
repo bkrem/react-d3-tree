@@ -25,9 +25,18 @@ describe('<Node />', () => {
       },
     },
     name: nodeData.name,
+    attributes: {
+      testkeyA: 'testvalA',
+      testKeyB: 'testvalB',
+    },
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
+    textLayout: {
+      textAnchor: 'start',
+      x: 10,
+      y: -10,
+    },
     styles: {},
   };
 
@@ -182,6 +191,24 @@ describe('<Node />', () => {
     ).toBe(1);
   });
 
+  it('applies the `textLayout` prop to the node name & attributes', () => {
+    const fixture = {
+      textAnchor: 'test',
+      x: 999,
+      y: 111,
+    };
+    const renderedComponent = shallow(
+      <Node {...mockProps} textLayout={fixture} />,
+    );
+    const nodeName = renderedComponent
+      .find('text')
+      .findWhere(n => n.prop('className') === 'nodeNameBase');
+    const nodeAttribute = renderedComponent.find('tspan').first();
+
+    expect(nodeName.props()).toEqual(expect.objectContaining(fixture));
+    expect(nodeAttribute.prop('x')).toBe(fixture.x);
+  });
+
   it('applies its own x/y coords on `transform` once mounted', () => {
     const fixture = `translate(${nodeData.y},${nodeData.x})`;
     const renderedComponent = mount(<Node {...mockProps} />);
@@ -219,7 +246,7 @@ describe('<Node />', () => {
   });
 
   it('allows passing SVG shape elements + shapeProps to be used as the node element', () => {
-    const fixture = { shape: 'ellipsis', shapeProps: { rx: 20, ry: 10 } };
+    const fixture = { shape: 'ellipse', shapeProps: { rx: 20, ry: 10 } };
     const props = { ...mockProps, nodeSvgShape: fixture };
     const renderedComponent = shallow(<Node {...props} />);
 
@@ -234,6 +261,7 @@ describe('<Node />', () => {
     const props = { ...mockProps, circleRadius: 99 };
     const renderedComponent = shallow(<Node {...props} />);
 
+    expect(renderedComponent.find('circle').length).toBe(1);
     expect(renderedComponent.find('circle').prop('r')).toBe(99);
   });
 
