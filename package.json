@@ -15,7 +15,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "docs:react": "react-docgen src -e src/**/*.test.js$|scripts/buildDocs.sh",
-    "docs": "yarn docs:react && yarn docs:util",
+    "docs": "yarn docs:react",
     "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
     "docs:clean": "rimraf docs/components/* && rimraf docs/util/*",
     "release": "yarn test && yarn build && yarn docs && git commit -a && np",
