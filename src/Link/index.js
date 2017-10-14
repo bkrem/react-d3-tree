@@ -72,6 +72,10 @@ export default class Link extends React.PureComponent {
   drawPath() {
     const { linkData, orientation, pathFunc } = this.props;
 
+    if (typeof pathFunc === 'function') {
+      return pathFunc(linkData, orientation);
+    }
+
     if (pathFunc === 'elbow') {
       return this.elbowPath(linkData, orientation);
     }
@@ -105,7 +109,10 @@ Link.defaultProps = {
 Link.propTypes = {
   linkData: PropTypes.object.isRequired,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-  pathFunc: PropTypes.oneOf(['diagonal', 'elbow', 'straight']).isRequired,
+  pathFunc: PropTypes.oneOfType([
+    PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
+    PropTypes.func,
+  ]).isRequired,
   transitionDuration: PropTypes.number.isRequired,
   styles: PropTypes.object,
 };
