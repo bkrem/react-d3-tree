@@ -357,7 +357,10 @@ Tree.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
   }),
-  pathFunc: PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
+  pathFunc: PropTypes.oneOfType([
+    PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
+    PropTypes.func,
+  ]),
   transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
