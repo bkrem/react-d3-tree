@@ -24,11 +24,17 @@ describe('<Link />', () => {
     styles: {},
   };
 
+  const pathFuncs = {
+    testPathFunc: (d, orientation) =>
+      orientation && `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`,
+  };
+
   jest.spyOn(Link.prototype, 'drawPath');
   jest.spyOn(Link.prototype, 'diagonalPath');
   jest.spyOn(Link.prototype, 'elbowPath');
   jest.spyOn(Link.prototype, 'straightPath');
   jest.spyOn(Link.prototype, 'applyOpacity');
+  jest.spyOn(pathFuncs, 'testPathFunc');
 
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
@@ -53,11 +59,13 @@ describe('<Link />', () => {
     const straightComponent = shallow(
       <Link {...mockProps} pathFunc="straight" />,
     );
+    shallow(<Link {...mockProps} pathFunc={pathFuncs.testPathFunc} />);
 
     expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
     expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
     expect(straightComponent.instance().straightPath).toHaveBeenCalled();
-    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(3);
+    expect(pathFuncs.testPathFunc).toHaveBeenCalled();
+    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(4);
   });
 
   it('returns an appropriate elbowPath according to `props.orientation`', () => {
