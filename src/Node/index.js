@@ -8,12 +8,12 @@ import './style.css';
 export default class Node extends React.Component {
   constructor(props) {
     super(props);
-    const { parent } = props.nodeData;
+    const { nodeData: { parent }, orientation } = props;
     const originX = parent ? parent.x : 0;
     const originY = parent ? parent.y : 0;
 
     this.state = {
-      transform: this.setTransformOrientation(originX, originY),
+      transform: this.setTransformOrientation(originX, originY, orientation),
       initialStyle: {
         opacity: 0,
       },
@@ -23,35 +23,52 @@ export default class Node extends React.Component {
   }
 
   componentDidMount() {
-    const { x, y } = this.props.nodeData;
-    const transform = this.setTransformOrientation(x, y);
+    const { nodeData: { x, y }, orientation, transitionDuration } = this.props;
+    const transform = this.setTransformOrientation(x, y, orientation);
 
-    this.applyTransform(transform);
+    this.applyTransform(transform, transitionDuration);
   }
 
   componentWillUpdate(nextProps) {
-    const transform = this.setTransformOrientation(
-      nextProps.nodeData.x,
-      nextProps.nodeData.y,
-    );
-    this.applyTransform(transform);
+    const shouldTransform = this.shouldNodeTransform(this.props, nextProps);
+    if (shouldTransform) {
+      const transform = this.setTransformOrientation(
+        nextProps.nodeData.x,
+        nextProps.nodeData.y,
+        nextProps.orientation,
+      );
+      this.applyTransform(transform, nextProps.transitionDuration);
+    }
   }
 
-  setTransformOrientation(x, y) {
-    return this.props.orientation === 'horizontal'
+  shouldNodeTransform(ownProps, nextProps) {
+    return (
+      nextProps.nodeData.x !== ownProps.nodeData.x ||
+      nextProps.nodeData.y !== ownProps.nodeData.y ||
+      nextProps.orientation !== ownProps.orientation
+    );
+  }
+
+  setTransformOrientation(x, y, orientation) {
+    return orientation === 'horizontal'
       ? `translate(${y},${x})`
       : `translate(${x},${y})`;
   }
 
-  applyTransform(transform, opacity = 1, done = () => {}) {
-    const { transitionDuration } = this.props;
-
-    select(this.node)
-      .transition()
-      .duration(transitionDuration)
-      .attr('transform', transform)
-      .style('opacity', opacity)
-      .each('end', done);
+  applyTransform(transform, transitionDuration, opacity = 1, done = () => {}) {
+    if (transitionDuration === 0) {
+      select(this.node)
+        .attr('transform', transform)
+        .style('opacity', opacity);
+      done();
+    } else {
+      select(this.node)
+        .transition()
+        .duration(transitionDuration)
+        .attr('transform', transform)
+        .style('opacity', opacity)
+        .each('end', done);
+    }
   }
 
   handleClick() {
@@ -59,12 +76,20 @@ export default class Node extends React.Component {
   }
 
   componentWillLeave(done) {
-    const { parent } = this.props.nodeData;
+    const {
+      nodeData: { parent },
+      orientation,
+      transitionDuration,
+    } = this.props;
     const originX = parent ? parent.x : 0;
     const originY = parent ? parent.y : 0;
-    const transform = this.setTransformOrientation(originX, originY);
+    const transform = this.setTransformOrientation(
+      originX,
+      originY,
+      orientation,
+    );
 
-    this.applyTransform(transform, 0, done);
+    this.applyTransform(transform, transitionDuration, 0, done);
   }
 
   render() {

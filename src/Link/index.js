@@ -15,21 +15,24 @@ export default class Link extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.applyOpacity(1);
+    this.applyOpacity(1, this.props.transitionDuration);
   }
 
   componentWillLeave(done) {
-    this.applyOpacity(0, done);
+    this.applyOpacity(0, this.props.transitionDuration, done);
   }
 
-  applyOpacity(opacity, done = () => {}) {
-    const { transitionDuration } = this.props;
-
-    select(this.link)
-      .transition()
-      .duration(transitionDuration)
-      .style('opacity', opacity)
-      .each('end', done);
+  applyOpacity(opacity, transitionDuration, done = () => {}) {
+    if (transitionDuration === 0) {
+      select(this.link).style('opacity', opacity);
+      done();
+    } else {
+      select(this.link)
+        .transition()
+        .duration(transitionDuration)
+        .style('opacity', opacity)
+        .each('end', done);
+    }
   }
 
   diagonalPath(linkData, orientation) {

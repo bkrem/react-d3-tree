@@ -215,11 +215,11 @@ describe('<Node />', () => {
 
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
       fixture,
+      mockProps.transitionDuration,
     );
   });
 
-  it('applies updated transform if either the `x` or `y` prop changes', () => {
-    // jest.spyOn(Node.prototype, 'applyTransform');
+  it('updates its position if `nodeData.x` or `nodeData.y` changes', () => {
     const updatedProps = {
       ...mockProps,
       nodeData: {
@@ -236,13 +236,26 @@ describe('<Node />', () => {
 
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
       initialTransform,
+      mockProps.transitionDuration,
     );
 
     renderedComponent.setProps(updatedProps);
 
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
       updatedTransform,
+      mockProps.transitionDuration,
     );
+  });
+
+  it('updates its position if `orientation` changes', () => {
+    const renderedComponent = mount(<Node {...mockProps} />);
+    const nextProps = { ...mockProps, orientation: 'vertical' };
+
+    expect(
+      renderedComponent
+        .instance()
+        .shouldNodeTransform(renderedComponent.props(), nextProps),
+    ).toBe(true);
   });
 
   it('allows passing SVG shape elements + shapeProps to be used as the node element', () => {
