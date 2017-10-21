@@ -18,7 +18,7 @@ type: `enum('horizontal'|'vertical')`
 
 ### `pathFunc` (required)
 
-type: `enum('diagonal'|'elbow'|'straight')`
+type: `union(enum|func)`
 
 
 ### `styles`
