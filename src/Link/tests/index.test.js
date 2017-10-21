@@ -96,6 +96,7 @@ describe('<Link />', () => {
 
     expect(renderedComponent.instance().applyOpacity).toHaveBeenCalledWith(
       fixture,
+      mockProps.transitionDuration,
     );
   });
 });
