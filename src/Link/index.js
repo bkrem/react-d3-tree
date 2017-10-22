@@ -38,9 +38,7 @@ export default class Link extends React.PureComponent {
   diagonalPath(linkData, orientation) {
     const diagonal = svg
       .diagonal()
-      .projection(
-        d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]),
-      );
+      .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]));
     return diagonal(linkData);
   }
 

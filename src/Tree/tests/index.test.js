@@ -46,26 +46,22 @@ describe('<Tree />', () => {
     };
     const renderedComponent = mount(<Tree data={mockData} />);
 
-    expect(
-      renderedComponent.instance().assignInternalProperties,
-    ).toHaveBeenCalledTimes(mockDataDepth);
+    expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
+      mockDataDepth,
+    );
 
     renderedComponent.setProps(nextProps);
 
-    expect(
-      renderedComponent.instance().assignInternalProperties,
-    ).toHaveBeenCalledTimes(mockDataDepth + mockData2Depth);
+    expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
+      mockDataDepth + mockData2Depth,
+    );
   });
 
   it('applies the `translate` prop when specified', () => {
     const fixture = { x: 123, y: 321 };
     const expected = `translate(${fixture.x},${fixture.y})`;
-    const renderedComponent = shallow(
-      <Tree data={mockData} translate={fixture} />,
-    );
-    expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(
-      expected,
-    );
+    const renderedComponent = shallow(<Tree data={mockData} translate={fixture} />);
+    expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(expected);
   });
 
   it("mutates each node's `y` prop according to `depthFactor` when specified", () => {
@@ -83,20 +79,14 @@ describe('<Tree />', () => {
 
   it('passes `props.orientation` to its <Node /> and <Link /> children', () => {
     const fixture = 'vertical';
-    const renderedComponent = shallow(
-      <Tree data={mockData} orientation={fixture} />,
-    );
+    const renderedComponent = shallow(<Tree data={mockData} orientation={fixture} />);
 
-    expect(
-      renderedComponent
-        .find(Node)
-        .everyWhere(n => n.prop('orientation') === fixture),
-    ).toBe(true);
-    expect(
-      renderedComponent
-        .find(Link)
-        .everyWhere(n => n.prop('orientation') === fixture),
-    ).toBe(true);
+    expect(renderedComponent.find(Node).everyWhere(n => n.prop('orientation') === fixture)).toBe(
+      true,
+    );
+    expect(renderedComponent.find(Link).everyWhere(n => n.prop('orientation') === fixture)).toBe(
+      true,
+    );
   });
 
   it('passes `handleNodeToggle()` to its <Node /> children as onClick prop', () => {
@@ -105,10 +95,7 @@ describe('<Tree />', () => {
     expect(
       renderedComponent
         .find(Node)
-        .everyWhere(
-          n =>
-            n.prop('onClick') === renderedComponent.instance().handleNodeToggle,
-        ),
+        .everyWhere(n => n.prop('onClick') === renderedComponent.instance().handleNodeToggle),
     ).toBe(true);
   });
 
@@ -140,9 +127,7 @@ describe('<Tree />', () => {
   });
 
   it('does not collapse a node if `props.collapsible` is false', () => {
-    const renderedComponent = mount(
-      <Tree data={mockData} collapsible={false} />,
-    );
+    const renderedComponent = mount(<Tree data={mockData} collapsible={false} />);
     renderedComponent
       .find(Node)
       .first()
@@ -160,25 +145,17 @@ describe('<Tree />', () => {
 
   it('adds the `.rd3t-grabbable` class if `props.zoomable`', () => {
     const zoomableComponent = shallow(<Tree data={mockData} />);
-    const nonZoomableComponent = shallow(
-      <Tree data={mockData} zoomable={false} />,
-    );
+    const nonZoomableComponent = shallow(<Tree data={mockData} zoomable={false} />);
 
-    expect(
-      zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable'),
-    ).toBe(true);
-    expect(
-      nonZoomableComponent
-        .find('.rd3t-tree-container')
-        .hasClass('rd3t-grabbable'),
-    ).toBe(false);
+    expect(zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(true);
+    expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(
+      false,
+    );
   });
 
   it('calls the onClick callback when a node is toggled', () => {
     const onClickSpy = jest.fn();
-    const renderedComponent = mount(
-      <Tree data={mockData} onClick={onClickSpy} />,
-    );
+    const renderedComponent = mount(<Tree data={mockData} onClick={onClickSpy} />);
 
     renderedComponent
       .find(Node)
@@ -204,9 +181,7 @@ describe('<Tree />', () => {
 
   it("clones the clicked node's data & passes it to the onClick callback if defined", () => {
     const onClickSpy = jest.fn();
-    const renderedComponent = mount(
-      <Tree data={mockData} onClick={onClickSpy} />,
-    );
+    const renderedComponent = mount(<Tree data={mockData} onClick={onClickSpy} />);
 
     renderedComponent
       .find(Node)

@@ -53,9 +53,7 @@ function _transformToHierarchy(links, attributeFields) {
     parent._collapsed = child._collapsed = false; // eslint-disable-line
     // NOTE We assign to a custom `_children` field instead of D3's reserved
     // `children` to avoid update anomalies when collapsing/re-expanding nodes.
-    parent._children
-      ? parent._children.push(child)
-      : (parent._children = [child]);
+    parent._children ? parent._children.push(child) : (parent._children = [child]);
   });
 
   // Extract & return the root node
@@ -74,9 +72,7 @@ function _transformToHierarchy(links, attributeFields) {
 function parseCSV(csvFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      csv(csvFilePath, data =>
-        resolve(_transformToHierarchy(data, attributeFields)),
-      ); // lol hello Lisp
+      csv(csvFilePath, data => resolve(_transformToHierarchy(data, attributeFields))); // lol hello Lisp
     } catch (err) {
       reject(err);
     }
@@ -111,9 +107,7 @@ function parseJSON(jsonFilePath) {
 function parseFlatJSON(jsonFilePath, attributeFields) {
   return new Promise((resolve, reject) => {
     try {
-      json(jsonFilePath, data =>
-        resolve(_transformToHierarchy(data, attributeFields)),
-      );
+      json(jsonFilePath, data => resolve(_transformToHierarchy(data, attributeFields)));
     } catch (err) {
       reject(err);
     }

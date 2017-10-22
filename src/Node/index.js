@@ -50,9 +50,7 @@ export default class Node extends React.Component {
   }
 
   setTransformOrientation(x, y, orientation) {
-    return orientation === 'horizontal'
-      ? `translate(${y},${x})`
-      : `translate(${x},${y})`;
+    return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
   }
 
   applyTransform(transform, transitionDuration, opacity = 1, done = () => {}) {
@@ -76,27 +74,17 @@ export default class Node extends React.Component {
   }
 
   componentWillLeave(done) {
-    const {
-      nodeData: { parent },
-      orientation,
-      transitionDuration,
-    } = this.props;
+    const { nodeData: { parent }, orientation, transitionDuration } = this.props;
     const originX = parent ? parent.x : 0;
     const originY = parent ? parent.y : 0;
-    const transform = this.setTransformOrientation(
-      originX,
-      originY,
-      orientation,
-    );
+    const transform = this.setTransformOrientation(originX, originY, orientation);
 
     this.applyTransform(transform, transitionDuration, 0, done);
   }
 
   render() {
     const { nodeData, nodeSvgShape, textLayout, styles } = this.props;
-    const nodeStyle = nodeData._children
-      ? { ...styles.node }
-      : { ...styles.leafNode };
+    const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
         id={nodeData.id}
