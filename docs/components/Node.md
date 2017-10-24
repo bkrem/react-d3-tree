@@ -60,6 +60,11 @@ defaultValue: `{
 }`
 
 
+### `subscriptions` (required)
+
+type: `object`
+
+
 ### `textAnchor`
 
 defaultValue: `'start'`
