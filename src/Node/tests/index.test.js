@@ -37,6 +37,7 @@ describe('<Node />', () => {
       x: 10,
       y: -10,
     },
+    subscriptions: {},
     styles: {},
   };
 
@@ -206,6 +207,16 @@ describe('<Node />', () => {
   it('updates its position if `orientation` changes', () => {
     const renderedComponent = mount(<Node {...mockProps} />);
     const nextProps = { ...mockProps, orientation: 'vertical' };
+
+    expect(
+      renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
+    ).toBe(true);
+  });
+
+  it('updates its position if any subscribed top-level props change', () => {
+    const subscriptions = { x: 12, y: 10, initialDepth: undefined };
+    const renderedComponent = mount(<Node {...mockProps} subscriptions={subscriptions} />);
+    const nextProps = { ...mockProps, subscriptions: { ...subscriptions, initialDepth: 1 } };
 
     expect(
       renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),

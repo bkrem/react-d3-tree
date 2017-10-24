@@ -30,19 +30,21 @@ export default class Node extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    const shouldTransform = this.shouldNodeTransform(this.props, nextProps);
-    if (shouldTransform) {
-      const transform = this.setTransformOrientation(
-        nextProps.nodeData.x,
-        nextProps.nodeData.y,
-        nextProps.orientation,
-      );
-      this.applyTransform(transform, nextProps.transitionDuration);
-    }
+    const transform = this.setTransformOrientation(
+      nextProps.nodeData.x,
+      nextProps.nodeData.y,
+      nextProps.orientation,
+    );
+    this.applyTransform(transform, nextProps.transitionDuration);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.shouldNodeTransform(this.props, nextProps);
   }
 
   shouldNodeTransform(ownProps, nextProps) {
     return (
+      nextProps.subscriptions !== ownProps.subscriptions ||
       nextProps.nodeData.x !== ownProps.nodeData.x ||
       nextProps.nodeData.y !== ownProps.nodeData.y ||
       nextProps.orientation !== ownProps.orientation
@@ -161,6 +163,7 @@ Node.propTypes = {
   name: PropTypes.string.isRequired,
   attributes: PropTypes.object,
   textLayout: PropTypes.object.isRequired,
+  subscriptions: PropTypes.object.isRequired, // eslint-disable-line react/no-unused-prop-types
   circleRadius: PropTypes.number,
   styles: PropTypes.object,
 };

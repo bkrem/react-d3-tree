@@ -250,9 +250,15 @@ export default class Tree extends React.Component {
       transitionDuration,
       zoomable,
       textLayout,
+      nodeSize,
+      depthFactor,
+      initialDepth,
+      separation,
       circleRadius,
       styles,
     } = this.props;
+
+    const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
 
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
@@ -285,6 +291,7 @@ export default class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
                 textLayout={textLayout}
                 circleRadius={circleRadius}
+                subscriptions={subscriptions}
                 styles={styles.nodes}
               />
             ))}
