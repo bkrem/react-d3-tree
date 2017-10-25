@@ -114,6 +114,7 @@ export default class Node extends React.Component {
           textAnchor={textLayout.textAnchor}
           x={textLayout.x}
           y={textLayout.y}
+          transform={textLayout.transform}
           dy=".35em"
         >
           {this.props.name}
