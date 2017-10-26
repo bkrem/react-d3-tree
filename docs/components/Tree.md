@@ -95,6 +95,7 @@ defaultValue: `{
   textAnchor: 'start',
   x: 10,
   y: -10,
+  transform: undefined,
 }`
 
 
