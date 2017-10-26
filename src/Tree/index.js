@@ -325,6 +325,7 @@ Tree.defaultProps = {
     textAnchor: 'start',
     x: 10,
     y: -10,
+    transform: undefined,
   },
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},

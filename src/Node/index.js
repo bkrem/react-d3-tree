@@ -114,6 +114,7 @@ export default class Node extends React.Component {
           textAnchor={textLayout.textAnchor}
           x={textLayout.x}
           y={textLayout.y}
+          transform={textLayout.transform}
           dy=".35em"
         >
           {this.props.name}
@@ -122,6 +123,7 @@ export default class Node extends React.Component {
           className="nodeAttributesBase"
           y={textLayout.y + 10}
           textAnchor={textLayout.textAnchor}
+          transform={textLayout.transform}
           style={nodeStyle.attributes}
         >
           {this.props.attributes &&
