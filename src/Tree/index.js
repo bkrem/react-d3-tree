@@ -218,7 +218,7 @@ export default class Tree extends React.Component {
       .tree()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
       .separation(
-        (a, b) => (deepEqual(a.parent, b.parent) ? separation.siblings : separation.nonSiblings),
+        (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings),
       )
       .children(d => (d._collapsed ? null : d._children));
 
