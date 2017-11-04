@@ -16,6 +16,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Node shapes](#node-shapes)
 - [Styling](#styling)
 - [External data sources](#external-data-sources)
+- [Recipes](#recipes)
 
 
 ## Demo
@@ -204,3 +205,7 @@ class MyComponent extends React.Component {
 
 For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).  
 For examples of each data type that can be parsed with `treeUtil`, please check the [data source examples](docs/examples/data).
+
+
+## Recipes
+* [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
