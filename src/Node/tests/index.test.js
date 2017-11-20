@@ -33,6 +33,7 @@ describe('<Node />', () => {
     transitionDuration: 500,
     onClick: () => {},
     onMouseOver: () => {},
+    onMouseOut: () => {},
     textLayout: {
       textAnchor: 'start',
       x: 10,
@@ -144,6 +145,15 @@ describe('<Node />', () => {
     renderedComponent.simulate('mouseover');
     expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
     expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id);
+  });
+
+  it('handles onMouseOut events and passes its nodeId to onMouseOut handler', () => {
+    const onMouseOutSpy = jest.fn();
+    const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
+
+    renderedComponent.simulate('mouseout');
+    expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
+    expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id);
   });
 
   it('maps each `props.attributes` to a <tspan> element', () => {

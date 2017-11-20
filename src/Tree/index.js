@@ -22,6 +22,7 @@ export default class Tree extends React.Component {
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
     this.handleOnClickCb = this.handleOnClickCb.bind(this);
     this.handleOnMouseOverCb = this.handleOnMouseOverCb.bind(this);
+    this.handleOnMouseOutCb = this.handleOnMouseOutCb.bind(this);
   }
 
   componentDidMount() {
@@ -222,6 +223,23 @@ export default class Tree extends React.Component {
   }
 
   /**
+   * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
+   * 
+   * @param {string} nodeId 
+   * 
+   * @return {void}
+   */
+  handleOnMouseOutCb(nodeId) {
+    const { onMouseOut } = this.props;
+    if (onMouseOut && typeof onMouseOut === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
+      onMouseOut(clone(targetNode));
+    }
+  }
+
+  /**
    * generateTree - Generates tree elements (`nodes` and `links`) by
    * grabbing the rootNode from `this.state.data[0]`.
    * Restricts tree depth to `props.initialDepth` if defined and if this is
@@ -308,6 +326,7 @@ export default class Tree extends React.Component {
                 attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
                 onMouseOver={this.handleOnMouseOverCb}
+                onMouseOut={this.handleOnMouseOutCb}
                 textLayout={textLayout}
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
@@ -330,6 +349,7 @@ Tree.defaultProps = {
   },
   onClick: undefined,
   onMouseOver: undefined,
+  onMouseOut: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
@@ -359,6 +379,7 @@ Tree.propTypes = {
   }),
   onClick: PropTypes.func,
   onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
     x: PropTypes.number,
