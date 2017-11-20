@@ -165,7 +165,7 @@ describe('<Tree />', () => {
     expect(onClickSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('calls the onClick callback when `props.collapsible` is false', () => {
+  it('calls the onClick callback even when `props.collapsible` is false', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = mount(
       <Tree data={mockData} collapsible={false} onClick={onClickSpy} />,
@@ -189,6 +189,35 @@ describe('<Tree />', () => {
       .simulate('click');
 
     expect(onClickSpy).toHaveBeenCalledWith(
+      renderedComponent
+        .find(Node)
+        .first()
+        .prop('nodeData'),
+    );
+  });
+
+  it('calls the onMouseOver callback when a node is hovered over', () => {
+    const onMouseOverSpy = jest.fn();
+    const renderedComponent = mount(<Tree data={mockData} onMouseOver={onMouseOverSpy} />);
+
+    renderedComponent
+      .find(Node)
+      .first()
+      .simulate('mouseover');
+
+    expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("clones the hovered node's data & passes it to the onMouseOver callback if defined", () => {
+    const onMouseOverSpy = jest.fn();
+    const renderedComponent = mount(<Tree data={mockData} onMouseOver={onMouseOverSpy} />);
+
+    renderedComponent
+      .find(Node)
+      .first()
+      .simulate('mouseover');
+
+    expect(onMouseOverSpy).toHaveBeenCalledWith(
       renderedComponent
         .find(Node)
         .first()
