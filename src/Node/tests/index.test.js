@@ -32,6 +32,8 @@ describe('<Node />', () => {
     orientation: 'horizontal',
     transitionDuration: 500,
     onClick: () => {},
+    onMouseOver: () => {},
+    onMouseOut: () => {},
     textLayout: {
       textAnchor: 'start',
       x: 10,
@@ -127,18 +129,31 @@ describe('<Node />', () => {
     expect(verticalComponent.find('g').prop('transform')).toBe(verticalTransform);
   });
 
-  it('should take an `onClick` prop', () => {
-    const renderedComponent = shallow(<Node {...mockProps} onClick={() => {}} />);
-
-    expect(renderedComponent.prop('onClick')).toBeDefined();
-  });
-
-  it('handles click events and passes its nodeId to onClick handler', () => {
+  it('handles onClick events and passes its nodeId to onClick handler', () => {
     const onClickSpy = jest.fn();
     const renderedComponent = shallow(<Node {...mockProps} onClick={onClickSpy} />);
 
     renderedComponent.simulate('click');
+    expect(onClickSpy).toHaveBeenCalledTimes(1);
     expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
+  });
+
+  it('handles onMouseOver events and passes its nodeId to onMouseOver handler', () => {
+    const onMouseOverSpy = jest.fn();
+    const renderedComponent = shallow(<Node {...mockProps} onMouseOver={onMouseOverSpy} />);
+
+    renderedComponent.simulate('mouseover');
+    expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
+    expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id);
+  });
+
+  it('handles onMouseOut events and passes its nodeId to onMouseOut handler', () => {
+    const onMouseOutSpy = jest.fn();
+    const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
+
+    renderedComponent.simulate('mouseout');
+    expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
+    expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id);
   });
 
   it('maps each `props.attributes` to a <tspan> element', () => {

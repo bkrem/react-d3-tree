@@ -21,6 +21,8 @@ export default class Tree extends React.Component {
     this.collapseNode = this.collapseNode.bind(this);
     this.handleNodeToggle = this.handleNodeToggle.bind(this);
     this.handleOnClickCb = this.handleOnClickCb.bind(this);
+    this.handleOnMouseOverCb = this.handleOnMouseOverCb.bind(this);
+    this.handleOnMouseOutCb = this.handleOnMouseOutCb.bind(this);
   }
 
   componentDidMount() {
@@ -204,6 +206,40 @@ export default class Tree extends React.Component {
   }
 
   /**
+   * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
+   * 
+   * @param {string} nodeId 
+   * 
+   * @return {void}
+   */
+  handleOnMouseOverCb(nodeId) {
+    const { onMouseOver } = this.props;
+    if (onMouseOver && typeof onMouseOver === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
+      onMouseOver(clone(targetNode));
+    }
+  }
+
+  /**
+   * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
+   * 
+   * @param {string} nodeId 
+   * 
+   * @return {void}
+   */
+  handleOnMouseOutCb(nodeId) {
+    const { onMouseOut } = this.props;
+    if (onMouseOut && typeof onMouseOut === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
+      onMouseOut(clone(targetNode));
+    }
+  }
+
+  /**
    * generateTree - Generates tree elements (`nodes` and `links`) by
    * grabbing the rootNode from `this.state.data[0]`.
    * Restricts tree depth to `props.initialDepth` if defined and if this is
@@ -218,7 +254,7 @@ export default class Tree extends React.Component {
       .tree()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
       .separation(
-        (a, b) => (deepEqual(a.parent, b.parent) ? separation.siblings : separation.nonSiblings),
+        (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings),
       )
       .children(d => (d._collapsed ? null : d._children));
 
@@ -289,6 +325,8 @@ export default class Tree extends React.Component {
                 name={nodeData.name}
                 attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
+                onMouseOver={this.handleOnMouseOverCb}
+                onMouseOut={this.handleOnMouseOutCb}
                 textLayout={textLayout}
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
@@ -310,6 +348,8 @@ Tree.defaultProps = {
     },
   },
   onClick: undefined,
+  onMouseOver: undefined,
+  onMouseOut: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
@@ -338,6 +378,8 @@ Tree.propTypes = {
     shapeProps: PropTypes.object,
   }),
   onClick: PropTypes.func,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
     x: PropTypes.number,
