@@ -38,6 +38,17 @@ type: `object`
 type: `func`
 
 
+### `onMouseOut` (required)
+
+type: `func`
+
+
+### `onMouseOver` (required)
+
+type: `func`
+defaultValue: `undefined`
+
+
 ### `orientation` (required)
 
 type: `enum('horizontal'|'vertical')`

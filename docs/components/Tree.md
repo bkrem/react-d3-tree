@@ -58,6 +58,18 @@ type: `func`
 defaultValue: `undefined`
 
 
+### `onMouseOut`
+
+type: `func`
+defaultValue: `undefined`
+
+
+### `onMouseOver`
+
+type: `func`
+defaultValue: `undefined`
+
+
 ### `orientation`
 
 type: `enum('horizontal'|'vertical')`
