@@ -6,16 +6,20 @@ node_js:
   - 6
   - 5
 
+before_install: yarn global add greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+
 script:
   - npm run test
   - npm run build
+
+after_script: greenkeeper-lockfile-upload
+after_success: 'npm run coveralls'
 
 notifications:
   email:
     on_success: change
     on_failure: always
-
-after_success: 'npm run coveralls'
 
 #cache:
   #  directories:
