@@ -151,10 +151,8 @@ export default class Node extends React.Component {
 }
 
 Node.defaultProps = {
-  textAnchor: 'start',
   attributes: undefined,
   circleRadius: undefined,
-  onMouseOver: undefined,
   styles: {
     node: {
       circle: {},
