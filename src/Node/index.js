@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
 import { select } from 'd3';
 
 import './style.css';
@@ -94,8 +93,19 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration, 0, done);
   }
 
+  renderForeignObjectData(foreignObjectData, nodeData) {
+    if (foreignObjectData.dataWrapper) {
+      if (typeof foreignObjectData.dataWrapper.content === 'function') return foreignObjectData.dataWrapper.content(nodeData)
+      return (
+        <div {...foreignObjectData.dataWrapper.params} dangerouslySetInnerHTML={foreignObjectData.dataWrapper.content} />
+      )
+    }
+    console.warn("dataWrapper for foreignObjectData should be specified")
+    return null
+  }
+
   render() {
-    const { nodeData, nodeSvgShape, textLayout, styles } = this.props;
+    const { nodeData, nodeSvgShape, textLayout, styles, foreignObjectData, noTextNested } = this.props;
     const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
@@ -119,32 +129,41 @@ export default class Node extends React.Component {
             ...nodeStyle.circle,
           })
         )}
-
-        <text
-          className="nodeNameBase"
-          style={nodeStyle.name}
-          textAnchor={textLayout.textAnchor}
-          x={textLayout.x}
-          y={textLayout.y}
-          transform={textLayout.transform}
-          dy=".35em"
-        >
-          {this.props.name}
-        </text>
-        <text
-          className="nodeAttributesBase"
-          y={textLayout.y + 10}
-          textAnchor={textLayout.textAnchor}
-          transform={textLayout.transform}
-          style={nodeStyle.attributes}
-        >
-          {this.props.attributes &&
-            Object.keys(this.props.attributes).map(labelKey => (
-              <tspan x={textLayout.x} dy="1.2em" key={uuid.v4()}>
-                {labelKey}: {this.props.attributes[labelKey]}
-              </tspan>
-            ))}
-        </text>
+        {
+          !noTextNested &&
+            <text
+              className="nodeNameBase"
+              style={nodeStyle.name}
+              textAnchor={textLayout.textAnchor}
+              x={textLayout.x}
+              y={textLayout.y}
+              transform={textLayout.transform}
+              dy=".35em"
+            >
+              {this.props.name}
+            </text>
+        }
+        {
+          !noTextNested &&
+            <text
+              className="nodeAttributesBase"
+              y={textLayout.y + 10}
+              textAnchor={textLayout.textAnchor}
+              transform={textLayout.transform}
+              style={nodeStyle.attributes}
+            >
+            </text>
+        }
+        {
+          nodeData && nodeData.dangerouslySetInnerHTML
+            ? <foreignObject><div dangerouslySetInnerHTML={{__html: nodeData.dangerouslySetInnerHTML}} /></foreignObject>
+            : foreignObjectData && Object.keys(foreignObjectData).length &&
+            <foreignObject 
+              {...foreignObjectData.params}
+            >
+              {this.renderForeignObjectData(foreignObjectData, nodeData)}
+            </foreignObject>
+        }
       </g>
     );
   }
@@ -165,6 +184,8 @@ Node.defaultProps = {
       attributes: {},
     },
   },
+  foreignObjectData: {},
+  noTextNested: false,
 };
 
 Node.propTypes = {
@@ -181,4 +202,6 @@ Node.propTypes = {
   subscriptions: PropTypes.object.isRequired, // eslint-disable-line react/no-unused-prop-types
   circleRadius: PropTypes.number,
   styles: PropTypes.object,
+  foreignObjectData: PropTypes.object,
+  noTextNested: PropTypes.bool,
 };

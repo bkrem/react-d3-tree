@@ -292,6 +292,8 @@ export default class Tree extends React.Component {
       separation,
       circleRadius,
       styles,
+      noTextNested,
+      foreignObjectData,
     } = this.props;
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
@@ -331,6 +333,8 @@ export default class Tree extends React.Component {
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
                 styles={styles.nodes}
+                foreignObjectData={foreignObjectData}
+                noTextNested={noTextNested}
               />
             ))}
           </TransitionGroup>
@@ -369,10 +373,11 @@ Tree.defaultProps = {
   },
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
+  noTextNested: false,
+  foreignObjectData: undefined,
 };
 
 Tree.propTypes = {
-  data: PropTypes.array.isRequired,
   nodeSvgShape: PropTypes.shape({
     shape: PropTypes.string,
     shapeProps: PropTypes.object,
@@ -412,4 +417,24 @@ Tree.propTypes = {
     nodes: PropTypes.object,
     links: PropTypes.object,
   }),
+  data: PropTypes.array.isRequired,
+  foreignObjectData: PropTypes.shape({
+    style: PropTypes.object,
+    width: PropTypes.string,
+    height: PropTypes.string,
+    x: PropTypes.string,
+    y: PropTypes.string,
+    dataWrapper: PropTypes.shape({
+      params: PropTypes.shape({
+        width: PropTypes.string,
+        height: PropTypes.string,
+        style: PropTypes.object,
+      }),
+      content: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+      ]),
+    }),
+  }),
+  noTextNested: PropTypes.bool,
 };
