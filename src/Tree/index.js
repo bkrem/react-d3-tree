@@ -207,9 +207,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOverCb(nodeId) {
@@ -224,9 +224,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOutCb(nodeId) {
@@ -292,8 +292,8 @@ export default class Tree extends React.Component {
       separation,
       circleRadius,
       styles,
-      noTextNested,
       foreignObjectData,
+      noTextNested,
     } = this.props;
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
@@ -373,8 +373,8 @@ Tree.defaultProps = {
   },
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
-  noTextNested: false,
   foreignObjectData: undefined,
+  noTextNested: false,
 };
 
 Tree.propTypes = {
@@ -419,22 +419,14 @@ Tree.propTypes = {
   }),
   data: PropTypes.array.isRequired,
   foreignObjectData: PropTypes.shape({
-    style: PropTypes.object,
-    width: PropTypes.string,
-    height: PropTypes.string,
-    x: PropTypes.string,
-    y: PropTypes.string,
-    dataWrapper: PropTypes.shape({
-      params: PropTypes.shape({
-        width: PropTypes.string,
-        height: PropTypes.string,
-        style: PropTypes.object,
-      }),
-      content: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.func,
-      ]),
+    params: PropTypes.shape({
+      style: PropTypes.object,
+      width: PropTypes.string,
+      height: PropTypes.string,
+      x: PropTypes.string,
+      y: PropTypes.string,
     }),
+    content: PropTypes.func,
   }),
   noTextNested: PropTypes.bool,
 };

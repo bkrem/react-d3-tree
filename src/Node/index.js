@@ -93,19 +93,15 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration, 0, done);
   }
 
-  renderForeignObjectData(foreignObjectData, nodeData) {
-    if (foreignObjectData.dataWrapper) {
-      if (typeof foreignObjectData.dataWrapper.content === 'function') return foreignObjectData.dataWrapper.content(nodeData)
-      return (
-        <div {...foreignObjectData.dataWrapper.params} dangerouslySetInnerHTML={foreignObjectData.dataWrapper.content} />
-      )
-    }
-    console.warn("dataWrapper for foreignObjectData should be specified")
-    return null
-  }
-
   render() {
-    const { nodeData, nodeSvgShape, textLayout, styles, foreignObjectData, noTextNested } = this.props;
+    const {
+      nodeData,
+      nodeSvgShape,
+      textLayout,
+      styles,
+      foreignObjectData,
+      noTextNested,
+    } = this.props;
     const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
@@ -129,41 +125,37 @@ export default class Node extends React.Component {
             ...nodeStyle.circle,
           })
         )}
-        {
-          !noTextNested &&
-            <text
-              className="nodeNameBase"
-              style={nodeStyle.name}
-              textAnchor={textLayout.textAnchor}
-              x={textLayout.x}
-              y={textLayout.y}
-              transform={textLayout.transform}
-              dy=".35em"
-            >
-              {this.props.name}
-            </text>
-        }
-        {
-          !noTextNested &&
-            <text
-              className="nodeAttributesBase"
-              y={textLayout.y + 10}
-              textAnchor={textLayout.textAnchor}
-              transform={textLayout.transform}
-              style={nodeStyle.attributes}
-            >
-            </text>
-        }
-        {
-          nodeData && nodeData.dangerouslySetInnerHTML
-            ? <foreignObject><div dangerouslySetInnerHTML={{__html: nodeData.dangerouslySetInnerHTML}} /></foreignObject>
-            : foreignObjectData && Object.keys(foreignObjectData).length &&
-            <foreignObject 
-              {...foreignObjectData.params}
-            >
-              {this.renderForeignObjectData(foreignObjectData, nodeData)}
+
+        {!noTextNested && (
+          <text
+            className="nodeNameBase"
+            style={nodeStyle.name}
+            textAnchor={textLayout.textAnchor}
+            x={textLayout.x}
+            y={textLayout.y}
+            transform={textLayout.transform}
+            dy=".35em"
+          >
+            {this.props.name}
+          </text>
+        )}
+
+        {!noTextNested && (
+          <text
+            className="nodeAttributesBase"
+            y={textLayout.y + 10}
+            textAnchor={textLayout.textAnchor}
+            transform={textLayout.transform}
+            style={nodeStyle.attributes}
+          />
+        )}
+
+        {foreignObjectData &&
+          Object.keys(foreignObjectData).length && (
+            <foreignObject {...foreignObjectData.params}>
+              {foreignObjectData.content(nodeData)}
             </foreignObject>
-        }
+          )}
       </g>
     );
   }
