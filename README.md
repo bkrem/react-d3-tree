@@ -22,18 +22,14 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 
 
 ## Demo
-- Current release: https://bkrem.github.io/react-d3-tree/
+- Current release: https://bkrem.github.io/react-d3-tree-demo/
 
 
 ## Installation
-To install via NPM, run:
-```bash
-npm i --save react-d3-tree
-```
-
-Or if Yarn is more your thing:
 ```bash
 yarn add react-d3-tree
+# or
+npm i --save react-d3-tree
 ```
 
 
