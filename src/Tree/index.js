@@ -207,9 +207,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOverCb(nodeId) {
@@ -224,9 +224,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOutCb(nodeId) {
@@ -292,6 +292,8 @@ export default class Tree extends React.Component {
       separation,
       circleRadius,
       styles,
+      foreignObjectData,
+      noTextNested,
     } = this.props;
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
@@ -331,6 +333,8 @@ export default class Tree extends React.Component {
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
                 styles={styles.nodes}
+                foreignObjectData={foreignObjectData}
+                noTextNested={noTextNested}
               />
             ))}
           </TransitionGroup>
@@ -369,10 +373,11 @@ Tree.defaultProps = {
   },
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
+  foreignObjectData: undefined,
+  noTextNested: false,
 };
 
 Tree.propTypes = {
-  data: PropTypes.array.isRequired,
   nodeSvgShape: PropTypes.shape({
     shape: PropTypes.string,
     shapeProps: PropTypes.object,
@@ -412,4 +417,16 @@ Tree.propTypes = {
     nodes: PropTypes.object,
     links: PropTypes.object,
   }),
+  data: PropTypes.array.isRequired,
+  foreignObjectData: PropTypes.shape({
+    params: PropTypes.shape({
+      style: PropTypes.object,
+      width: PropTypes.string,
+      height: PropTypes.string,
+      x: PropTypes.string,
+      y: PropTypes.string,
+    }),
+    content: PropTypes.func,
+  }),
+  noTextNested: PropTypes.bool,
 };
