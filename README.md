@@ -18,6 +18,8 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Node shapes](#node-shapes)
 - [Styling](#styling)
 - [External data sources](#external-data-sources)
+- [Using foreignObjects](#using-foreignobjects)
+  - [`nodeLabelComponent`](#nodelabelcomponent)
 - [Recipes](#recipes)
 
 
@@ -82,6 +84,7 @@ class MyComponent extends React.Component {
 |:------------------------|:-----------------------|:------------------------------------------------------------------------------|:----------|:--------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `data`                  | `array`                |                                                                               | required  | `undefined`                                                   | Single-element array containing hierarchical object (see `myTreeData` above). <br /> Contains (at least) `name` and `parent` keys.                                                                                                                                                                                                                                                                                            |
 | `nodeSvgShape`          | `object`               | see [Node shapes](#node-shapes)                                               |           | `{shape: 'circle', shapeProps: r: 10}`                        | Sets a specific SVG shape element + shapeProps to be used for each node.                                                                                                                                                                                                                                                                                                                                                      |
+| `nodeLabelComponent`    | `object`               | see [Using foreignObjects](#using-foreignobjects)                             |           | `null`                                                        | Allows using a React component as a node label; requires `allowForeignObjects` to be set.                                                                                                                                                                                                                                                                                                                                     |
 | `onClick`               | `func`                 |                                                                               |           | `undefined`                                                   | Callback function to be called when a node is clicked. <br /><br /> The clicked node's data object is passed to the callback function.                                                                                                                                                                                                                                                                                        |
 | `onMouseOver`           | `func`                 |                                                                               |           | `undefined`                                                   | Callback function to be called when mouse enters the space belonging to a node. <br /><br /> The node's data object is passed to the callback.                                                                                                                                                                                                                                                                                |
 | `onMouseOut`            | `func`                 |                                                                               |           | `undefined`                                                   | Callback function to be called when mouse leaves the space belonging to a node. <br /><br /> The node's data object is passed to the callback.                                                                                                                                                                                                                                                                                |
@@ -98,6 +101,7 @@ class MyComponent extends React.Component {
 | `transitionDuration`    | `number`               | `0..n`                                                                        |           | `500`                                                         | Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to `0` to deactivate animations completely.                                                                                                                                                                                                                                                                              |
 | `textLayout`            | `object`               | `{textAnchor: enum, x: -n..0..n, y: -n..0..n, transform: string}`             |           | `{textAnchor: "start", x: 10, y: -10, transform: undefined }` | Configures the positioning of each node's text (name & attributes) relative to the node itself.<br/><br/>`textAnchor` enums mirror the [`text-anchor` spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-anchor).<br/><br/>`x` & `y` accept integers denoting `px` values.<br/><br/> `transform` mirrors the [svg `transform` spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform). |
 | `styles`                | `object`               | see [Styling](#styling)                                                       |           | `Node`/`Link` CSS files                                       | Overrides and/or enhances the tree's default styling.                                                                                                                                                                                                                                                                                                                                                                         |
+| `allowForeignObjects`   | `bool`                 | see [Using foreignObjects](#using-foreignobjects)                             |           | `false`                                                       | Allows use of partially supported `<foreignObject />` elements.                                                                                                                                                                                                                                                                                                                                                               |
 | `circleRadius` (legacy) | `number`               | `0..n`                                                                        |           | `undefined`                                                   | Sets the radius of each node's `<circle>` element.<br /><br /> **Will be deprecated in v2, please use `nodeSvgShape` instead.**                                                                                                                                                                                                                                                                                               |
 
 
@@ -130,6 +134,7 @@ const svgSquare = {
 This is to prevent breaking the legacy usage of `circleRadius` + styling via `node/leafNode` properties until it is deprecated fully in v2. 
 
 **From v1.5.x onwards, it is therefore recommended to pass all node styling properties through `shapeProps`**.
+
 
 ## Styling
 The tree's `styles` prop may be used to override any of the tree's default styling.
@@ -205,6 +210,64 @@ class MyComponent extends React.Component {
 
 For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).  
 For examples of each data type that can be parsed with `treeUtil`, please check the [data source examples](docs/examples/data).
+
+
+## Using foreignObjects
+> ⚠️ Requires `allowForeignObjects` prop to be set due to limited browser support: [IE does not currently support `foreignObject` elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Browser_compatibility).
+
+The SVG spec's `foreignObject` element allows foreign XML content to be rendered into the SVG namespace, unlocking the ability to use regular React components for elements of the tree graph.
+
+### `nodeLabelComponent`
+The `nodeLabelComponent` prop provides a way to use a React component for each node's label. It accepts an object with the following signature:
+```ts
+{
+  render: ReactElement,
+  foreignObjectWrapper?: object
+}
+```
+* `render` is the XML React-D3-Tree will use to render each node's label.
+* `foreignObjectWrapper` contains a set of attributes that should be passed to the `<foreignObject />` that wraps `nodeLabelComponent`. For possible attributes please check the [spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Global_attributes).
+
+**Note: `foreignObjectWrapper` will set its width and height attributes to whatever values `nodeSize.x` and `nodeSize.y` return by default.** 
+To override this behaviour for each attribute, specify `width` and/or `height` properties for your `foreignObjectWrapper`.
+
+**Note:** The ReactElement passed to `render` is cloned with its existing props and **receives an additional `nodeData` object prop, containing information about the current node.**
+
+#### Example
+Assuming we have a React component `NodeLabel` and we want to avoid node's label overlapping with the node itself by moving its position along the Y-axis, we could implement `nodeLabelComponent` like so:
+```jsx
+class NodeLabel extends React.PureComponent {
+  render() {
+    const {className, nodeData} = this.props
+    return (
+      <div className={className}>
+        <h2>{nodeData.name}</h2>
+        {nodeData._children && 
+          <button>{nodeData._collapsed ? 'Expand' : 'Collapse'}</button>
+        }
+      </div>
+    )
+  }
+}
+
+/* ... */
+
+render() {
+  return (
+    <Tree 
+      data={myTreeData}
+      allowForeignObjects
+      nodeLabelComponent={{
+        render: <NodeLabel className='myLabelComponentInSvg' />,
+        foreignObjectWrapper: {
+          y: 24
+        }
+      }}
+    />
+    )
+}
+```
+
 
 
 ## Recipes

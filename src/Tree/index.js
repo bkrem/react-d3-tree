@@ -207,9 +207,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOverCb(nodeId) {
@@ -224,9 +224,9 @@ export default class Tree extends React.Component {
 
   /**
    * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
-   * 
-   * @param {string} nodeId 
-   * 
+   *
+   * @param {string} nodeId
+   *
    * @return {void}
    */
   handleOnMouseOutCb(nodeId) {
@@ -280,6 +280,7 @@ export default class Tree extends React.Component {
     const { nodes, links } = this.generateTree();
     const {
       nodeSvgShape,
+      nodeLabelComponent,
       orientation,
       translate,
       pathFunc,
@@ -291,6 +292,7 @@ export default class Tree extends React.Component {
       initialDepth,
       separation,
       circleRadius,
+      allowForeignObjects,
       styles,
     } = this.props;
 
@@ -319,6 +321,8 @@ export default class Tree extends React.Component {
               <Node
                 key={nodeData.id}
                 nodeSvgShape={nodeSvgShape}
+                nodeLabelComponent={nodeLabelComponent}
+                nodeSize={nodeSize}
                 orientation={orientation}
                 transitionDuration={transitionDuration}
                 nodeData={nodeData}
@@ -330,6 +334,7 @@ export default class Tree extends React.Component {
                 textLayout={textLayout}
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
+                allowForeignObjects={allowForeignObjects}
                 styles={styles.nodes}
               />
             ))}
@@ -347,6 +352,7 @@ Tree.defaultProps = {
       r: 10,
     },
   },
+  nodeLabelComponent: null,
   onClick: undefined,
   onMouseOver: undefined,
   onMouseOut: undefined,
@@ -367,6 +373,7 @@ Tree.defaultProps = {
     y: -10,
     transform: undefined,
   },
+  allowForeignObjects: false,
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
 };
@@ -377,6 +384,7 @@ Tree.propTypes = {
     shape: PropTypes.string,
     shapeProps: PropTypes.object,
   }),
+  nodeLabelComponent: PropTypes.object,
   onClick: PropTypes.func,
   onMouseOver: PropTypes.func,
   onMouseOut: PropTypes.func,
@@ -407,6 +415,7 @@ Tree.propTypes = {
     nonSiblings: PropTypes.number,
   }),
   textLayout: PropTypes.object,
+  allowForeignObjects: PropTypes.bool,
   circleRadius: PropTypes.number,
   styles: PropTypes.shape({
     nodes: PropTypes.object,

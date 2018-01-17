@@ -18,6 +18,10 @@ describe('<Node />', () => {
 
   const mockProps = {
     nodeData,
+    nodeSize: {
+      x: 123,
+      y: 321,
+    },
     nodeSvgShape: {
       shape: 'circle',
       shapeProps: {
@@ -41,6 +45,7 @@ describe('<Node />', () => {
     },
     subscriptions: {},
     styles: {},
+    allowForeignObjects: false,
   };
 
   jest.spyOn(Node.prototype, 'applyTransform');
@@ -60,8 +65,8 @@ describe('<Node />', () => {
       <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} />,
     );
 
-    expect(leafNodeComponent.prop('className')).toBe('leafNodeBase');
-    expect(nodeComponent.prop('className')).toBe('nodeBase');
+    expect(leafNodeComponent.find('g').prop('className')).toBe('leafNodeBase');
+    expect(nodeComponent.find('g').prop('className')).toBe('nodeBase');
   });
 
   it('applies correct <circle> styles depending on `nodeData._children`', () => {
@@ -82,44 +87,6 @@ describe('<Node />', () => {
     expect(nodeComponent.find('circle').prop('fill')).toBe(fixture.node.circle.fill);
   });
 
-  it('applies correct node name styles depending on `nodeData._children`', () => {
-    const fixture = {
-      node: {
-        name: { stroke: '#000' },
-      },
-      leafNode: {
-        name: { stroke: '#fff' },
-      },
-    };
-    const leafNodeComponent = shallow(<Node {...mockProps} styles={fixture} />);
-    const nodeComponent = shallow(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
-    );
-
-    expect(leafNodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.leafNode.name);
-    expect(nodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.node.name);
-  });
-
-  it('applies correct node attributes styles depending on `nodeData._children`', () => {
-    const fixture = {
-      node: {
-        attributes: { stroke: '#000' },
-      },
-      leafNode: {
-        attributes: { stroke: '#fff' },
-      },
-    };
-    const leafNodeComponent = shallow(<Node {...mockProps} styles={fixture} />);
-    const nodeComponent = shallow(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
-    );
-
-    expect(leafNodeComponent.find('.nodeAttributesBase').prop('style')).toBe(
-      fixture.leafNode.attributes,
-    );
-    expect(nodeComponent.find('.nodeAttributesBase').prop('style')).toBe(fixture.node.attributes);
-  });
-
   it('applies correct `transform` prop based on its `orientation`', () => {
     const horizontalTransform = `translate(${nodeData.parent.y},${nodeData.parent.x})`;
     const verticalTransform = `translate(${nodeData.parent.x},${nodeData.parent.y})`;
@@ -129,58 +96,33 @@ describe('<Node />', () => {
     expect(verticalComponent.find('g').prop('transform')).toBe(verticalTransform);
   });
 
-  it('handles onClick events and passes its nodeId to onClick handler', () => {
-    const onClickSpy = jest.fn();
-    const renderedComponent = shallow(<Node {...mockProps} onClick={onClickSpy} />);
+  describe('Events', () => {
+    it('handles onClick events and passes its nodeId to onClick handler', () => {
+      const onClickSpy = jest.fn();
+      const renderedComponent = shallow(<Node {...mockProps} onClick={onClickSpy} />);
 
-    renderedComponent.simulate('click');
-    expect(onClickSpy).toHaveBeenCalledTimes(1);
-    expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
-  });
+      renderedComponent.simulate('click');
+      expect(onClickSpy).toHaveBeenCalledTimes(1);
+      expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
+    });
 
-  it('handles onMouseOver events and passes its nodeId to onMouseOver handler', () => {
-    const onMouseOverSpy = jest.fn();
-    const renderedComponent = shallow(<Node {...mockProps} onMouseOver={onMouseOverSpy} />);
+    it('handles onMouseOver events and passes its nodeId to onMouseOver handler', () => {
+      const onMouseOverSpy = jest.fn();
+      const renderedComponent = shallow(<Node {...mockProps} onMouseOver={onMouseOverSpy} />);
 
-    renderedComponent.simulate('mouseover');
-    expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
-    expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id);
-  });
+      renderedComponent.simulate('mouseover');
+      expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id);
+    });
 
-  it('handles onMouseOut events and passes its nodeId to onMouseOut handler', () => {
-    const onMouseOutSpy = jest.fn();
-    const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
+    it('handles onMouseOut events and passes its nodeId to onMouseOut handler', () => {
+      const onMouseOutSpy = jest.fn();
+      const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
 
-    renderedComponent.simulate('mouseout');
-    expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
-    expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id);
-  });
-
-  it('maps each `props.attributes` to a <tspan> element', () => {
-    const fixture = { keyA: 'valA', keyB: 'valB' };
-    const renderedComponent = shallow(<Node {...mockProps} attributes={fixture} />);
-    const textNode = renderedComponent
-      .find('text')
-      .findWhere(n => n.prop('className') === 'nodeAttributesBase');
-
-    expect(textNode.findWhere(n => n.text() === `keyA: ${fixture.keyA}`).length).toBe(1);
-    expect(textNode.findWhere(n => n.text() === `keyB: ${fixture.keyB}`).length).toBe(1);
-  });
-
-  it('applies the `textLayout` prop to the node name & attributes', () => {
-    const fixture = {
-      textAnchor: 'test',
-      x: 999,
-      y: 111,
-    };
-    const renderedComponent = shallow(<Node {...mockProps} textLayout={fixture} />);
-    const nodeName = renderedComponent
-      .find('text')
-      .findWhere(n => n.prop('className') === 'nodeNameBase');
-    const nodeAttribute = renderedComponent.find('tspan').first();
-
-    expect(nodeName.props()).toEqual(expect.objectContaining(fixture));
-    expect(nodeAttribute.prop('x')).toBe(fixture.x);
+      renderedComponent.simulate('mouseout');
+      expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id);
+    });
   });
 
   it('applies its own x/y coords on `transform` once mounted', () => {
@@ -193,49 +135,51 @@ describe('<Node />', () => {
     );
   });
 
-  it('updates its position if `nodeData.x` or `nodeData.y` changes', () => {
-    const updatedProps = {
-      ...mockProps,
-      nodeData: {
-        ...mockProps.nodeData,
-        x: 1,
-        y: 2,
-      },
-    };
-    const initialTransform = `translate(${mockProps.nodeData.y},${mockProps.nodeData.x})`;
-    const updatedTransform = `translate(${updatedProps.nodeData.y},${updatedProps.nodeData.x})`;
-    const renderedComponent = mount(<Node {...mockProps} />);
+  describe('Update Positioning', () => {
+    it('updates its position if `nodeData.x` or `nodeData.y` changes', () => {
+      const updatedProps = {
+        ...mockProps,
+        nodeData: {
+          ...mockProps.nodeData,
+          x: 1,
+          y: 2,
+        },
+      };
+      const initialTransform = `translate(${mockProps.nodeData.y},${mockProps.nodeData.x})`;
+      const updatedTransform = `translate(${updatedProps.nodeData.y},${updatedProps.nodeData.x})`;
+      const renderedComponent = mount(<Node {...mockProps} />);
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
-      initialTransform,
-      mockProps.transitionDuration,
-    );
+      expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
+        initialTransform,
+        mockProps.transitionDuration,
+      );
 
-    renderedComponent.setProps(updatedProps);
+      renderedComponent.setProps(updatedProps);
 
-    expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
-      updatedTransform,
-      mockProps.transitionDuration,
-    );
-  });
+      expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
+        updatedTransform,
+        mockProps.transitionDuration,
+      );
+    });
 
-  it('updates its position if `orientation` changes', () => {
-    const renderedComponent = mount(<Node {...mockProps} />);
-    const nextProps = { ...mockProps, orientation: 'vertical' };
+    it('updates its position if `orientation` changes', () => {
+      const renderedComponent = mount(<Node {...mockProps} />);
+      const nextProps = { ...mockProps, orientation: 'vertical' };
 
-    expect(
-      renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
-    ).toBe(true);
-  });
+      expect(
+        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
+      ).toBe(true);
+    });
 
-  it('updates its position if any subscribed top-level props change', () => {
-    const subscriptions = { x: 12, y: 10, initialDepth: undefined };
-    const renderedComponent = mount(<Node {...mockProps} subscriptions={subscriptions} />);
-    const nextProps = { ...mockProps, subscriptions: { ...subscriptions, initialDepth: 1 } };
+    it('updates its position if any subscribed top-level props change', () => {
+      const subscriptions = { x: 12, y: 10, initialDepth: undefined };
+      const renderedComponent = mount(<Node {...mockProps} subscriptions={subscriptions} />);
+      const nextProps = { ...mockProps, subscriptions: { ...subscriptions, initialDepth: 1 } };
 
-    expect(
-      renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
-    ).toBe(true);
+      expect(
+        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
+      ).toBe(true);
+    });
   });
 
   it('allows passing SVG shape elements + shapeProps to be used as the node element', () => {
@@ -245,6 +189,38 @@ describe('<Node />', () => {
 
     expect(renderedComponent.find(fixture.shape).length).toBe(1);
     expect(renderedComponent.find(fixture.shape).props()).toEqual(fixture.shapeProps);
+  });
+
+  it('applies correct node name styles depending on `nodeData._children`', () => {
+    const fixture = {
+      node: {
+        name: { stroke: '#000' },
+      },
+      leafNode: {
+        name: { stroke: '#fff' },
+      },
+    };
+    const leafNodeComponent = mount(<Node {...mockProps} styles={fixture} />);
+    const nodeComponent = mount(
+      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
+    );
+
+    expect(leafNodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.leafNode.name);
+    expect(nodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.node.name);
+  });
+
+  describe('Node Label', () => {
+    it('renders a SvgTextElement by default', () => {
+      const renderedComponent = shallow(<Node {...mockProps} />);
+      expect(renderedComponent.find('SvgTextElement').length).toBe(1);
+    });
+
+    it('renders a ForeignObjectElement if `props.allowForeignObjects && props.nodeLabelComponent`', () => {
+      const renderedComponent = shallow(
+        <Node {...mockProps} nodeLabelComponent={{ render: <div /> }} allowForeignObjects />,
+      );
+      expect(renderedComponent.find('ForeignObjectElement').length).toBe(1);
+    });
   });
 
   // TODO: DEPRECATE in v2
