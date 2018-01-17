@@ -6,6 +6,12 @@
 Props
 -----
 
+### `allowForeignObjects`
+
+type: `bool`
+defaultValue: `false`
+
+
 ### `circleRadius`
 
 type: `number`
@@ -33,6 +39,12 @@ defaultValue: `undefined`
 
 type: `number`
 defaultValue: `undefined`
+
+
+### `nodeLabelComponent`
+
+type: `object`
+defaultValue: `null`
 
 
 ### `nodeSize`

@@ -6,6 +6,11 @@
 Props
 -----
 
+### `allowForeignObjects` (required)
+
+type: `bool`
+
+
 ### `attributes`
 
 type: `object`
@@ -28,6 +33,17 @@ type: `string`
 type: `object`
 
 
+### `nodeLabelComponent`
+
+type: `object`
+defaultValue: `null`
+
+
+### `nodeSize` (required)
+
+type: `object`
+
+
 ### `nodeSvgShape` (required)
 
 type: `object`
@@ -46,7 +62,6 @@ type: `func`
 ### `onMouseOver` (required)
 
 type: `func`
-defaultValue: `undefined`
 
 
 ### `orientation` (required)
@@ -74,11 +89,6 @@ defaultValue: `{
 ### `subscriptions` (required)
 
 type: `object`
-
-
-### `textAnchor`
-
-defaultValue: `'start'`
 
 
 ### `textLayout` (required)
