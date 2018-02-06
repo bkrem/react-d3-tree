@@ -14,6 +14,7 @@ describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'collapseNode');
   jest.spyOn(Tree.prototype, 'expandNode');
   jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
+  jest.spyOn(Tree.prototype, 'bindZoomListener');
 
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
@@ -62,7 +63,7 @@ describe('<Tree />', () => {
       const fixture = { x: 123, y: 321 };
       const expected = `translate(${fixture.x},${fixture.y})`;
       const renderedComponent = shallow(<Tree data={mockData} translate={fixture} />);
-      expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(expected);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
     });
   });
 
@@ -161,6 +162,29 @@ describe('<Tree />', () => {
       expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(
         false,
       );
+    });
+  });
+
+  describe('zoom', () => {
+    it('applies the `zoom` prop when specified', () => {
+      const zoomLevel = 0.3;
+      const expected = `scale(${zoomLevel})`;
+      const renderedComponent = shallow(<Tree data={mockData} zoom={zoomLevel} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
+    });
+
+    it('rebind zoom handler on zoom-related props update', () => {
+      const zoomProps = [
+        { translate: { x: 1, y: 1 } },
+        { scaleExtent: { min: 0.3, max: 0.4 } },
+        { zoom: 3.1415 },
+      ];
+      const renderedComponent = mount(<Tree data={mockData} />);
+
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(1);
+
+      zoomProps.forEach(nextProps => renderedComponent.setProps(nextProps));
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(4);
     });
   });
 

@@ -42,7 +42,8 @@ export default class Tree extends React.Component {
     // If zoom-specific props change -> rebind listener with new values
     if (
       !deepEqual(this.props.translate, nextProps.translate) ||
-      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)
+      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent) ||
+      this.props.zoom !== nextProps.zoom
     ) {
       this.bindZoomListener(nextProps);
     }
@@ -70,7 +71,7 @@ export default class Tree extends React.Component {
    * @return {void}
    */
   bindZoomListener(props) {
-    const { zoomable, scaleExtent, translate } = props;
+    const { zoomable, scaleExtent, translate, zoom } = props;
     const svg = select('.rd3t-svg');
     const g = select('.rd3t-g');
 
@@ -83,6 +84,7 @@ export default class Tree extends React.Component {
             g.attr('transform', `translate(${event.translate}) scale(${event.scale})`);
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
+          .scale(zoom)
           .translate([translate.x, translate.y]),
       );
     }
@@ -286,6 +288,7 @@ export default class Tree extends React.Component {
       pathFunc,
       transitionDuration,
       zoomable,
+      zoom,
       textLayout,
       nodeSize,
       depthFactor,
@@ -304,7 +307,7 @@ export default class Tree extends React.Component {
           <TransitionGroup
             component="g"
             className="rd3t-g"
-            transform={`translate(${translate.x},${translate.y})`}
+            transform={`translate(${translate.x},${translate.y}) scale(${zoom})`}
           >
             {links.map(linkData => (
               <Link
@@ -364,6 +367,7 @@ Tree.defaultProps = {
   collapsible: true,
   initialDepth: undefined,
   zoomable: true,
+  zoom: 1,
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
@@ -402,6 +406,7 @@ Tree.propTypes = {
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,
   zoomable: PropTypes.bool,
+  zoom: PropTypes.number,
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,
