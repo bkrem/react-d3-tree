@@ -83,6 +83,9 @@ export default class Tree extends React.Component {
           .on('zoom', () => {
             g.attr('transform', `translate(${event.translate}) scale(${event.scale})`);
             if (typeof onUpdate !== 'undefined') {
+              // This callback is magically called not only on "zoom", but on "drag", as well,
+              // even though event.type == "zoom".
+              // Taking advantage of this and not writing a "drag" handler.
               onUpdate({
                 nodeId: null,
                 zoom: event.scale,
