@@ -1,6 +1,7 @@
 import React from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { shallow, mount } from 'enzyme';
+import { render } from 'react-dom';
 
 import Node from '../../Node';
 import Link from '../../Link';
@@ -292,6 +293,49 @@ describe('<Tree />', () => {
           .first()
           .prop('nodeData'),
       );
+    });
+  });
+
+  describe('onUpdate', () => {
+    it('calls `onUpdate` on node toggle', () => {
+      const onUpdateSpy = jest.fn();
+
+      const renderedComponent = mount(<Tree data={mockData} onUpdate={onUpdateSpy} />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // collapse
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // re-expand
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(2);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        nodeId: expect.any(String),
+        zoom: 1,
+        translate: { x: 0, y: 0 },
+      });
+    });
+
+    it('calls `onUpdate` on zoom', () => {
+      const onUpdateSpy = jest.fn();
+
+      document.body.innerHTML += '<div id="reactContainer"></div>';
+      render(
+        <Tree data={mockData} onUpdate={onUpdateSpy} scaleExtent={{ min: 0.1, max: 10 }} />,
+        document.querySelector('#reactContainer'),
+      );
+
+      const scrollableComponent = document.querySelector('.rd3t-svg');
+      scrollableComponent.dispatchEvent(new Event('wheel'));
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        nodeId: null,
+        translate: [expect.any(Number), expect.any(Number)],
+        zoom: expect.any(Number),
+      });
     });
   });
 });

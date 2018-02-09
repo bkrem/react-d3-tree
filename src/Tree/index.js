@@ -71,7 +71,7 @@ export default class Tree extends React.Component {
    * @return {void}
    */
   bindZoomListener(props) {
-    const { zoomable, scaleExtent, translate, zoom } = props;
+    const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
     const svg = select('.rd3t-svg');
     const g = select('.rd3t-g');
 
@@ -82,6 +82,13 @@ export default class Tree extends React.Component {
           .scaleExtent([scaleExtent.min, scaleExtent.max])
           .on('zoom', () => {
             g.attr('transform', `translate(${event.translate}) scale(${event.scale})`);
+            if (typeof onUpdate !== 'undefined') {
+              onUpdate({
+                nodeId: null,
+                zoom: event.scale,
+                translate: event.translate,
+              });
+            }
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
           .scale(zoom)
@@ -188,6 +195,13 @@ export default class Tree extends React.Component {
     if (this.props.collapsible) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
       this.setState({ data }, () => this.handleOnClickCb(targetNode));
+      if (typeof this.props.onUpdate === 'function') {
+        this.props.onUpdate({
+          nodeId,
+          zoom: this.props.zoom,
+          translate: this.props.translate,
+        });
+      }
     } else {
       this.handleOnClickCb(targetNode);
     }
@@ -359,6 +373,7 @@ Tree.defaultProps = {
   onClick: undefined,
   onMouseOver: undefined,
   onMouseOut: undefined,
+  onUpdate: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
@@ -392,6 +407,7 @@ Tree.propTypes = {
   onClick: PropTypes.func,
   onMouseOver: PropTypes.func,
   onMouseOut: PropTypes.func,
+  onUpdate: PropTypes.func,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
     x: PropTypes.number,
