@@ -174,7 +174,7 @@ describe('<Tree />', () => {
       expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
     });
 
-    it('rebind zoom handler on zoom-related props update', () => {
+    it('rebinds zoom handler on zoom-related props update', () => {
       const zoomProps = [
         { translate: { x: 1, y: 1 } },
         { scaleExtent: { min: 0.3, max: 0.4 } },
