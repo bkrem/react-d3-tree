@@ -14,11 +14,11 @@ export default class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      targetNode: null,
       data: this.assignInternalProperties(clone(props.data)),
     };
     this.internalState = {
       initialRender: true,
+      targetNode: null,
       d3: {
         scale: this.props.zoom,
         translate: this.props.translate,
@@ -40,10 +40,12 @@ export default class Tree extends React.Component {
   componentDidUpdate() {
     if (typeof this.props.onUpdate === 'function') {
       this.props.onUpdate({
-        node: this.state.targetNode ? clone(this.state.targetNode) : null,
+        node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
         zoom: this.internalState.d3.scale,
         translate: this.internalState.d3.translate,
       });
+
+      this.internalState.targetNode = null;
     }
   }
 
@@ -51,7 +53,6 @@ export default class Tree extends React.Component {
     // Clone new data & assign internal properties
     if (!deepEqual(this.props.data, nextProps.data)) {
       this.setState({
-        targetNode: null,
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
     }
@@ -219,7 +220,8 @@ export default class Tree extends React.Component {
 
     if (this.props.collapsible) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
-      this.setState({ data, targetNode }, () => this.handleOnClickCb(targetNode));
+      this.setState({ data }, () => this.handleOnClickCb(targetNode));
+      this.internalState.targetNode = targetNode;
     } else {
       this.handleOnClickCb(targetNode);
     }
