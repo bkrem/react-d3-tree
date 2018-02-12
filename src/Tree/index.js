@@ -14,8 +14,15 @@ export default class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialRender: true,
+      targetNode: null,
       data: this.assignInternalProperties(clone(props.data)),
+    };
+    this.internalState = {
+      initialRender: true,
+      d3: {
+        scale: this.props.zoom,
+        translate: this.props.translate,
+      },
     };
     this.findNodesById = this.findNodesById.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
@@ -27,17 +34,30 @@ export default class Tree extends React.Component {
 
   componentDidMount() {
     this.bindZoomListener(this.props);
-    // TODO find better way of setting initialDepth, re-render here is suboptimal
-    this.setState({ initialRender: false }); // eslint-disable-line
+    this.internalState.initialRender = false;
+  }
+
+  componentDidUpdate() {
+    if (typeof this.props.onUpdate === 'function') {
+      this.props.onUpdate({
+        node: this.state.targetNode ? clone(this.state.targetNode) : null,
+        zoom: this.internalState.d3.scale,
+        translate: this.internalState.d3.translate,
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
     if (!deepEqual(this.props.data, nextProps.data)) {
       this.setState({
+        targetNode: null,
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
     }
+
+    this.internalState.d3.translate = this.props.translate;
+    this.internalState.d3.scale = this.props.zoom;
 
     // If zoom-specific props change -> rebind listener with new values
     if (
@@ -91,6 +111,8 @@ export default class Tree extends React.Component {
                 zoom: event.scale,
                 translate: event.translate,
               });
+              this.internalState.d3.scale = event.scale;
+              this.internalState.d3.translate = event.translate;
             }
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
@@ -197,14 +219,7 @@ export default class Tree extends React.Component {
 
     if (this.props.collapsible) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
-      this.setState({ data }, () => this.handleOnClickCb(targetNode));
-      if (typeof this.props.onUpdate === 'function') {
-        this.props.onUpdate({
-          node: clone(targetNode),
-          zoom: this.props.zoom,
-          translate: this.props.translate,
-        });
-      }
+      this.setState({ data, targetNode }, () => this.handleOnClickCb(targetNode));
     } else {
       this.handleOnClickCb(targetNode);
     }
@@ -282,7 +297,7 @@ export default class Tree extends React.Component {
     const links = tree.links(nodes);
 
     // set `initialDepth` on first render if specified
-    if (initialDepth !== undefined && this.state.initialRender) {
+    if (initialDepth !== undefined && this.internalState.initialRender) {
       this.setInitialTreeDepth(nodes, initialDepth);
     }
 
