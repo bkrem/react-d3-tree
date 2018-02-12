@@ -312,7 +312,7 @@ describe('<Tree />', () => {
 
       expect(onUpdateSpy).toHaveBeenCalledTimes(2);
       expect(onUpdateSpy).toHaveBeenCalledWith({
-        nodeId: expect.any(String),
+        node: expect.any(Object),
         zoom: 1,
         translate: { x: 0, y: 0 },
       });
@@ -332,7 +332,7 @@ describe('<Tree />', () => {
 
       expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
-        nodeId: null,
+        node: null,
         translate: [expect.any(Number), expect.any(Number)],
         zoom: expect.any(Number),
       });

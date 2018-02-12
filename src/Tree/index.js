@@ -87,7 +87,7 @@ export default class Tree extends React.Component {
               // even though event.type == "zoom".
               // Taking advantage of this and not writing a "drag" handler.
               onUpdate({
-                nodeId: null,
+                node: null,
                 zoom: event.scale,
                 translate: event.translate,
               });
@@ -200,7 +200,7 @@ export default class Tree extends React.Component {
       this.setState({ data }, () => this.handleOnClickCb(targetNode));
       if (typeof this.props.onUpdate === 'function') {
         this.props.onUpdate({
-          nodeId,
+          node: clone(targetNode),
           zoom: this.props.zoom,
           translate: this.props.translate,
         });
