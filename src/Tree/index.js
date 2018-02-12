@@ -305,7 +305,6 @@ export default class Tree extends React.Component {
       pathFunc,
       transitionDuration,
       zoomable,
-      zoom,
       textLayout,
       nodeSize,
       depthFactor,
@@ -318,13 +317,25 @@ export default class Tree extends React.Component {
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
 
+    // Limit zoom level according to `scaleExtent` on initial display. This is necessary,
+    // because the first time we are setting it as an SVG property, instead of going
+    // through D3's scaling mechanism, which would have picked up both properties.
+    let scale;
+    if (this.props.zoom > this.props.scaleExtent.max) {
+      scale = this.props.scaleExtent.max;
+    } else if (this.props.zoom < this.props.scaleExtent.min) {
+      scale = this.props.scaleExtent.min;
+    } else {
+      scale = this.props.zoom;
+    }
+
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className="rd3t-svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
             className="rd3t-g"
-            transform={`translate(${translate.x},${translate.y}) scale(${zoom})`}
+            transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map(linkData => (
               <Link

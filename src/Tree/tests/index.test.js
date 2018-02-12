@@ -174,6 +174,25 @@ describe('<Tree />', () => {
       expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
     });
 
+    it('applies default zoom level when `zoom` is not specified', () => {
+      const renderedComponent = shallow(<Tree data={mockData} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(`scale(1)`);
+    });
+
+    it('respects `scaleExtent` constraints on initital display', () => {
+      const scaleExtent = { min: 0.2, max: 1.5 };
+
+      let renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={2} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(
+        `scale(${scaleExtent.max})`,
+      );
+
+      renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={0.1} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(
+        `scale(${scaleExtent.min})`,
+      );
+    });
+
     it('rebinds zoom handler on zoom-related props update', () => {
       const zoomProps = [
         { translate: { x: 1, y: 1 } },
