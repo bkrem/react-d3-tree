@@ -110,7 +110,7 @@ export default class Tree extends React.Component {
               onUpdate({
                 node: null,
                 zoom: event.scale,
-                translate: event.translate,
+                translate: { x: event.translate[0], y: event.translate[1] },
               });
               this.internalState.d3.scale = event.scale;
               this.internalState.d3.translate = event.translate;

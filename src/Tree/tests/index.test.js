@@ -352,8 +352,29 @@ describe('<Tree />', () => {
       expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: null,
-        translate: [expect.any(Number), expect.any(Number)],
+        translate: { x: expect.any(Number), y: expect.any(Number) },
         zoom: expect.any(Number),
+      });
+    });
+
+    it('passes the specified (not default) `zoom` and `translate` when a node is clicked for the 1st time', () => {
+      const onUpdateSpy = jest.fn();
+      const zoom = 0.7;
+      const translate = { x: 10, y: 5 };
+
+      const renderedComponent = mount(
+        <Tree data={mockData} zoom={zoom} translate={translate} onUpdate={onUpdateSpy} />,
+      );
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        node: expect.any(Object),
+        translate,
+        zoom,
       });
     });
   });
