@@ -74,6 +74,21 @@ export default class Node extends React.Component {
     }
   }
 
+  renderNodeElement(nodeStyle) {
+    const { circleRadius, nodeSvgShape } = this.props;
+    /* TODO: DEPRECATE <circle /> */
+    if (circleRadius) {
+      return <circle r={circleRadius} style={nodeStyle.circle} />;
+    }
+
+    return nodeSvgShape.shape === 'none'
+      ? null
+      : React.createElement(nodeSvgShape.shape, {
+          ...nodeSvgShape.shapeProps,
+          ...nodeStyle.circle,
+        });
+  }
+
   handleClick() {
     this.props.onClick(this.props.nodeData.id);
   }
@@ -96,14 +111,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const {
-      nodeData,
-      nodeSvgShape,
-      nodeSize,
-      nodeLabelComponent,
-      allowForeignObjects,
-      styles,
-    } = this.props;
+    const { nodeData, nodeSize, nodeLabelComponent, allowForeignObjects, styles } = this.props;
     const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
@@ -118,15 +126,7 @@ export default class Node extends React.Component {
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
       >
-        {/* TODO: DEPRECATE <circle /> */}
-        {this.props.circleRadius ? (
-          <circle r={this.props.circleRadius} style={nodeStyle.circle} />
-        ) : (
-          React.createElement(nodeSvgShape.shape, {
-            ...nodeSvgShape.shapeProps,
-            ...nodeStyle.circle,
-          })
-        )}
+        {this.renderNodeElement(nodeStyle)}
 
         {allowForeignObjects && nodeLabelComponent ? (
           <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
