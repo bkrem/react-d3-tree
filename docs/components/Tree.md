@@ -82,6 +82,12 @@ type: `func`
 defaultValue: `undefined`
 
 
+### `onUpdate`
+
+type: `func`
+defaultValue: `undefined`
+
+
 ### `orientation`
 
 type: `enum('horizontal'|'vertical')`
@@ -133,6 +139,12 @@ defaultValue: `500`
 
 type: `shape[object Object]`
 defaultValue: `{ x: 0, y: 0 }`
+
+
+### `zoom`
+
+type: `number`
+defaultValue: `1`
 
 
 ### `zoomable`
