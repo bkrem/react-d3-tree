@@ -209,6 +209,30 @@ describe('<Node />', () => {
     expect(nodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.node.name);
   });
 
+  describe('Node Element', () => {
+    // TODO: DEPRECATE in v2
+    it('renders legacy `<circle />` if `props.circleRadius` is defined', () => {
+      const props = { ...mockProps, circleRadius: 99 };
+      const renderedComponent = shallow(<Node {...props} />);
+
+      expect(renderedComponent.find('circle').length).toBe(1);
+      expect(renderedComponent.find('circle').prop('r')).toBe(99);
+    });
+
+    it('renders the appropriate SVG element if `props.nodeSvgShape` is defined', () => {
+      const props = { ...mockProps, nodeSvgShape: { shape: 'rect', shapeProps: { y: 123 } } };
+      const renderedComponent = shallow(<Node {...props} />);
+      expect(renderedComponent.find('rect').length).toBe(1);
+      expect(renderedComponent.find('rect').prop('y')).toBe(123);
+    });
+
+    it('renders nothing if `nodeSvgShape.shape` is set to `none`', () => {
+      const props = { ...mockProps, nodeSvgShape: { shape: 'none' } };
+      const renderedComponent = shallow(<Node {...props} />);
+      expect(renderedComponent.instance().renderNodeElement({})).toBe(null);
+    });
+  });
+
   describe('Node Label', () => {
     it('renders a SvgTextElement by default', () => {
       const renderedComponent = shallow(<Node {...mockProps} />);
@@ -221,15 +245,6 @@ describe('<Node />', () => {
       );
       expect(renderedComponent.find('ForeignObjectElement').length).toBe(1);
     });
-  });
-
-  // TODO: DEPRECATE in v2
-  it('falls back to legacy `<circle />` prop only if `circleRadius` is defined', () => {
-    const props = { ...mockProps, circleRadius: 99 };
-    const renderedComponent = shallow(<Node {...props} />);
-
-    expect(renderedComponent.find('circle').length).toBe(1);
-    expect(renderedComponent.find('circle').prop('r')).toBe(99);
   });
 
   // TODO: Find a way to meaningfully test `componentWillLeave`

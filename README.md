@@ -129,6 +129,8 @@ const svgSquare = {
 <Tree data={myTreeData} nodeSvgShape={svgSquare}>
 ```
 
+To avoid rendering any node element, simply set `nodeSvgShape` to `{ shape: 'none' }`.
+
 ### Overridable `shapeProps`
  `shapeProps` is currently merged with `node.circle`/`leafNode.circle` (see [Styling](#styling)).  
 
