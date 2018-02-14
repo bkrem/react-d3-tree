@@ -57,9 +57,6 @@ export default class Tree extends React.Component {
       });
     }
 
-    this.internalState.d3.translate = this.props.translate;
-    this.internalState.d3.scale = this.props.zoom;
-
     // If zoom-specific props change -> rebind listener with new values
     if (
       !deepEqual(this.props.translate, nextProps.translate) ||
