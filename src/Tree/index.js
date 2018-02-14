@@ -14,8 +14,15 @@ export default class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialRender: true,
       data: this.assignInternalProperties(clone(props.data)),
+    };
+    this.internalState = {
+      initialRender: true,
+      targetNode: null,
+      d3: {
+        scale: this.props.zoom,
+        translate: this.props.translate,
+      },
     };
     this.findNodesById = this.findNodesById.bind(this);
     this.collapseNode = this.collapseNode.bind(this);
@@ -27,8 +34,19 @@ export default class Tree extends React.Component {
 
   componentDidMount() {
     this.bindZoomListener(this.props);
-    // TODO find better way of setting initialDepth, re-render here is suboptimal
-    this.setState({ initialRender: false }); // eslint-disable-line
+    this.internalState.initialRender = false;
+  }
+
+  componentDidUpdate() {
+    if (typeof this.props.onUpdate === 'function') {
+      this.props.onUpdate({
+        node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
+        zoom: this.internalState.d3.scale,
+        translate: this.internalState.d3.translate,
+      });
+
+      this.internalState.targetNode = null;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,7 +60,8 @@ export default class Tree extends React.Component {
     // If zoom-specific props change -> rebind listener with new values
     if (
       !deepEqual(this.props.translate, nextProps.translate) ||
-      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent)
+      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent) ||
+      this.props.zoom !== nextProps.zoom
     ) {
       this.bindZoomListener(nextProps);
     }
@@ -70,7 +89,7 @@ export default class Tree extends React.Component {
    * @return {void}
    */
   bindZoomListener(props) {
-    const { zoomable, scaleExtent, translate } = props;
+    const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
     const svg = select('.rd3t-svg');
     const g = select('.rd3t-g');
 
@@ -81,8 +100,21 @@ export default class Tree extends React.Component {
           .scaleExtent([scaleExtent.min, scaleExtent.max])
           .on('zoom', () => {
             g.attr('transform', `translate(${event.translate}) scale(${event.scale})`);
+            if (typeof onUpdate === 'function') {
+              // This callback is magically called not only on "zoom", but on "drag", as well,
+              // even though event.type == "zoom".
+              // Taking advantage of this and not writing a "drag" handler.
+              onUpdate({
+                node: null,
+                zoom: event.scale,
+                translate: { x: event.translate[0], y: event.translate[1] },
+              });
+              this.internalState.d3.scale = event.scale;
+              this.internalState.d3.translate = event.translate;
+            }
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
+          .scale(zoom)
           .translate([translate.x, translate.y]),
       );
     }
@@ -186,6 +218,7 @@ export default class Tree extends React.Component {
     if (this.props.collapsible) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
       this.setState({ data }, () => this.handleOnClickCb(targetNode));
+      this.internalState.targetNode = targetNode;
     } else {
       this.handleOnClickCb(targetNode);
     }
@@ -263,7 +296,7 @@ export default class Tree extends React.Component {
     const links = tree.links(nodes);
 
     // set `initialDepth` on first render if specified
-    if (initialDepth !== undefined && this.state.initialRender) {
+    if (initialDepth !== undefined && this.internalState.initialRender) {
       this.setInitialTreeDepth(nodes, initialDepth);
     }
 
@@ -298,13 +331,25 @@ export default class Tree extends React.Component {
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
 
+    // Limit zoom level according to `scaleExtent` on initial display. This is necessary,
+    // because the first time we are setting it as an SVG property, instead of going
+    // through D3's scaling mechanism, which would have picked up both properties.
+    let scale;
+    if (this.props.zoom > this.props.scaleExtent.max) {
+      scale = this.props.scaleExtent.max;
+    } else if (this.props.zoom < this.props.scaleExtent.min) {
+      scale = this.props.scaleExtent.min;
+    } else {
+      scale = this.props.zoom;
+    }
+
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className="rd3t-svg" width="100%" height="100%">
           <TransitionGroup
             component="g"
             className="rd3t-g"
-            transform={`translate(${translate.x},${translate.y})`}
+            transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map(linkData => (
               <Link
@@ -356,6 +401,7 @@ Tree.defaultProps = {
   onClick: undefined,
   onMouseOver: undefined,
   onMouseOut: undefined,
+  onUpdate: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
   pathFunc: 'diagonal',
@@ -364,6 +410,7 @@ Tree.defaultProps = {
   collapsible: true,
   initialDepth: undefined,
   zoomable: true,
+  zoom: 1,
   scaleExtent: { min: 0.1, max: 1 },
   nodeSize: { x: 140, y: 140 },
   separation: { siblings: 1, nonSiblings: 2 },
@@ -388,6 +435,7 @@ Tree.propTypes = {
   onClick: PropTypes.func,
   onMouseOver: PropTypes.func,
   onMouseOut: PropTypes.func,
+  onUpdate: PropTypes.func,
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   translate: PropTypes.shape({
     x: PropTypes.number,
@@ -402,6 +450,7 @@ Tree.propTypes = {
   collapsible: PropTypes.bool,
   initialDepth: PropTypes.number,
   zoomable: PropTypes.bool,
+  zoom: PropTypes.number,
   scaleExtent: PropTypes.shape({
     min: PropTypes.number,
     max: PropTypes.number,

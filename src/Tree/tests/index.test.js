@@ -1,6 +1,7 @@
 import React from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { shallow, mount } from 'enzyme';
+import { render } from 'react-dom';
 
 import Node from '../../Node';
 import Link from '../../Link';
@@ -14,6 +15,7 @@ describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'collapseNode');
   jest.spyOn(Tree.prototype, 'expandNode');
   jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
+  jest.spyOn(Tree.prototype, 'bindZoomListener');
 
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
@@ -62,7 +64,7 @@ describe('<Tree />', () => {
       const fixture = { x: 123, y: 321 };
       const expected = `translate(${fixture.x},${fixture.y})`;
       const renderedComponent = shallow(<Tree data={mockData} translate={fixture} />);
-      expect(renderedComponent.find(TransitionGroup).prop('transform')).toBe(expected);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
     });
   });
 
@@ -161,6 +163,48 @@ describe('<Tree />', () => {
       expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(
         false,
       );
+    });
+  });
+
+  describe('zoom', () => {
+    it('applies the `zoom` prop when specified', () => {
+      const zoomLevel = 0.3;
+      const expected = `scale(${zoomLevel})`;
+      const renderedComponent = shallow(<Tree data={mockData} zoom={zoomLevel} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(expected);
+    });
+
+    it('applies default zoom level when `zoom` is not specified', () => {
+      const renderedComponent = shallow(<Tree data={mockData} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(`scale(1)`);
+    });
+
+    it('respects `scaleExtent` constraints on initital display', () => {
+      const scaleExtent = { min: 0.2, max: 1.5 };
+
+      let renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={2} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(
+        `scale(${scaleExtent.max})`,
+      );
+
+      renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={0.1} />);
+      expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(
+        `scale(${scaleExtent.min})`,
+      );
+    });
+
+    it('rebinds zoom handler on zoom-related props update', () => {
+      const zoomProps = [
+        { translate: { x: 1, y: 1 } },
+        { scaleExtent: { min: 0.3, max: 0.4 } },
+        { zoom: 3.1415 },
+      ];
+      const renderedComponent = mount(<Tree data={mockData} />);
+
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(1);
+
+      zoomProps.forEach(nextProps => renderedComponent.setProps(nextProps));
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -268,6 +312,70 @@ describe('<Tree />', () => {
           .first()
           .prop('nodeData'),
       );
+    });
+  });
+
+  describe('onUpdate', () => {
+    it('calls `onUpdate` on node toggle', () => {
+      const onUpdateSpy = jest.fn();
+
+      const renderedComponent = mount(<Tree data={mockData} onUpdate={onUpdateSpy} />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // collapse
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // re-expand
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(2);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        node: expect.any(Object),
+        zoom: 1,
+        translate: { x: 0, y: 0 },
+      });
+    });
+
+    it('calls `onUpdate` on zoom', () => {
+      const onUpdateSpy = jest.fn();
+
+      document.body.innerHTML += '<div id="reactContainer"></div>';
+      render(
+        <Tree data={mockData} onUpdate={onUpdateSpy} scaleExtent={{ min: 0.1, max: 10 }} />,
+        document.querySelector('#reactContainer'),
+      );
+
+      const scrollableComponent = document.querySelector('.rd3t-svg');
+      scrollableComponent.dispatchEvent(new Event('wheel'));
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        node: null,
+        translate: { x: expect.any(Number), y: expect.any(Number) },
+        zoom: expect.any(Number),
+      });
+    });
+
+    it('passes the specified (not default) `zoom` and `translate` when a node is clicked for the 1st time', () => {
+      const onUpdateSpy = jest.fn();
+      const zoom = 0.7;
+      const translate = { x: 10, y: 5 };
+
+      const renderedComponent = mount(
+        <Tree data={mockData} zoom={zoom} translate={translate} onUpdate={onUpdateSpy} />,
+      );
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(onUpdateSpy).toHaveBeenCalledWith({
+        node: expect.any(Object),
+        translate,
+        zoom,
+      });
     });
   });
 });
