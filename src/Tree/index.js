@@ -32,6 +32,10 @@ export default class Tree extends React.Component {
     this.handleOnMouseOutCb = this.handleOnMouseOutCb.bind(this);
   }
 
+  componentWillMount() {
+    this.internalState.d3 = this.calculateD3Geometry(this.props);
+  }
+
   componentDidMount() {
     this.bindZoomListener(this.props);
     this.internalState.initialRender = false;
@@ -56,6 +60,8 @@ export default class Tree extends React.Component {
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
     }
+
+    this.internalState.d3 = this.calculateD3Geometry(nextProps);
 
     // If zoom-specific props change -> rebind listener with new values
     if (
@@ -110,7 +116,7 @@ export default class Tree extends React.Component {
                 translate: { x: event.translate[0], y: event.translate[1] },
               });
               this.internalState.d3.scale = event.scale;
-              this.internalState.d3.translate = event.translate;
+              this.internalState.d3.translate = { x: event.translate[0], y: event.translate[1] };
             }
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
@@ -309,13 +315,38 @@ export default class Tree extends React.Component {
     return { nodes, links };
   }
 
+  /**
+   * calculateD3Geometry - Set initial zoom and position.
+   * Also limit zoom level according to `scaleExtent` on initial display. This is necessary,
+   * because the first time we are setting it as an SVG property, instead of going
+   * through D3's scaling mechanism, which would have picked up both properties.
+   *
+   * @param  {object} nextProps
+   * @return {object} {translate: {x: number, y: number}, zoom: number}
+   */
+  calculateD3Geometry(nextProps) {
+    let scale;
+
+    if (nextProps.zoom > nextProps.scaleExtent.max) {
+      scale = nextProps.scaleExtent.max;
+    } else if (nextProps.zoom < nextProps.scaleExtent.min) {
+      scale = nextProps.scaleExtent.min;
+    } else {
+      scale = nextProps.zoom;
+    }
+
+    return {
+      translate: nextProps.translate,
+      scale,
+    };
+  }
+
   render() {
     const { nodes, links } = this.generateTree();
     const {
       nodeSvgShape,
       nodeLabelComponent,
       orientation,
-      translate,
       pathFunc,
       transitionDuration,
       zoomable,
@@ -328,20 +359,9 @@ export default class Tree extends React.Component {
       allowForeignObjects,
       styles,
     } = this.props;
+    const { translate, scale } = this.internalState.d3;
 
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
-
-    // Limit zoom level according to `scaleExtent` on initial display. This is necessary,
-    // because the first time we are setting it as an SVG property, instead of going
-    // through D3's scaling mechanism, which would have picked up both properties.
-    let scale;
-    if (this.props.zoom > this.props.scaleExtent.max) {
-      scale = this.props.scaleExtent.max;
-    } else if (this.props.zoom < this.props.scaleExtent.min) {
-      scale = this.props.scaleExtent.min;
-    } else {
-      scale = this.props.zoom;
-    }
 
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
