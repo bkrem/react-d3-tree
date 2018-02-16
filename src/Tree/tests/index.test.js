@@ -180,9 +180,11 @@ describe('<Tree />', () => {
     });
 
     it('respects `scaleExtent` constraints on initital display', () => {
-      const scaleExtent = { min: 0.2, max: 1.5 };
+      const scaleExtent = { min: 0.2, max: 0.8 };
 
-      let renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={2} />);
+      let renderedComponent = shallow(
+        <Tree data={mockData} scaleExtent={scaleExtent} zoom={0.9} />,
+      );
       expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(
         `scale(${scaleExtent.max})`,
       );
