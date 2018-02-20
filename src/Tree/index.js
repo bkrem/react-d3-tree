@@ -385,7 +385,7 @@ export default class Tree extends React.Component {
             {nodes.map(nodeData => (
               <Node
                 key={nodeData.id}
-                nodeSvgShape={nodeSvgShape}
+                nodeSvgShape={{ ...nodeSvgShape, ...nodeData.shape }}
                 nodeLabelComponent={nodeLabelComponent}
                 nodeSize={nodeSize}
                 orientation={orientation}
