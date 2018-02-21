@@ -32,6 +32,38 @@ describe('<Tree />', () => {
     expect(renderedComponent.find(Node).length).toBe(nodeCount);
   });
 
+  it('passes individual `shapeProps` to the specified <Node /> only', () => {
+    const svgShapeMock = {
+      shape: 'circle',
+      shapeProps: {
+        r: 3,
+        fill: 'red',
+      },
+    };
+    const mockTree = [
+      {
+        name: 'Top Level',
+        parent: 'null',
+        shape: svgShapeMock,
+        children: [
+          {
+            name: 'Inner',
+            parent: 'Top Level',
+          },
+        ],
+      },
+    ];
+
+    const renderedComponent = mount(<Tree data={mockTree} />);
+    const parentNode = renderedComponent.find(Node).first();
+    expect(parentNode).not.toBeUndefined();
+    expect(parentNode.props().nodeSvgShape).toEqual(svgShapeMock);
+
+    const childNode = renderedComponent.find(Node).last();
+    expect(childNode).not.toBeUndefined();
+    expect(childNode.props().nodeSvgShape).not.toEqual(svgShapeMock);
+  });
+
   it('maps every parent-child relation onto a <Link />', () => {
     const linkCount = 2;
     const renderedComponent = shallow(<Tree data={mockData} />);
