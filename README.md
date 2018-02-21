@@ -140,6 +140,58 @@ This is to prevent breaking the legacy usage of `circleRadius` + styling via `no
 **From v1.5.x onwards, it is therefore recommended to pass all node styling properties through `shapeProps`**.
 
 
+### Individual `shapeProps`
+`shapeProps` can be passed to a given node individually. The shape is optionally added as `shape` property to input data. This allows for setting style, shape and size of nodes independently (see [Styling](#styling)).
+
+The usage example above can be extended to include individual `shapeProps`:
+```jsx
+import React from 'react';
+import Tree from 'react-d3-tree';
+
+const myTreeData = [
+  {
+    name: 'Parent Node',
+    attributes: {
+      keyA: 'val A',
+      keyB: 'val B',
+      keyC: 'val C',
+    },
+    shape: {
+      shapeProps: {
+        fill: 'blue',
+      },
+    },
+    children: [
+      {
+        name: 'Inner Node',
+        attributes: {
+          keyA: 'val A',
+          keyB: 'val B',
+          keyC: 'val C',
+        },
+        shape: {
+          shape: 'rect',
+          shapeProps: {
+            width: 20,
+            height: 20,
+            x: -10,
+            y: -10,
+            fill: red,
+          },
+        },
+      },
+      {
+        name: 'Level 2: B',
+      },
+    ],
+  },
+];
+
+...
+
+```
+In the above, "Parent Node" will only be blue, but it will keep the default size and geometrical shape. "Inner Node", however, will completely change to a red rectangle with the given dimensions. Omitting `shape`, will keep node's default appearance.
+
 ## Styling
 The tree's `styles` prop may be used to override any of the tree's default styling.
 The following object shape is expected by `styles`:
