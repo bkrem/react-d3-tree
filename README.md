@@ -141,7 +141,7 @@ This is to prevent breaking the legacy usage of `circleRadius` + styling via `no
 
 
 ### Individual `shapeProps`
-`shapeProps` can be passed to a given node individually. The shape is optionally added as `shape` property to input data. This allows for setting style, shape and size of nodes independently (see [Styling](#styling)).
+`shapeProps` can be passed to a node individually by adding the `nodeSvgShape` property to the relevant node's data set. This allows setting each node's style, shape and size independently of the tree's overall `shapeProps` configuration (see [Styling](#styling)).
 
 The usage example above can be extended to include individual `shapeProps`:
 ```jsx
@@ -156,7 +156,7 @@ const myTreeData = [
       keyB: 'val B',
       keyC: 'val C',
     },
-    shape: {
+    nodeSvgShape: {
       shapeProps: {
         fill: 'blue',
       },
@@ -169,14 +169,14 @@ const myTreeData = [
           keyB: 'val B',
           keyC: 'val C',
         },
-        shape: {
+        nodeSvgShape: {
           shape: 'rect',
           shapeProps: {
             width: 20,
             height: 20,
             x: -10,
             y: -10,
-            fill: red,
+            fill: 'red',
           },
         },
       },

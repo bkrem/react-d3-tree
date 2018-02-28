@@ -84,8 +84,8 @@ export default class Node extends React.Component {
     return nodeSvgShape.shape === 'none'
       ? null
       : React.createElement(nodeSvgShape.shape, {
-          ...nodeSvgShape.shapeProps,
           ...nodeStyle.circle,
+          ...nodeSvgShape.shapeProps,
         });
   }
 

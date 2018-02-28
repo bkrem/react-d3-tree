@@ -34,7 +34,7 @@ describe('<Tree />', () => {
 
   it('passes individual `shapeProps` to the specified <Node /> only', () => {
     const svgShapeMock = {
-      shape: 'circle',
+      shape: 'rect',
       shapeProps: {
         r: 3,
         fill: 'red',
@@ -44,7 +44,7 @@ describe('<Tree />', () => {
       {
         name: 'Top Level',
         parent: 'null',
-        shape: svgShapeMock,
+        nodeSvgShape: svgShapeMock,
         children: [
           {
             name: 'Inner',
