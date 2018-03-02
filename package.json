@@ -55,7 +55,8 @@
   "greenkeeper": {
     "ignore": [
       "d3",
-      "react-transition-group"
+      "react-transition-group",
+      "webpack"
     ]
   },
   "dependencies": {
