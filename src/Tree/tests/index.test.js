@@ -79,15 +79,28 @@ describe('<Tree />', () => {
       data: mockData2,
     };
     const renderedComponent = mount(<Tree data={mockData} />);
-
     expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
       mockDataDepth,
     );
-
     renderedComponent.setProps(nextProps);
-
     expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
       mockDataDepth + mockData2Depth,
+    );
+  });
+
+  it("reassigns internal props if `props.data`'s array reference changes", () => {
+    // `assignInternalProperties` recurses by depth: 1 level -> 1 call
+    const mockDataDepth = 2;
+    const nextDataDepth = 2;
+    const nextData = [...mockData];
+    nextData[0].children.push({ name: `${nextData[0].children.length}` });
+    const renderedComponent = mount(<Tree data={mockData} />);
+    expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
+      mockDataDepth,
+    );
+    renderedComponent.setProps({ data: nextData });
+    expect(renderedComponent.instance().assignInternalProperties).toHaveBeenCalledTimes(
+      mockDataDepth + nextDataDepth,
     );
   });
 
