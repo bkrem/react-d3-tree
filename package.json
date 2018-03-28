@@ -1,6 +1,6 @@
 {
   "name": "react-d3-tree",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "React component to create interactive D3 tree hierarchies",
   "main": "lib/react-d3-tree.min.js",
   "scripts": {
