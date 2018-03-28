@@ -216,17 +216,17 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleNodeToggle(nodeId) {
+  handleNodeToggle(nodeId, evt) {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     const targetNode = matches[0];
 
     if (this.props.collapsible) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
-      this.setState({ data }, () => this.handleOnClickCb(targetNode));
+      this.setState({ data }, () => this.handleOnClickCb(targetNode, evt));
       this.internalState.targetNode = targetNode;
     } else {
-      this.handleOnClickCb(targetNode);
+      this.handleOnClickCb(targetNode, evt);
     }
   }
 
@@ -237,10 +237,10 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnClickCb(targetNode) {
+  handleOnClickCb(targetNode, evt) {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
-      onClick(clone(targetNode));
+      onClick(clone(targetNode), evt);
     }
   }
 
@@ -251,13 +251,13 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnMouseOverCb(nodeId) {
+  handleOnMouseOverCb(nodeId, evt) {
     const { onMouseOver } = this.props;
     if (onMouseOver && typeof onMouseOver === 'function') {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
-      onMouseOver(clone(targetNode));
+      onMouseOver(clone(targetNode), evt);
     }
   }
 
@@ -268,13 +268,13 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnMouseOutCb(nodeId) {
+  handleOnMouseOutCb(nodeId, evt) {
     const { onMouseOut } = this.props;
     if (onMouseOut && typeof onMouseOut === 'function') {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
-      onMouseOut(clone(targetNode));
+      onMouseOut(clone(targetNode), evt);
     }
   }
 

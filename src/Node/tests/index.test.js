@@ -97,31 +97,34 @@ describe('<Node />', () => {
   });
 
   describe('Events', () => {
-    it('handles onClick events and passes its nodeId to onClick handler', () => {
+    it('handles onClick events and passes its nodeId & event object to onClick handler', () => {
       const onClickSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onClick={onClickSpy} />);
 
-      renderedComponent.simulate('click');
+      renderedComponent.simulate('click', mockEvt);
       expect(onClickSpy).toHaveBeenCalledTimes(1);
-      expect(onClickSpy).toHaveBeenCalledWith(nodeData.id);
+      expect(onClickSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
     });
 
-    it('handles onMouseOver events and passes its nodeId to onMouseOver handler', () => {
+    it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
       const onMouseOverSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onMouseOver={onMouseOverSpy} />);
 
-      renderedComponent.simulate('mouseover');
+      renderedComponent.simulate('mouseover', mockEvt);
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id);
+      expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
     });
 
-    it('handles onMouseOut events and passes its nodeId to onMouseOut handler', () => {
+    it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
       const onMouseOutSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
 
-      renderedComponent.simulate('mouseout');
+      renderedComponent.simulate('mouseout', mockEvt);
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id);
+      expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
     });
   });
 

@@ -284,18 +284,20 @@ describe('<Tree />', () => {
 
     it("clones the clicked node's data & passes it to the onClick callback if defined", () => {
       const onClickSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = mount(<Tree data={mockData} onClick={onClickSpy} />);
 
       renderedComponent
         .find(Node)
         .first()
-        .simulate('click');
+        .simulate('click', mockEvt);
 
       expect(onClickSpy).toHaveBeenCalledWith(
         renderedComponent
           .find(Node)
           .first()
           .prop('nodeData'),
+        expect.objectContaining(mockEvt),
       );
     });
   });
@@ -315,18 +317,20 @@ describe('<Tree />', () => {
 
     it("clones the hovered node's data & passes it to the onMouseOver callback if defined", () => {
       const onMouseOverSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = mount(<Tree data={mockData} onMouseOver={onMouseOverSpy} />);
 
       renderedComponent
         .find(Node)
         .first()
-        .simulate('mouseover');
+        .simulate('mouseover', mockEvt);
 
       expect(onMouseOverSpy).toHaveBeenCalledWith(
         renderedComponent
           .find(Node)
           .first()
           .prop('nodeData'),
+        expect.objectContaining(mockEvt),
       );
     });
   });
@@ -346,18 +350,20 @@ describe('<Tree />', () => {
 
     it("clones the hovered node's data & passes it to the onMouseOut callback if defined", () => {
       const onMouseOutSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
       const renderedComponent = mount(<Tree data={mockData} onMouseOut={onMouseOutSpy} />);
 
       renderedComponent
         .find(Node)
         .first()
-        .simulate('mouseout');
+        .simulate('mouseout', mockEvt);
 
       expect(onMouseOutSpy).toHaveBeenCalledWith(
         renderedComponent
           .find(Node)
           .first()
           .prop('nodeData'),
+        expect.objectContaining(mockEvt),
       );
     });
   });

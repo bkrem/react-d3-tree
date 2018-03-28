@@ -89,16 +89,16 @@ export default class Node extends React.Component {
         });
   }
 
-  handleClick() {
-    this.props.onClick(this.props.nodeData.id);
+  handleClick(evt) {
+    this.props.onClick(this.props.nodeData.id, evt);
   }
 
-  handleOnMouseOver() {
-    this.props.onMouseOver(this.props.nodeData.id);
+  handleOnMouseOver(evt) {
+    this.props.onMouseOver(this.props.nodeData.id, evt);
   }
 
-  handleOnMouseOut() {
-    this.props.onMouseOut(this.props.nodeData.id);
+  handleOnMouseOut(evt) {
+    this.props.onMouseOut(this.props.nodeData.id, evt);
   }
 
   componentWillLeave(done) {
