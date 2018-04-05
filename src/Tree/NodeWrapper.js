@@ -11,9 +11,11 @@ export default class NodeWrapper extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      enableTransitions: nextProps.transitionDuration > 0,
-    });
+    if (nextProps.transitionDuration !== this.props.transitionDuration) {
+      this.setState({
+        enableTransitions: nextProps.transitionDuration > 0,
+      });
+    }
   }
 
   render() {
