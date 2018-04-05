@@ -224,7 +224,7 @@ describe('<Tree />', () => {
       expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(`scale(1)`);
     });
 
-    it('respects `scaleExtent` constraints on initital display', () => {
+    it('respects `scaleExtent` constraints on initial display', () => {
       const scaleExtent = { min: 0.2, max: 0.8 };
 
       let renderedComponent = shallow(
@@ -252,6 +252,13 @@ describe('<Tree />', () => {
 
       zoomProps.forEach(nextProps => renderedComponent.setProps(nextProps));
       expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(4);
+    });
+
+    it('rebinds on `props.transitionDuration` change to handle switched DOM nodes from NodeWrapper', () => {
+      const renderedComponent = mount(<Tree data={mockData} />);
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(1);
+      renderedComponent.setProps({ transitionDuration: 0 });
+      expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(2);
     });
   });
 

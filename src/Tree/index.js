@@ -41,7 +41,12 @@ export default class Tree extends React.Component {
     this.internalState.initialRender = false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    // Rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
+    if (prevProps.transitionDuration !== this.props.transitionDuration) {
+      this.bindZoomListener(this.props);
+    }
+
     if (typeof this.props.onUpdate === 'function') {
       this.props.onUpdate({
         node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
