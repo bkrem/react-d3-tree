@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TransitionGroup } from 'react-transition-group';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';
 import deepEqual from 'deep-equal';
 import uuid from 'uuid';
 
+import NodeWrapper from './NodeWrapper';
 import Node from '../Node';
 import Link from '../Link';
 import './style.css';
@@ -41,7 +41,12 @@ export default class Tree extends React.Component {
     this.internalState.initialRender = false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    // Rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
+    if (prevProps.transitionDuration !== this.props.transitionDuration) {
+      this.bindZoomListener(this.props);
+    }
+
     if (typeof this.props.onUpdate === 'function') {
       this.props.onUpdate({
         node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
@@ -366,7 +371,8 @@ export default class Tree extends React.Component {
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className="rd3t-svg" width="100%" height="100%">
-          <TransitionGroup
+          <NodeWrapper
+            transitionDuration={transitionDuration}
             component="g"
             className="rd3t-g"
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
@@ -403,7 +409,7 @@ export default class Tree extends React.Component {
                 styles={styles.nodes}
               />
             ))}
-          </TransitionGroup>
+          </NodeWrapper>
         </svg>
       </div>
     );
