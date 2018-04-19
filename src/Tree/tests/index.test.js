@@ -165,11 +165,15 @@ describe('<Tree />', () => {
     });
 
     it("expands a node's children when it is clicked in a collapsed state", () => {
+      jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} />);
       renderedComponent
         .find(Node)
         .first()
         .simulate('click'); // collapse
+
+      jest.runAllTimers();
+
       renderedComponent
         .find(Node)
         .first()
@@ -189,6 +193,43 @@ describe('<Tree />', () => {
 
       expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(1);
       expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(0);
+    });
+
+    it('does not toggle any nodes again until `transitionDuration` has completed', () => {
+      const renderedComponent = mount(<Tree data={mockData} />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
+      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+      expect(Tree.prototype.expandNode).not.toHaveBeenCalled();
+    });
+
+    it('allows toggling nodes again after `transitionDuration` + 10ms has expired', () => {
+      jest.useFakeTimers();
+      const renderedComponent = mount(<Tree data={mockData} />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      jest.runAllTimers();
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
+      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+      expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -384,12 +425,8 @@ describe('<Tree />', () => {
         .find(Node)
         .first()
         .simulate('click'); // collapse
-      renderedComponent
-        .find(Node)
-        .first()
-        .simulate('click'); // re-expand
 
-      expect(onUpdateSpy).toHaveBeenCalledTimes(2);
+      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: expect.any(Object),
         zoom: 1,

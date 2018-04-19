@@ -19,6 +19,7 @@ export default class Tree extends React.Component {
     this.internalState = {
       initialRender: true,
       targetNode: null,
+      isTransitioning: false,
       d3: {
         scale: this.props.zoom,
         translate: this.props.translate,
@@ -226,9 +227,15 @@ export default class Tree extends React.Component {
     const matches = this.findNodesById(nodeId, data, []);
     const targetNode = matches[0];
 
-    if (this.props.collapsible) {
+    if (this.props.collapsible && !this.state.isTransitioning) {
       targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
-      this.setState({ data }, () => this.handleOnClickCb(targetNode, evt));
+      // Lock node toggling while transition takes place
+      this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
+      // Await transitionDuration + 10 ms before unlocking node toggling again
+      setTimeout(
+        () => this.setState({ isTransitioning: false }),
+        this.props.transitionDuration + 10,
+      );
       this.internalState.targetNode = targetNode;
     } else {
       this.handleOnClickCb(targetNode, evt);
