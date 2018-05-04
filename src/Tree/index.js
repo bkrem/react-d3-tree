@@ -15,8 +15,8 @@ export default class Tree extends React.Component {
     super(props);
     this.state = {
       data: this.assignInternalProperties(clone(props.data)),
-      rd3tSvgClassName: '_' + uuid.v4(),
-      rd3tGClassName: '_' + uuid.v4()
+      rd3tSvgClassName: `_${uuid.v4()}`,
+      rd3tGClassName: `_${uuid.v4()}`,
     };
     this.internalState = {
       initialRender: true,
@@ -105,8 +105,8 @@ export default class Tree extends React.Component {
   bindZoomListener(props) {
     const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
     const { rd3tSvgClassName, rd3tGClassName } = this.state;
-    const svg = select('.' + rd3tSvgClassName);
-    const g = select('.' + rd3tGClassName);
+    const svg = select(`.${rd3tSvgClassName}`);
+    const g = select(`.${rd3tGClassName}`);
 
     if (zoomable) {
       svg.call(

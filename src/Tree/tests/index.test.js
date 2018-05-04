@@ -443,7 +443,7 @@ describe('<Tree />', () => {
         document.querySelector('#reactContainer'),
       );
 
-      const scrollableComponent = document.querySelector('.rd3t-svg');
+      const scrollableComponent = document.querySelector('.rd3t-tree-container > svg');
       scrollableComponent.dispatchEvent(new Event('wheel'));
 
       expect(onUpdateSpy).toHaveBeenCalledTimes(1);
