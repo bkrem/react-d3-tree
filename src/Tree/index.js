@@ -15,6 +15,8 @@ export default class Tree extends React.Component {
     super(props);
     this.state = {
       data: this.assignInternalProperties(clone(props.data)),
+      rd3tSvgClassName: `_${uuid.v4()}`,
+      rd3tGClassName: `_${uuid.v4()}`,
     };
     this.internalState = {
       initialRender: true,
@@ -102,8 +104,9 @@ export default class Tree extends React.Component {
    */
   bindZoomListener(props) {
     const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
-    const svg = select('.rd3t-svg');
-    const g = select('.rd3t-g');
+    const { rd3tSvgClassName, rd3tGClassName } = this.state;
+    const svg = select(`.${rd3tSvgClassName}`);
+    const g = select(`.${rd3tGClassName}`);
 
     if (zoomable) {
       svg.call(
@@ -355,6 +358,7 @@ export default class Tree extends React.Component {
 
   render() {
     const { nodes, links } = this.generateTree();
+    const { rd3tSvgClassName, rd3tGClassName } = this.state;
     const {
       nodeSvgShape,
       nodeLabelComponent,
@@ -377,11 +381,11 @@ export default class Tree extends React.Component {
 
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
-        <svg className="rd3t-svg" width="100%" height="100%">
+        <svg className={rd3tSvgClassName} width="100%" height="100%">
           <NodeWrapper
             transitionDuration={transitionDuration}
             component="g"
-            className="rd3t-g"
+            className={rd3tGClassName}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map(linkData => (
