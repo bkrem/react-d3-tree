@@ -4,11 +4,6 @@ Feel free to delete any questions that do not apply.
 
 ## Are you reporting a bug, or opening a feature request?
 [Replace with your answer]
-
-* Please insert below the code you are checking with mypy,
-  or a mock-up repro if the source is private. We would appreciate
-  if you try to simplify your case to a minimal repro.
-  
   
 ## What is the actual behavior/output?
 [Replace with your answer if relevant]
