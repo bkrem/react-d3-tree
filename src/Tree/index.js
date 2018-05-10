@@ -313,12 +313,12 @@ export default class Tree extends React.Component {
       .children(d => (d._collapsed ? null : d._children));
 
     const rootNode = this.state.data[0];
-    const nodes = tree.nodes(rootNode);
-    const links = tree.links(nodes);
+    let nodes = tree.nodes(rootNode);
 
     // set `initialDepth` on first render if specified
     if (initialDepth !== undefined && this.internalState.initialRender) {
       this.setInitialTreeDepth(nodes, initialDepth);
+      nodes = tree.nodes(rootNode);
     }
 
     if (depthFactor) {
@@ -327,6 +327,7 @@ export default class Tree extends React.Component {
       });
     }
 
+    const links = tree.links(nodes);
     return { nodes, links };
   }
 
