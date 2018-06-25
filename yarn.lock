@@ -619,9 +619,9 @@ babel-messages@^6.23.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-add-module-exports@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-add-module-exports/-/babel-plugin-add-module-exports-0.2.1.tgz#9ae9a1f4a8dc67f0cdec4f4aeda1e43a5ff65e25"
+babel-plugin-add-module-exports@0.3.0-pre:
+  version "0.3.0-pre"
+  resolved "https://registry.yarnpkg.com/babel-plugin-add-module-exports/-/babel-plugin-add-module-exports-0.3.0-pre.tgz#49f56804ac77cbc503ab9d9c3c36babcb0d985ac"
 
 babel-plugin-check-es2015-constants@^6.22.0:
   version "6.22.0"
