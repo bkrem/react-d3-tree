@@ -147,7 +147,9 @@ export default class Tree extends React.Component {
   assignInternalProperties(data) {
     return data.map(node => {
       node.id = uuid.v4();
-      node._collapsed = false;
+      if (node._collapsed === undefined) {
+        node._collapsed = false;
+      }
       // if there are children, recursively assign properties to them too
       if (node.children && node.children.length > 0) {
         node.children = this.assignInternalProperties(node.children);
@@ -302,7 +304,14 @@ export default class Tree extends React.Component {
    * @return {object} Object containing `nodes` and `links`.
    */
   generateTree() {
-    const { initialDepth, depthFactor, separation, nodeSize, orientation } = this.props;
+    const {
+      initialDepth,
+      useCollapseData,
+      depthFactor,
+      separation,
+      nodeSize,
+      orientation,
+    } = this.props;
 
     const tree = layout
       .tree()
@@ -316,7 +325,11 @@ export default class Tree extends React.Component {
     let nodes = tree.nodes(rootNode);
 
     // set `initialDepth` on first render if specified
-    if (initialDepth !== undefined && this.internalState.initialRender) {
+    if (
+      useCollapseData === false &&
+      initialDepth !== undefined &&
+      this.internalState.initialRender
+    ) {
       this.setInitialTreeDepth(nodes, initialDepth);
       nodes = tree.nodes(rootNode);
     }
@@ -377,7 +390,6 @@ export default class Tree extends React.Component {
       styles,
     } = this.props;
     const { translate, scale } = this.internalState.d3;
-
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
 
     return (
@@ -446,6 +458,7 @@ Tree.defaultProps = {
   transitionDuration: 500,
   depthFactor: undefined,
   collapsible: true,
+  useCollapseData: false,
   initialDepth: undefined,
   zoomable: true,
   zoom: 1,
@@ -486,6 +499,7 @@ Tree.propTypes = {
   transitionDuration: PropTypes.number,
   depthFactor: PropTypes.number,
   collapsible: PropTypes.bool,
+  useCollapseData: PropTypes.bool,
   initialDepth: PropTypes.number,
   zoomable: PropTypes.bool,
   zoom: PropTypes.number,
