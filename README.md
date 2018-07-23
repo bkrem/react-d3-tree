@@ -284,7 +284,7 @@ The `nodeLabelComponent` prop provides a way to use a React component for each n
 * `render` is the XML React-D3-Tree will use to render each node's label.
 * `foreignObjectWrapper` contains a set of attributes that should be passed to the `<foreignObject />` that wraps `nodeLabelComponent`. For possible attributes please check the [spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Global_attributes).
 
-**Note: `foreignObjectWrapper` will set its width and height attributes to whatever values `nodeSize.x` and `nodeSize.y` return by default.** 
+**Note: By default, `foreignObjectWrapper` will set its width and height attributes to `nodeSize.x - 24px` and `nodeSize.y - 24px` respectively; where a base margin of 24px is subtracted to avoid the overlapping of elements.** 
 To override this behaviour for each attribute, specify `width` and/or `height` properties for your `foreignObjectWrapper`.
 
 **Note:** The ReactElement passed to `render` is cloned with its existing props and **receives an additional `nodeData` object prop, containing information about the current node.**
