@@ -13,6 +13,9 @@ import './style.css';
 export default class Tree extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log('constructing tree');
+
     this.state = {
       data: this.assignInternalProperties(clone(props.data)),
       rd3tSvgClassName: `_${uuid.v4()}`,
@@ -40,6 +43,7 @@ export default class Tree extends React.Component {
   }
 
   componentDidMount() {
+    console.log('mounting tree');
     this.bindZoomListener(this.props);
     this.internalState.initialRender = false;
   }
@@ -63,7 +67,9 @@ export default class Tree extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
-    if (this.props.data !== nextProps.data) {
+    console.log('this.props.data: ', this.props.data);
+    console.log('nextProps.data: ', nextProps.data);
+    if (JSON.stringify(this.props.data) !== JSON.stringify(nextProps.data)) {
       this.setState({
         data: this.assignInternalProperties(clone(nextProps.data)),
       });
