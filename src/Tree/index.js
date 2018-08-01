@@ -13,6 +13,9 @@ import './style.css';
 export default class Tree extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log('constructing tree');
+
     this.state = {
       data: this.assignInternalProperties(clone(props.data)),
       rd3tSvgClassName: `_${uuid.v4()}`,
@@ -40,6 +43,7 @@ export default class Tree extends React.Component {
   }
 
   componentDidMount() {
+    console.log('mounting tree');
     this.bindZoomListener(this.props);
     this.internalState.initialRender = false;
   }
