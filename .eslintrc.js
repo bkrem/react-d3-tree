@@ -64,7 +64,7 @@ module.exports = {
     "no-param-reassign": "off",
     "no-use-before-define": 0,
     "no-underscore-dangle": "off",
-    "no-unused-expressions": "warn",
+    "no-unused-expressions": "off",
     "prefer-template": 2,
     "class-methods-use-this": 0,
     "react/forbid-prop-types": 0,

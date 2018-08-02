@@ -16,6 +16,7 @@ describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'expandNode');
   jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
   jest.spyOn(Tree.prototype, 'bindZoomListener');
+  jest.spyOn(Tree.prototype, 'collapseNeighborNodes');
 
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
@@ -230,6 +231,44 @@ describe('<Tree />', () => {
       expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
       expect(Tree.prototype.collapseNode).toHaveBeenCalled();
       expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('shouldCollapseNeighborNodes', () => {
+    it('is inactive by default', () => {
+      jest.useFakeTimers();
+      const renderedComponent = mount(<Tree data={mockData} />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // collapse
+
+      jest.runAllTimers();
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // re-expand
+
+      expect(Tree.prototype.collapseNeighborNodes).toHaveBeenCalledTimes(0);
+    });
+
+    it('collapses all neighbor nodes of the targetNode if it is about to be expanded', () => {
+      jest.useFakeTimers();
+      const renderedComponent = mount(<Tree data={mockData} shouldCollapseNeighborNodes />);
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // collapse
+
+      jest.runAllTimers();
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click'); // re-expand
+
+      expect(Tree.prototype.collapseNeighborNodes).toHaveBeenCalledTimes(1);
     });
   });
 

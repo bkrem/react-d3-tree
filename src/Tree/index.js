@@ -158,15 +158,15 @@ export default class Tree extends React.Component {
   }
 
   /**
-   * findNodesById - Description
+   * findNodesById - Recursively walks the nested `nodeSet` until a node matching `nodeId` is found.
    *
    * @param {string} nodeId The `node.id` being searched for
-   * @param {array} nodeSet Array of `node` objects
+   * @param {array} nodeSet Array of nested `node` objects
    * @param {array} hits Accumulator for matches, passed between recursive calls
    *
    * @return {array} Set of nodes matching `nodeId`
    */
-  // TODO Refactor this into a more readable/reasonable recursive depth-first walk.
+  // TODO: Refactor this into a more readable/reasonable recursive depth-first walk.
   findNodesById(nodeId, nodeSet, hits) {
     if (hits.length > 0) {
       return hits;
@@ -177,12 +177,30 @@ export default class Tree extends React.Component {
     nodeSet.forEach(node => {
       if (node._children && node._children.length > 0) {
         hits = this.findNodesById(nodeId, node._children, hits);
-        return hits;
       }
-      return hits;
     });
 
     return hits;
+  }
+
+  /**
+   * findNodesAtDepth - Recursively walks the nested `nodeSet` until all nodes at `depth` have been found.
+   *
+   * @param {number} depth Target depth for which nodes should be returned
+   * @param {array} nodeSet Array of nested `node` objects
+   * @param {array} accumulator Accumulator for matches, passed between recursive calls
+   * @return
+   */
+  findNodesAtDepth(depth, nodeSet, accumulator) {
+    accumulator = accumulator.concat(nodeSet.filter(node => node.depth === depth));
+
+    nodeSet.forEach(node => {
+      if (node._children && node._children.length > 0) {
+        accumulator = this.findNodesAtDepth(depth, node._children, accumulator);
+      }
+    });
+
+    return accumulator;
   }
 
   /**
@@ -215,6 +233,21 @@ export default class Tree extends React.Component {
   }
 
   /**
+   * collapseNodeNeighbors - Collapses all nodes in `nodeSet` that are neighbors (same depth) of `targetNode`.
+   *
+   * @param {object} targetNode
+   * @param {array} nodeSet
+   *
+   * @return {void}
+   */
+  collapseNeighborNodes(targetNode, nodeSet) {
+    const neighbors = this.findNodesAtDepth(targetNode.depth, nodeSet, []).filter(
+      node => node.id !== targetNode.id,
+    );
+    neighbors.forEach(neighbor => this.collapseNode(neighbor));
+  }
+
+  /**
    * handleNodeToggle - Finds the node matching `nodeId` and
    * expands/collapses it, depending on the current state of
    * its `_collapsed` property.
@@ -231,7 +264,12 @@ export default class Tree extends React.Component {
     const targetNode = matches[0];
 
     if (this.props.collapsible && !this.state.isTransitioning) {
-      targetNode._collapsed ? this.expandNode(targetNode) : this.collapseNode(targetNode);
+      if (targetNode._collapsed) {
+        this.expandNode(targetNode);
+        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
+      } else {
+        this.collapseNode(targetNode);
+      }
       // Lock node toggling while transition takes place
       this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
       // Await transitionDuration + 10 ms before unlocking node toggling again
@@ -459,6 +497,7 @@ Tree.defaultProps = {
     transform: undefined,
   },
   allowForeignObjects: false,
+  shouldCollapseNeighborNodes: false,
   circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
 };
@@ -503,6 +542,7 @@ Tree.propTypes = {
   }),
   textLayout: PropTypes.object,
   allowForeignObjects: PropTypes.bool,
+  shouldCollapseNeighborNodes: PropTypes.bool,
   circleRadius: PropTypes.number,
   styles: PropTypes.shape({
     nodes: PropTypes.object,
