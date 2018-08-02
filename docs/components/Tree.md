@@ -112,6 +112,12 @@ type: `shape[object Object]`
 defaultValue: `{ siblings: 1, nonSiblings: 2 }`
 
 
+### `shouldCollapseNeighborNodes`
+
+type: `bool`
+defaultValue: `false`
+
+
 ### `styles`
 
 type: `shape[object Object]`
