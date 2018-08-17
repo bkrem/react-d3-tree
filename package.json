@@ -96,7 +96,7 @@
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^6.0.0",
     "np": "^2.20.0",
-    "postcss-loader": "^2.0.9",
+    "postcss-loader": "^3.0.0",
     "prettier": "^1.6.1",
     "react": "^16.1.1",
     "react-docgen": "^2.16.0",
