@@ -26,7 +26,7 @@ defaultValue: `true`
 
 ### `data` (required)
 
-type: `array`
+type: `union(array|object)`
 
 
 ### `depthFactor`
@@ -145,6 +145,12 @@ defaultValue: `500`
 
 type: `shape[object Object]`
 defaultValue: `{ x: 0, y: 0 }`
+
+
+### `useCollapseData`
+
+type: `bool`
+defaultValue: `false`
 
 
 ### `zoom`
