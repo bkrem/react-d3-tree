@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import T from 'prop-types';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';
 import deepEqual from 'deep-equal';
@@ -145,7 +145,9 @@ export default class Tree extends React.Component {
    * @return {array} `data` array with internal properties added
    */
   assignInternalProperties(data) {
-    return data.map(node => {
+    // Wrap the root node into an array for recursive transformations if it wasn't in one already.
+    const d = Array.isArray(data) ? data : [data];
+    return d.map(node => {
       node.id = uuid.v4();
       // If the node's `_collapsed` state wasn't defined by the data set -> default to `false`.
       if (node._collapsed === undefined) {
@@ -517,50 +519,47 @@ Tree.defaultProps = {
 };
 
 Tree.propTypes = {
-  data: PropTypes.array.isRequired,
-  nodeSvgShape: PropTypes.shape({
-    shape: PropTypes.string,
-    shapeProps: PropTypes.object,
+  data: T.oneOfType([T.array, T.object]).isRequired,
+  nodeSvgShape: T.shape({
+    shape: T.string,
+    shapeProps: T.object,
   }),
-  nodeLabelComponent: PropTypes.object,
-  onClick: PropTypes.func,
-  onMouseOver: PropTypes.func,
-  onMouseOut: PropTypes.func,
-  onUpdate: PropTypes.func,
-  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
-  translate: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
+  nodeLabelComponent: T.object,
+  onClick: T.func,
+  onMouseOver: T.func,
+  onMouseOut: T.func,
+  onUpdate: T.func,
+  orientation: T.oneOf(['horizontal', 'vertical']),
+  translate: T.shape({
+    x: T.number,
+    y: T.number,
   }),
-  pathFunc: PropTypes.oneOfType([
-    PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
-    PropTypes.func,
-  ]),
-  transitionDuration: PropTypes.number,
-  depthFactor: PropTypes.number,
-  collapsible: PropTypes.bool,
-  useCollapseData: PropTypes.bool,
-  initialDepth: PropTypes.number,
-  zoomable: PropTypes.bool,
-  zoom: PropTypes.number,
-  scaleExtent: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
+  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]),
+  transitionDuration: T.number,
+  depthFactor: T.number,
+  collapsible: T.bool,
+  useCollapseData: T.bool,
+  initialDepth: T.number,
+  zoomable: T.bool,
+  zoom: T.number,
+  scaleExtent: T.shape({
+    min: T.number,
+    max: T.number,
   }),
-  nodeSize: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
+  nodeSize: T.shape({
+    x: T.number,
+    y: T.number,
   }),
-  separation: PropTypes.shape({
-    siblings: PropTypes.number,
-    nonSiblings: PropTypes.number,
+  separation: T.shape({
+    siblings: T.number,
+    nonSiblings: T.number,
   }),
-  textLayout: PropTypes.object,
-  allowForeignObjects: PropTypes.bool,
-  shouldCollapseNeighborNodes: PropTypes.bool,
-  circleRadius: PropTypes.number,
-  styles: PropTypes.shape({
-    nodes: PropTypes.object,
-    links: PropTypes.object,
+  textLayout: T.object,
+  allowForeignObjects: T.bool,
+  shouldCollapseNeighborNodes: T.bool,
+  circleRadius: T.number,
+  styles: T.shape({
+    nodes: T.object,
+    links: T.object,
   }),
 };
