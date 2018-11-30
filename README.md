@@ -10,8 +10,7 @@
 React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated & interactive tree graph by leveraging [D3](https://d3js.org/)'s `tree` layout.
 
 
-## Contents
-- [Contents](#contents)
+## Contents <!-- omit in toc -->
 - [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -21,12 +20,15 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
   - [Individual `shapeProps`](#individual-shapeprops)
 - [Styling](#styling)
 - [Pre-defining a node's `_collapsed` state](#pre-defining-a-nodes-_collapsed-state)
+- [Keeping large trees responsive](#keeping-large-trees-responsive)
 - [External data sources](#external-data-sources)
   - [Example](#example)
 - [Using foreignObjects](#using-foreignobjects)
   - [`nodeLabelComponent`](#nodelabelcomponent)
     - [Example](#example-1)
 - [Recipes](#recipes)
+    - [Auto-centering inside `treeContainer`](#auto-centering-inside-treecontainer)
+    - [Adding & removing nodes dynamically](#adding--removing-nodes-dynamically)
 
 
 ## Demo
@@ -280,6 +282,13 @@ Clarifications:
 
 > **Note:** `props.useCollapseData` and `props.initialDepth` are mutually exclusive. If `useCollapseData` is set, `initialDepth` values will be ignored.
 
+
+## Keeping large trees responsive
+Attempting to render large trees with animated transitions may cause significant input lag. This is due to limitations related to the way D3's `select().transition()` enqueues calls to `requestAnimationFrame`, discussed [here](https://github.com/bkrem/react-d3-tree/issues/41#issuecomment-338425414).
+
+Until a custom debounce for expand/collapse has been implemented, **it is therefore recommended to set `props.transitionDuration` to `0` for large tree graphs** if you're experiencing responsiveness issues.
+
+
 ## External data sources
 Statically hosted JSON or CSV files can be used as data sources via the additional `treeUtil` module.
 
@@ -384,4 +393,5 @@ render() {
 
 
 ## Recipes
-* [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
+#### [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
+#### [Adding & removing nodes dynamically](https://codesandbox.io/s/jz1v7o2ryy)
