@@ -27,6 +27,8 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
   - [`nodeLabelComponent`](#nodelabelcomponent)
     - [Example](#example-1)
 - [Recipes](#recipes)
+    - [Auto-centering inside `treeContainer`](#auto-centering-inside-treecontainer)
+    - [Adding & removing nodes dynamically](#adding--removing-nodes-dynamically)
 
 
 ## Demo
@@ -391,4 +393,5 @@ render() {
 
 
 ## Recipes
-* [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
+#### [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
+#### [Adding & removing nodes dynamically](https://codesandbox.io/s/jz1v7o2ryy)
