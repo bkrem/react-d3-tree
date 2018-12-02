@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import T from 'prop-types';
 
 export const BASE_MARGIN = 24;
 
@@ -23,11 +23,11 @@ ForeignObjectElement.defaultProps = {
 };
 
 ForeignObjectElement.propTypes = {
-  render: PropTypes.oneOfType([PropTypes.element, PropTypes.node]).isRequired,
-  nodeData: PropTypes.object.isRequired,
-  nodeSize: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
+  render: T.oneOfType([T.element, T.node]).isRequired,
+  nodeData: T.object.isRequired,
+  nodeSize: T.shape({
+    x: T.number,
+    y: T.number,
   }).isRequired,
-  foreignObjectWrapper: PropTypes.object,
+  foreignObjectWrapper: T.object,
 };

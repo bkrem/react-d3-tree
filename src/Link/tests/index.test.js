@@ -30,9 +30,9 @@ describe('<Link />', () => {
   };
 
   jest.spyOn(Link.prototype, 'drawPath');
-  jest.spyOn(Link.prototype, 'diagonalPath');
-  jest.spyOn(Link.prototype, 'elbowPath');
-  jest.spyOn(Link.prototype, 'straightPath');
+  jest.spyOn(Link.prototype, 'drawDiagonalPath');
+  jest.spyOn(Link.prototype, 'drawElbowPath');
+  jest.spyOn(Link.prototype, 'drawStraightPath');
   jest.spyOn(Link.prototype, 'applyOpacity');
   jest.spyOn(pathFuncs, 'testPathFunc');
 
@@ -59,27 +59,27 @@ describe('<Link />', () => {
     const straightComponent = shallow(<Link {...mockProps} pathFunc="straight" />);
     shallow(<Link {...mockProps} pathFunc={pathFuncs.testPathFunc} />);
 
-    expect(diagonalComponent.instance().diagonalPath).toHaveBeenCalled();
-    expect(elbowComponent.instance().elbowPath).toHaveBeenCalled();
-    expect(straightComponent.instance().straightPath).toHaveBeenCalled();
+    expect(diagonalComponent.instance().drawDiagonalPath).toHaveBeenCalled();
+    expect(elbowComponent.instance().drawElbowPath).toHaveBeenCalled();
+    expect(straightComponent.instance().drawStraightPath).toHaveBeenCalled();
     expect(pathFuncs.testPathFunc).toHaveBeenCalled();
     expect(Link.prototype.drawPath).toHaveBeenCalledTimes(4);
   });
 
   it('returns an appropriate elbowPath according to `props.orientation`', () => {
-    expect(Link.prototype.elbowPath(linkData, 'horizontal')).toBe(
+    expect(Link.prototype.drawElbowPath(linkData, 'horizontal')).toBe(
       `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`,
     );
-    expect(Link.prototype.elbowPath(linkData, 'vertical')).toBe(
+    expect(Link.prototype.drawElbowPath(linkData, 'vertical')).toBe(
       `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`,
     );
   });
 
   it('returns an appropriate straightPath according to `props.orientation`', () => {
-    expect(Link.prototype.straightPath(linkData, 'horizontal')).toBe(
+    expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
       `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`,
     );
-    expect(Link.prototype.straightPath(linkData, 'vertical')).toBe(
+    expect(Link.prototype.drawStraightPath(linkData, 'vertical')).toBe(
       `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`,
     );
   });

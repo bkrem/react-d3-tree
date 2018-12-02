@@ -1,18 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import T from 'prop-types';
 import { svg, select } from 'd3';
 
 import './style.css';
 
 export default class Link extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      initialStyle: {
-        opacity: 0,
-      },
-    };
-  }
+  state = {
+    initialStyle: {
+      opacity: 0,
+    },
+  };
 
   componentDidMount() {
     this.applyOpacity(1, this.props.transitionDuration);
@@ -35,14 +32,14 @@ export default class Link extends React.PureComponent {
     }
   }
 
-  diagonalPath(linkData, orientation) {
+  drawDiagonalPath(linkData, orientation) {
     const diagonal = svg
       .diagonal()
       .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]));
     return diagonal(linkData);
   }
 
-  straightPath(linkData, orientation) {
+  drawStraightPath(linkData, orientation) {
     const straight = svg
       .line()
       .interpolate('basis')
@@ -64,7 +61,7 @@ export default class Link extends React.PureComponent {
     return straight(data);
   }
 
-  elbowPath(d, orientation) {
+  drawElbowPath(d, orientation) {
     return orientation === 'horizontal'
       ? `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`
       : `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
@@ -78,14 +75,14 @@ export default class Link extends React.PureComponent {
     }
 
     if (pathFunc === 'elbow') {
-      return this.elbowPath(linkData, orientation);
+      return this.drawElbowPath(linkData, orientation);
     }
 
     if (pathFunc === 'straight') {
-      return this.straightPath(linkData, orientation);
+      return this.drawStraightPath(linkData, orientation);
     }
 
-    return this.diagonalPath(linkData, orientation);
+    return this.drawDiagonalPath(linkData, orientation);
   }
 
   render() {
@@ -108,12 +105,9 @@ Link.defaultProps = {
 };
 
 Link.propTypes = {
-  linkData: PropTypes.object.isRequired,
-  orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-  pathFunc: PropTypes.oneOfType([
-    PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
-    PropTypes.func,
-  ]).isRequired,
-  transitionDuration: PropTypes.number.isRequired,
-  styles: PropTypes.object,
+  linkData: T.object.isRequired,
+  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
+  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]).isRequired,
+  transitionDuration: T.number.isRequired,
+  styles: T.object,
 };

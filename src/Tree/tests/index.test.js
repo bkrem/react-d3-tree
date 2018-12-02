@@ -11,7 +11,6 @@ import { mockData, mockData2 } from './mockData';
 describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');
   jest.spyOn(Tree.prototype, 'assignInternalProperties');
-  jest.spyOn(Tree.prototype, 'handleNodeToggle');
   jest.spyOn(Tree.prototype, 'collapseNode');
   jest.spyOn(Tree.prototype, 'expandNode');
   jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
@@ -156,18 +155,19 @@ describe('<Tree />', () => {
 
     it("collapses a node's children when it is clicked in an expanded state", () => {
       const renderedComponent = mount(<Tree data={mockData} />);
+      const nodeCount = renderedComponent.find(Node).length;
       renderedComponent
         .find(Node)
         .first()
         .simulate('click'); // collapse
 
-      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(1);
-      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+      expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
     });
 
     it("expands a node's children when it is clicked in a collapsed state", () => {
       jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} />);
+      const nodeCount = renderedComponent.find(Node).length;
       renderedComponent
         .find(Node)
         .first()
@@ -180,9 +180,8 @@ describe('<Tree />', () => {
         .first()
         .simulate('click'); // re-expand
 
-      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
-      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
-      expect(Tree.prototype.expandNode).toHaveBeenCalled();
+      expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
+      expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
     });
 
     it('does not collapse a node if `props.collapsible` is false', () => {
@@ -192,12 +191,12 @@ describe('<Tree />', () => {
         .first()
         .simulate('click');
 
-      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(1);
       expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(0);
     });
 
     it('does not toggle any nodes again until `transitionDuration` has completed', () => {
       const renderedComponent = mount(<Tree data={mockData} />);
+      const nodeCount = renderedComponent.find(Node).length;
       renderedComponent
         .find(Node)
         .first()
@@ -208,14 +207,14 @@ describe('<Tree />', () => {
         .first()
         .simulate('click');
 
-      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
-      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+      expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
       expect(Tree.prototype.expandNode).not.toHaveBeenCalled();
     });
 
     it('allows toggling nodes again after `transitionDuration` + 10ms has expired', () => {
       jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} />);
+      const nodeCount = renderedComponent.find(Node).length;
       renderedComponent
         .find(Node)
         .first()
@@ -228,8 +227,7 @@ describe('<Tree />', () => {
         .first()
         .simulate('click');
 
-      expect(Tree.prototype.handleNodeToggle).toHaveBeenCalledTimes(2);
-      expect(Tree.prototype.collapseNode).toHaveBeenCalled();
+      expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
       expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
     });
   });

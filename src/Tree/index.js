@@ -11,29 +11,21 @@ import Link from '../Link';
 import './style.css';
 
 export default class Tree extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: this.assignInternalProperties(clone(props.data)),
-      rd3tSvgClassName: `_${uuid.v4()}`,
-      rd3tGClassName: `_${uuid.v4()}`,
-    };
-    this.internalState = {
-      initialRender: true,
-      targetNode: null,
-      isTransitioning: false,
-      d3: {
-        scale: this.props.zoom,
-        translate: this.props.translate,
-      },
-    };
-    this.findNodesById = this.findNodesById.bind(this);
-    this.collapseNode = this.collapseNode.bind(this);
-    this.handleNodeToggle = this.handleNodeToggle.bind(this);
-    this.handleOnClickCb = this.handleOnClickCb.bind(this);
-    this.handleOnMouseOverCb = this.handleOnMouseOverCb.bind(this);
-    this.handleOnMouseOutCb = this.handleOnMouseOutCb.bind(this);
-  }
+  state = {
+    data: this.assignInternalProperties(clone(this.props.data)),
+    rd3tSvgClassName: `_${uuid.v4()}`,
+    rd3tGClassName: `_${uuid.v4()}`,
+  };
+
+  internalState = {
+    initialRender: true,
+    targetNode: null,
+    isTransitioning: false,
+    d3: {
+      scale: this.props.zoom,
+      translate: this.props.translate,
+    },
+  };
 
   componentWillMount() {
     this.internalState.d3 = this.calculateD3Geometry(this.props);
@@ -263,7 +255,7 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleNodeToggle(nodeId, evt) {
+  handleNodeToggle = (nodeId, evt) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     const targetNode = matches[0];
@@ -286,7 +278,7 @@ export default class Tree extends React.Component {
     } else {
       this.handleOnClickCb(targetNode, evt);
     }
-  }
+  };
 
   /**
    * handleOnClickCb - Handles the user-defined `onClick` function
@@ -295,12 +287,12 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnClickCb(targetNode, evt) {
+  handleOnClickCb = (targetNode, evt) => {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
       onClick(clone(targetNode), evt);
     }
-  }
+  };
 
   /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
@@ -309,7 +301,7 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnMouseOverCb(nodeId, evt) {
+  handleOnMouseOverCb = (nodeId, evt) => {
     const { onMouseOver } = this.props;
     if (onMouseOver && typeof onMouseOver === 'function') {
       const data = clone(this.state.data);
@@ -317,7 +309,7 @@ export default class Tree extends React.Component {
       const targetNode = matches[0];
       onMouseOver(clone(targetNode), evt);
     }
-  }
+  };
 
   /**
    * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
@@ -326,7 +318,7 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleOnMouseOutCb(nodeId, evt) {
+  handleOnMouseOutCb = (nodeId, evt) => {
     const { onMouseOut } = this.props;
     if (onMouseOut && typeof onMouseOut === 'function') {
       const data = clone(this.state.data);
@@ -334,7 +326,7 @@ export default class Tree extends React.Component {
       const targetNode = matches[0];
       onMouseOut(clone(targetNode), evt);
     }
-  }
+  };
 
   /**
    * generateTree - Generates tree elements (`nodes` and `links`) by

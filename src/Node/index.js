@@ -1,43 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import T from 'prop-types';
 import { select } from 'd3';
 
-import './style.css';
 import SvgTextElement from './SvgTextElement';
 import ForeignObjectElement from './ForeignObjectElement';
+import './style.css';
 
 export default class Node extends React.Component {
-  constructor(props) {
-    super(props);
-    const { nodeData: { parent }, orientation } = props;
-    const originX = parent ? parent.x : 0;
-    const originY = parent ? parent.y : 0;
-
-    this.state = {
-      transform: this.setTransformOrientation(originX, originY, orientation),
-      initialStyle: {
-        opacity: 0,
-      },
-    };
-
-    this.handleClick = this.handleClick.bind(this);
-    this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
-    this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
-  }
+  state = {
+    transform: this.setTransform(this.props.nodeData, this.props.orientation, true),
+    initialStyle: {
+      opacity: 0,
+    },
+  };
 
   componentDidMount() {
-    const { nodeData: { x, y }, orientation, transitionDuration } = this.props;
-    const transform = this.setTransformOrientation(x, y, orientation);
+    const { nodeData, orientation, transitionDuration } = this.props;
+    const transform = this.setTransform(nodeData, orientation);
 
     this.applyTransform(transform, transitionDuration);
   }
 
   componentWillUpdate(nextProps) {
-    const transform = this.setTransformOrientation(
-      nextProps.nodeData.x,
-      nextProps.nodeData.y,
-      nextProps.orientation,
-    );
+    const transform = this.setTransform(nextProps.nodeData, nextProps.orientation);
     this.applyTransform(transform, nextProps.transitionDuration);
   }
 
@@ -45,16 +30,21 @@ export default class Node extends React.Component {
     return this.shouldNodeTransform(this.props, nextProps);
   }
 
-  shouldNodeTransform(ownProps, nextProps) {
-    return (
-      nextProps.subscriptions !== ownProps.subscriptions ||
-      nextProps.nodeData.x !== ownProps.nodeData.x ||
-      nextProps.nodeData.y !== ownProps.nodeData.y ||
-      nextProps.orientation !== ownProps.orientation
-    );
-  }
+  shouldNodeTransform = (ownProps, nextProps) =>
+    nextProps.subscriptions !== ownProps.subscriptions ||
+    nextProps.nodeData.x !== ownProps.nodeData.x ||
+    nextProps.nodeData.y !== ownProps.nodeData.y ||
+    nextProps.orientation !== ownProps.orientation;
 
-  setTransformOrientation(x, y, orientation) {
+  setTransform(nodeData, orientation, shouldTranslateToOrigin = false) {
+    const { x, y, parent } = nodeData;
+    if (shouldTranslateToOrigin) {
+      const originX = parent ? parent.x : 0;
+      const originY = parent ? parent.y : 0;
+      return orientation === 'horizontal'
+        ? `translate(${originY},${originX})`
+        : `translate(${originX},${originY})`;
+    }
     return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
   }
 
@@ -74,7 +64,7 @@ export default class Node extends React.Component {
     }
   }
 
-  renderNodeElement(nodeStyle) {
+  renderNodeElement = nodeStyle => {
     const { circleRadius, nodeSvgShape } = this.props;
     /* TODO: DEPRECATE <circle /> */
     if (circleRadius) {
@@ -87,26 +77,23 @@ export default class Node extends React.Component {
           ...nodeStyle.circle,
           ...nodeSvgShape.shapeProps,
         });
-  }
+  };
 
-  handleClick(evt) {
+  handleClick = evt => {
     this.props.onClick(this.props.nodeData.id, evt);
-  }
+  };
 
-  handleOnMouseOver(evt) {
+  handleOnMouseOver = evt => {
     this.props.onMouseOver(this.props.nodeData.id, evt);
-  }
+  };
 
-  handleOnMouseOut(evt) {
+  handleOnMouseOut = evt => {
     this.props.onMouseOut(this.props.nodeData.id, evt);
-  }
+  };
 
   componentWillLeave(done) {
-    const { nodeData: { parent }, orientation, transitionDuration } = this.props;
-    const originX = parent ? parent.x : 0;
-    const originY = parent ? parent.y : 0;
-    const transform = this.setTransformOrientation(originX, originY, orientation);
-
+    const { nodeData, orientation, transitionDuration } = this.props;
+    const transform = this.setTransform(nodeData, orientation, true);
     this.applyTransform(transform, transitionDuration, 0, done);
   }
 
@@ -157,20 +144,20 @@ Node.defaultProps = {
 };
 
 Node.propTypes = {
-  nodeData: PropTypes.object.isRequired,
-  nodeSvgShape: PropTypes.object.isRequired,
-  nodeLabelComponent: PropTypes.object,
-  nodeSize: PropTypes.object.isRequired,
-  orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-  transitionDuration: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-  onMouseOver: PropTypes.func.isRequired,
-  onMouseOut: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
-  attributes: PropTypes.object,
-  textLayout: PropTypes.object.isRequired,
-  subscriptions: PropTypes.object.isRequired, // eslint-disable-line react/no-unused-prop-types
-  allowForeignObjects: PropTypes.bool.isRequired,
-  circleRadius: PropTypes.number,
-  styles: PropTypes.object,
+  nodeData: T.object.isRequired,
+  nodeSvgShape: T.object.isRequired,
+  nodeLabelComponent: T.object,
+  nodeSize: T.object.isRequired,
+  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
+  transitionDuration: T.number.isRequired,
+  onClick: T.func.isRequired,
+  onMouseOver: T.func.isRequired,
+  onMouseOut: T.func.isRequired,
+  name: T.string.isRequired,
+  attributes: T.object,
+  textLayout: T.object.isRequired,
+  subscriptions: T.object.isRequired, // eslint-disable-line react/no-unused-prop-types
+  allowForeignObjects: T.bool.isRequired,
+  circleRadius: T.number,
+  styles: T.object,
 };

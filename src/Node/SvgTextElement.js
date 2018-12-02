@@ -1,6 +1,6 @@
 import React from 'react';
 import uuid from 'uuid';
-import PropTypes from 'prop-types';
+import T from 'prop-types';
 
 export default class SvgTextElement extends React.PureComponent {
   render() {
@@ -42,8 +42,8 @@ SvgTextElement.defaultProps = {
 };
 
 SvgTextElement.propTypes = {
-  name: PropTypes.string.isRequired,
-  attributes: PropTypes.object,
-  textLayout: PropTypes.object.isRequired,
-  nodeStyle: PropTypes.object.isRequired,
+  name: T.string.isRequired,
+  attributes: T.object,
+  textLayout: T.object.isRequired,
+  nodeStyle: T.object.isRequired,
 };
