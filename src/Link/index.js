@@ -71,7 +71,11 @@ export default class Link extends React.PureComponent {
   }
 
   drawPath() {
-    const { linkData, orientation, pathFunc } = this.props;
+    const { linkData, orientation, pathFunc, onLineDrawing } = this.props;
+
+    if (typeof onLineDrawing === 'function') {
+      onLineDrawing(linkData, orientation);
+    }
 
     if (typeof pathFunc === 'function') {
       return pathFunc(linkData, orientation);
@@ -105,6 +109,7 @@ export default class Link extends React.PureComponent {
 
 Link.defaultProps = {
   styles: {},
+  onLineDrawing: null,
 };
 
 Link.propTypes = {
@@ -114,6 +119,7 @@ Link.propTypes = {
     PropTypes.oneOf(['diagonal', 'elbow', 'straight']),
     PropTypes.func,
   ]).isRequired,
+  onLineDrawing: PropTypes.func,
   transitionDuration: PropTypes.number.isRequired,
   styles: PropTypes.object,
 };
