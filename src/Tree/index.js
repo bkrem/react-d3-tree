@@ -255,44 +255,48 @@ export default class Tree extends React.Component {
    *
    * @return {void}
    */
-  handleNodeToggle = (nodeId, evt) => {
+  handleNodeToggle(nodeId, evt) {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     const targetNode = matches[0];
 
-    if (this.props.collapsible && !this.state.isTransitioning) {
+    if (
+      this.handleOnClickCb(targetNode, evt) !== false &&
+      this.props.collapsible &&
+      !this.state.isTransitioning
+    ) {
       if (targetNode._collapsed) {
         this.expandNode(targetNode);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
       } else {
         this.collapseNode(targetNode);
       }
+
       // Lock node toggling while transition takes place
-      this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
+      this.setState({ data, isTransitioning: true });
       // Await transitionDuration + 10 ms before unlocking node toggling again
       setTimeout(
         () => this.setState({ isTransitioning: false }),
         this.props.transitionDuration + 10,
       );
       this.internalState.targetNode = targetNode;
-    } else {
-      this.handleOnClickCb(targetNode, evt);
     }
-  };
+  }
 
   /**
    * handleOnClickCb - Handles the user-defined `onClick` function
    *
    * @param {object} targetNode Description
    *
-   * @return {void}
+   * @return {boolean} false stops the event from bubbling up
    */
-  handleOnClickCb = (targetNode, evt) => {
+  handleOnClickCb(targetNode, evt) {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
-      onClick(clone(targetNode), evt);
+      return onClick(clone(targetNode), evt);
     }
-  };
+    return true;
+  }
 
   /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
