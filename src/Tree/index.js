@@ -259,6 +259,8 @@ export default class Tree extends React.Component {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     const targetNode = matches[0];
+    // Persist the SyntheticEvent for downstream handling by users.
+    evt.persist();
 
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNode._collapsed) {
@@ -307,6 +309,8 @@ export default class Tree extends React.Component {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
       onMouseOver(clone(targetNode), evt);
     }
   };
@@ -324,6 +328,8 @@ export default class Tree extends React.Component {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
       onMouseOut(clone(targetNode), evt);
     }
   };

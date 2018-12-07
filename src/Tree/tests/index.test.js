@@ -390,6 +390,19 @@ describe('<Tree />', () => {
         expect.objectContaining(mockEvt),
       );
     });
+
+    it('persists the SynthethicEvent for downstream processing', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData} onClick={() => {}} />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('onMouseOver', () => {
@@ -423,6 +436,19 @@ describe('<Tree />', () => {
         expect.objectContaining(mockEvt),
       );
     });
+
+    it('persists the SynthethicEvent for downstream processing if handler is defined', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData} onMouseOver={() => {}} />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('mouseover', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('onMouseOut', () => {
@@ -455,6 +481,19 @@ describe('<Tree />', () => {
           .prop('nodeData'),
         expect.objectContaining(mockEvt),
       );
+    });
+
+    it('persists the SynthethicEvent for downstream processing if handler is defined', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData} onMouseOut={() => {}} />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('mouseout', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
     });
   });
 
