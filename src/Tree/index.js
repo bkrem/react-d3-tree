@@ -140,7 +140,7 @@ export default class Tree extends React.Component {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
     const d = Array.isArray(data) ? data : [data];
     return d.map(node => {
-      node.id = uuid.v4();
+      // node.id = uuid.v4();
       // If the node's `_collapsed` state wasn't defined by the data set -> default to `false`.
       if (node._collapsed === undefined) {
         node._collapsed = false;
