@@ -442,7 +442,7 @@ export default class Tree extends React.Component {
           >
             {links.map(linkData => (
               <Link
-                key={uuid.v4()}
+                key={linkData.id}
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}
