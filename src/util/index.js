@@ -126,9 +126,4 @@ function generateHierarchy(flatArray) {
   return _transformToHierarchy(flatArray);
 }
 
-export default {
-  parseCSV,
-  parseJSON,
-  parseFlatJSON,
-  generateHierarchy,
-};
+export { parseCSV, parseJSON, parseFlatJSON, generateHierarchy };
