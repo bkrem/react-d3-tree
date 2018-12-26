@@ -7,9 +7,8 @@
   "scripts": {
     "clean:lib": "rimraf lib/*",
     "precommit": "lint-staged",
-    "build": "yarn clean:lib && webpack --progress --colors --env build",
-    "build:watch": "yarn clean:lib && webpack --progress --colors --watch --env build",
-    "dev": "yarn clean:lib && webpack --progress --colors --watch --env dev",
+    "build": "rollup -c",
+    "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.js",
     "test": "yarn lint && jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
@@ -21,9 +20,7 @@
     "docs": "yarn docs:react",
     "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
     "docs:clean": "rimraf docs/components/* && rimraf docs/util/*",
-    "release": "yarn test && yarn build && yarn docs && git commit -a && yarn version",
-    "preanalyze": "rimraf stats.json",
-    "analyze": "webpack --config webpack.config.js --env build --profile --json > stats.json && echo '==> http://webpack.github.io/analyse/'"
+    "release": "yarn test && yarn build && yarn docs && git commit -a"
   },
   "lint-staged": {
     "src/**/*.js": [
@@ -37,8 +34,7 @@
       "src/**/*.{js,jsx}",
       "!src/index.js",
       "!src/util/*",
-      "!src/**/*.test.{js,jsx}",
-      "!playground/*"
+      "!src/**/*.test.{js,jsx}"
     ],
     "coverageThreshold": {
       "global": {
@@ -50,15 +46,13 @@
     },
     "setupTestFrameworkScriptFile": "<rootDir>/jest/setup.js",
     "moduleNameMapper": {
-      ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js",
-      ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/jest/mocks/image.js"
+      ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js"
     }
   },
   "greenkeeper": {
     "ignore": [
       "d3",
-      "react-transition-group",
-      "webpack"
+      "react-transition-group"
     ]
   },
   "dependencies": {
@@ -71,26 +65,25 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0"
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.2.6",
     "babel-jest": "^21.2.0",
-    "babel-loader": "7.1.2",
-    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "6.24.1",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "coveralls": "^3.0.0",
-    "css-loader": "^0.28.1",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "4.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^3.3.0",
-    "eslint-loader": "2.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
@@ -98,7 +91,6 @@
     "jest": "^22.1.3",
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^6.0.0",
-    "postcss-loader": "^3.0.0",
     "prettier": "^1.6.1",
     "react": "^16.6.3",
     "react-docgen": "^2.16.0",
@@ -106,9 +98,13 @@
     "react-test-renderer": "^16.6.3",
     "regenerator-runtime": "^0.12.0",
     "rimraf": "^2.6.1",
-    "style-loader": "^0.22.1",
-    "webpack": "^3.5.6",
-    "yargs": "12.0.1"
+    "rollup": "^0.68.2",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-babel": "3",
+    "rollup-plugin-cleanup": "^3.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-postcss": "^1.6.3"
   },
   "repository": {
     "type": "git",

@@ -19,7 +19,3 @@ notifications:
   email:
     on_success: change
     on_failure: always
-
-#cache:
-  #  directories:
-    #    - node_modules
