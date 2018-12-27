@@ -124,8 +124,6 @@ class MyComponent extends React.Component {
 ## Node shapes
 The `nodeSvgShape` prop allows specifying any [SVG shape primitive](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes) to describe how the tree's nodes should be shaped.
 
-> Note: `nodeSvgShape` and `circleRadius` are mutually exclusive props. `nodeSvgShape` will be used unless the legacy `circleRadius` is specified.
-
 For example, assuming we want to use squares instead of the default circles, we can do:
 ```js
 const svgSquare = {

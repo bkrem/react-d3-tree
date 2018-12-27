@@ -214,15 +214,6 @@ describe('<Node />', () => {
   });
 
   describe('Node Element', () => {
-    // TODO: DEPRECATE in v2
-    it('renders legacy `<circle />` if `props.circleRadius` is defined', () => {
-      const props = { ...mockProps, circleRadius: 99 };
-      const renderedComponent = shallow(<Node {...props} />);
-
-      expect(renderedComponent.find('circle').length).toBe(1);
-      expect(renderedComponent.find('circle').prop('r')).toBe(99);
-    });
-
     it('renders the appropriate SVG element if `props.nodeSvgShape` is defined', () => {
       const props = { ...mockProps, nodeSvgShape: { shape: 'rect', shapeProps: { y: 123 } } };
       const renderedComponent = shallow(<Node {...props} />);

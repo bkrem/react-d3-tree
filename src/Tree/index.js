@@ -167,7 +167,6 @@ class Tree extends React.Component {
    *
    * @return {array} Set of nodes matching `nodeId`
    */
-  // TODO: Refactor this into a more readable/reasonable recursive depth-first walk.
   findNodesById(nodeId, nodeSet, hits) {
     if (hits.length > 0) {
       return hits;
@@ -496,7 +495,6 @@ class Tree extends React.Component {
       depthFactor,
       initialDepth,
       separation,
-      circleRadius,
       allowForeignObjects,
       styles,
     } = this.props;
@@ -539,8 +537,7 @@ class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
                 onMouseOver={this.handleOnMouseOverCb}
                 onMouseOut={this.handleOnMouseOutCb}
-                textLayout={nodeData.textLayout || textLayout}
-                circleRadius={circleRadius}
+                textLayout={textLayout}
                 subscriptions={subscriptions}
                 allowForeignObjects={allowForeignObjects}
                 styles={styles.nodes}
@@ -589,7 +586,6 @@ Tree.defaultProps = {
   },
   allowForeignObjects: false,
   shouldCollapseNeighborNodes: false,
-  circleRadius: undefined, // TODO: DEPRECATE
   styles: {},
 };
 
@@ -635,7 +631,6 @@ Tree.propTypes = {
   textLayout: T.object,
   allowForeignObjects: T.bool,
   shouldCollapseNeighborNodes: T.bool,
-  circleRadius: T.number,
   styles: T.shape({
     nodes: T.object,
     links: T.object,

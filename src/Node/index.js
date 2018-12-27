@@ -69,11 +69,7 @@ export default class Node extends React.Component {
   }
 
   renderNodeElement = nodeStyle => {
-    const { circleRadius, nodeSvgShape } = this.props;
-    /* TODO: DEPRECATE <circle /> */
-    if (circleRadius) {
-      return <circle r={circleRadius} style={nodeStyle.circle} />;
-    }
+    const { nodeSvgShape } = this.props;
 
     return nodeSvgShape.shape === 'none'
       ? null
@@ -133,7 +129,6 @@ Node.defaultProps = {
   nodeLabelComponent: null,
   name: '',
   attributes: undefined,
-  circleRadius: undefined,
   styles: {
     node: {
       circle: {},
@@ -163,6 +158,5 @@ Node.propTypes = {
   textLayout: T.object.isRequired,
   subscriptions: T.object.isRequired, // eslint-disable-line react/no-unused-prop-types
   allowForeignObjects: T.bool.isRequired,
-  circleRadius: T.number,
   styles: T.object,
 };
