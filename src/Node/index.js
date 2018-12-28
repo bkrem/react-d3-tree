@@ -79,7 +79,17 @@ export default class Node extends React.Component {
         });
   };
 
-  handleOnClick = evt => {
+  renderNodeLabelElement = nodeStyle => {
+    const { allowForeignObjects, nodeLabelComponent, nodeData, nodeSize } = this.props;
+
+    return allowForeignObjects && nodeLabelComponent ? (
+      <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
+    ) : (
+      <SvgTextElement {...this.props} nodeStyle={nodeStyle} />
+    );
+  };
+
+  handleClick = evt => {
     this.props.onClick(this.props.nodeData.id, evt);
   };
 
@@ -98,7 +108,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, nodeSize, nodeLabelComponent, allowForeignObjects, styles } = this.props;
+    const { nodeData, styles } = this.props;
     const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
     return (
       <g
@@ -114,12 +124,7 @@ export default class Node extends React.Component {
         onMouseOut={this.handleOnMouseOut}
       >
         {this.renderNodeElement(nodeStyle)}
-
-        {allowForeignObjects && nodeLabelComponent ? (
-          <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
-        ) : (
-          <SvgTextElement {...this.props} nodeStyle={nodeStyle} />
-        )}
+        {this.renderNodeLabelElement(nodeStyle)}
       </g>
     );
   }
