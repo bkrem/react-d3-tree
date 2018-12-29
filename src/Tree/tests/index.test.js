@@ -32,10 +32,10 @@ describe('<Tree />', () => {
     expect(renderedComponent.find(Node).length).toBe(nodeCount);
   });
 
-  it('passes individual `shapeProps` to the specified <Node /> only', () => {
+  it('passes individual `baseProps` to the specified <Node /> only', () => {
     const svgShapeMock = {
       shape: 'rect',
-      shapeProps: {
+      baseProps: {
         r: 3,
         fill: 'red',
       },
@@ -44,7 +44,7 @@ describe('<Tree />', () => {
       {
         name: 'Top Level',
         parent: 'null',
-        nodeSvgShape: svgShapeMock,
+        nodeElement: svgShapeMock,
         children: [
           {
             name: 'Inner',
@@ -54,14 +54,14 @@ describe('<Tree />', () => {
       },
     ];
 
-    const renderedComponent = mount(<Tree data={mockTree[0]} />);
-    const parentNode = renderedComponent.find(Node).first();
-    expect(parentNode).not.toBeUndefined();
-    expect(parentNode.props().nodeSvgShape).toEqual(svgShapeMock);
+    const renderedComponent = mount(<Tree data={mockTree} />);
+    const rootNode = renderedComponent.find(Node).first();
+    expect(rootNode).not.toBeUndefined();
+    expect(rootNode.props().nodeElement).toEqual(svgShapeMock);
 
     const childNode = renderedComponent.find(Node).last();
     expect(childNode).not.toBeUndefined();
-    expect(childNode.props().nodeSvgShape).not.toEqual(svgShapeMock);
+    expect(childNode.props().nodeElement).not.toEqual(svgShapeMock);
   });
 
   it('maps every parent-child relation onto a <Link />', () => {

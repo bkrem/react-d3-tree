@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme';
 
 import Link from '../index';
 
-// TODO Find a way to meaningfully test `componentWillLeave`
 describe('<Link />', () => {
   const linkData = {
     source: {

@@ -22,9 +22,9 @@ describe('<Node />', () => {
       x: 123,
       y: 321,
     },
-    nodeSvgShape: {
+    nodeElement: {
       shape: 'circle',
-      shapeProps: {
+      baseProps: {
         r: 10,
       },
     },
@@ -67,24 +67,6 @@ describe('<Node />', () => {
 
     expect(leafNodeComponent.find('g').prop('className')).toBe('leafNodeBase');
     expect(nodeComponent.find('g').prop('className')).toBe('nodeBase');
-  });
-
-  it('applies correct <circle> styles depending on `nodeData._children`', () => {
-    const fixture = {
-      leafNode: {
-        circle: { fill: 'blue' },
-      },
-      node: {
-        circle: { fill: 'green' },
-      },
-    };
-    const leafNodeComponent = shallow(<Node {...mockProps} styles={fixture} />);
-    const nodeComponent = shallow(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
-    );
-
-    expect(leafNodeComponent.find('circle').prop('fill')).toBe(fixture.leafNode.circle.fill);
-    expect(nodeComponent.find('circle').prop('fill')).toBe(fixture.node.circle.fill);
   });
 
   it('applies correct `transform` prop based on its `orientation`', () => {
@@ -186,49 +168,82 @@ describe('<Node />', () => {
     });
   });
 
-  it('allows passing SVG shape elements + shapeProps to be used as the node element', () => {
-    const fixture = { shape: 'ellipse', shapeProps: { rx: 20, ry: 10 } };
-    const props = { ...mockProps, nodeSvgShape: fixture };
-    const renderedComponent = shallow(<Node {...props} />);
+  // TODO: should default to circle shape if not provided
+  describe('NodeElement', () => {
+    it('allows passing SVG shape elements + baseProps to be used as the node element', () => {
+      const fixture = { shape: 'ellipse', baseProps: { rx: 20, ry: 10 } };
+      const props = { ...mockProps, nodeElement: fixture };
+      const renderedComponent = shallow(<Node {...props} />);
 
-    expect(renderedComponent.find(fixture.shape).length).toBe(1);
-    expect(renderedComponent.find(fixture.shape).props()).toEqual(fixture.shapeProps);
-  });
-
-  it('applies correct node name styles depending on `nodeData._children`', () => {
-    const fixture = {
-      node: {
-        name: { stroke: '#000' },
-      },
-      leafNode: {
-        name: { stroke: '#fff' },
-      },
-    };
-    const leafNodeComponent = mount(<Node {...mockProps} styles={fixture} />);
-    const nodeComponent = mount(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
-    );
-
-    expect(leafNodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.leafNode.name);
-    expect(nodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.node.name);
-  });
-
-  describe('Node Element', () => {
-    it('renders the appropriate SVG element if `props.nodeSvgShape` is defined', () => {
-      const props = { ...mockProps, nodeSvgShape: { shape: 'rect', shapeProps: { y: 123 } } };
+      expect(renderedComponent.find(fixture.shape).length).toBe(1);
+      expect(renderedComponent.find(fixture.shape).props()).toEqual(fixture.baseProps);
+    });
+    it('renders the appropriate SVG element if `props.nodeElement` is defined', () => {
+      const props = { ...mockProps, nodeElement: { shape: 'rect', baseProps: { y: 123 } } };
       const renderedComponent = shallow(<Node {...props} />);
       expect(renderedComponent.find('rect').length).toBe(1);
       expect(renderedComponent.find('rect').prop('y')).toBe(123);
     });
 
-    it('renders nothing if `nodeSvgShape.shape` is set to `none`', () => {
-      const props = { ...mockProps, nodeSvgShape: { shape: 'none' } };
+    it('renders nothing if `nodeElement.shape` is set to `none`', () => {
+      const props = { ...mockProps, nodeElement: { shape: 'none' } };
       const renderedComponent = shallow(<Node {...props} />);
       expect(renderedComponent.instance().renderNodeElement({})).toBe(null);
     });
+
+    it('merges `branchNodeProps` into `baseProps` if node has `_children`', () => {
+      const fixture = {
+        nodeElement: {
+          shape: 'rect',
+          branchNodeProps: { fill: 'green', r: 20 },
+        },
+      };
+      // const leafNodeComponent = shallow(<Node {...mockProps} />);
+      const renderedComponent = shallow(
+        <Node {...mockProps} {...fixture} nodeData={{ ...nodeData, _children: [{}] }} />,
+      );
+
+      expect(renderedComponent.find(fixture.nodeElement.shape).props()).toEqual(
+        fixture.nodeElement.branchNodeProps,
+      );
+    });
+
+    it('merges `leafNodeProps` into `baseProps` if node has no children', () => {
+      const fixture = {
+        nodeElement: {
+          shape: 'rect',
+          leafNodeProps: { fill: 'red', r: 15 },
+        },
+      };
+      // const leafNodeComponent = shallow(<Node {...mockProps} />);
+      const renderedComponent = shallow(<Node {...mockProps} {...fixture} />);
+
+      expect(renderedComponent.find(fixture.nodeElement.shape).props()).toEqual(
+        fixture.nodeElement.leafNodeProps,
+      );
+    });
+
+    // // FIXME: move to SgTextElement tests?
+    // it('applies correct node name styles depending on `nodeData._children`', () => {
+    //   const fixture = {
+    //     node: {
+    //       name: { stroke: '#000' },
+    //     },
+    //     leafNode: {
+    //       name: { stroke: '#fff' },
+    //     },
+    //   };
+    //   const leafNodeComponent = mount(<Node {...mockProps} styles={fixture} />);
+    //   const nodeComponent = mount(
+    //     <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} styles={fixture} />,
+    //   );
+
+    //   expect(leafNodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.leafNode.name);
+    //   expect(nodeComponent.find('.nodeNameBase').prop('style')).toBe(fixture.node.name);
+    // });
   });
 
-  describe('Node Label', () => {
+  describe('NodeLabelElement', () => {
     it('renders a SvgTextElement by default', () => {
       const renderedComponent = shallow(<Node {...mockProps} />);
       expect(renderedComponent.find('SvgTextElement').length).toBe(1);
@@ -241,20 +256,4 @@ describe('<Node />', () => {
       expect(renderedComponent.find('ForeignObjectElement').length).toBe(1);
     });
   });
-
-  // TODO: Find a way to meaningfully test `componentWillLeave`
-
-  // it('regresses to its parent coords when unmounting/leaving', () => {
-  //   jest.spyOn(Node.prototype, 'applyTransform');
-  //   const fixture = `translate(${nodeData.parent.y},${nodeData.parent.x})`;
-  //   const renderedComponent = mount(
-  //     <Node
-  //       {...mockProps}
-  //     />
-  //   );
-  //
-  //   renderedComponent.unmount();
-  //   expect(Node.prototype.applyTransform).toHaveBeenCalledWith(fixture);
-  //   expect(Node.prototype.applyTransform).toHaveBeenCalledTimes(1);
-  // });
 });

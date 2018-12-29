@@ -68,24 +68,23 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration);
   }
 
-  renderNodeElement = nodeStyle => {
-    const { nodeSvgShape } = this.props;
-
-    return nodeSvgShape.shape === 'none'
-      ? null
-      : React.createElement(nodeSvgShape.shape, {
-          ...nodeStyle.circle,
-          ...nodeSvgShape.shapeProps,
-        });
+  renderNodeElement = () => {
+    const { nodeElement, nodeData } = this.props;
+    const { shape, baseProps, leafNodeProps, branchNodeProps } = nodeElement;
+    const elemProps = nodeData._children
+      ? { ...baseProps, ...branchNodeProps }
+      : { ...baseProps, ...leafNodeProps };
+    return shape === 'none' ? null : React.createElement(shape, elemProps);
   };
 
-  renderNodeLabelElement = nodeStyle => {
+  renderNodeLabelElement = () => {
     const { allowForeignObjects, nodeLabelComponent, nodeData, nodeSize } = this.props;
 
     return allowForeignObjects && nodeLabelComponent ? (
       <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
     ) : (
-      <SvgTextElement {...this.props} nodeStyle={nodeStyle} />
+      // FIXME:
+      <SvgTextElement {...this.props} nodeStyle={{}} />
     );
   };
 
@@ -108,8 +107,7 @@ export default class Node extends React.Component {
   }
 
   render() {
-    const { nodeData, styles } = this.props;
-    const nodeStyle = nodeData._children ? { ...styles.node } : { ...styles.leafNode };
+    const { nodeData } = this.props;
     return (
       <g
         id={nodeData.id}
@@ -123,8 +121,8 @@ export default class Node extends React.Component {
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
       >
-        {this.renderNodeElement(nodeStyle)}
-        {this.renderNodeLabelElement(nodeStyle)}
+        {this.renderNodeElement()}
+        {this.renderNodeLabelElement()}
       </g>
     );
   }
@@ -150,7 +148,7 @@ Node.defaultProps = {
 
 Node.propTypes = {
   nodeData: T.object.isRequired,
-  nodeSvgShape: T.object.isRequired,
+  nodeElement: T.object.isRequired,
   nodeLabelComponent: T.object,
   nodeSize: T.object.isRequired,
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
