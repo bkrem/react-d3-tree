@@ -58,13 +58,22 @@ export default class Link extends React.PureComponent {
       ];
     }
 
+    else if (orientation === 'invertical') {
+      data = [
+        { x: linkData.source.x, y: -linkData.source.y},
+        { x: linkData.target.x, y: -linkData.target.y}
+      ]
+    }
+
     return straight(data);
   }
 
   drawElbowPath(d, orientation) {
     return orientation === 'horizontal'
       ? `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`
-      : `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
+      : orientation === 'vertical'
+        ? `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`
+        : `M${d.source.x},-${d.source.y}V-${d.target.y}H${d.target.x}`;
   }
 
   drawPath() {
