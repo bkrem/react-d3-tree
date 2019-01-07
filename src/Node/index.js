@@ -50,7 +50,7 @@ export default class Node extends React.Component {
           return `translate(${originX},${originY})`;
 
         case 'invertical':
-          return `translate(${originX},-${originY})`;
+          return `translate(-${originX},${originY})`;
       }
     }
 
@@ -62,7 +62,7 @@ export default class Node extends React.Component {
         return `translate(${x},${y})`;
 
       case 'invertical':
-        return `translate(${x},-${y})`;
+        return `translate(-${x},${y})`;
     }
   }
 
