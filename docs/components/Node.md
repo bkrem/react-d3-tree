@@ -66,7 +66,7 @@ type: `func`
 
 ### `orientation` (required)
 
-type: `enum('horizontal'|'vertical')`
+type: `enum('horizontal'|'vertical'|'invertical')`
 
 
 ### `styles`

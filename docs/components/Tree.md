@@ -90,7 +90,7 @@ defaultValue: `undefined`
 
 ### `orientation`
 
-type: `enum('horizontal'|'vertical')`
+type: `enum('horizontal'|'vertical'|'invertical')`
 defaultValue: `'horizontal'`
 
 
