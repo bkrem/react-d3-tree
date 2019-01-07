@@ -22,7 +22,7 @@ declare module "react-d3-tree" {
     onMouseOver?: (targetNode: ReactD3TreeItem, event: Event) => any,
     onMouseOut?: (targetNode: ReactD3TreeItem, event: Event) => any,
     onUpdate?: (targetNode: ReactD3TreeItem, event: Event) => any,
-    orientation?: "horizontal" | "vertical",
+    orientation?: "horizontal" | "vertical" | "invertical",
     translate?: {
       x?: number,
       y?: number
@@ -58,7 +58,7 @@ declare module "react-d3-tree" {
   };
 
   var Tree: React.ComponentClass<ReactD3TreeProps, any>;
-  
+
   export {Tree};
   export default Tree;
 }

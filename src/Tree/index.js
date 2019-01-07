@@ -527,7 +527,7 @@ Tree.propTypes = {
   onMouseOver: T.func,
   onMouseOut: T.func,
   onUpdate: T.func,
-  orientation: T.oneOf(['horizontal', 'vertical']),
+  orientation: T.oneOf(['horizontal', 'vertical', 'invertical']),
   translate: T.shape({
     x: T.number,
     y: T.number,

@@ -41,11 +41,29 @@ export default class Node extends React.Component {
     if (shouldTranslateToOrigin) {
       const originX = parent ? parent.x : 0;
       const originY = parent ? parent.y : 0;
-      return orientation === 'horizontal'
-        ? `translate(${originY},${originX})`
-        : `translate(${originX},${originY})`;
+
+      switch (orientation) {
+        case 'horizontal':
+          return `translate(${originY},${originX})`;
+
+        case 'vertical':
+          return `translate(${originX},${originY})`;
+
+        case 'invertical':
+          return `translate(${originX},-${originY})`;
+      }
     }
-    return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
+
+    switch (orientation) {
+      case 'horizontal':
+        return `translate(${y},-${x})`;
+
+      case 'vertical':
+        return `translate(${x},${y})`;
+
+      case 'invertical':
+        return `translate(${x},-${y})`;
+    }
   }
 
   applyTransform(transform, transitionDuration, opacity = 1, done = () => {}) {
@@ -148,7 +166,7 @@ Node.propTypes = {
   nodeSvgShape: T.object.isRequired,
   nodeLabelComponent: T.object,
   nodeSize: T.object.isRequired,
-  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
+  orientation: T.oneOf(['horizontal', 'vertical', 'invertical']).isRequired,
   transitionDuration: T.number.isRequired,
   onClick: T.func.isRequired,
   onMouseOver: T.func.isRequired,

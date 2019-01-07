@@ -35,7 +35,7 @@ export default class Link extends React.PureComponent {
   drawDiagonalPath(linkData, orientation) {
     const diagonal = svg
       .diagonal()
-      .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]));
+      .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : orientation === 'vertical' ? [d.x, d.y] : [d.x, -d.y]));
     return diagonal(linkData);
   }
 
@@ -106,7 +106,7 @@ Link.defaultProps = {
 
 Link.propTypes = {
   linkData: T.object.isRequired,
-  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
+  orientation: T.oneOf(['horizontal', 'vertical', 'invertical']).isRequired,
   pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]).isRequired,
   transitionDuration: T.number.isRequired,
   styles: T.object,
