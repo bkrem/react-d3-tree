@@ -33,9 +33,15 @@ export default class Link extends React.PureComponent {
   }
 
   drawDiagonalPath(linkData, orientation) {
-    const diagonal = svg
-      .diagonal()
-      .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : orientation === 'vertical' ? [d.x, d.y] : [-d.x, d.y]));
+    const diagonal = svg.diagonal().projection(d => {
+      if (orientation === 'horizontal') {
+        return [d.y, d.x];
+      } else if (orientation === 'vertical') {
+        return [d.x, d.y];
+      }
+
+      return [d.x, -d.y];
+    });
     return diagonal(linkData);
   }
 
@@ -56,24 +62,24 @@ export default class Link extends React.PureComponent {
         { x: linkData.source.y, y: linkData.source.x },
         { x: linkData.target.y, y: linkData.target.x },
       ];
-    }
-
-    else if (orientation === 'invertical') {
+    } else if (orientation === 'invertical') {
       data = [
-        { x: -linkData.source.x, y: linkData.source.y},
-        { x: -linkData.target.x, y: linkData.target.y}
-      ]
+        { x: linkData.source.x, y: -linkData.source.y },
+        { x: linkData.target.x, y: -linkData.target.y },
+      ];
     }
 
     return straight(data);
   }
 
   drawElbowPath(d, orientation) {
-    return orientation === 'horizontal'
-      ? `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`
-      : orientation === 'vertical'
-        ? `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`
-        : `M$-{d.source.x},${d.source.y}V${d.target.y}H-${d.target.x}`;
+    if (orientation === 'horizontal') {
+      return `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`;
+    } else if (orientation === 'vertical') {
+      return `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
+    }
+
+    return `M${d.source.x},-${d.source.y}V-${d.target.y}H${d.target.x}`;
   }
 
   drawPath() {

@@ -50,19 +50,21 @@ export default class Node extends React.Component {
           return `translate(${originX},${originY})`;
 
         case 'invertical':
-          return `translate(-${originX},${originY})`;
+        default:
+          return `translate(${originX},-${originY})`;
       }
     }
 
     switch (orientation) {
       case 'horizontal':
-        return `translate(${y},-${x})`;
+        return `translate(${y},${x})`;
 
       case 'vertical':
         return `translate(${x},${y})`;
 
       case 'invertical':
-        return `translate(-${x},${y})`;
+      default:
+        return `translate(${x},-${y})`;
     }
   }
 
