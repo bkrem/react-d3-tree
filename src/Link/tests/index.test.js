@@ -45,6 +45,31 @@ describe('<Link />', () => {
     expect(renderedComponent.prop('className')).toBe('linkBase');
   });
 
+  it('applies the linkData based className', () => {
+    const extendedLinkData = {
+      source: {
+        x: 123,
+        y: 321,
+        linkClassName: 'sourceClassName',
+      },
+      target: {
+        x: 456,
+        y: 654,
+        linkClassName: 'targetClassName',
+      },
+    };
+    const extendedProps = {
+      ...mockProps,
+      linkData: extendedLinkData,
+    };
+
+    const renderedComponent = shallow(<Link {...extendedProps} />);
+
+    expect(renderedComponent.prop('className')).toBe(
+      'linkBase from_sourceClassName to_targetClassName',
+    );
+  });
+
   it('applies `props.styles` when defined', () => {
     const initialStyle = { opacity: 0 }; // state.initialStyle
     const fixture = { ...initialStyle, stroke: '#777', strokeWidth: 2 };
