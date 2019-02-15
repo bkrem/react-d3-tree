@@ -99,7 +99,7 @@
     "postcss-loader": "^3.0.0",
     "prettier": "^1.6.1",
     "react": "^16.6.3",
-    "react-docgen": "^2.16.0",
+    "react-docgen": "^4.0.0",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.6.3",
     "regenerator-runtime": "^0.12.0",
