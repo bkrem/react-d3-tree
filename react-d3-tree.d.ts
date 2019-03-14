@@ -57,7 +57,7 @@ declare module "react-d3-tree" {
     }
   };
 
-  var Tree: React.ComponentClass<ReactD3TreeProps, any>;
+  var Tree: React.ComponentClass<ReactD3TreeProps>;
   
   export {Tree};
   export default Tree;
