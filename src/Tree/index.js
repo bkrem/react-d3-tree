@@ -486,6 +486,7 @@ class Tree extends React.Component {
     const {
       commonNodeElement,
       nodeLabelComponent,
+      nodeLabelProps,
       orientation,
       pathFunc,
       transitionDuration,
@@ -527,13 +528,12 @@ class Tree extends React.Component {
               <Node
                 key={nodeData.id}
                 nodeElement={nodeData.nodeElement ? nodeData.nodeElement : commonNodeElement}
+                nodeLabelProps={nodeLabelProps}
                 nodeLabelComponent={nodeLabelComponent}
                 nodeSize={nodeSize}
                 orientation={orientation}
                 transitionDuration={transitionDuration}
                 nodeData={nodeData}
-                name={nodeData.name}
-                attributes={nodeData.attributes}
                 onClick={this.handleNodeToggle}
                 onMouseOver={this.handleOnMouseOverCb}
                 onMouseOut={this.handleOnMouseOutCb}
@@ -555,6 +555,19 @@ Tree.defaultProps = {
     shape: 'circle',
     baseProps: {
       r: 10,
+    },
+  },
+  nodeLabelProps: {
+    labelNameProps: {
+      textAnchor: 'start',
+      x: 10,
+      y: -10,
+      style: { stroke: 'green' },
+    },
+    labelAttributeProps: {
+      x: 10,
+      dy: '1.2em',
+      style: { stroke: 'purple' },
     },
   },
   nodeLabelComponent: null,
@@ -597,6 +610,7 @@ Tree.propTypes = {
     branchNodeProps: T.object,
     leafNodeProps: T.object,
   }),
+  nodeLabelProps: T.object,
   nodeLabelComponent: T.object,
   onClick: T.func,
   onMouseOver: T.func,

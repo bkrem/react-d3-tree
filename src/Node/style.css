@@ -12,14 +12,12 @@
   stroke-width: 2;
 }
 
-.nodeNameBase {
-  fill: #000;
+.labelNameBase {
   stroke: #000;
   stroke-width: 1;
 }
 
-.nodeAttributesBase {
-  fill: #777;
+.labelAttributesBase {
   stroke: #777;
   stroke-width: 1;
   font-size: smaller;
