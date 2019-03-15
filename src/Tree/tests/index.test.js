@@ -835,3 +835,59 @@ describe('linkData', () => {
     });
   });
 });
+
+describe('commonNodeElement', () => {
+  it('passes `commonNodeElement` to each Node by default', () => {
+    const fixture = {
+      shape: 'rect',
+      baseProps: {
+        width: 10,
+        height: 10,
+      },
+    };
+    const renderedComponent = mount(<Tree data={mockData} commonNodeElement={fixture} />);
+    expect(
+      renderedComponent
+        .find(Node)
+        .first()
+        .prop('nodeElement'),
+    ).toEqual(fixture);
+  });
+  
+  it('allows overrides for individual Nodes from `nodeData.nodeElement` if specified', () => {
+    const fixture = {
+      shape: 'rect',
+      baseProps: {
+        width: 10,
+        height: 10,
+      },
+    };
+    const dataWithNodeElement = [
+      {
+        name: 'Top Level',
+        nodeElement: fixture,
+        children: [
+          {
+            name: 'Level 2: A',
+          },
+          {
+            name: 'Level 2: B',
+          },
+        ],
+      },
+    ];
+    const renderedComponent = mount(<Tree data={dataWithNodeElement} />);
+    expect(
+      renderedComponent
+        .find(Node)
+        .first()
+        .prop('nodeElement'),
+    ).toEqual(fixture);
+    expect(
+      renderedComponent
+        .find(Node)
+        .last()
+        .prop('nodeElement'),
+    ).not.toEqual(fixture);
+  });
+});
