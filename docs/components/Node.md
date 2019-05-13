@@ -23,9 +23,10 @@ type: `number`
 defaultValue: `undefined`
 
 
-### `name` (required)
+### `name`
 
 type: `string`
+defaultValue: `''`
 
 
 ### `nodeData` (required)
