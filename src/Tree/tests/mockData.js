@@ -77,4 +77,4 @@ const mockData3 = [
   },
 ]
 
-export { mockData, mockData2 };
+export { mockData, mockData2, mockData3 };
