@@ -465,7 +465,7 @@ export default class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
                 onMouseOver={this.handleOnMouseOverCb}
                 onMouseOut={this.handleOnMouseOutCb}
-                textLayout={textLayout}
+                textLayout={nodeData.textLayout || textLayout}
                 circleRadius={circleRadius}
                 subscriptions={subscriptions}
                 allowForeignObjects={allowForeignObjects}
