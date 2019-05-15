@@ -557,7 +557,7 @@ describe('<Tree />', () => {
     });
   });
   
-  describe('onUpdate', () => {
+  describe('on customized dataNode attributes applied', () => {
     it('applies textLayout when nodeData has it specified', () => {
       const renderedComponent = shallow(<Tree data={mockData3} />);
       expect(renderedComponent.find(NodeWrapper).prop('text-anchor')).toContain(`middle`);
