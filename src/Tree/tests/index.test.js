@@ -6,7 +6,7 @@ import NodeWrapper from '../NodeWrapper';
 import Node from '../../Node';
 import Link from '../../Link';
 import Tree from '../index';
-import { mockData, mockData2 } from './mockData';
+import { mockData, mockData2, mockData3 } from './mockData';
 
 describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');
@@ -554,6 +554,18 @@ describe('<Tree />', () => {
         translate,
         zoom,
       });
+    });
+  });
+
+  describe('nodeData', () => {
+    it('applies textLayout when nodeData has it specified', () => {
+      const renderedComponent = mount(<Tree data={mockData3} />);
+      expect(
+        renderedComponent
+          .find(Node)
+          .last()
+          .prop('textLayout'),
+      ).toEqual(expect.objectContaining({ textAnchor: 'middle' }));
     });
   });
 });
