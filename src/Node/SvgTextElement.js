@@ -5,6 +5,7 @@ import T from 'prop-types';
 export default class SvgTextElement extends React.PureComponent {
   render() {
     const { name, nodeStyle, textLayout, attributes } = this.props;
+    console.log('test');
     return (
       <g>
         <text
