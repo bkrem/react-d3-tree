@@ -377,11 +377,11 @@ export default class Tree extends React.Component {
 
     if (depthFactor) {
       nodes.forEach(node => {
-        const lastY = node.parent? node.parent.y: 0;
         if (typeof depthFactor === 'number') {
-          node.y = lastY + depthFactor
+          node.y = node.depth * depthFactor;
         }
         if (typeof depthFactor === 'function') {
+          const lastY = node.parent? node.parent.y: 0;
           node.y = lastY + depthFactor({ node })
         }
       });
