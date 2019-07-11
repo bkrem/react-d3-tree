@@ -352,11 +352,13 @@ export default class Tree extends React.Component {
       orientation,
     } = this.props;
 
+    const spearationFunc = typeof separation === 'function'? separation:
+      (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings);
     const tree = layout
       .tree()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
       .separation(
-        (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings),
+        spearationFunc
       )
       .children(d => (d._collapsed ? null : d._children));
 
@@ -375,7 +377,13 @@ export default class Tree extends React.Component {
 
     if (depthFactor) {
       nodes.forEach(node => {
-        node.y = node.depth * depthFactor;
+        const lastY = node.parent? node.parent.y: 0;
+        if (typeof depthFactor === 'number') {
+          node.y = lastY + depthFactor
+        }
+        if (typeof depthFactor === 'function') {
+          node.y = lastY + depthFactor({ node })
+        }
       });
     }
 
@@ -534,7 +542,7 @@ Tree.propTypes = {
   }),
   pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]),
   transitionDuration: T.number,
-  depthFactor: T.number,
+  depthFactor: T.oneOfType([T.number, T.func]),
   collapsible: T.bool,
   useCollapseData: T.bool,
   initialDepth: T.number,
@@ -548,10 +556,10 @@ Tree.propTypes = {
     x: T.number,
     y: T.number,
   }),
-  separation: T.shape({
+  separation: T.oneOfType([T.shape({
     siblings: T.number,
     nonSiblings: T.number,
-  }),
+  }), T.func]),
   textLayout: T.object,
   allowForeignObjects: T.bool,
   shouldCollapseNeighborNodes: T.bool,
