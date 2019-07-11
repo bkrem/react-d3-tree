@@ -31,5 +31,5 @@ ForeignObjectElement.propTypes = {
     x: T.number,
     y: T.number,
   }).isRequired,
-  foreignObjectWrapper: T.object,
+  foreignObjectWrapper: T.oneOfType([T.func, T.object]),
 };
