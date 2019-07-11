@@ -6,7 +6,8 @@ export const BASE_MARGIN = 24;
 export default class ForeignObjectElement extends React.PureComponent {
   render() {
     const { nodeData, nodeSize, render, foreignObjectWrapper } = this.props;
-    const sizeConfig = nodeData.foreignObjectWrapper || foreignObjectWrapper;
+    const sizeConfig = typeof foreignObjectWrapper === 'function'? foreignObjectWrapper({ node: nodeData }):
+      foreignObjectWrapper;
     return (
       <foreignObject
         width={nodeSize.x - BASE_MARGIN}
