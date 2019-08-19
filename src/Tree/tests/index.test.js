@@ -12,7 +12,7 @@ describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');
   jest.spyOn(Tree.prototype, 'assignInternalProperties');
   jest.spyOn(Tree.prototype, 'collapseNode');
-  jest.spyOn(Tree.prototype, 'expandNode');
+  jest.spyOn(Tree, 'expandNode');
   jest.spyOn(Tree.prototype, 'setInitialTreeDepth');
   jest.spyOn(Tree.prototype, 'bindZoomListener');
   jest.spyOn(Tree.prototype, 'collapseNeighborNodes');
@@ -181,7 +181,7 @@ describe('<Tree />', () => {
         .simulate('click'); // re-expand
 
       expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
-      expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
+      expect(Tree.expandNode).toHaveBeenCalledTimes(1);
     });
 
     it('does not collapse a node if `props.collapsible` is false', () => {
@@ -208,7 +208,7 @@ describe('<Tree />', () => {
         .simulate('click');
 
       expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
-      expect(Tree.prototype.expandNode).not.toHaveBeenCalled();
+      expect(Tree.expandNode).not.toHaveBeenCalled();
     });
 
     it('allows toggling nodes again after `transitionDuration` + 10ms has expired', () => {
@@ -228,7 +228,7 @@ describe('<Tree />', () => {
         .simulate('click');
 
       expect(Tree.prototype.collapseNode).toHaveBeenCalledTimes(nodeCount);
-      expect(Tree.prototype.expandNode).toHaveBeenCalledTimes(1);
+      expect(Tree.expandNode).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -497,6 +497,174 @@ describe('<Tree />', () => {
     });
   });
 
+  describe('onLinkClick', () => {
+    it('calls the onLinkClick callback when a node is toggled', () => {
+      const onLinkClickSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData2} onLinkClick={onLinkClickSpy} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('click');
+
+      expect(onLinkClickSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls the onLinkClick callback even when `props.collapsible` is false', () => {
+      const onLinkClickSpy = jest.fn();
+      const renderedComponent = mount(
+        <Tree data={mockData} collapsible={false} onLinkClick={onLinkClickSpy} />,
+      );
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('click');
+
+      expect(onLinkClickSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("clones the clicked link's data & passes it to the onLinkClick callback if defined", () => {
+      const onLinkClickSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = mount(<Tree data={mockData2} onLinkClick={onLinkClickSpy} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('click', mockEvt);
+
+      expect(onLinkClickSpy).toHaveBeenCalledWith(
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').source,
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('persists the SyntheticEvent for downstream processing', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData2} onLinkClick={() => {}} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('click', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('onLinkMouseOver', () => {
+    it('calls the onLinkMouseOver callback when a node is hovered over', () => {
+      const onLinkMouseOverOverSpy = jest.fn();
+      const renderedComponent = mount(
+        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />,
+      );
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseover');
+
+      expect(onLinkMouseOverOverSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("clones the hovered node's data & passes it to the onLinkMouseOver callback if defined", () => {
+      const onLinkMouseOverOverSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = mount(
+        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />,
+      );
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseover', mockEvt);
+
+      expect(onLinkMouseOverOverSpy).toHaveBeenCalledWith(
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').source,
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('persists the SynthethicEvent for downstream processing if handler is defined', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOver={() => {}} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseover', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('onLinkMouseOut', () => {
+    it('calls the onLinkMouseOut callback when a node is hovered over', () => {
+      const onLinkMouseOutSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOut={onLinkMouseOutSpy} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseout');
+
+      expect(onLinkMouseOutSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("clones the hovered node's data & passes it to the onMouseOut callback if defined", () => {
+      const onLinkMouseOutSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOut={onLinkMouseOutSpy} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseout', mockEvt);
+
+      expect(onLinkMouseOutSpy).toHaveBeenCalledWith(
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').source,
+        renderedComponent
+          .find(Link)
+          .first()
+          .prop('linkData').target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('persists the SynthethicEvent for downstream processing if handler is defined', () => {
+      const persistSpy = jest.fn();
+      const mockEvt = { mock: 'event', persist: persistSpy };
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOut={() => {}} />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseout', mockEvt);
+
+      expect(persistSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('onUpdate', () => {
     it('calls `onUpdate` on node toggle', () => {
       const onUpdateSpy = jest.fn();
@@ -566,6 +734,22 @@ describe('<Tree />', () => {
           .last()
           .prop('textLayout'),
       ).toEqual(expect.objectContaining({ textAnchor: 'middle' }));
+    });
+  });
+});
+
+describe('linkData', () => {
+  it('applies textLayout when nodeData has it specified', () => {
+    const renderedComponent = mount(<Tree data={mockData2} />);
+    const { name, attributes, children } = mockData2[0];
+    expect(
+      renderedComponent
+        .find(Link)
+        .last()
+        .prop('linkData'),
+    ).toMatchObject({
+      source: { name, attributes },
+      target: { name: children[0].name, attributes: children[0].attributes },
     });
   });
 });

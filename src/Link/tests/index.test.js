@@ -21,6 +21,9 @@ describe('<Link />', () => {
     pathFunc: 'diagonal',
     orientation: 'horizontal',
     transitionDuration: 500,
+    onClick: () => {},
+    onMouseOver: () => {},
+    onMouseOut: () => {},
     styles: {},
   };
 
@@ -92,5 +95,49 @@ describe('<Link />', () => {
       fixture,
       mockProps.transitionDuration,
     );
+  });
+
+  describe('Events', () => {
+    it('handles onClick events and passes its nodeId & event object to onClick handler', () => {
+      const onClickSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onClick={onClickSpy} />);
+
+      renderedComponent.simulate('click', mockEvt);
+      expect(onClickSpy).toHaveBeenCalledTimes(1);
+      expect(onClickSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
+      const onMouseOverSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onMouseOver={onMouseOverSpy} />);
+
+      renderedComponent.simulate('mouseover', mockEvt);
+      expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOverSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
+      const onMouseOutSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onMouseOut={onMouseOutSpy} />);
+
+      renderedComponent.simulate('mouseout', mockEvt);
+      expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOutSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
   });
 });
