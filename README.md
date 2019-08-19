@@ -19,7 +19,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
   - [Overridable `shapeProps`](#overridable-shapeprops)
   - [Individual `shapeProps`](#individual-shapeprops)
 - [Styling](#styling)
-- [Pre-defining a node's `_collapsed` state](#pre-defining-a-nodes-collapsed-state)
+- [Pre-defining a node's `_collapsed` state](#pre-defining-a-nodes-_collapsed-state)
 - [Keeping large trees responsive](#keeping-large-trees-responsive)
 - [External data sources](#external-data-sources)
   - [Example](#example)
