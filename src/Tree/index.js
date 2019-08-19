@@ -206,15 +206,15 @@ export default class Tree extends React.Component {
    * collapseNode - Recursively sets the `_collapsed` property of
    * the passed `node` object and its children to `true`.
    *
-   * @param {object} node Node object with custom properties
+   * @param {Node} node Node object with custom properties
    *
    * @return {void}
    */
-  collapseNode(node) {
+  static collapseNode(node) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
       node._children.forEach(child => {
-        this.collapseNode(child);
+        Tree.collapseNode(child);
       });
     }
   }
@@ -243,7 +243,7 @@ export default class Tree extends React.Component {
     const neighbors = this.findNodesAtDepth(targetNode.depth, nodeSet, []).filter(
       node => node.id !== targetNode.id,
     );
-    neighbors.forEach(neighbor => this.collapseNode(neighbor));
+    neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
   }
 
   /**
@@ -271,7 +271,7 @@ export default class Tree extends React.Component {
         Tree.expandNode(targetNode);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
       } else {
-        this.collapseNode(targetNode);
+        Tree.collapseNode(targetNode);
       }
       // Lock node toggling while transition takes place
       this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
