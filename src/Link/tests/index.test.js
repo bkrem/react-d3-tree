@@ -78,6 +78,20 @@ describe('<Link />', () => {
     );
   });
 
+  it('returns an appropriate diagonal according to `props.orientation`', () => {
+    const ymean = (linkData.target.y + linkData.source.y) / 2;
+    expect(Link.prototype.drawDiagonalPath(linkData, 'horizontal')).toBe(
+      `M${linkData.source.y},${linkData.source.x}` +
+        `C${ymean},${linkData.source.x} ${ymean},${linkData.target.x} ` +
+        `${linkData.target.y},${linkData.target.x}`,
+    );
+    expect(Link.prototype.drawDiagonalPath(linkData, 'vertical')).toBe(
+      `M${linkData.source.x},${linkData.source.y}` +
+        `C${linkData.source.x},${ymean} ${linkData.target.x},${ymean} ` +
+        `${linkData.target.x},${linkData.target.y}`,
+    );
+  });
+
   it('returns an appropriate straightPath according to `props.orientation`', () => {
     expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
       `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`,

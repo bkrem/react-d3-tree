@@ -11,22 +11,19 @@ Props
 type: `object`
 
 
-### `onClick`
+### `onClick` (required)
 
 type: `func`
-defaultValue: `() => {}`
 
 
-### `onMouseOut`
-
-type: `func`
-defaultValue: `() => {}`
-
-
-### `onMouseOver`
+### `onMouseOut` (required)
 
 type: `func`
-defaultValue: `() => {}`
+
+
+### `onMouseOver` (required)
+
+type: `func`
 
 
 ### `orientation` (required)

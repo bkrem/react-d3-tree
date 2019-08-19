@@ -365,6 +365,18 @@ describe('<Tree />', () => {
       expect(onClickSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('does not call the onClick callback if it is not a function', () => {
+      const onClickSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onClick />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('click');
+
+      expect(onClickSpy).toHaveBeenCalledTimes(0);
+    });
+
     it('calls the onClick callback even when `props.collapsible` is false', () => {
       const onClickSpy = jest.fn();
       const renderedComponent = mount(
@@ -425,6 +437,18 @@ describe('<Tree />', () => {
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('does not call the onMouseOver callback if it is not a function', () => {
+      const onMouseOverSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onMouseOver />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('mouseover');
+
+      expect(onMouseOverSpy).toHaveBeenCalledTimes(0);
+    });
+
     it("clones the hovered node's data & passes it to the onMouseOver callback if defined", () => {
       const onMouseOverSpy = jest.fn();
       const mockEvt = { mock: 'event' };
@@ -471,6 +495,18 @@ describe('<Tree />', () => {
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('does not call the onMouseOut callback if it is not a function', () => {
+      const onMouseOutSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onMouseOut />);
+
+      renderedComponent
+        .find(Node)
+        .first()
+        .simulate('mouseout');
+
+      expect(onMouseOutSpy).toHaveBeenCalledTimes(0);
+    });
+
     it("clones the hovered node's data & passes it to the onMouseOut callback if defined", () => {
       const onMouseOutSpy = jest.fn();
       const mockEvt = { mock: 'event' };
@@ -515,6 +551,18 @@ describe('<Tree />', () => {
         .simulate('click');
 
       expect(onLinkClickSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call the onLinkClick callback if it is not a function', () => {
+      const onClickSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onLinkClick />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('click');
+
+      expect(onClickSpy).toHaveBeenCalledTimes(0);
     });
 
     it('calls the onLinkClick callback even when `props.collapsible` is false', () => {
@@ -583,6 +631,18 @@ describe('<Tree />', () => {
       expect(onLinkMouseOverOverSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('does not call the onLinkMouseOver callback if it is not a function', () => {
+      const onLinkMouseOverSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOver />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseover');
+
+      expect(onLinkMouseOverSpy).toHaveBeenCalledTimes(0);
+    });
+
     it("clones the hovered node's data & passes it to the onLinkMouseOver callback if defined", () => {
       const onLinkMouseOverOverSpy = jest.fn();
       const mockEvt = { mock: 'event' };
@@ -633,6 +693,18 @@ describe('<Tree />', () => {
         .simulate('mouseout');
 
       expect(onLinkMouseOutSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call the onLinkMouseOut callback if it is not a function', () => {
+      const onLinkMouseOutSpy = jest.fn();
+      const renderedComponent = mount(<Tree data={mockData} onLinkMouseOut />);
+
+      renderedComponent
+        .find(Link)
+        .first()
+        .simulate('mouseout');
+
+      expect(onLinkMouseOutSpy).toHaveBeenCalledTimes(0);
     });
 
     it("clones the hovered node's data & passes it to the onMouseOut callback if defined", () => {
@@ -706,6 +778,19 @@ describe('<Tree />', () => {
         translate: { x: expect.any(Number), y: expect.any(Number) },
         zoom: expect.any(Number),
       });
+    });
+
+    it('does not call `onUpdate` if not a function', () => {
+      const onUpdateSpy = jest.fn();
+
+      document.body.innerHTML += '<div id="reactContainer"></div>';
+      render(
+        <Tree data={mockData} onUpdate scaleExtent={{ min: 0.1, max: 10 }} />,
+        document.querySelector('#reactContainer'),
+      );
+      const scrollableComponent = document.querySelector('.rd3t-tree-container > svg');
+      scrollableComponent.dispatchEvent(new Event('wheel'));
+      expect(onUpdateSpy).toHaveBeenCalledTimes(0);
     });
 
     it('passes the specified (not default) `zoom` and `translate` when a node is clicked for the 1st time', () => {
