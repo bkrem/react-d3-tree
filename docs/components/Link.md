@@ -11,6 +11,21 @@ Props
 type: `object`
 
 
+### `onClick` (required)
+
+type: `func`
+
+
+### `onMouseOut` (required)
+
+type: `func`
+
+
+### `onMouseOver` (required)
+
+type: `func`
+
+
 ### `orientation` (required)
 
 type: `enum('horizontal'|'vertical')`

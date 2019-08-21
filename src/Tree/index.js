@@ -27,8 +27,9 @@ export default class Tree extends React.Component {
     },
   };
 
-  componentWillMount() {
-    this.internalState.d3 = this.calculateD3Geometry(this.props);
+  constructor(props) {
+    super(props);
+    this.internalState.d3 = Tree.calculateD3Geometry(this.props);
   }
 
   componentDidMount() {
@@ -53,7 +54,8 @@ export default class Tree extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
     if (this.props.data !== nextProps.data) {
       this.setState({
@@ -61,7 +63,7 @@ export default class Tree extends React.Component {
       });
     }
 
-    this.internalState.d3 = this.calculateD3Geometry(nextProps);
+    this.internalState.d3 = Tree.calculateD3Geometry(nextProps);
 
     // If zoom-specific props change -> rebind listener with new values
     if (
@@ -204,15 +206,15 @@ export default class Tree extends React.Component {
    * collapseNode - Recursively sets the `_collapsed` property of
    * the passed `node` object and its children to `true`.
    *
-   * @param {object} node Node object with custom properties
+   * @param {Node} node Node object with custom properties
    *
    * @return {void}
    */
-  collapseNode(node) {
+  static collapseNode(node) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
       node._children.forEach(child => {
-        this.collapseNode(child);
+        Tree.collapseNode(child);
       });
     }
   }
@@ -221,11 +223,11 @@ export default class Tree extends React.Component {
    * expandNode - Sets the `_collapsed` property of
    * the passed `node` object to `false`.
    *
-   * @param {type} node Node object with custom properties
+   * @param {object} node Node object with custom properties
    *
    * @return {void}
    */
-  expandNode(node) {
+  static expandNode(node) {
     node._collapsed = false;
   }
 
@@ -241,7 +243,7 @@ export default class Tree extends React.Component {
     const neighbors = this.findNodesAtDepth(targetNode.depth, nodeSet, []).filter(
       node => node.id !== targetNode.id,
     );
-    neighbors.forEach(neighbor => this.collapseNode(neighbor));
+    neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
   }
 
   /**
@@ -252,6 +254,8 @@ export default class Tree extends React.Component {
    * `props.onClick` if defined.
    *
    * @param {string} nodeId A node object's `id` field.
+   *
+   * @param {object} evt Event
    *
    * @return {void}
    */
@@ -264,10 +268,10 @@ export default class Tree extends React.Component {
 
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNode._collapsed) {
-        this.expandNode(targetNode);
+        Tree.expandNode(targetNode);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
       } else {
-        this.collapseNode(targetNode);
+        Tree.collapseNode(targetNode);
       }
       // Lock node toggling while transition takes place
       this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
@@ -287,6 +291,8 @@ export default class Tree extends React.Component {
    *
    * @param {object} targetNode Description
    *
+   * @param {object} evt Event
+   *
    * @return {void}
    */
   handleOnClickCb = (targetNode, evt) => {
@@ -297,9 +303,31 @@ export default class Tree extends React.Component {
   };
 
   /**
+   * handleOnLinkClickCb - Handles the user-defined `onLinkClick` function
+   *
+   * @param {object} linkSource Description
+   *
+   * @param {object} linkTarget Description
+   *
+   *  @param {object} evt Event
+   *
+   * @return {void}
+   */
+  handleOnLinkClickCb = (linkSource, linkTarget, evt) => {
+    const { onLinkClick } = this.props;
+    if (onLinkClick && typeof onLinkClick === 'function') {
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
+      onLinkClick(clone(linkSource), clone(linkTarget), evt);
+    }
+  };
+
+  /**
    * handleOnMouseOverCb - Handles the user-defined `onMouseOver` function
    *
    * @param {string} nodeId
+   *
+   * @param {object} evt Event
    *
    * @return {void}
    */
@@ -316,9 +344,31 @@ export default class Tree extends React.Component {
   };
 
   /**
+   * handleOnLinkMouseOverCb - Handles the user-defined `onLinkMouseOver` function
+   *
+   * @param {object} linkSource Description
+   *
+   * @param {object} linkTarget Description
+   *
+   * @param {object} evt Event
+   *
+   * @return {void}
+   */
+  handleOnLinkMouseOverCb = (linkSource, linkTarget, evt) => {
+    const { onLinkMouseOver } = this.props;
+    if (onLinkMouseOver && typeof onLinkMouseOver === 'function') {
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
+      onLinkMouseOver(clone(linkSource), clone(linkTarget), evt);
+    }
+  };
+
+  /**
    * handleOnMouseOutCb - Handles the user-defined `onMouseOut` function
    *
    * @param {string} nodeId
+   *
+   * @param {object} evt Event
    *
    * @return {void}
    */
@@ -331,6 +381,26 @@ export default class Tree extends React.Component {
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
       onMouseOut(clone(targetNode), evt);
+    }
+  };
+
+  /**
+   * handleOnLinkMouseOutCb - Handles the user-defined `onLinkMouseOut` function
+   *
+   * @param {string} linkSource
+   *
+   * @param {string} linkTarget
+   *
+   * @param {object} evt Event
+   *
+   * @return {void}
+   */
+  handleOnLinkMouseOutCb = (linkSource, linkTarget, evt) => {
+    const { onLinkMouseOut } = this.props;
+    if (onLinkMouseOut && typeof onLinkMouseOut === 'function') {
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
+      onLinkMouseOut(clone(linkSource), clone(linkTarget), evt);
     }
   };
 
@@ -392,7 +462,7 @@ export default class Tree extends React.Component {
    * @param  {object} nextProps
    * @return {object} {translate: {x: number, y: number}, zoom: number}
    */
-  calculateD3Geometry(nextProps) {
+  static calculateD3Geometry(nextProps) {
     let scale;
 
     if (nextProps.zoom > nextProps.scaleExtent.max) {
@@ -446,6 +516,9 @@ export default class Tree extends React.Component {
                 orientation={orientation}
                 pathFunc={pathFunc}
                 linkData={linkData}
+                onClick={this.handleOnLinkClickCb}
+                onMouseOver={this.handleOnLinkMouseOverCb}
+                onMouseOut={this.handleOnLinkMouseOutCb}
                 transitionDuration={transitionDuration}
                 styles={styles.links}
               />
@@ -490,6 +563,9 @@ Tree.defaultProps = {
   onClick: undefined,
   onMouseOver: undefined,
   onMouseOut: undefined,
+  onLinkClick: undefined,
+  onLinkMouseOver: undefined,
+  onLinkMouseOut: undefined,
   onUpdate: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
@@ -526,6 +602,9 @@ Tree.propTypes = {
   onClick: T.func,
   onMouseOver: T.func,
   onMouseOut: T.func,
+  onLinkClick: T.func,
+  onLinkMouseOver: T.func,
+  onLinkMouseOut: T.func,
   onUpdate: T.func,
   orientation: T.oneOf(['horizontal', 'vertical']),
   translate: T.shape({

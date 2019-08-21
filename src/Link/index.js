@@ -85,6 +85,18 @@ export default class Link extends React.PureComponent {
     return this.drawDiagonalPath(linkData, orientation);
   }
 
+  handleOnClick = evt => {
+    this.props.onClick(this.props.linkData.source, this.props.linkData.target, evt);
+  };
+
+  handleOnMouseOver = evt => {
+    this.props.onMouseOver(this.props.linkData.source, this.props.linkData.target, evt);
+  };
+
+  handleOnMouseOut = evt => {
+    this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
+  };
+
   render() {
     const { styles } = this.props;
     return (
@@ -95,6 +107,9 @@ export default class Link extends React.PureComponent {
         style={{ ...this.state.initialStyle, ...styles }}
         className="linkBase"
         d={this.drawPath()}
+        onClick={this.handleOnClick}
+        onMouseOver={this.handleOnMouseOver}
+        onMouseOut={this.handleOnMouseOut}
       />
     );
   }
@@ -109,5 +124,8 @@ Link.propTypes = {
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
   pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]).isRequired,
   transitionDuration: T.number.isRequired,
+  onClick: T.func.isRequired,
+  onMouseOver: T.func.isRequired,
+  onMouseOut: T.func.isRequired,
   styles: T.object,
 };

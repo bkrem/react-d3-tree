@@ -166,9 +166,10 @@ describe('<Node />', () => {
     });
 
     it('updates its position if `orientation` changes', () => {
-      const renderedComponent = mount(<Node {...mockProps} />);
-      const nextProps = { ...mockProps, orientation: 'vertical' };
-
+      const thisProps = { ...mockProps, shouldTranslateToOrigin: true, orientation: 'horizontal' };
+      delete thisProps.parent;
+      const renderedComponent = mount(<Node {...thisProps} />);
+      const nextProps = { ...thisProps, orientation: 'vertical' };
       expect(
         renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
       ).toBe(true);

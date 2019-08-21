@@ -21,7 +21,8 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration);
   }
 
-  componentWillUpdate(nextProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillUpdate(nextProps) {
     const transform = this.setTransform(nextProps.nodeData, nextProps.orientation);
     this.applyTransform(transform, nextProps.transitionDuration);
   }
@@ -39,8 +40,9 @@ export default class Node extends React.Component {
   setTransform(nodeData, orientation, shouldTranslateToOrigin = false) {
     const { x, y, parent } = nodeData;
     if (shouldTranslateToOrigin) {
-      const originX = parent ? parent.x : 0;
-      const originY = parent ? parent.y : 0;
+      const hasParent = typeof parent === 'object';
+      const originX = hasParent ? parent.x : 0;
+      const originY = hasParent ? parent.y : 0;
       return orientation === 'horizontal'
         ? `translate(${originY},${originX})`
         : `translate(${originX},${originY})`;
@@ -79,7 +81,7 @@ export default class Node extends React.Component {
         });
   };
 
-  handleClick = evt => {
+  handleOnClick = evt => {
     this.props.onClick(this.props.nodeData.id, evt);
   };
 
@@ -109,7 +111,7 @@ export default class Node extends React.Component {
         style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.state.transform}
-        onClick={this.handleClick}
+        onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
       >

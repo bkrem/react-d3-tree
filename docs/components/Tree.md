@@ -70,6 +70,24 @@ type: `func`
 defaultValue: `undefined`
 
 
+### `onLinkClick`
+
+type: `func`
+defaultValue: `undefined`
+
+
+### `onLinkMouseOut`
+
+type: `func`
+defaultValue: `undefined`
+
+
+### `onLinkMouseOver`
+
+type: `func`
+defaultValue: `undefined`
+
+
 ### `onMouseOut`
 
 type: `func`

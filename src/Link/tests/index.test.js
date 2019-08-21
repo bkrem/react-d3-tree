@@ -21,6 +21,9 @@ describe('<Link />', () => {
     pathFunc: 'diagonal',
     orientation: 'horizontal',
     transitionDuration: 500,
+    onClick: () => {},
+    onMouseOver: () => {},
+    onMouseOut: () => {},
     styles: {},
   };
 
@@ -75,6 +78,20 @@ describe('<Link />', () => {
     );
   });
 
+  it('returns an appropriate diagonal according to `props.orientation`', () => {
+    const ymean = (linkData.target.y + linkData.source.y) / 2;
+    expect(Link.prototype.drawDiagonalPath(linkData, 'horizontal')).toBe(
+      `M${linkData.source.y},${linkData.source.x}` +
+        `C${ymean},${linkData.source.x} ${ymean},${linkData.target.x} ` +
+        `${linkData.target.y},${linkData.target.x}`,
+    );
+    expect(Link.prototype.drawDiagonalPath(linkData, 'vertical')).toBe(
+      `M${linkData.source.x},${linkData.source.y}` +
+        `C${linkData.source.x},${ymean} ${linkData.target.x},${ymean} ` +
+        `${linkData.target.x},${linkData.target.y}`,
+    );
+  });
+
   it('returns an appropriate straightPath according to `props.orientation`', () => {
     expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
       `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`,
@@ -92,5 +109,49 @@ describe('<Link />', () => {
       fixture,
       mockProps.transitionDuration,
     );
+  });
+
+  describe('Events', () => {
+    it('handles onClick events and passes its nodeId & event object to onClick handler', () => {
+      const onClickSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onClick={onClickSpy} />);
+
+      renderedComponent.simulate('click', mockEvt);
+      expect(onClickSpy).toHaveBeenCalledTimes(1);
+      expect(onClickSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
+      const onMouseOverSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onMouseOver={onMouseOverSpy} />);
+
+      renderedComponent.simulate('mouseover', mockEvt);
+      expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOverSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
+
+    it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
+      const onMouseOutSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(<Link {...mockProps} onMouseOut={onMouseOutSpy} />);
+
+      renderedComponent.simulate('mouseout', mockEvt);
+      expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
+      expect(onMouseOutSpy).toHaveBeenCalledWith(
+        linkData.source,
+        linkData.target,
+        expect.objectContaining(mockEvt),
+      );
+    });
   });
 });
