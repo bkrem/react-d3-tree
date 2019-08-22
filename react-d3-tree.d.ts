@@ -21,6 +21,9 @@ declare module "react-d3-tree" {
     onClick?: (targetNode: ReactD3TreeItem, event: Event) => any,
     onMouseOver?: (targetNode: ReactD3TreeItem, event: Event) => any,
     onMouseOut?: (targetNode: ReactD3TreeItem, event: Event) => any,
+    onLinkClick?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
+    onLinkMouseOver?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
+    onLinkMouseOut?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
     onUpdate?: (targetNode: ReactD3TreeItem, event: Event) => any,
     orientation?: "horizontal" | "vertical",
     translate?: {
@@ -59,6 +62,6 @@ declare module "react-d3-tree" {
 
   var Tree: React.ComponentClass<ReactD3TreeProps>;
   
-  export {Tree};
+  export {Tree, ReactD3TreeProps, ReactD3TreeItem, NodeSvgShape};
   export default Tree;
 }
