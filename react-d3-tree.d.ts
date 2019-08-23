@@ -14,6 +14,8 @@ declare module "react-d3-tree" {
     nodeSvgShape?: NodeSvgShape
   };
 
+  type ReactD3TreeTranslate = {x: number, y: number}
+
   type ReactD3TreeProps = {
     data: ReactD3TreeItem[] | ReactD3TreeItem,
     nodeSvgShape?: NodeSvgShape,
@@ -24,12 +26,9 @@ declare module "react-d3-tree" {
     onLinkClick?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
     onLinkMouseOver?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
     onLinkMouseOut?: (linkSource: ReactD3TreeItem, linkTarget: ReactD3TreeItem, event: Event) => any,
-    onUpdate?: (targetNode: ReactD3TreeItem, event: Event) => any,
+    onUpdate?: (updateTarget: { targetNode: ReactD3TreeItem | null, currentTranslate: ReactD3TreeTranslate, currentZoom: number}) => any,
     orientation?: "horizontal" | "vertical",
-    translate?: {
-      x?: number,
-      y?: number
-    },
+    translate?: Partial<ReactD3TreeTranslate>,
     pathFunc?: ("diagonal" | "elbow" | "straight") | ((...args: any[]) => any),
     transitionDuration?: number,
     depthFactor?: number,
@@ -62,6 +61,6 @@ declare module "react-d3-tree" {
 
   var Tree: React.ComponentClass<ReactD3TreeProps>;
   
-  export {Tree, ReactD3TreeProps, ReactD3TreeItem, NodeSvgShape};
+  export {Tree, ReactD3TreeProps, ReactD3TreeItem, ReactD3TreeTranslate, NodeSvgShape};
   export default Tree;
 }
