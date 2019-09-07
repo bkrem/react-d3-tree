@@ -56,6 +56,22 @@ describe('<Link />', () => {
     expect(renderedComponent.prop('style')).toEqual(fixture);
   });
 
+  it('binds IDs of source & target nodes to data-source-id/data-target-id', () => {
+    linkData.source.id = 1;
+    linkData.target.id = 2;
+    const renderedComponent = shallow(<Link {...mockProps} />);
+    expect(renderedComponent.find('path').prop('data-source-id')).toEqual(linkData.source.id);
+    expect(renderedComponent.find('path').prop('data-target-id')).toEqual(linkData.target.id);
+    delete linkData.source.id;
+    delete linkData.target.id
+  });
+  
+  it('binds the full source & target to data-source-id/data-target-id if "id" not in source/target', () => {
+    const renderedComponent = shallow(<Link {...mockProps} />);
+    expect(renderedComponent.find('path').prop('data-source-id')).toEqual(linkData.source);
+    expect(renderedComponent.find('path').prop('data-target-id')).toEqual(linkData.target);
+  });
+  
   it('calls the appropriate path func based on `props.pathFunc`', () => {
     const diagonalComponent = shallow(<Link {...mockProps} />);
     const elbowComponent = shallow(<Link {...mockProps} pathFunc="elbow" />);
