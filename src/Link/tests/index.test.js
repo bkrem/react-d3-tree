@@ -66,12 +66,6 @@ describe('<Link />', () => {
     delete linkData.target.id
   });
   
-  it('binds the full source & target to data-source-id/data-target-id if "id" not in source/target', () => {
-    const renderedComponent = shallow(<Link {...mockProps} />);
-    expect(renderedComponent.find('path').prop('data-source-id')).toEqual(linkData.source);
-    expect(renderedComponent.find('path').prop('data-target-id')).toEqual(linkData.target);
-  });
-  
   it('calls the appropriate path func based on `props.pathFunc`', () => {
     const diagonalComponent = shallow(<Link {...mockProps} />);
     const elbowComponent = shallow(<Link {...mockProps} pathFunc="elbow" />);
