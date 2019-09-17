@@ -7,8 +7,7 @@ export default class NodeWrapper extends React.Component {
     enableTransitions: this.props.transitionDuration > 0,
   };
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.transitionDuration !== this.props.transitionDuration) {
       this.setState({
         enableTransitions: nextProps.transitionDuration > 0,
@@ -35,6 +34,10 @@ export default class NodeWrapper extends React.Component {
       </g>
     );
   }
+
+  // React 16 compatibility:
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps = this.componentWillReceiveProps;
 }
 
 NodeWrapper.defaultProps = {

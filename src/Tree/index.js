@@ -54,8 +54,7 @@ export default class Tree extends React.Component {
     }
   }
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
     if (this.props.data !== nextProps.data) {
       this.setState({
@@ -550,6 +549,10 @@ export default class Tree extends React.Component {
       </div>
     );
   }
+
+  // React 16 compatibility:
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps = this.componentWillReceiveProps;
 }
 
 Tree.defaultProps = {
