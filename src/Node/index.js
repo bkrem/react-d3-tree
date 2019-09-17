@@ -21,7 +21,6 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration);
   }
 
-  // eslint-disable-next-line camelcase
   componentWillUpdate(nextProps) {
     const transform = this.setTransform(nextProps.nodeData, nextProps.orientation);
     this.applyTransform(transform, nextProps.transitionDuration);

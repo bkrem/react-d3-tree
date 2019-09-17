@@ -54,7 +54,6 @@ export default class Tree extends React.Component {
     }
   }
 
-  // eslint-disable-next-line camelcase
   componentWillReceiveProps(nextProps) {
     // Clone new data & assign internal properties
     if (this.props.data !== nextProps.data) {
