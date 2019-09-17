@@ -21,6 +21,7 @@ export default class Node extends React.Component {
     this.applyTransform(transform, transitionDuration);
   }
 
+  // eslint-disable-next-line camelcase
   componentWillUpdate(nextProps) {
     const transform = this.setTransform(nextProps.nodeData, nextProps.orientation);
     this.applyTransform(transform, nextProps.transitionDuration);
@@ -124,10 +125,6 @@ export default class Node extends React.Component {
       </g>
     );
   }
-
-  // React 16 compatibility:
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillUpdate = this.componentWillUpdate;
 }
 
 Node.defaultProps = {
