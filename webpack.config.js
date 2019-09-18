@@ -1,4 +1,4 @@
-/* global __dirname, require, module*/
+/* global __dirname, require, module */
 
 const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
@@ -33,6 +33,7 @@ const config = {
     'd3',
     'react',
     'react-transition-group',
+    'react-lifecycles-compat',
     'prop-types',
     'uuid',
     'deep-equal',

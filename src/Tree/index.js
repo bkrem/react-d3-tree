@@ -1,4 +1,5 @@
 import React from 'react';
+import { polyfill } from 'react-lifecycles-compat';
 import T from 'prop-types';
 import { layout, select, behavior, event } from 'd3';
 import clone from 'clone';
@@ -10,9 +11,11 @@ import Node from '../Node';
 import Link from '../Link';
 import './style.css';
 
-export default class Tree extends React.Component {
+class Tree extends React.Component {
   state = {
-    data: this.assignInternalProperties(clone(this.props.data)),
+    // eslint-disable-next-line react/no-unused-state
+    dataRef: this.props.data,
+    data: Tree.assignInternalProperties(clone(this.props.data)),
     rd3tSvgClassName: `_${uuid.v4()}`,
     rd3tGClassName: `_${uuid.v4()}`,
   };
@@ -27,6 +30,19 @@ export default class Tree extends React.Component {
     },
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // Clone new data & assign internal properties if `data` object reference changed.
+    if (nextProps.data !== prevState.dataRef) {
+      return {
+        // eslint-disable-next-line react/no-unused-state
+        dataRef: nextProps.data,
+        data: Tree.assignInternalProperties(clone(nextProps.data)),
+      };
+    }
+
+    return null;
+  }
+
   constructor(props) {
     super(props);
     this.internalState.d3 = Tree.calculateD3Geometry(this.props);
@@ -38,8 +54,14 @@ export default class Tree extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
-    if (prevProps.transitionDuration !== this.props.transitionDuration) {
+    // If zoom-specific props change -> rebind listener with new values
+    // Or: rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
+    if (
+      !deepEqual(this.props.translate, prevProps.translate) ||
+      !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
+      this.props.zoom !== prevProps.zoom ||
+      this.props.transitionDuration !== prevProps.transitionDuration
+    ) {
       this.bindZoomListener(this.props);
     }
 
@@ -50,28 +72,8 @@ export default class Tree extends React.Component {
         translate: this.internalState.d3.translate,
       });
 
+      this.internalState.d3 = Tree.calculateD3Geometry(this.props);
       this.internalState.targetNode = null;
-    }
-  }
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    // Clone new data & assign internal properties
-    if (this.props.data !== nextProps.data) {
-      this.setState({
-        data: this.assignInternalProperties(clone(nextProps.data)),
-      });
-    }
-
-    this.internalState.d3 = Tree.calculateD3Geometry(nextProps);
-
-    // If zoom-specific props change -> rebind listener with new values
-    if (
-      !deepEqual(this.props.translate, nextProps.translate) ||
-      !deepEqual(this.props.scaleExtent, nextProps.scaleExtent) ||
-      this.props.zoom !== nextProps.zoom
-    ) {
-      this.bindZoomListener(nextProps);
     }
   }
 
@@ -134,11 +136,12 @@ export default class Tree extends React.Component {
    * `data` set that are required for tree manipulation and returns
    * a new `data` array.
    *
+   * @static
    * @param {array} data Hierarchical tree data
    *
    * @return {array} `data` array with internal properties added
    */
-  assignInternalProperties(data) {
+  static assignInternalProperties(data) {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
     const d = Array.isArray(data) ? data : [data];
     return d.map(node => {
@@ -149,7 +152,7 @@ export default class Tree extends React.Component {
       }
       // If there are children, recursively assign properties to them too
       if (node.children && node.children.length > 0) {
-        node.children = this.assignInternalProperties(node.children);
+        node.children = Tree.assignInternalProperties(node.children);
         node._children = node.children;
       }
       return node;
@@ -500,7 +503,6 @@ export default class Tree extends React.Component {
     } = this.props;
     const { translate, scale } = this.internalState.d3;
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
-
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className={rd3tSvgClassName} width="100%" height="100%">
@@ -640,3 +642,8 @@ Tree.propTypes = {
     links: T.object,
   }),
 };
+
+// Polyfill React 16 lifecycle methods for compat with React 15.
+polyfill(Tree);
+
+export default Tree;

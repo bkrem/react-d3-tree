@@ -15,16 +15,11 @@ export default class Node extends React.Component {
   };
 
   componentDidMount() {
-    const { nodeData, orientation, transitionDuration } = this.props;
-    const transform = this.setTransform(nodeData, orientation);
-
-    this.applyTransform(transform, transitionDuration);
+    this.commitTransform();
   }
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillUpdate(nextProps) {
-    const transform = this.setTransform(nextProps.nodeData, nextProps.orientation);
-    this.applyTransform(transform, nextProps.transitionDuration);
+  componentDidUpdate() {
+    this.commitTransform();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -64,6 +59,13 @@ export default class Node extends React.Component {
         .style('opacity', opacity)
         .each('end', done);
     }
+  }
+
+  commitTransform() {
+    const { nodeData, orientation, transitionDuration } = this.props;
+    const transform = this.setTransform(nodeData, orientation);
+
+    this.applyTransform(transform, transitionDuration);
   }
 
   renderNodeElement = nodeStyle => {

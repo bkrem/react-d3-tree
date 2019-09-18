@@ -2,40 +2,21 @@ import React from 'react';
 import T from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 
-export default class NodeWrapper extends React.Component {
-  state = {
-    enableTransitions: this.props.transitionDuration > 0,
-  };
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.transitionDuration !== this.props.transitionDuration) {
-      this.setState({
-        enableTransitions: nextProps.transitionDuration > 0,
-      });
-    }
-  }
-
-  render() {
-    if (this.state.enableTransitions) {
-      return (
-        <TransitionGroup
-          component={this.props.component}
-          className={this.props.className}
-          transform={this.props.transform}
-        >
-          {this.props.children}
-        </TransitionGroup>
-      );
-    }
-
-    return (
-      <g className={this.props.className} transform={this.props.transform}>
-        {this.props.children}
-      </g>
-    );
-  }
-}
+// eslint-disable-next-line
+const NodeWrapper = props =>
+  props.transitionDuration > 0 ? (
+    <TransitionGroup
+      component={props.component}
+      className={props.className}
+      transform={props.transform}
+    >
+      {props.children}
+    </TransitionGroup>
+  ) : (
+    <g className={props.className} transform={props.transform}>
+      {props.children}
+    </g>
+  );
 
 NodeWrapper.defaultProps = {
   component: 'g',
@@ -48,3 +29,5 @@ NodeWrapper.propTypes = {
   transform: T.string.isRequired,
   children: T.array.isRequired,
 };
+
+export default NodeWrapper;
