@@ -16,6 +16,7 @@ class Tree extends React.Component {
     // eslint-disable-next-line react/no-unused-state
     dataRef: this.props.data,
     data: Tree.assignInternalProperties(clone(this.props.data)),
+    d3: Tree.calculateD3Geometry(this.props),
     rd3tSvgClassName: `_${uuid.v4()}`,
     rd3tGClassName: `_${uuid.v4()}`,
   };
@@ -24,10 +25,6 @@ class Tree extends React.Component {
     initialRender: true,
     targetNode: null,
     isTransitioning: false,
-    d3: {
-      scale: this.props.zoom,
-      translate: this.props.translate,
-    },
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -40,12 +37,13 @@ class Tree extends React.Component {
       };
     }
 
-    return null;
-  }
+    if (!deepEqual(Tree.calculateD3Geometry(nextProps), prevState.d3)) {
+      return {
+        d3: Tree.calculateD3Geometry(nextProps),
+      };
+    }
 
-  constructor(props) {
-    super(props);
-    this.internalState.d3 = Tree.calculateD3Geometry(this.props);
+    return null;
   }
 
   componentDidMount() {
@@ -68,13 +66,12 @@ class Tree extends React.Component {
     if (typeof this.props.onUpdate === 'function') {
       this.props.onUpdate({
         node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
-        zoom: this.internalState.d3.scale,
-        translate: this.internalState.d3.translate,
+        zoom: this.state.d3.scale,
+        translate: this.state.d3.translate,
       });
-
-      this.internalState.d3 = Tree.calculateD3Geometry(this.props);
-      this.internalState.targetNode = null;
     }
+    // Reset the last target node after we've flushed it to `onUpdate`.
+    this.internalState.targetNode = null;
   }
 
   /**
@@ -120,8 +117,8 @@ class Tree extends React.Component {
                 zoom: event.scale,
                 translate: { x: event.translate[0], y: event.translate[1] },
               });
-              this.internalState.d3.scale = event.scale;
-              this.internalState.d3.translate = { x: event.translate[0], y: event.translate[1] };
+              this.state.d3.scale = event.scale;
+              this.state.d3.translate = { x: event.translate[0], y: event.translate[1] };
             }
           })
           // Offset so that first pan and zoom does not jump back to [0,0] coords
@@ -501,7 +498,7 @@ class Tree extends React.Component {
       allowForeignObjects,
       styles,
     } = this.props;
-    const { translate, scale } = this.internalState.d3;
+    const { translate, scale } = this.state.d3;
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
