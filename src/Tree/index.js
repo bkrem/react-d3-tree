@@ -28,22 +28,24 @@ class Tree extends React.Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    let derivedState = null;
+
     // Clone new data & assign internal properties if `data` object reference changed.
     if (nextProps.data !== prevState.dataRef) {
-      return {
+      derivedState = {
         // eslint-disable-next-line react/no-unused-state
         dataRef: nextProps.data,
         data: Tree.assignInternalProperties(clone(nextProps.data)),
       };
     }
 
-    if (!deepEqual(Tree.calculateD3Geometry(nextProps), prevState.d3)) {
-      return {
-        d3: Tree.calculateD3Geometry(nextProps),
-      };
+    const d3 = Tree.calculateD3Geometry(nextProps);
+    if (!deepEqual(d3, prevState.d3)) {
+      derivedState = derivedState || {};
+      derivedState.d3 = d3;
     }
 
-    return null;
+    return derivedState;
   }
 
   componentDidMount() {
