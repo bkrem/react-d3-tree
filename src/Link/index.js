@@ -32,7 +32,7 @@ export default class Link extends React.PureComponent {
     }
   }
 
-  drawStairPath(linkData, orientation) {
+  drawStepPath(linkData, orientation) {
     const { source, target } = linkData;
     const deltaY = target.y - source.y;
 
@@ -91,8 +91,8 @@ export default class Link extends React.PureComponent {
       return this.drawStraightPath(linkData, orientation);
     }
 
-    if (pathFunc === 'stair') {
-      return this.drawStairPath(linkData, orientation);
+    if (pathFunc === 'step') {
+      return this.drawStepPath(linkData, orientation);
     }
 
     return this.drawDiagonalPath(linkData, orientation);
@@ -137,7 +137,7 @@ Link.defaultProps = {
 Link.propTypes = {
   linkData: T.object.isRequired,
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
-  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'stair']), T.func]).isRequired,
+  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'step']), T.func]).isRequired,
   transitionDuration: T.number.isRequired,
   onClick: T.func.isRequired,
   onMouseOver: T.func.isRequired,
