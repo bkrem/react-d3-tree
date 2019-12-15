@@ -114,7 +114,7 @@ describe('<Link />', () => {
     );
   });
 
-  it('return an appropriate stepPath accordin to `props.orientation`', () => {
+  it('return an appropriate stepPath according to `props.orientation`', () => {
     const { source, target } = linkData;
     const deltaY = target.y - source.y;
 
