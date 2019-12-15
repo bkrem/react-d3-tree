@@ -119,10 +119,10 @@ describe('<Link />', () => {
     const deltaY = target.y - source.y;
 
     expect(Link.prototype.drawStairPath(linkData, 'horizontal')).toBe(
-      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`,
+      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`,
     );
     expect(Link.prototype.drawStairPath(linkData, 'vertical')).toBe(
-      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`,
+      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`,
     );
   });
 

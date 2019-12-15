@@ -37,8 +37,8 @@ export default class Link extends React.PureComponent {
     const deltaY = target.y - source.y;
 
     return orientation === 'horizontal'
-      ? `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`
-      : `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`;
+      ? `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`
+      : `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`;
   }
 
   drawDiagonalPath(linkData, orientation) {
