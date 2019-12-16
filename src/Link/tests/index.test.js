@@ -36,6 +36,7 @@ describe('<Link />', () => {
   jest.spyOn(Link.prototype, 'drawDiagonalPath');
   jest.spyOn(Link.prototype, 'drawElbowPath');
   jest.spyOn(Link.prototype, 'drawStraightPath');
+  jest.spyOn(Link.prototype, 'drawStepPath');
   jest.spyOn(Link.prototype, 'applyOpacity');
   jest.spyOn(pathFuncs, 'testPathFunc');
 
@@ -70,13 +71,15 @@ describe('<Link />', () => {
     const diagonalComponent = shallow(<Link {...mockProps} />);
     const elbowComponent = shallow(<Link {...mockProps} pathFunc="elbow" />);
     const straightComponent = shallow(<Link {...mockProps} pathFunc="straight" />);
+    const stepComponent = shallow(<Link {...mockProps} pathFunc="step" />);
     shallow(<Link {...mockProps} pathFunc={pathFuncs.testPathFunc} />);
 
     expect(diagonalComponent.instance().drawDiagonalPath).toHaveBeenCalled();
     expect(elbowComponent.instance().drawElbowPath).toHaveBeenCalled();
     expect(straightComponent.instance().drawStraightPath).toHaveBeenCalled();
+    expect(stepComponent.instance().drawStepPath).toHaveBeenCalled();
     expect(pathFuncs.testPathFunc).toHaveBeenCalled();
-    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(4);
+    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(5);
   });
 
   it('returns an appropriate elbowPath according to `props.orientation`', () => {
@@ -108,6 +111,18 @@ describe('<Link />', () => {
     );
     expect(Link.prototype.drawStraightPath(linkData, 'vertical')).toBe(
       `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`,
+    );
+  });
+
+  it('return an appropriate stepPath according to `props.orientation`', () => {
+    const { source, target } = linkData;
+    const deltaY = target.y - source.y;
+
+    expect(Link.prototype.drawStepPath(linkData, 'horizontal')).toBe(
+      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`,
+    );
+    expect(Link.prototype.drawStepPath(linkData, 'vertical')).toBe(
+      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`,
     );
   });
 

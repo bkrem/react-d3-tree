@@ -32,6 +32,15 @@ export default class Link extends React.PureComponent {
     }
   }
 
+  drawStepPath(linkData, orientation) {
+    const { source, target } = linkData;
+    const deltaY = target.y - source.y;
+
+    return orientation === 'horizontal'
+      ? `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`
+      : `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`;
+  }
+
   drawDiagonalPath(linkData, orientation) {
     const diagonal = svg
       .diagonal()
@@ -82,6 +91,10 @@ export default class Link extends React.PureComponent {
       return this.drawStraightPath(linkData, orientation);
     }
 
+    if (pathFunc === 'step') {
+      return this.drawStepPath(linkData, orientation);
+    }
+
     return this.drawDiagonalPath(linkData, orientation);
   }
 
@@ -124,7 +137,7 @@ Link.defaultProps = {
 Link.propTypes = {
   linkData: T.object.isRequired,
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
-  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight']), T.func]).isRequired,
+  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'step']), T.func]).isRequired,
   transitionDuration: T.number.isRequired,
   onClick: T.func.isRequired,
   onMouseOver: T.func.isRequired,
