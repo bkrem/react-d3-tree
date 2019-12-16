@@ -64,7 +64,7 @@
   "dependencies": {
     "clone": "^2.1.1",
     "d3": "3.5.17",
-    "deep-equal": "^1.0.1",
+    "deep-equal": "^2.0.1",
     "prop-types": "^15.5.10",
     "react-lifecycles-compat": "^3.0.4",
     "react-transition-group": "^1.1.3",
