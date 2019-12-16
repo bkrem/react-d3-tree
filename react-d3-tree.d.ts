@@ -29,7 +29,7 @@ declare module "react-d3-tree" {
     onUpdate?: (updateTarget: { targetNode: ReactD3TreeItem | null, currentTranslate: ReactD3TreeTranslate, currentZoom: number}) => any,
     orientation?: "horizontal" | "vertical",
     translate?: Partial<ReactD3TreeTranslate>,
-    pathFunc?: ("diagonal" | "elbow" | "straight") | ((...args: any[]) => any),
+    pathFunc?: ("diagonal" | "elbow" | "straight" | "step") | ((...args: any[]) => any),
     transitionDuration?: number,
     depthFactor?: number,
     collapsible?: boolean,
