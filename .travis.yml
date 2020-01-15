@@ -1,9 +1,9 @@
 language: node_js
 
 node_js:
+  - 12
+  - 10
   - 8
-  - 7
-  - 6
 
 before_install: yarn global add greenkeeper-lockfile@1
 before_script: greenkeeper-lockfile-update
