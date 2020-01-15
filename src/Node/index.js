@@ -97,7 +97,7 @@ export default class Node extends React.Component {
     );
   };
 
-  handleClick = evt => {
+  handleOnClick = evt => {
     this.props.onClick(this.props.nodeData.id, evt);
   };
 

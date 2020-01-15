@@ -537,7 +537,7 @@ class Tree extends React.Component {
                 onClick={this.handleNodeToggle}
                 onMouseOver={this.handleOnMouseOverCb}
                 onMouseOut={this.handleOnMouseOutCb}
-                textLayout={textLayout}
+                textLayout={nodeData.textLayout || textLayout}
                 subscriptions={subscriptions}
                 allowForeignObjects={allowForeignObjects}
                 styles={styles.nodes}
