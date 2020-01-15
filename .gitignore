@@ -32,3 +32,5 @@ node_modules
 
 # ignore Webpack stats output
 stats.json
+
+dist
