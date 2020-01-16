@@ -27,7 +27,11 @@
   "lint-staged": {
     "src/**/*.js": [
       "eslint",
-      "prettier --write --single-quote --trailing-comma=all --print-width 100",
+      "prettier",
+      "git add"
+    ],
+    "src/**/*.tsx": [
+      "prettier",
       "git add"
     ]
   },
@@ -56,6 +60,7 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
+    "@types/react": "^16.9.17",
     "babel-jest": "^24.9.0",
     "coveralls": "^3.0.0",
     "enzyme": "^3.4.4",
@@ -70,7 +75,7 @@
     "jest": "^24.9.0",
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^9.4.2",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "react": "^16.6.3",
     "react-docgen": "^2.16.0",
     "react-dom": "^16.6.3",
