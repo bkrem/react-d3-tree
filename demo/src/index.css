@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  background: #fff;
+}
+
+h1 {
+  margin: 0;
+  color: #F97F85;
+}

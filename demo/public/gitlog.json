@@ -1,0 +1,2149 @@
+[{
+  "child": "f438442e23e663826083d44c5246e0e22a3a220b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Nov 20 23:04:13 2017 +0100",
+  "name": "v1.7.0",
+  "parent": "caf2d5012f9af57a635994a9ca72c64f392bf977"
+},
+{
+  "child": "caf2d5012f9af57a635994a9ca72c64f392bf977",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Nov 20 23:02:33 2017 +0100",
+  "name": "1.7.0-build",
+  "parent": "ea31f5cfa66a045e18abc59366cb75c33523bb9f"
+},
+{
+  "child": "ea31f5cfa66a045e18abc59366cb75c33523bb9f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Nov 20 22:59:15 2017 +0100",
+  "name": "Merge-branch-develop",
+  "parent": "264b2186015671b211f6df3ce691f12e4afef993 7cb456c3e2909dd9c763dba765ff0537fd248874"
+},
+{
+  "child": "7cb456c3e2909dd9c763dba765ff0537fd248874",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Nov 20 22:50:34 2017 +0100",
+  "name": "Implement-onMouseOut-prop",
+  "parent": "5d6804bc686b0ad3939e9ab7b5464a92bfdc473d"
+},
+{
+  "child": "5d6804bc686b0ad3939e9ab7b5464a92bfdc473d",
+  "author": "Rohan Damani <damanirohan@gmail.com>",
+  "date": "Mon Nov 20 07:07:21 2017 -0800",
+  "name": "Implement-onMouseOver-feature-50",
+  "parent": "6939773b16d18fb79ac752da7f5f6103c5d8bf08"
+},
+{
+  "child": "6939773b16d18fb79ac752da7f5f6103c5d8bf08",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Nov 20 15:45:22 2017 +0100",
+  "name": "Upgrade-dev-env-to-React-16.x",
+  "parent": "946f6aefc9fbd0fed6f8ba7cf357cc0fe50b320c"
+},
+{
+  "child": "946f6aefc9fbd0fed6f8ba7cf357cc0fe50b320c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Nov 19 15:27:37 2017 +0100",
+  "name": "Move-react-from-devDeps-to-peerDeps",
+  "parent": "f84c1a202eb42b7738b44cefbeabdebc0b2e4a97"
+},
+{
+  "child": "264b2186015671b211f6df3ce691f12e4afef993",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Nov 4 17:34:00 2017 +0100",
+  "name": "Adds-Recipes-section-49",
+  "parent": "1686333f0db7beb2a135e1e1ac6873134ca8393e"
+},
+{
+  "child": "f84c1a202eb42b7738b44cefbeabdebc0b2e4a97",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Nov 4 16:36:18 2017 +0100",
+  "name": "Avoid-unnecessary-deepEqual-call",
+  "parent": "1686333f0db7beb2a135e1e1ac6873134ca8393e"
+},
+{
+  "child": "1686333f0db7beb2a135e1e1ac6873134ca8393e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Oct 26 18:41:51 2017 +0200",
+  "name": "v1.6.0",
+  "parent": "e3ea93c4fdfdbc8c7d118aadba46d5bbad95db2d"
+},
+{
+  "child": "e3ea93c4fdfdbc8c7d118aadba46d5bbad95db2d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Oct 26 18:40:57 2017 +0200",
+  "name": "1.6.0-build",
+  "parent": "2687ae326cd777c00e26e8ffb24f05b18af90f0f"
+},
+{
+  "child": "2687ae326cd777c00e26e8ffb24f05b18af90f0f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Oct 26 18:37:42 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "415b019670348342fb21f35e2b3815e7997bd859"
+},
+{
+  "child": "415b019670348342fb21f35e2b3815e7997bd859",
+  "author": "Alex Lamas <alex.lamas@bazaarvoice.com>",
+  "date": "Thu Oct 26 11:30:44 2017 -0500",
+  "name": "Added-svg-text-transform-functionality-to-node-names-43",
+  "parent": "275e43ece850517070b0e993a75ff13a17cd9da4"
+},
+{
+  "child": "275e43ece850517070b0e993a75ff13a17cd9da4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Oct 24 23:32:25 2017 +0200",
+  "name": "v1.5.2",
+  "parent": "1f317b3d9ae8d13ead4c272b8b587fd16aa57f06"
+},
+{
+  "child": "1f317b3d9ae8d13ead4c272b8b587fd16aa57f06",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Oct 24 23:31:22 2017 +0200",
+  "name": "1.5.2-build",
+  "parent": "78b55c094745017b2c7c730fa88b99aff7704bb5"
+},
+{
+  "child": "78b55c094745017b2c7c730fa88b99aff7704bb5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Oct 24 23:09:06 2017 +0200",
+  "name": "Reflow-graph-on-subscribed-prop-change-42",
+  "parent": "8d1d5bfea3e3f80c9b06cd34aac66b8bb87243fb"
+},
+{
+  "child": "8d1d5bfea3e3f80c9b06cd34aac66b8bb87243fb",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Oct 22 02:45:04 2017 +0200",
+  "name": "Set-prettier-to-more-sane-100-chars",
+  "parent": "b96892c57250db0d7f615da1a8d33e0262e2a4b3"
+},
+{
+  "child": "b96892c57250db0d7f615da1a8d33e0262e2a4b3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 21 20:48:23 2017 +0200",
+  "name": "v1.5.1",
+  "parent": "f3603d0073a4f4850cefef459378e1012e2eec78"
+},
+{
+  "child": "f3603d0073a4f4850cefef459378e1012e2eec78",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 21 20:47:24 2017 +0200",
+  "name": "1.5.1-build",
+  "parent": "658a0150d2444ae410a089c7f2cfa3bddcd75830"
+},
+{
+  "child": "658a0150d2444ae410a089c7f2cfa3bddcd75830",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 21 20:38:59 2017 +0200",
+  "name": "Updates-docs-for-custom-pathFunc-37",
+  "parent": "c397c4902af3af40f756d8b461a66233e25e9b20"
+},
+{
+  "child": "c397c4902af3af40f756d8b461a66233e25e9b20",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 21 20:20:24 2017 +0200",
+  "name": "Merge-branch-hotfix-41-prevent-render-blocking",
+  "parent": "f890f06cdec3b72ccbc711bfd69299ad514d6b46 0f6f1da50595aeec4879702df778489f0462f48f"
+},
+{
+  "child": "0f6f1da50595aeec4879702df778489f0462f48f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 21 16:39:30 2017 +0200",
+  "name": "Improves-render-update-performance-41",
+  "parent": "f890f06cdec3b72ccbc711bfd69299ad514d6b46"
+},
+{
+  "child": "f890f06cdec3b72ccbc711bfd69299ad514d6b46",
+  "author": "Michael Su <mdasu1@gmail.com>",
+  "date": "Wed Oct 18 02:45:18 2017 -0700",
+  "name": "37-Custom-pathFunc-38",
+  "parent": "4be8ba37f7158cae2f0459d6c75ff786ac7a2583"
+},
+{
+  "child": "4be8ba37f7158cae2f0459d6c75ff786ac7a2583",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 7 18:26:12 2017 +0200",
+  "name": "v1.5.0",
+  "parent": "30ccff4186739520cac09c11a3bdfd9ecf73d45a"
+},
+{
+  "child": "30ccff4186739520cac09c11a3bdfd9ecf73d45a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 7 18:25:25 2017 +0200",
+  "name": "1.5.0-build",
+  "parent": "8f187008f81f65988f1fc1cac2b69931596e7bc1"
+},
+{
+  "child": "8f187008f81f65988f1fc1cac2b69931596e7bc1",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 7 18:22:19 2017 +0200",
+  "name": "Deactivate-docs-util-until-working-with-prettier",
+  "parent": "460e17643c3fc580d6495a4d5b858ad90d8ca5b9"
+},
+{
+  "child": "460e17643c3fc580d6495a4d5b858ad90d8ca5b9",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Oct 7 16:41:05 2017 +0200",
+  "name": "Implements-textLayout-prop-closes-34",
+  "parent": "b99192d177e3be6832c94397fdbccd2ca8f0a53c"
+},
+{
+  "child": "b99192d177e3be6832c94397fdbccd2ca8f0a53c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Oct 6 18:18:37 2017 +0200",
+  "name": "Implements-nodeSvgShape-prop-31",
+  "parent": "2b14a4f0fe2412a7be35f213e35d1016ce153e0e"
+},
+{
+  "child": "2b14a4f0fe2412a7be35f213e35d1016ce153e0e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Oct 6 16:36:18 2017 +0200",
+  "name": "Adds-eslint-config-for-prettier",
+  "parent": "f73bf8e5a5f8829c74faa52257c290fdcd770900"
+},
+{
+  "child": "f73bf8e5a5f8829c74faa52257c290fdcd770900",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Sep 10 17:17:12 2017 +0200",
+  "name": "Initial-prettier-run-through-of-src",
+  "parent": "15c4d3504d4abae0fde085411d5aae98fb36c9a4"
+},
+{
+  "child": "15c4d3504d4abae0fde085411d5aae98fb36c9a4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Sep 10 17:16:34 2017 +0200",
+  "name": "Adds-prettier-adds-precommit-lint-hook",
+  "parent": "9c054d9b4a867286e223d2e3430fa239b4a903c1"
+},
+{
+  "child": "9c054d9b4a867286e223d2e3430fa239b4a903c1",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Sep 10 16:22:33 2017 +0200",
+  "name": "Disable-parameter-assignment-lint-rule",
+  "parent": "fdd6f903cd974a62c3ae12913ae190deaeafb2e3"
+},
+{
+  "child": "fdd6f903cd974a62c3ae12913ae190deaeafb2e3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Sep 8 20:39:41 2017 +0200",
+  "name": "Upgrade-Webpack-to-v3.x",
+  "parent": "5a041af073ffde82716135560594c5084fe35188"
+},
+{
+  "child": "5a041af073ffde82716135560594c5084fe35188",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jul 28 11:21:14 2017 +0200",
+  "name": "Adds-node-8.x-to-travis-config",
+  "parent": "24260eb7132c19c18df3bcfb3b6af68afbdd2945"
+},
+{
+  "child": "24260eb7132c19c18df3bcfb3b6af68afbdd2945",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jul 24 19:30:07 2017 +0200",
+  "name": "v1.4.0",
+  "parent": "5651bd3be1d2716fc8b059c6e770cdad746fe87f"
+},
+{
+  "child": "5651bd3be1d2716fc8b059c6e770cdad746fe87f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jul 24 19:28:54 2017 +0200",
+  "name": "1.4.0-build",
+  "parent": "59f5b1cc1243046c3219a640184ad6e8da5e8c44"
+},
+{
+  "child": "59f5b1cc1243046c3219a640184ad6e8da5e8c44",
+  "author": "Justin Sisley <sisley.justin@gmail.com>",
+  "date": "Mon Jul 24 10:22:47 2017 -0700",
+  "name": "Feature-straight-as-a-pathFunc-30",
+  "parent": "e489e6cf9eac4fbb4db7077b275bcfcbb2c22a69"
+},
+{
+  "child": "e489e6cf9eac4fbb4db7077b275bcfcbb2c22a69",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jul 23 21:04:04 2017 +0200",
+  "name": "v1.3.4",
+  "parent": "a5b927fabe9ca61759e3a59d7ee79ea02c662c1e"
+},
+{
+  "child": "a5b927fabe9ca61759e3a59d7ee79ea02c662c1e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jul 23 21:03:01 2017 +0200",
+  "name": "1.3.4-build",
+  "parent": "4e325beee9daa7219536c5b13ebdd60ad0c24003"
+},
+{
+  "child": "4e325beee9daa7219536c5b13ebdd60ad0c24003",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jul 23 21:01:13 2017 +0200",
+  "name": "Set-styles-defaultProps-on-component-level",
+  "parent": "e5795515e00759952f042c9f268431b042ac94f2"
+},
+{
+  "child": "e5795515e00759952f042c9f268431b042ac94f2",
+  "author": "Justin Sisley <sisley.justin@gmail.com>",
+  "date": "Sun Jul 23 11:34:12 2017 -0700",
+  "name": "Ensure-nodes-render-over-their-links-on-Z-axis-29-closes-26",
+  "parent": "7477fd0796527ba646b63c04c5bd368786c373bc"
+},
+{
+  "child": "7477fd0796527ba646b63c04c5bd368786c373bc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jul 23 13:55:14 2017 +0200",
+  "name": "v1.3.3",
+  "parent": "843134b6a48e6b45bc579abb372a0f131044cd9b"
+},
+{
+  "child": "843134b6a48e6b45bc579abb372a0f131044cd9b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jul 23 13:54:19 2017 +0200",
+  "name": "1.3.3-build",
+  "parent": "4949402eeb090de7fce6e825ce40276a7677edeb"
+},
+{
+  "child": "4949402eeb090de7fce6e825ce40276a7677edeb",
+  "author": "Justin Sisley <sisley.justin@gmail.com>",
+  "date": "Sun Jul 23 04:48:06 2017 -0700",
+  "name": "Ensures-onClick-cb-fires-on-non-collapsible-tree-25",
+  "parent": "e8eacf3de672772e1b8d55aef8fa389ac564e2c8"
+},
+{
+  "child": "e8eacf3de672772e1b8d55aef8fa389ac564e2c8",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jul 15 19:59:09 2017 +0200",
+  "name": "v1.3.2",
+  "parent": "2cc7ac1fc23528f4ac183b43d2432dc6c9c6861d"
+},
+{
+  "child": "2cc7ac1fc23528f4ac183b43d2432dc6c9c6861d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jul 15 19:58:19 2017 +0200",
+  "name": "1.3.2-build",
+  "parent": "5802a9b1882c3ec2928afa1a9a342c911cac7560"
+},
+{
+  "child": "5802a9b1882c3ec2928afa1a9a342c911cac7560",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jul 15 19:55:09 2017 +0200",
+  "name": "Only-clone-targetNode-if-onClick-defined",
+  "parent": "d5fe463a1c752b0599dcf3a82b9bcdc4b68d929f"
+},
+{
+  "child": "d5fe463a1c752b0599dcf3a82b9bcdc4b68d929f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jul 11 22:45:27 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "e803dd4138c8506a88f0e53ad7ce33fa2986fa01"
+},
+{
+  "child": "e803dd4138c8506a88f0e53ad7ce33fa2986fa01",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jul 3 23:52:01 2017 +0200",
+  "name": "Update-keywords",
+  "parent": "f4bb9b3de4ed782febb285b273c1b11e977faf93"
+},
+{
+  "child": "f4bb9b3de4ed782febb285b273c1b11e977faf93",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 30 22:41:56 2017 +0200",
+  "name": "v1.3.1",
+  "parent": "1cf3c19edacc1c84c995af6f202ac677535f5206"
+},
+{
+  "child": "1cf3c19edacc1c84c995af6f202ac677535f5206",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 30 22:40:50 2017 +0200",
+  "name": "1.3.1-build",
+  "parent": "c307dc0904ba55a2e5f858be8986f19e19d323c6"
+},
+{
+  "child": "c307dc0904ba55a2e5f858be8986f19e19d323c6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 30 22:39:12 2017 +0200",
+  "name": "Implements-nodeData-param-for-onClick-hook-closes-21",
+  "parent": "4600275155e62e3401f3ee0d6d30d7d302c88670"
+},
+{
+  "child": "4600275155e62e3401f3ee0d6d30d7d302c88670",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 30 22:38:42 2017 +0200",
+  "name": "Update-lockfile",
+  "parent": "0f229855a2d3fda5a5ff050316ac5a2897d7dbf3"
+},
+{
+  "child": "0f229855a2d3fda5a5ff050316ac5a2897d7dbf3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 22:05:16 2017 +0200",
+  "name": "Switch-to-yarn-for-task-running",
+  "parent": "3a633f02601de103ce5803ffb3c2184c645e756c"
+},
+{
+  "child": "3a633f02601de103ce5803ffb3c2184c645e756c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:46:06 2017 +0200",
+  "name": "v1.3.0",
+  "parent": "014e35119f7ebfea8ceb9d8b957ef99fd619f88f"
+},
+{
+  "child": "014e35119f7ebfea8ceb9d8b957ef99fd619f88f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:44:58 2017 +0200",
+  "name": "1.3.0-build",
+  "parent": "5e09a1134042a7cf143b1a530ae79d3709e6a0f4"
+},
+{
+  "child": "5e09a1134042a7cf143b1a530ae79d3709e6a0f4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:44:17 2017 +0200",
+  "name": "Switch-to-yarn",
+  "parent": "6c5ede20a252e0718a59729261d1b4d19992c502"
+},
+{
+  "child": "6c5ede20a252e0718a59729261d1b4d19992c502",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:23:12 2017 +0200",
+  "name": "Merge-branch-feature-19-on-click-hook-into-develop",
+  "parent": "dd23a6ec63119a56657cc1bd29b36cd7a3d4fbfd e8985742cec072c39e187a5b2c7b92a70e8a5659"
+},
+{
+  "child": "e8985742cec072c39e187a5b2c7b92a70e8a5659",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:21:32 2017 +0200",
+  "name": "Adds-docs-for-onClick-prop-closes-19",
+  "parent": "06ddc82d94f6e691547bb5f3790415c6ed9ba123"
+},
+{
+  "child": "06ddc82d94f6e691547bb5f3790415c6ed9ba123",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 27 21:15:20 2017 +0200",
+  "name": "Adds-onClick-callback-test-19",
+  "parent": "dd23a6ec63119a56657cc1bd29b36cd7a3d4fbfd"
+},
+{
+  "child": "dd23a6ec63119a56657cc1bd29b36cd7a3d4fbfd",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:39:43 2017 +0200",
+  "name": "Merge-branch-feature-18-expose-circle-radius-into-develop",
+  "parent": "86e4db2b0452fc7eb3a8291296a8ef9ed5c7311a 6c80f00a6a56bed3e9692786cdf6cf86a819932b"
+},
+{
+  "child": "6c80f00a6a56bed3e9692786cdf6cf86a819932b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:37:12 2017 +0200",
+  "name": "Adds-circleRadius-docs-closes-18",
+  "parent": "ee92e6885254efd34ba9cd2979eaf5887542ca91"
+},
+{
+  "child": "ee92e6885254efd34ba9cd2979eaf5887542ca91",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:32:42 2017 +0200",
+  "name": "Exposes-circleRadius-prop-18",
+  "parent": "86e4db2b0452fc7eb3a8291296a8ef9ed5c7311a"
+},
+{
+  "child": "86e4db2b0452fc7eb3a8291296a8ef9ed5c7311a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:21:15 2017 +0200",
+  "name": "Merge-branch-feature-13-expose-separation-prop-into-develop",
+  "parent": "1b6e6beec6d98c55731966685fcbe76f108e3c92 847da4ea639adc56d97acc7ce0b6f4cfc19ecf93"
+},
+{
+  "child": "847da4ea639adc56d97acc7ce0b6f4cfc19ecf93",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:20:36 2017 +0200",
+  "name": "Fixes-defaultProps-for-separation-13",
+  "parent": "508343d561afd09d84a6cd053c88ae70a1700a59"
+},
+{
+  "child": "508343d561afd09d84a6cd053c88ae70a1700a59",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 20:11:17 2017 +0200",
+  "name": "Update-docs-for-13-17",
+  "parent": "06253e1790c24f39e96d02355e16db7e2eb03336"
+},
+{
+  "child": "06253e1790c24f39e96d02355e16db7e2eb03336",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 19:44:37 2017 +0200",
+  "name": "Increase-coverage-thresholds",
+  "parent": "b8a67bb9686c14c4e8fa4cbcb7bf2eac6926f51f"
+},
+{
+  "child": "b8a67bb9686c14c4e8fa4cbcb7bf2eac6926f51f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 19:44:12 2017 +0200",
+  "name": "Reimplements-test-for-zoomable-prop",
+  "parent": "e5862d14dcdc481136bd9d6946d6b9af66faaa1b"
+},
+{
+  "child": "e5862d14dcdc481136bd9d6946d6b9af66faaa1b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 19:37:14 2017 +0200",
+  "name": "Renames-separation-properties-adds-lib-prefix-for-CSS-13",
+  "parent": "ff2697485f3fabe53da34e24e25f465657e3e34f"
+},
+{
+  "child": "ff2697485f3fabe53da34e24e25f465657e3e34f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 19:12:22 2017 +0200",
+  "name": "Implements-nodeSize-prop-17",
+  "parent": "6c3419c3057a0eceb49c27ca922b13f8ffbe9b6e"
+},
+{
+  "child": "6c3419c3057a0eceb49c27ca922b13f8ffbe9b6e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 18:23:34 2017 +0200",
+  "name": "Merge-branch-feature-13-expose-separation-prop-of-https-github.com-bkrem-react-d3-tree-into-feature-13-expose-separation-prop",
+  "parent": "4d7494053a452d336417ea402bd184b2d637eaf1 62074408fba2ea9c05c1a1009d2bb846f483b524"
+},
+{
+  "child": "4d7494053a452d336417ea402bd184b2d637eaf1",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 24 18:22:47 2017 +0200",
+  "name": "Use-pre-script-for-analyze",
+  "parent": "b0d3ae6d5bd93afa8c1eac586b834e918f56119d"
+},
+{
+  "child": "62074408fba2ea9c05c1a1009d2bb846f483b524",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 20 20:30:08 2017 +0200",
+  "name": "Adds-provisional-docs-for-separation-prop",
+  "parent": "b0d3ae6d5bd93afa8c1eac586b834e918f56119d"
+},
+{
+  "child": "b0d3ae6d5bd93afa8c1eac586b834e918f56119d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 20 20:23:03 2017 +0200",
+  "name": "Adds-analyze-npm-script",
+  "parent": "973caddf1f54feba3fd9b091d59f00b01d5926cf"
+},
+{
+  "child": "973caddf1f54feba3fd9b091d59f00b01d5926cf",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 20 18:25:33 2017 +0200",
+  "name": "Removes-debug-logging-13",
+  "parent": "dd71e0acf3bea20a1bc8c2781c69b3b8b45bf39c"
+},
+{
+  "child": "dd71e0acf3bea20a1bc8c2781c69b3b8b45bf39c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jun 19 21:02:13 2017 +0200",
+  "name": "Establishes-separation-prop-13",
+  "parent": "1b6e6beec6d98c55731966685fcbe76f108e3c92"
+},
+{
+  "child": "1b6e6beec6d98c55731966685fcbe76f108e3c92",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jun 19 20:25:07 2017 +0200",
+  "name": "Merge-branch-master-into-develop",
+  "parent": "d7ce894a04fbc47d6a22de6690caf9e3855211c0 7128edbe6490936cb5353cc7b06e82d5233ac549"
+},
+{
+  "child": "7128edbe6490936cb5353cc7b06e82d5233ac549",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 17 21:30:15 2017 +0200",
+  "name": "Adds-release-script-closes-15",
+  "parent": "5316a9e722910cfc63fff9f5b65c9c23707dd5ca"
+},
+{
+  "child": "5316a9e722910cfc63fff9f5b65c9c23707dd5ca",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 17 21:17:33 2017 +0200",
+  "name": "Adds-np-devDependency",
+  "parent": "2e9eb1d3619de49c6205ef8fffb486c48d90a5de"
+},
+{
+  "child": "d7ce894a04fbc47d6a22de6690caf9e3855211c0",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 17 16:01:00 2017 +0200",
+  "name": "Merge-branch-master-into-develop",
+  "parent": "07c705eef01a20c79627eb7fbe38b5e7e24c61c0 2e9eb1d3619de49c6205ef8fffb486c48d90a5de"
+},
+{
+  "child": "2e9eb1d3619de49c6205ef8fffb486c48d90a5de",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 17 16:00:46 2017 +0200",
+  "name": "Update-component-docs",
+  "parent": "78df4748a040b0d63e0a698835e46e4da7788dce"
+},
+{
+  "child": "78df4748a040b0d63e0a698835e46e4da7788dce",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 16 15:46:06 2017 +0200",
+  "name": "Add-Codacy-badge",
+  "parent": "d9c2cc7b218bf5b7e6b2029a35f043dbb4793a5c"
+},
+{
+  "child": "07c705eef01a20c79627eb7fbe38b5e7e24c61c0",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 15 19:07:33 2017 +0200",
+  "name": "Merge-branch-release-v1.2.0-into-develop",
+  "parent": "8c5f5b096f43504cac8227e6929a5be0fc41d90c 2f594fda3427fb753f6c91057b8a85af480d47da"
+},
+{
+  "child": "d9c2cc7b218bf5b7e6b2029a35f043dbb4793a5c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 15 19:07:33 2017 +0200",
+  "name": "Merge-branch-release-v1.2.0",
+  "parent": "da76e203815dd0adbf052053a4a5f78b2d9af55c 2f594fda3427fb753f6c91057b8a85af480d47da"
+},
+{
+  "child": "2f594fda3427fb753f6c91057b8a85af480d47da",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 15 19:04:35 2017 +0200",
+  "name": "Bump-version-to-1.2.0",
+  "parent": "3d4e608ef8c8ff8255cbe856735bea2db94c60f5"
+},
+{
+  "child": "3d4e608ef8c8ff8255cbe856735bea2db94c60f5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 15 19:03:39 2017 +0200",
+  "name": "Updates-minified-build-for-v1.2.0",
+  "parent": "8c5f5b096f43504cac8227e6929a5be0fc41d90c"
+},
+{
+  "child": "8c5f5b096f43504cac8227e6929a5be0fc41d90c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 21:10:17 2017 +0200",
+  "name": "Update-deprecated-packages-for-testing",
+  "parent": "891dddfa09848e0a689a6a4a8dc16bed12e7128b"
+},
+{
+  "child": "891dddfa09848e0a689a6a4a8dc16bed12e7128b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 21:04:51 2017 +0200",
+  "name": "Update-React-dependencies-add-prop-types-package",
+  "parent": "3ee0571a19a24987267ee2c079da4ca636d2c5c3"
+},
+{
+  "child": "3ee0571a19a24987267ee2c079da4ca636d2c5c3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 17:27:47 2017 +0200",
+  "name": "Merge-branch-feature-11-expose-style-props-into-develop",
+  "parent": "f4d0df5b17cb22347d31b593aabc8f634e0cdee5 fefbeed34c8dd28555210e299db11e72062b59e6"
+},
+{
+  "child": "fefbeed34c8dd28555210e299db11e72062b59e6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 17:06:01 2017 +0200",
+  "name": "Avoids-redundant-setState-bindZoomListener-calls",
+  "parent": "9e0b776d62da46b1104263a3f2add6fbd5ef287a"
+},
+{
+  "child": "9e0b776d62da46b1104263a3f2add6fbd5ef287a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 16:34:36 2017 +0200",
+  "name": "Ensure-we-re-using-nextProps-on-bindZoomListener-when-rebinding-10",
+  "parent": "e2f55767682fc2f09958c7f976bc9143ba5fcbc6"
+},
+{
+  "child": "e2f55767682fc2f09958c7f976bc9143ba5fcbc6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 16:21:23 2017 +0200",
+  "name": "Adds-styles-to-props-table",
+  "parent": "d748834c1fa598dd821f4566155f2b0f9a397024"
+},
+{
+  "child": "d748834c1fa598dd821f4566155f2b0f9a397024",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 16:16:19 2017 +0200",
+  "name": "Adds-Styling-section-to-docs",
+  "parent": "0ced6842cb304501c824048267aa2055729f614f"
+},
+{
+  "child": "0ced6842cb304501c824048267aa2055729f614f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 16:03:20 2017 +0200",
+  "name": "Simplifies-structuring-for-top-level-style-object",
+  "parent": "8a215f99a2365301e983ea7889778125893ec8c9"
+},
+{
+  "child": "8a215f99a2365301e983ea7889778125893ec8c9",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 15:32:57 2017 +0200",
+  "name": "Update-tests-for-style-props",
+  "parent": "ec88dfa3b6f2b57b2b397f0c414370f1de60c72c"
+},
+{
+  "child": "ec88dfa3b6f2b57b2b397f0c414370f1de60c72c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 14:25:05 2017 +0200",
+  "name": "Adds-issue-template",
+  "parent": "271f1a8484eabfb58c8d14e7b8d7f867895ff21e"
+},
+{
+  "child": "271f1a8484eabfb58c8d14e7b8d7f867895ff21e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 14:21:54 2017 +0200",
+  "name": "Adds-styles-prop-to-Link-11",
+  "parent": "e79090df70dddf0740b8f4e3dc270ba3fcb05d1d"
+},
+{
+  "child": "e79090df70dddf0740b8f4e3dc270ba3fcb05d1d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue Jun 13 01:25:45 2017 +0200",
+  "name": "Refactors-style-props-to-simplify-API-11",
+  "parent": "8cbe7372428444ea8cbca8fdc6fe58d852d5cd0d"
+},
+{
+  "child": "8cbe7372428444ea8cbca8fdc6fe58d852d5cd0d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jun 12 22:18:32 2017 +0200",
+  "name": "Rebinds-zoomListener-on-relevant-prop-change-10",
+  "parent": "f4d0df5b17cb22347d31b593aabc8f634e0cdee5"
+},
+{
+  "child": "da76e203815dd0adbf052053a4a5f78b2d9af55c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon Jun 12 21:31:14 2017 +0200",
+  "name": "Update-example-code",
+  "parent": "5036d0a134c65b3aa8971d4cbc537c5de49bd994"
+},
+{
+  "child": "5036d0a134c65b3aa8971d4cbc537c5de49bd994",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 10 20:18:17 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "c76145f58e893a708bc332a320dc9faa21384daa"
+},
+{
+  "child": "f4d0df5b17cb22347d31b593aabc8f634e0cdee5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:42:29 2017 +0200",
+  "name": "Merge-branch-hotfix-v1.1.1-into-develop",
+  "parent": "94fb50b9880a2787388fe2eea97ccb8fb9eef6e6 cd6614c3458b61b59e77b6326e357cb26c97e48d"
+},
+{
+  "child": "c76145f58e893a708bc332a320dc9faa21384daa",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:42:29 2017 +0200",
+  "name": "Merge-branch-hotfix-v1.1.1",
+  "parent": "af28f191eac8f5e3af3fe34ec86c83aed690a879 cd6614c3458b61b59e77b6326e357cb26c97e48d"
+},
+{
+  "child": "cd6614c3458b61b59e77b6326e357cb26c97e48d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:41:51 2017 +0200",
+  "name": "Bumps-version-to-1.1.1",
+  "parent": "c2933259c0b95ce4c80a323c9801ae5976984fdc"
+},
+{
+  "child": "c2933259c0b95ce4c80a323c9801ae5976984fdc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:41:03 2017 +0200",
+  "name": "Moves-react-transition-group-to-core-dependencies",
+  "parent": "af28f191eac8f5e3af3fe34ec86c83aed690a879"
+},
+{
+  "child": "94fb50b9880a2787388fe2eea97ccb8fb9eef6e6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:26:41 2017 +0200",
+  "name": "Merge-branch-release-v1.1.0-into-develop",
+  "parent": "ce92d1594e54bd66df3b15b6bc83272e9117d2fc 51e0d10df79ddd9d3eb6f67aa68f22bc4bf6d580"
+},
+{
+  "child": "af28f191eac8f5e3af3fe34ec86c83aed690a879",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:26:41 2017 +0200",
+  "name": "Merge-branch-release-v1.1.0",
+  "parent": "2c37aeefe9d23eff41718e7fa79c72d8f4d7f3eb 51e0d10df79ddd9d3eb6f67aa68f22bc4bf6d580"
+},
+{
+  "child": "51e0d10df79ddd9d3eb6f67aa68f22bc4bf6d580",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:25:38 2017 +0200",
+  "name": "Bump-version-to-1.1.0",
+  "parent": "a87ad21d59f2d3e801a888f7fbc3027eaf6c4f8c"
+},
+{
+  "child": "a87ad21d59f2d3e801a888f7fbc3027eaf6c4f8c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:25:10 2017 +0200",
+  "name": "Update-minified-bundle-for-v1.1.0",
+  "parent": "ce92d1594e54bd66df3b15b6bc83272e9117d2fc"
+},
+{
+  "child": "ce92d1594e54bd66df3b15b6bc83272e9117d2fc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:23:06 2017 +0200",
+  "name": "Merge-branch-feature-09-reimplement-zoom-into-develop",
+  "parent": "43b84828b71b91941e9dfaba3d1ea780eed4274b 107172b93c7c8d3afe8d290a8ea651d03d7172ff"
+},
+{
+  "child": "107172b93c7c8d3afe8d290a8ea651d03d7172ff",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:21:23 2017 +0200",
+  "name": "Remove-TODO",
+  "parent": "e20e3a47ac37bf5e8680ab988c9b37057e7127e0"
+},
+{
+  "child": "e20e3a47ac37bf5e8680ab988c9b37057e7127e0",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 21:20:47 2017 +0200",
+  "name": "Adds-docs-for-refactored-zoom-functionality-closes-9",
+  "parent": "21c204b5f5f2e09255edbb87b29272944ea9764d"
+},
+{
+  "child": "21c204b5f5f2e09255edbb87b29272944ea9764d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 20:51:03 2017 +0200",
+  "name": "Use-cursor-grab-for-diagram-if-props.zoomable",
+  "parent": "a8d149d4ac8b074de4a03c2034d819da7639e243"
+},
+{
+  "child": "a8d149d4ac8b074de4a03c2034d819da7639e243",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 20:30:52 2017 +0200",
+  "name": "Re-implement-stable-zoom-listener",
+  "parent": "43b84828b71b91941e9dfaba3d1ea780eed4274b"
+},
+{
+  "child": "43b84828b71b91941e9dfaba3d1ea780eed4274b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 9 19:47:26 2017 +0200",
+  "name": "Ensures-library-specific-class-naming",
+  "parent": "3be4ebd04169706c1adb2e5426acd5cd3d6fe830"
+},
+{
+  "child": "2c37aeefe9d23eff41718e7fa79c72d8f4d7f3eb",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:28:32 2017 +0200",
+  "name": "Merge-branch-hotfix-v1.0.1",
+  "parent": "4c795cdde3bcf58404ad3866e1523d66cb0bca6a 4321da9d7ba4703876331995ebc3e9be175398e8"
+},
+{
+  "child": "3be4ebd04169706c1adb2e5426acd5cd3d6fe830",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:28:32 2017 +0200",
+  "name": "Merge-branch-hotfix-v1.0.1-into-develop",
+  "parent": "4c795cdde3bcf58404ad3866e1523d66cb0bca6a 4321da9d7ba4703876331995ebc3e9be175398e8"
+},
+{
+  "child": "4321da9d7ba4703876331995ebc3e9be175398e8",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:27:21 2017 +0200",
+  "name": "Bumps-version-to-1.0.1",
+  "parent": "5bbda32f33d4a09a53c17f015f4dda8e19707b3e"
+},
+{
+  "child": "5bbda32f33d4a09a53c17f015f4dda8e19707b3e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:26:21 2017 +0200",
+  "name": "Adds-updated-minified-bundle",
+  "parent": "4c795cdde3bcf58404ad3866e1523d66cb0bca6a"
+},
+{
+  "child": "4c795cdde3bcf58404ad3866e1523d66cb0bca6a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:24:07 2017 +0200",
+  "name": "Merge-branch-release-v1.0.0",
+  "parent": "b75a8df2c87866b3589790c4b50b2320b0f16025 105d3e8d4e06e904cfe87d0bdc1f8983d8067948"
+},
+{
+  "child": "105d3e8d4e06e904cfe87d0bdc1f8983d8067948",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:16:36 2017 +0200",
+  "name": "Typo",
+  "parent": "8115a1ebcadd0c1516f342a716f28d31f67281bc"
+},
+{
+  "child": "8115a1ebcadd0c1516f342a716f28d31f67281bc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:15:42 2017 +0200",
+  "name": "Updates-docs-for-transitions",
+  "parent": "e199312b6ccfa1a09caac5c15f5ee29cc2c0c6a7"
+},
+{
+  "child": "e199312b6ccfa1a09caac5c15f5ee29cc2c0c6a7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:06:50 2017 +0200",
+  "name": "Bumps-version-to-v1.0.0",
+  "parent": "0524828e7f50e3d47f11e78c7ce4512a741e1182"
+},
+{
+  "child": "0524828e7f50e3d47f11e78c7ce4512a741e1182",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:05:53 2017 +0200",
+  "name": "Merge-branch-feature-add-transitions-into-develop",
+  "parent": "7cf66611a61dd77a07ddc497b039eb8b70a3e36d bf5f3dc67403d8a6ea031c10ba101a904033495a"
+},
+{
+  "child": "bf5f3dc67403d8a6ea031c10ba101a904033495a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 21:04:43 2017 +0200",
+  "name": "Removes-node-v8-until-package-issue-resolved",
+  "parent": "b3e0e6d64d79464d966319116d66559a2a1779d7"
+},
+{
+  "child": "b3e0e6d64d79464d966319116d66559a2a1779d7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 20:58:00 2017 +0200",
+  "name": "Omits-duplicate-linting",
+  "parent": "ce1e0c3fd1fed6e39c0c5218c9e0abcb3351021e"
+},
+{
+  "child": "ce1e0c3fd1fed6e39c0c5218c9e0abcb3351021e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 20:57:16 2017 +0200",
+  "name": "Updates-tests-for-depthFactor-fix",
+  "parent": "adf28bacec2f1927d98688778011b6ec97edfac2"
+},
+{
+  "child": "adf28bacec2f1927d98688778011b6ec97edfac2",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 20:43:20 2017 +0200",
+  "name": "Fixes-issue-with-dynamic-changes-in-depthFactor",
+  "parent": "4f98430057457be664626a0d9ad562725e4855a2"
+},
+{
+  "child": "4f98430057457be664626a0d9ad562725e4855a2",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 19:55:36 2017 +0200",
+  "name": "Comments-out-bindZoomListener-until-refactored",
+  "parent": "7d5a18ae8f2c6c7e50084dc6bbfba0995636d148"
+},
+{
+  "child": "7d5a18ae8f2c6c7e50084dc6bbfba0995636d148",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 19:52:31 2017 +0200",
+  "name": "Reduce-branching-threshold-to-non-ridic-level",
+  "parent": "ff80fe5331df3725402f8b44e9098c6b34f4aa78"
+},
+{
+  "child": "ff80fe5331df3725402f8b44e9098c6b34f4aa78",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 19:51:52 2017 +0200",
+  "name": "Updates-Tree-tests",
+  "parent": "e04bfc21006a7b25dffacdc44d00d4e0624506d8"
+},
+{
+  "child": "e04bfc21006a7b25dffacdc44d00d4e0624506d8",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 18:43:21 2017 +0200",
+  "name": "Simplifies-Node-component-updates-fixes-horizontal-vertical-switch-bug",
+  "parent": "e9de712293dd3e91413ad60ffd3e70bd9a8a54a1"
+},
+{
+  "child": "e9de712293dd3e91413ad60ffd3e70bd9a8a54a1",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 18:14:25 2017 +0200",
+  "name": "Removes-redundant-Link-method",
+  "parent": "a07b4572de188a9ee252e2ef2045a06231712087"
+},
+{
+  "child": "a07b4572de188a9ee252e2ef2045a06231712087",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 18:08:08 2017 +0200",
+  "name": "Update-Link-tests-for-transitions",
+  "parent": "8fc248c94d2b2b4a673eb4c99edecd5c1936f824"
+},
+{
+  "child": "8fc248c94d2b2b4a673eb4c99edecd5c1936f824",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 18:02:42 2017 +0200",
+  "name": "Simplifies-method-spies",
+  "parent": "e0dfc23d2a3b79ff8098cdafbdca20cb2a512a2e"
+},
+{
+  "child": "e0dfc23d2a3b79ff8098cdafbdca20cb2a512a2e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 8 17:56:08 2017 +0200",
+  "name": "Update-Node-tests-for-transitions",
+  "parent": "0cdbabc267796899049446445c1abb07a57c2373"
+},
+{
+  "child": "0cdbabc267796899049446445c1abb07a57c2373",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed Jun 7 19:55:32 2017 +0200",
+  "name": "Comments-out-bindZoomListener-test-until-relevant",
+  "parent": "0ccc8f433bbcd0c32fb0ca6368c5e1dd592e40f4"
+},
+{
+  "child": "0ccc8f433bbcd0c32fb0ca6368c5e1dd592e40f4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed Jun 7 19:54:51 2017 +0200",
+  "name": "Fixes-unstable-behaviour-on-undefined-transitionDuration",
+  "parent": "49d1f4136d2015e21b2cf4f22fb9c4f69ad1eb78"
+},
+{
+  "child": "49d1f4136d2015e21b2cf4f22fb9c4f69ad1eb78",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 23:47:29 2017 +0200",
+  "name": "Fixes-missing-className-from-previous-merge",
+  "parent": "d55422ac543bdcb55dab03df994537b84c44d802"
+},
+{
+  "child": "d55422ac543bdcb55dab03df994537b84c44d802",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 23:37:35 2017 +0200",
+  "name": "Use-state.initialStyle-for-node-opacity-transitions",
+  "parent": "90da59c541c7b38d47d02c29ff14d0466ca61919"
+},
+{
+  "child": "90da59c541c7b38d47d02c29ff14d0466ca61919",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 23:12:22 2017 +0200",
+  "name": "Simplify-transitions-API-by-only-exposing-transitionDuration",
+  "parent": "4678ca91ac0b728b50710e91add0886ba0d3f587"
+},
+{
+  "child": "4678ca91ac0b728b50710e91add0886ba0d3f587",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 22:57:42 2017 +0200",
+  "name": "Removes-unnecessary-ternary-on-style-prop",
+  "parent": "4fe30edb95a79872df6a09511df7174d2e20a412"
+},
+{
+  "child": "4fe30edb95a79872df6a09511df7174d2e20a412",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 22:36:48 2017 +0200",
+  "name": "Moves-depthFactor-conditional-into-setTransformOrientation",
+  "parent": "04fc70f3218ffac87eb5f77b06316ce8b0c88540"
+},
+{
+  "child": "04fc70f3218ffac87eb5f77b06316ce8b0c88540",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 22:36:37 2017 +0200",
+  "name": "Fix-some-tests",
+  "parent": "123d53f92e81a74faf1f98468c89b16d7f0ad180"
+},
+{
+  "child": "123d53f92e81a74faf1f98468c89b16d7f0ad180",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 21:04:42 2017 +0200",
+  "name": "Smoothens-mounting-unmounting-transitions-for-nodes-links",
+  "parent": "0d308cd07b0178ff114d065f829455dc797e5370"
+},
+{
+  "child": "0d308cd07b0178ff114d065f829455dc797e5370",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 18:28:12 2017 +0200",
+  "name": "Sets-defaultProps-for-transitions-stabilises-unmounting",
+  "parent": "da8f3cdafd3846fe57e2823d0a8fd17f7a51d0ef"
+},
+{
+  "child": "da8f3cdafd3846fe57e2823d0a8fd17f7a51d0ef",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun Jun 4 17:51:27 2017 +0200",
+  "name": "Enables-transitioning-of-mounted-nodes-between-coordinates",
+  "parent": "2a540f9ce1c97f12017f124523e1f376119cbe61"
+},
+{
+  "child": "2a540f9ce1c97f12017f124523e1f376119cbe61",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 3 18:32:00 2017 +0200",
+  "name": "Ensures-component-regresses-to-origin-onLeave",
+  "parent": "58420d8dd9f8d3313e0ba4d32685a2f717ff74f6"
+},
+{
+  "child": "b75a8df2c87866b3589790c4b50b2320b0f16025",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 3 18:26:13 2017 +0200",
+  "name": "Merge-branch-master-of-https-github.com-bkrem-react-d3-tree",
+  "parent": "c153b0c044b6d19f85502e4f434fb665419a6a1c eb15c914907dd8978cf141fb08cdd4765a6b2b97"
+},
+{
+  "child": "c153b0c044b6d19f85502e4f434fb665419a6a1c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 3 18:25:47 2017 +0200",
+  "name": "Removes-unrequired-parent-pointer-key-from-docs",
+  "parent": "a537823ea64d6eb8de4e9275a3026a36e97ff98c"
+},
+{
+  "child": "eb15c914907dd8978cf141fb08cdd4765a6b2b97",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Jun 3 13:34:06 2017 +0200",
+  "name": "Fixes-indentation",
+  "parent": "e241b2896bf6fe88fdfe8c10a81df12d96531030"
+},
+{
+  "child": "58420d8dd9f8d3313e0ba4d32685a2f717ff74f6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 2 18:29:15 2017 +0200",
+  "name": "Implements-transitioning-from-parent-for-nodes",
+  "parent": "f27e0fba2effd5239342e5587b916efafd303ebf"
+},
+{
+  "child": "f27e0fba2effd5239342e5587b916efafd303ebf",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 2 18:23:05 2017 +0200",
+  "name": "Moves-react-transition-group-to-dev-dependencies",
+  "parent": "e0205d5bc89a885fd7d2002415c0897c8d0fc8ca"
+},
+{
+  "child": "e241b2896bf6fe88fdfe8c10a81df12d96531030",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Jun 2 15:42:01 2017 +0200",
+  "name": "Update-csvSource-URL-in-example",
+  "parent": "a537823ea64d6eb8de4e9275a3026a36e97ff98c"
+},
+{
+  "child": "e0205d5bc89a885fd7d2002415c0897c8d0fc8ca",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 23:26:43 2017 +0200",
+  "name": "Merge-branch-develop-into-feature-add-transitions",
+  "parent": "a324d4f034a86668222cd055947ce2521a74e700 7cf66611a61dd77a07ddc497b039eb8b70a3e36d"
+},
+{
+  "child": "7cf66611a61dd77a07ddc497b039eb8b70a3e36d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 23:25:23 2017 +0200",
+  "name": "Adds-NPM-lockfile",
+  "parent": "a537823ea64d6eb8de4e9275a3026a36e97ff98c"
+},
+{
+  "child": "a324d4f034a86668222cd055947ce2521a74e700",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 23:22:00 2017 +0200",
+  "name": "Merge-branch-develop-into-feature-add-transitions",
+  "parent": "f7272bd5993a79c0e6323454ff1cc1411c4db2bc a537823ea64d6eb8de4e9275a3026a36e97ff98c"
+},
+{
+  "child": "a537823ea64d6eb8de4e9275a3026a36e97ff98c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 23:02:43 2017 +0200",
+  "name": "Changes-Heading-to-Usage",
+  "parent": "4861a8a82a26d419a5b59ac70fd8e9ca8fc6931d"
+},
+{
+  "child": "4861a8a82a26d419a5b59ac70fd8e9ca8fc6931d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 23:01:33 2017 +0200",
+  "name": "Update-ToC",
+  "parent": "9162c8d8b740ff277328ab184d2585182b80dc18"
+},
+{
+  "child": "f7272bd5993a79c0e6323454ff1cc1411c4db2bc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 22:52:27 2017 +0200",
+  "name": "Merge-branch-master-into-feature-add-transitions",
+  "parent": "9c5e86a6cf3c4f2eb42bbedac1208d628f0b5183 9162c8d8b740ff277328ab184d2585182b80dc18"
+},
+{
+  "child": "9162c8d8b740ff277328ab184d2585182b80dc18",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 22:09:48 2017 +0200",
+  "name": "Makes-Travis-email-notifs-less-spammy",
+  "parent": "299f20c5a32acfee545899b3c3f4bc469a514bf5"
+},
+{
+  "child": "299f20c5a32acfee545899b3c3f4bc469a514bf5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:55:32 2017 +0200",
+  "name": "Merge-branch-master-into-develop",
+  "parent": "536fecb8dac63e621a8d062392c3769c35e54b86 989575cc341fa39bfa26457a58c1cf0733531a67"
+},
+{
+  "child": "989575cc341fa39bfa26457a58c1cf0733531a67",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:54:48 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "adecadb8439aeff3bd3a63dea0fbfd68781616a7"
+},
+{
+  "child": "536fecb8dac63e621a8d062392c3769c35e54b86",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:44:21 2017 +0200",
+  "name": "Merge-branch-release-v0.4.0-into-develop",
+  "parent": "cb42dbcc331668dbdb79dca1f9a6675a3f96e28c d1c315d845689bf397b88041d876515b658b5593"
+},
+{
+  "child": "adecadb8439aeff3bd3a63dea0fbfd68781616a7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:44:21 2017 +0200",
+  "name": "Merge-branch-release-v0.4.0",
+  "parent": "fd7a83b899b43814c793a354de797498d95e0c1e d1c315d845689bf397b88041d876515b658b5593"
+},
+{
+  "child": "d1c315d845689bf397b88041d876515b658b5593",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:43:17 2017 +0200",
+  "name": "Bumps-version-to-0.4.0",
+  "parent": "f31c8fc001be71b2c7ae444225e2408691070ef7"
+},
+{
+  "child": "f31c8fc001be71b2c7ae444225e2408691070ef7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:42:52 2017 +0200",
+  "name": "Adds-minified-build-for-v0.4.0",
+  "parent": "cb42dbcc331668dbdb79dca1f9a6675a3f96e28c"
+},
+{
+  "child": "cb42dbcc331668dbdb79dca1f9a6675a3f96e28c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:41:39 2017 +0200",
+  "name": "Merge-branch-feature-add-csv-to-json-transform-into-develop",
+  "parent": "772f39eff1c0b65fb08e74bb5b2cb363b7f75750 226ada38ee3f303c42836cdd4729535ae4993f95"
+},
+{
+  "child": "226ada38ee3f303c42836cdd4729535ae4993f95",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:39:27 2017 +0200",
+  "name": "Adds-Node-v8",
+  "parent": "6bf4f4a3d2888c655b5bcae5f6395b2f239610fe"
+},
+{
+  "child": "6bf4f4a3d2888c655b5bcae5f6395b2f239610fe",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:34:15 2017 +0200",
+  "name": "Adds-missing-line-break",
+  "parent": "7351598354800390ea552079baab9f83a01d8421"
+},
+{
+  "child": "7351598354800390ea552079baab9f83a01d8421",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:33:18 2017 +0200",
+  "name": "Add-reference-to-data-source-examples",
+  "parent": "8c9c23b0fc9d48c882bf74c498e609c4cd72ec72"
+},
+{
+  "child": "8c9c23b0fc9d48c882bf74c498e609c4cd72ec72",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Jun 1 21:27:50 2017 +0200",
+  "name": "Improves-JSDoc-for-parseCSV",
+  "parent": "528647630f54935a03a0ea1f95c31d153c99f388"
+},
+{
+  "child": "528647630f54935a03a0ea1f95c31d153c99f388",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 29 19:25:22 2017 +0200",
+  "name": "Removes-test-script",
+  "parent": "5458f4768efdaaf9bdcc16fba94043eacb333057"
+},
+{
+  "child": "5458f4768efdaaf9bdcc16fba94043eacb333057",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 29 19:24:11 2017 +0200",
+  "name": "Update-docs",
+  "parent": "d95981d8d28fc10f22bf344b0548dc114af5d8ac"
+},
+{
+  "child": "d95981d8d28fc10f22bf344b0548dc114af5d8ac",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 29 19:23:44 2017 +0200",
+  "name": "Adds-more-docs-scripts",
+  "parent": "6a1d3948af20f4752cfceef91489a223dcd3d518"
+},
+{
+  "child": "6a1d3948af20f4752cfceef91489a223dcd3d518",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 26 14:29:16 2017 +0200",
+  "name": "Ignore-private-method-for-docs",
+  "parent": "fbf1906de307a967ae8943ec5bd4d967de01ff93"
+},
+{
+  "child": "fbf1906de307a967ae8943ec5bd4d967de01ff93",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 26 14:28:47 2017 +0200",
+  "name": "Adds-readme-to-JSDoc-output",
+  "parent": "53bc6f4a6311d7c20ffc767d051b4b682c7e4e3d"
+},
+{
+  "child": "53bc6f4a6311d7c20ffc767d051b4b682c7e4e3d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 26 14:12:48 2017 +0200",
+  "name": "Adds-JSDocs-for-treeUtil",
+  "parent": "eb94b3b01b3d626994e885bec5f30554f7247f68"
+},
+{
+  "child": "eb94b3b01b3d626994e885bec5f30554f7247f68",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 26 14:12:08 2017 +0200",
+  "name": "Adds-scripts-for-doc-generation",
+  "parent": "170a15b99d8aedb5417033804137af0c06361b12"
+},
+{
+  "child": "170a15b99d8aedb5417033804137af0c06361b12",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 26 13:30:36 2017 +0200",
+  "name": "Adds-example-for-treeUtil",
+  "parent": "6a1b8c831d2b06ab2c3c26739a6f81c55cd27346"
+},
+{
+  "child": "6a1b8c831d2b06ab2c3c26739a6f81c55cd27346",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 18:11:06 2017 +0200",
+  "name": "Updates-react-docgen-docs",
+  "parent": "047c4c0d5675cce588b34e1387e3b312e6bf3789"
+},
+{
+  "child": "047c4c0d5675cce588b34e1387e3b312e6bf3789",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 17:56:04 2017 +0200",
+  "name": "Adds-generateHierarchy-util-method",
+  "parent": "e556282154a690829671ff2f853ecb896289a628"
+},
+{
+  "child": "e556282154a690829671ff2f853ecb896289a628",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 17:23:46 2017 +0200",
+  "name": "Adds-JSDocs",
+  "parent": "5609eabf37846c8a3c8455e8b908bb0d65b4bb64"
+},
+{
+  "child": "5609eabf37846c8a3c8455e8b908bb0d65b4bb64",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 17:12:02 2017 +0200",
+  "name": "Combines-_extractRootNode-_formatJSON-into-_transformHierarchy",
+  "parent": "6915f34b44a59fd1691c2208102bfdb9aa334d70"
+},
+{
+  "child": "6915f34b44a59fd1691c2208102bfdb9aa334d70",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 16:59:41 2017 +0200",
+  "name": "Sets-default-export-and-destructuring-export",
+  "parent": "c8ea04bf775f6d8a5a02815671c4a464aa187b68"
+},
+{
+  "child": "c8ea04bf775f6d8a5a02815671c4a464aa187b68",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 16:33:08 2017 +0200",
+  "name": "Update-mock-attribute-naming",
+  "parent": "2e45dc546d258a108af63b929c4d6652da614a70"
+},
+{
+  "child": "2e45dc546d258a108af63b929c4d6652da614a70",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 16:02:31 2017 +0200",
+  "name": "Adds-data-examples",
+  "parent": "3cc8e13f6b8cc0c42fca08926db161e181077b6f"
+},
+{
+  "child": "3cc8e13f6b8cc0c42fca08926db161e181077b6f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 15:40:27 2017 +0200",
+  "name": "Moves-React-to-devDependency",
+  "parent": "e592739fc2a9caeba5a2e094f45d653881505d5a"
+},
+{
+  "child": "e592739fc2a9caeba5a2e094f45d653881505d5a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 24 15:38:59 2017 +0200",
+  "name": "Heighten-coverage-threshold-of-branches",
+  "parent": "7eaa7abe64e262e6a195d7d155b54dda8db36dd5"
+},
+{
+  "child": "7eaa7abe64e262e6a195d7d155b54dda8db36dd5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 22:20:53 2017 +0200",
+  "name": "Adds-require-jsdoc-rule",
+  "parent": "c6c0e068f9d2c3fb755153cdd018293efb9fc342"
+},
+{
+  "child": "c6c0e068f9d2c3fb755153cdd018293efb9fc342",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 16:09:51 2017 +0200",
+  "name": "Merge-branch-master-into-feature-add-csv-to-json-transform",
+  "parent": "2bb9ea08d3e74e2fc6e407dafcd7f0f8892eb296 fd7a83b899b43814c793a354de797498d95e0c1e"
+},
+{
+  "child": "fd7a83b899b43814c793a354de797498d95e0c1e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 16:03:11 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "ba541f78c58631b9a6a38411a3adc2cca0ccf2be"
+},
+{
+  "child": "772f39eff1c0b65fb08e74bb5b2cb363b7f75750",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 15:53:13 2017 +0200",
+  "name": "Merge-branch-hotfix-v0.3.1-into-develop",
+  "parent": "ce575188e1ef937318ae0f3b2bb0dfbaae2bc10f d650e4e7de00bf4824161a794b4ba38639f99888"
+},
+{
+  "child": "ba541f78c58631b9a6a38411a3adc2cca0ccf2be",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 15:53:13 2017 +0200",
+  "name": "Merge-branch-hotfix-v0.3.1",
+  "parent": "d38099202430eb3776666f0b9d072a1b8a72095c d650e4e7de00bf4824161a794b4ba38639f99888"
+},
+{
+  "child": "d650e4e7de00bf4824161a794b4ba38639f99888",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 15:52:46 2017 +0200",
+  "name": "Generate-minified-build-for-v0.3.1",
+  "parent": "4248a92c285f7a02a31aec4833e722b838cf261a"
+},
+{
+  "child": "4248a92c285f7a02a31aec4833e722b838cf261a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 23 15:52:27 2017 +0200",
+  "name": "Bumps-version-to-0.3.1",
+  "parent": "a018a450d0d39a3739a3eac947c53763cce09944"
+},
+{
+  "child": "a018a450d0d39a3739a3eac947c53763cce09944",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 21:49:36 2017 +0200",
+  "name": "Patches-findTargetNode-to-support-arbitrary-depth-recursion",
+  "parent": "d38099202430eb3776666f0b9d072a1b8a72095c"
+},
+{
+  "child": "ce575188e1ef937318ae0f3b2bb0dfbaae2bc10f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 17:00:40 2017 +0200",
+  "name": "Merge-branch-release-v0.3.0-into-develop",
+  "parent": "d350fe6aeb480d110a20c8747bc9dbe0f5df11e4 2001c4c11a82d12909c96afa3fb0b333fdea89e6"
+},
+{
+  "child": "d38099202430eb3776666f0b9d072a1b8a72095c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 17:00:40 2017 +0200",
+  "name": "Merge-branch-release-v0.3.0",
+  "parent": "ea013a97e2a80ad8116c83e56696c726e2e4c2c5 2001c4c11a82d12909c96afa3fb0b333fdea89e6"
+},
+{
+  "child": "2001c4c11a82d12909c96afa3fb0b333fdea89e6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:59:38 2017 +0200",
+  "name": "Update-minified-build-for-v0.3.0",
+  "parent": "060ec01a0002e3607dc0e2454733b66b365e5ec7"
+},
+{
+  "child": "060ec01a0002e3607dc0e2454733b66b365e5ec7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:57:18 2017 +0200",
+  "name": "Bumps-version-to-0.3.0",
+  "parent": "d350fe6aeb480d110a20c8747bc9dbe0f5df11e4"
+},
+{
+  "child": "d350fe6aeb480d110a20c8747bc9dbe0f5df11e4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:56:22 2017 +0200",
+  "name": "Merge-branch-feature-5-add-fixed-depth-into-develop",
+  "parent": "749679b1ab2998aed761992c2d47d7c786ea1d23 381d18f8af8c50c3c95740a73f48f606dc31be94"
+},
+{
+  "child": "381d18f8af8c50c3c95740a73f48f606dc31be94",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:51:48 2017 +0200",
+  "name": "Adds-docs-for-depthFactor-closes-5",
+  "parent": "6cfd42d1c8c0f436c1eb4a308b5c02f6920a1161"
+},
+{
+  "child": "6cfd42d1c8c0f436c1eb4a308b5c02f6920a1161",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:34:03 2017 +0200",
+  "name": "Adds-depthFactor-prop-unit-test-5",
+  "parent": "616f8407ed374870a35031a2fd4df03356489d68"
+},
+{
+  "child": "616f8407ed374870a35031a2fd4df03356489d68",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 16:28:32 2017 +0200",
+  "name": "Update-npm-scripts-add-missing-devDependency",
+  "parent": "749679b1ab2998aed761992c2d47d7c786ea1d23"
+},
+{
+  "child": "ea013a97e2a80ad8116c83e56696c726e2e4c2c5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 22 13:09:30 2017 +0200",
+  "name": "Adds-.editorconfig",
+  "parent": "b590ed3c200ab06c85406da687c2ce846227d0a9"
+},
+{
+  "child": "b590ed3c200ab06c85406da687c2ce846227d0a9",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 18:18:47 2017 +0200",
+  "name": "Adds-NPM-version-badge",
+  "parent": "c10ff68cc8ff5347110f21ffb918eddb7c066b3a"
+},
+{
+  "child": "c10ff68cc8ff5347110f21ffb918eddb7c066b3a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 18:11:18 2017 +0200",
+  "name": "Adds-ToC",
+  "parent": "9736a15d50805d5507a8fa44ed74ba564b675ba7"
+},
+{
+  "child": "749679b1ab2998aed761992c2d47d7c786ea1d23",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:53:27 2017 +0200",
+  "name": "Merge-branch-release-v0.2.0-into-develop",
+  "parent": "f7cb7678fa6bd89a7aa67385039e8aec5cdee242 96761fe70deefc73c3ee07d4547be6643a6c9b11"
+},
+{
+  "child": "9736a15d50805d5507a8fa44ed74ba564b675ba7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:53:27 2017 +0200",
+  "name": "Merge-branch-release-v0.2.0",
+  "parent": "cc6ca5b3cdd94a3dcb5b9ef1c9724243d079fea4 96761fe70deefc73c3ee07d4547be6643a6c9b11"
+},
+{
+  "child": "96761fe70deefc73c3ee07d4547be6643a6c9b11",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:52:06 2017 +0200",
+  "name": "Bump-version-to-0.2.0",
+  "parent": "0f1816c4a5ace20d4bc1fc927e640c9cca2fe6a5"
+},
+{
+  "child": "0f1816c4a5ace20d4bc1fc927e640c9cca2fe6a5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:51:23 2017 +0200",
+  "name": "Update-minified-build-for-v0.2.0",
+  "parent": "f7cb7678fa6bd89a7aa67385039e8aec5cdee242"
+},
+{
+  "child": "f7cb7678fa6bd89a7aa67385039e8aec5cdee242",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:46:47 2017 +0200",
+  "name": "Merge-branch-feature-04-add-zoom-pan-into-develop",
+  "parent": "cc6ca5b3cdd94a3dcb5b9ef1c9724243d079fea4 55e8268b0c321c19c79f3e9c12232ac96450b4db"
+},
+{
+  "child": "55e8268b0c321c19c79f3e9c12232ac96450b4db",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:41:02 2017 +0200",
+  "name": "Adds-docs-for-zoomable-4",
+  "parent": "5be9515e127cf4829fa49b1fbd0df8fb31d2a6df"
+},
+{
+  "child": "5be9515e127cf4829fa49b1fbd0df8fb31d2a6df",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat May 20 17:32:05 2017 +0200",
+  "name": "Adds-zoom-capability-and-unit-test-adds-JSDocs-for-Tree-4",
+  "parent": "cc6ca5b3cdd94a3dcb5b9ef1c9724243d079fea4"
+},
+{
+  "child": "2bb9ea08d3e74e2fc6e407dafcd7f0f8892eb296",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 21:49:36 2017 +0200",
+  "name": "Refactors-findTargetNode-findNodesById-enable-recursive-matching-to-arbitrary-depth-2",
+  "parent": "52fdb97c7318eba5a6b7b186475cb0e16e49417a"
+},
+{
+  "child": "52fdb97c7318eba5a6b7b186475cb0e16e49417a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 20:02:42 2017 +0200",
+  "name": "Ignore-util-for-tests-until-proper-mocks-are-in-place",
+  "parent": "b4d510b11bd8bfa9fe04d2ca67ffda1b6946fb1c"
+},
+{
+  "child": "b4d510b11bd8bfa9fe04d2ca67ffda1b6946fb1c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 19:28:43 2017 +0200",
+  "name": "Adds-csv-to-hierarchy-transform-pipeline-2",
+  "parent": "3705a986b105dc38596882cef26dfc25e735c334"
+},
+{
+  "child": "cc6ca5b3cdd94a3dcb5b9ef1c9724243d079fea4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 18:36:59 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "a3614ec12984eadd81869b775a52db7d22b3cfc8"
+},
+{
+  "child": "3705a986b105dc38596882cef26dfc25e735c334",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 17 18:29:48 2017 +0200",
+  "name": "Allows-marking-private-functions-with-underscore",
+  "parent": "8c322f8ef6f660e4175c43138d7aaa85612d45ae"
+},
+{
+  "child": "a3614ec12984eadd81869b775a52db7d22b3cfc8",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 16:50:33 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "8c322f8ef6f660e4175c43138d7aaa85612d45ae"
+},
+{
+  "child": "8c322f8ef6f660e4175c43138d7aaa85612d45ae",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 01:41:44 2017 +0200",
+  "name": "Merge-branch-master-of-https-github.com-bkrem-react-d3-tree",
+  "parent": "83129ddece2921aa118a9620d1d1536c73dcf2ce 730f562cb7d714110df413c4460ebfad8ca89804"
+},
+{
+  "child": "83129ddece2921aa118a9620d1d1536c73dcf2ce",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 01:41:32 2017 +0200",
+  "name": "Fixes-linting-config",
+  "parent": "ecc29aac92ba1b098581b2b99e50db3165847630"
+},
+{
+  "child": "730f562cb7d714110df413c4460ebfad8ca89804",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 01:29:17 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "ecc29aac92ba1b098581b2b99e50db3165847630"
+},
+{
+  "child": "ecc29aac92ba1b098581b2b99e50db3165847630",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 01:25:44 2017 +0200",
+  "name": "Adds-modified-react-docgen-scripts-and-md-docs",
+  "parent": "caec9e3ec261dd2144778c5e006134f4fe61f983"
+},
+{
+  "child": "caec9e3ec261dd2144778c5e006134f4fe61f983",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 16 00:36:08 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "a3fadf12a12041da56795d04e1385c16e6280feb"
+},
+{
+  "child": "9c5e86a6cf3c4f2eb42bbedac1208d628f0b5183",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:57:14 2017 +0200",
+  "name": "Merge-branch-develop-into-feature-add-transitions",
+  "parent": "3fda97e651c96450864640c0368d9468ca5a0a07 1fee51f70e7dad19ac618a6a5d6bbff07711b9ac"
+},
+{
+  "child": "a3fadf12a12041da56795d04e1385c16e6280feb",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:52:11 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "d9a6c8d93fc51294c00aee44a85ab5e1544d28eb"
+},
+{
+  "child": "d9a6c8d93fc51294c00aee44a85ab5e1544d28eb",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:50:31 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "e8d0825a6c605fb2cd7bd54839aee4fff9273495"
+},
+{
+  "child": "e8d0825a6c605fb2cd7bd54839aee4fff9273495",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:47:48 2017 +0200",
+  "name": "Merge-branch-develop",
+  "parent": "c983a4ef7cf92d941ec3c6b7b5e3ad248812ccb9 1fee51f70e7dad19ac618a6a5d6bbff07711b9ac"
+},
+{
+  "child": "1fee51f70e7dad19ac618a6a5d6bbff07711b9ac",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:47:37 2017 +0200",
+  "name": "Cache-node_modules-for-Travis-builds",
+  "parent": "0c882076f0942ba38424b56d8168df76ea9a040e"
+},
+{
+  "child": "0c882076f0942ba38424b56d8168df76ea9a040e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:43:28 2017 +0200",
+  "name": "Updates-.travis.yml-scripts",
+  "parent": "1ab356116033b1e994eb022ad018b3f582e3b948"
+},
+{
+  "child": "1ab356116033b1e994eb022ad018b3f582e3b948",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:41:15 2017 +0200",
+  "name": "use-coverage-for-npm-t",
+  "parent": "1ca3b48cf7732b098f77d1a07ee23c37e64953e3"
+},
+{
+  "child": "c983a4ef7cf92d941ec3c6b7b5e3ad248812ccb9",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:37:13 2017 +0200",
+  "name": "Merge-branch-develop",
+  "parent": "56ab400dfda5d1119a985d6b94f23dbb064dedfe 1ca3b48cf7732b098f77d1a07ee23c37e64953e3"
+},
+{
+  "child": "1ca3b48cf7732b098f77d1a07ee23c37e64953e3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 20:35:46 2017 +0200",
+  "name": "Adds-tests",
+  "parent": "4fa7826a8e731ab32a989c0df2e8ffed4c581660"
+},
+{
+  "child": "56ab400dfda5d1119a985d6b94f23dbb064dedfe",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 19:51:01 2017 +0200",
+  "name": "Add-demo-link",
+  "parent": "f623a84d8c87437faae468caec2b7ee86056ba43"
+},
+{
+  "child": "f623a84d8c87437faae468caec2b7ee86056ba43",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 19:48:20 2017 +0200",
+  "name": "Adds-library-description",
+  "parent": "2116209dad081b294f2dcde894d7247a0a254cb4"
+},
+{
+  "child": "3fda97e651c96450864640c0368d9468ca5a0a07",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 19:38:10 2017 +0200",
+  "name": "Abstracts-into-expandPath-collapsePath-fixes-broken-test",
+  "parent": "47098d1feead5a6796454b291b6c93b886239453"
+},
+{
+  "child": "47098d1feead5a6796454b291b6c93b886239453",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 19:04:20 2017 +0200",
+  "name": "Adds-basic-expand-collapse-transitions-for-Link",
+  "parent": "ef5b5dd06ef7708c44c146c93f89adfeff7a0a6a"
+},
+{
+  "child": "2116209dad081b294f2dcde894d7247a0a254cb4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 18:01:59 2017 +0200",
+  "name": "Use-rimraf-instead-of-rm-rf",
+  "parent": "784abeaa8f2d96043f0e355fba47b1b51399c906"
+},
+{
+  "child": "ef5b5dd06ef7708c44c146c93f89adfeff7a0a6a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 04:16:51 2017 +0200",
+  "name": "Implements-Link-transition-methods",
+  "parent": "0c1d40ec3d739f9643e23417ff45d2e760123ef0"
+},
+{
+  "child": "0c1d40ec3d739f9643e23417ff45d2e760123ef0",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Mon May 15 04:16:18 2017 +0200",
+  "name": "Simplifies-Node-export",
+  "parent": "6f2fd95039e851d92ff396e7f6c47b0db550fbdb"
+},
+{
+  "child": "6f2fd95039e851d92ff396e7f6c47b0db550fbdb",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 22:29:29 2017 +0200",
+  "name": "Fixes-broken-test",
+  "parent": "0c475ea3ead2be3873181d258d5546c501e76c00"
+},
+{
+  "child": "0c475ea3ead2be3873181d258d5546c501e76c00",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 22:29:08 2017 +0200",
+  "name": "Simplify-base-classes",
+  "parent": "9036b283c14f3c5c6ae60f9f9d620d30a137d952"
+},
+{
+  "child": "9036b283c14f3c5c6ae60f9f9d620d30a137d952",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 22:22:45 2017 +0200",
+  "name": "Simplify-calls-to-this.setTransformOrientation",
+  "parent": "5160df34b39f0ac6dd4198b2549283936e71d198"
+},
+{
+  "child": "5160df34b39f0ac6dd4198b2549283936e71d198",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 22:21:16 2017 +0200",
+  "name": "Use-onClick-handler-method-instead-of-anon-func",
+  "parent": "c40d84d09ba8fc14582a9da4c83e5f1c120d0837"
+},
+{
+  "child": "c40d84d09ba8fc14582a9da4c83e5f1c120d0837",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 22:18:26 2017 +0200",
+  "name": "Implements-partial-transition-animations-for-Node",
+  "parent": "4fa7826a8e731ab32a989c0df2e8ffed4c581660"
+},
+{
+  "child": "784abeaa8f2d96043f0e355fba47b1b51399c906",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 14 21:23:03 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "77e1aa9f5ab4c40dc55c68b6ceaf884365a42114"
+},
+{
+  "child": "4fa7826a8e731ab32a989c0df2e8ffed4c581660",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 23:34:57 2017 +0200",
+  "name": "Merge-branch-master-into-develop",
+  "parent": "4d8033c7465df30d084e0f786696518a6964f8e3 77e1aa9f5ab4c40dc55c68b6ceaf884365a42114"
+},
+{
+  "child": "4d8033c7465df30d084e0f786696518a6964f8e3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 23:34:23 2017 +0200",
+  "name": "Use-rimraf-instead-of-rm-rf",
+  "parent": "6836b9f36fd872f479a36043d07ca3b3ce2de86b"
+},
+{
+  "child": "77e1aa9f5ab4c40dc55c68b6ceaf884365a42114",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 17:21:10 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "6836b9f36fd872f479a36043d07ca3b3ce2de86b"
+},
+{
+  "child": "6836b9f36fd872f479a36043d07ca3b3ce2de86b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 17:12:46 2017 +0200",
+  "name": "Fixes-build-breakage-on-node-v5",
+  "parent": "d9ca0846d1156148ab7c52445dfdff69c7cd19dd"
+},
+{
+  "child": "d9ca0846d1156148ab7c52445dfdff69c7cd19dd",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 17:03:28 2017 +0200",
+  "name": "Splits-test-scripts-into-coverage-non-coverage",
+  "parent": "7f2fe60614dc7f52361de996d720d1c4087ff84a"
+},
+{
+  "child": "7f2fe60614dc7f52361de996d720d1c4087ff84a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 16:57:00 2017 +0200",
+  "name": "Merge-branch-master-into-develop",
+  "parent": "a8a0eafb156e22bb1238fbaeedcbc835e4008b15 fa7d6ddce3f4e4a775f61716d7fc44aa161c39dd"
+},
+{
+  "child": "a8a0eafb156e22bb1238fbaeedcbc835e4008b15",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 16:56:25 2017 +0200",
+  "name": "Lints-webpack-config-removes-unrequired-webpack-plugin",
+  "parent": "62fdee2c66b32069778c6e5496e1a425683164f6"
+},
+{
+  "child": "62fdee2c66b32069778c6e5496e1a425683164f6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 16:55:59 2017 +0200",
+  "name": "Adds-travis.yml",
+  "parent": "0c9cbb2ab65398652d0bfdb4e20863a95cd3030e"
+},
+{
+  "child": "0c9cbb2ab65398652d0bfdb4e20863a95cd3030e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 11 16:46:31 2017 +0200",
+  "name": "Adds-tests-for-Tree",
+  "parent": "433475d1206e70449aea2f6d482880726caf4dd1"
+},
+{
+  "child": "433475d1206e70449aea2f6d482880726caf4dd1",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 9 20:05:38 2017 +0200",
+  "name": "Adds-tests-for-Link-component",
+  "parent": "bce43c07ff0bec2d061398576adaa5043a246d01"
+},
+{
+  "child": "bce43c07ff0bec2d061398576adaa5043a246d01",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 9 19:24:30 2017 +0200",
+  "name": "Configures-Jest-and-adds-Node-component-tests",
+  "parent": "7870357015e3da2f9fc2763a7585ff2183d694c5"
+},
+{
+  "child": "fa7d6ddce3f4e4a775f61716d7fc44aa161c39dd",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sun May 7 22:43:42 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "6b5e9117476b66a7af6fcbf23260f1165cfd9e23"
+},
+{
+  "child": "6b5e9117476b66a7af6fcbf23260f1165cfd9e23",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 01:02:12 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "8a85c2ca259927b248d1b360ed7812c1b13bb924"
+},
+{
+  "child": "8a85c2ca259927b248d1b360ed7812c1b13bb924",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 01:01:00 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "f9aa415052399955920037ead163b476cb9fa9a7"
+},
+{
+  "child": "f9aa415052399955920037ead163b476cb9fa9a7",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:59:50 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "ed0e132ff0ff4572a17e10620eb15b4c3de06f1c"
+},
+{
+  "child": "ed0e132ff0ff4572a17e10620eb15b4c3de06f1c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:59:17 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "7870357015e3da2f9fc2763a7585ff2183d694c5"
+},
+{
+  "child": "7870357015e3da2f9fc2763a7585ff2183d694c5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:37:32 2017 +0200",
+  "name": "Updates-build",
+  "parent": "80ddb519b9c6b1e2d5b7e317c5b6982d4e2cb279"
+},
+{
+  "child": "80ddb519b9c6b1e2d5b7e317c5b6982d4e2cb279",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:30:44 2017 +0200",
+  "name": "Fixes-minor-issue-with-conditional-node-styling",
+  "parent": "df2378354ff4b0f470326d9b5ef3f0eaadb4c8ec"
+},
+{
+  "child": "df2378354ff4b0f470326d9b5ef3f0eaadb4c8ec",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:30:24 2017 +0200",
+  "name": "Implements-initialDepth-prop",
+  "parent": "e228d3c71c28dc1a4d57a0af30a829b3e798f207"
+},
+{
+  "child": "e228d3c71c28dc1a4d57a0af30a829b3e798f207",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri May 5 00:24:19 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "1782b799a039e4e2f2c70406fec1cdece320ea29"
+},
+{
+  "child": "1782b799a039e4e2f2c70406fec1cdece320ea29",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:27:11 2017 +0200",
+  "name": "Set-minified-bundle-for-main",
+  "parent": "45defa143118cfee55cc798a087b284d704bf875"
+},
+{
+  "child": "45defa143118cfee55cc798a087b284d704bf875",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:23:47 2017 +0200",
+  "name": "Merge-branches-master-and-master-of-https-github.com-bkrem-react-d3-tree",
+  "parent": "e73d777b379413582d12834bb1d535190f21b08e 356d41f64085de91d2f1689f74bd357285a4cd92"
+},
+{
+  "child": "e73d777b379413582d12834bb1d535190f21b08e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:23:36 2017 +0200",
+  "name": "Adds-collapsible-prop",
+  "parent": "94fbcab0d05c02ced3e03dc9e0eefdec23ade2df"
+},
+{
+  "child": "356d41f64085de91d2f1689f74bd357285a4cd92",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:23:13 2017 +0200",
+  "name": "Update-README.md",
+  "parent": "94fbcab0d05c02ced3e03dc9e0eefdec23ade2df"
+},
+{
+  "child": "94fbcab0d05c02ced3e03dc9e0eefdec23ade2df",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:09:58 2017 +0200",
+  "name": "Adds-docs-for-translate-prop",
+  "parent": "d299feab7b535f60415a8d55eba59ea3f071a249"
+},
+{
+  "child": "d299feab7b535f60415a8d55eba59ea3f071a249",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 19:04:34 2017 +0200",
+  "name": "Allow-setting-svg-translate-via-props",
+  "parent": "a7f4eb5fcb459159c61be351ca156f0c6642ee26"
+},
+{
+  "child": "a7f4eb5fcb459159c61be351ca156f0c6642ee26",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 18:31:58 2017 +0200",
+  "name": "Cleaning-up",
+  "parent": "17bb261c443aeba9356855a1f7c32019ed59e138"
+},
+{
+  "child": "17bb261c443aeba9356855a1f7c32019ed59e138",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 18:30:46 2017 +0200",
+  "name": "Removes-redundant-.isRequired-on-propTypes",
+  "parent": "55b9ee1faa69220f263d58bd9ec148e80833c5a8"
+},
+{
+  "child": "55b9ee1faa69220f263d58bd9ec148e80833c5a8",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 18:30:12 2017 +0200",
+  "name": "Adds-table-for-Component-props-options",
+  "parent": "ee019607095491176cdf25e07d7ce05a099fb2f9"
+},
+{
+  "child": "ee019607095491176cdf25e07d7ce05a099fb2f9",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 17:52:29 2017 +0200",
+  "name": "Tweak-dev-pipeline",
+  "parent": "3a1b2f1d01feb7417e710f6037dfa611c78a85e6"
+},
+{
+  "child": "3a1b2f1d01feb7417e710f6037dfa611c78a85e6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 17:52:13 2017 +0200",
+  "name": "Remove-mock-attributes",
+  "parent": "f2eb160b39ab37e683d07a759d6ae9ddea23b8e6"
+},
+{
+  "child": "f2eb160b39ab37e683d07a759d6ae9ddea23b8e6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 17:11:53 2017 +0200",
+  "name": "Adds-nodemon-config-for-lib",
+  "parent": "1401e003ed3739c2a5898a0e917f7197f93a74de"
+},
+{
+  "child": "1401e003ed3739c2a5898a0e917f7197f93a74de",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu May 4 16:48:41 2017 +0200",
+  "name": "Cleans-up-the-repo-restructure-to-lib",
+  "parent": "b83b362988a50b48ebda89a84cd139e83cb14e56"
+},
+{
+  "child": "b83b362988a50b48ebda89a84cd139e83cb14e56",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 3 17:08:24 2017 +0200",
+  "name": "Adds-top-level-pathFunc-prop",
+  "parent": "7f36a4ce2c17ec97571f192176a51beac819938d"
+},
+{
+  "child": "7f36a4ce2c17ec97571f192176a51beac819938d",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 3 16:47:55 2017 +0200",
+  "name": "Linting",
+  "parent": "36ab281fe90d88674f83937ce3c51564228ce4c5"
+},
+{
+  "child": "36ab281fe90d88674f83937ce3c51564228ce4c5",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 3 16:41:48 2017 +0200",
+  "name": "Adds-collapsable-expandable-nodes",
+  "parent": "8eb4884548deee79dcc3aecb002d975bed15dbae"
+},
+{
+  "child": "8eb4884548deee79dcc3aecb002d975bed15dbae",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed May 3 16:41:26 2017 +0200",
+  "name": "Cleans-up-eslintrc",
+  "parent": "2e2e5e32b6a9efef4b63be6e9e3c7947dd7ef7ac"
+},
+{
+  "child": "2e2e5e32b6a9efef4b63be6e9e3c7947dd7ef7ac",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 2 18:49:55 2017 +0200",
+  "name": "Switches-to-extended-Airbnb-ESLint",
+  "parent": "88211ba954d59171a0e1cc1f6ed3e8d90828069a"
+},
+{
+  "child": "88211ba954d59171a0e1cc1f6ed3e8d90828069a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Tue May 2 18:25:47 2017 +0200",
+  "name": "Adds-semi-colon-back-to-linting-spec",
+  "parent": "88a1bc3aa0288bff824b438bbe8ecc43d83e647f"
+},
+{
+  "child": "88a1bc3aa0288bff824b438bbe8ecc43d83e647f",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Wed Apr 26 15:58:22 2017 +0100",
+  "name": "Changes-start-script-keyword",
+  "parent": "255f5382af94803b1a13854271d9beb060c62ad6"
+},
+{
+  "child": "255f5382af94803b1a13854271d9beb060c62ad6",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 15:56:03 2017 +0100",
+  "name": "Adds-assignCustomProperties-method",
+  "parent": "be2088f61a520d5c979d890b67587c5e47b8c748"
+},
+{
+  "child": "be2088f61a520d5c979d890b67587c5e47b8c748",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 15:02:13 2017 +0100",
+  "name": "Linting",
+  "parent": "b701362c2bc0792a644f6f17c987279b6543f0b4"
+},
+{
+  "child": "b701362c2bc0792a644f6f17c987279b6543f0b4",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 01:54:01 2017 +0100",
+  "name": "Moves-defaultProps-into-style.css-where-possible",
+  "parent": "e9cae7fb425384e48448527c49b6b4b73cb4513c"
+},
+{
+  "child": "e9cae7fb425384e48448527c49b6b4b73cb4513c",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 01:29:22 2017 +0100",
+  "name": "Implements-conditional-transform-for-nodes",
+  "parent": "a288f22039919b1d8f895a1c2fb32785f9656921"
+},
+{
+  "child": "a288f22039919b1d8f895a1c2fb32785f9656921",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 01:25:10 2017 +0100",
+  "name": "Implements-horizontal-vertical-enum-prop",
+  "parent": "fa388f18569f631f555ac782543929fd95a3e04a"
+},
+{
+  "child": "fa388f18569f631f555ac782543929fd95a3e04a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 00:40:12 2017 +0100",
+  "name": "Adds-elbow-path-func",
+  "parent": "d1ce59f89568b4b06426d101551349ae623fbe8a"
+},
+{
+  "child": "d1ce59f89568b4b06426d101551349ae623fbe8a",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Sat Mar 18 00:33:00 2017 +0100",
+  "name": "Adds-diagonal-path-rendering-func",
+  "parent": "10eccc62d9cfa4c80b6f200773c9c0075b661a46"
+},
+{
+  "child": "10eccc62d9cfa4c80b6f200773c9c0075b661a46",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 23:29:37 2017 +0100",
+  "name": "Adds-mapping-for-Nodes-establishes-Link-component",
+  "parent": "40d7d99755b0d612d346f9f045a3e5a6f4cd54f3"
+},
+{
+  "child": "40d7d99755b0d612d346f9f045a3e5a6f4cd54f3",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 22:19:41 2017 +0100",
+  "name": "Renames-title",
+  "parent": "ea23092126169375d5567e6f7333a927ea40f1bc"
+},
+{
+  "child": "ea23092126169375d5567e6f7333a927ea40f1bc",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 17:25:26 2017 +0100",
+  "name": "Ensures-we-re-using-final-release-of-D3-v3",
+  "parent": "f418e745dd5b9d9de4e1704466dab5bfc70a1d92"
+},
+{
+  "child": "f418e745dd5b9d9de4e1704466dab5bfc70a1d92",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 15:59:04 2017 +0100",
+  "name": "Sets-up-basics-for-Tree-Node-components",
+  "parent": "f2c2ded838c086609bb33b24f383d0b3f79bf73e"
+},
+{
+  "child": "f2c2ded838c086609bb33b24f383d0b3f79bf73e",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 15:12:09 2017 +0100",
+  "name": "Adds-d3-dependency",
+  "parent": "af38d705d194f8fbfa51caba42cc45910d0d3a24"
+},
+{
+  "child": "af38d705d194f8fbfa51caba42cc45910d0d3a24",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 15:11:51 2017 +0100",
+  "name": "Linting",
+  "parent": "b5aea1565e5a219c7819f5f8ee3b31f1f8f2bacd"
+},
+{
+  "child": "b5aea1565e5a219c7819f5f8ee3b31f1f8f2bacd",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Fri Mar 17 15:11:25 2017 +0100",
+  "name": "Avoids-vars-used-in-JSX-being-marked-unused",
+  "parent": "5b54aa987a2dc783011a9415edd63a85300c6330"
+},
+{
+  "child": "5b54aa987a2dc783011a9415edd63a85300c6330",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Mar 16 15:30:40 2017 +0100",
+  "name": "Adds-eslint-editorconfig-lints-current-files",
+  "parent": "da41d4ad50a7e505598002153c1e6334dbd4d826"
+},
+{
+  "child": "da41d4ad50a7e505598002153c1e6334dbd4d826",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Mar 16 14:52:10 2017 +0100",
+  "name": "Updates-app.json",
+  "parent": "f2835126e12f39ec5df19ac0ffca9a7481dbcfd2"
+},
+{
+  "child": "f2835126e12f39ec5df19ac0ffca9a7481dbcfd2",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Mar 16 14:45:22 2017 +0100",
+  "name": "Updates-port-logging-statement",
+  "parent": "51cc1d7dca600b768d5821e799a89e9f64daea7b"
+},
+{
+  "child": "51cc1d7dca600b768d5821e799a89e9f64daea7b",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Mar 16 14:38:20 2017 +0100",
+  "name": "Fixes-typo",
+  "parent": "32dfbab9568f8f2b825d82181167722040c239bd"
+},
+{
+  "child": "32dfbab9568f8f2b825d82181167722040c239bd",
+  "author": "Ben Kremer <ben.kremer@hotmail.co.uk>",
+  "date": "Thu Mar 16 14:18:32 2017 +0100",
+  "name": "Initial-commit",
+  "parent": ""
+}]
