@@ -4,6 +4,7 @@
     "allowJs": true,
     "removeComments": true,
     "target": "es5",
+    "jsx": "react",
     "sourceMap": true,
     "declaration": true,
     "outDir": "./dist",

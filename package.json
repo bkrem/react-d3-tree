@@ -6,10 +6,10 @@
   "main": "dist/index.js",
   "types": "./react-d3-tree.d.ts",
   "scripts": {
-    "clean:lib": "rimraf lib/*",
     "precommit": "lint-staged",
-    "build": "rimraf dist && tsc",
-    "build:watch": "rimraf dist && tsc -w",
+    "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
+    "build": "rimraf dist && yarn cp:css && tsc",
+    "build:watch": "rimraf dist && yarn cp:css && tsc -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
