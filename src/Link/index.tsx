@@ -7,15 +7,15 @@ type LinkEventHandler = (source: NodeData, target: NodeData, evt: Event) => void
 
 type LinkProps = {
   linkData: {
-    source: NodeData,
-    target: NodeData
+    source: NodeData;
+    target: NodeData;
   };
-  orientation: Orientation
+  orientation: Orientation;
   pathFunc: ('diagonal' | 'elbow' | 'straight' | 'step') | ((...args: any[]) => any);
   transitionDuration: number;
   onClick: LinkEventHandler;
-  onMouseOver: LinkEventHandler
-  onMouseOut: LinkEventHandler
+  onMouseOver: LinkEventHandler;
+  onMouseOut: LinkEventHandler;
   styles?: object;
 };
 
@@ -26,7 +26,7 @@ type LinkState = {
 export default class Link extends React.PureComponent<LinkProps, LinkState> {
   static defaultProps = {
     styles: {},
-  }
+  };
 
   private link: SVGPathElement = null;
 
@@ -44,7 +44,11 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.applyOpacity(0, this.props.transitionDuration, done);
   }
 
-  applyOpacity(opacity: number, transitionDuration: LinkProps['transitionDuration'], done = () => {}) {
+  applyOpacity(
+    opacity: number,
+    transitionDuration: LinkProps['transitionDuration'],
+    done = () => {}
+  ) {
     if (transitionDuration === 0) {
       select(this.link).style('opacity', opacity);
       done();

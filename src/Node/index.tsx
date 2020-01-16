@@ -8,18 +8,18 @@ import './style.css';
 type NodeEventHandler = (id: string, evt: Event) => void;
 
 type NodeProps = {
-  nodeData: NodeData
+  nodeData: NodeData;
   nodeElement: {
-    shape: string,
-    baseProps: FIXME,
-    branchNodeProps: FIXME,
-    leafNodeProps: FIXME,
+    shape: string;
+    baseProps: FIXME;
+    branchNodeProps: FIXME;
+    leafNodeProps: FIXME;
   };
   nodeLabelProps: FIXME;
   nodeLabelComponent?: FIXME;
   nodeSize: {
-    x: number,
-    y: number
+    x: number;
+    y: number;
   };
   orientation: Orientation;
   transitionDuration: number;
@@ -81,7 +81,11 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     nextProps.nodeData.y !== ownProps.nodeData.y ||
     nextProps.orientation !== ownProps.orientation;
 
-  setTransform(nodeData: NodeProps['nodeData'], orientation: NodeProps['orientation'], shouldTranslateToOrigin = false) {
+  setTransform(
+    nodeData: NodeProps['nodeData'],
+    orientation: NodeProps['orientation'],
+    shouldTranslateToOrigin = false
+  ) {
     const { x, y, parent } = nodeData;
     if (shouldTranslateToOrigin) {
       const hasParent = typeof parent === 'object';
@@ -94,7 +98,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
   }
 
-  applyTransform(transform: string, transitionDuration: NodeProps['transitionDuration'], opacity = 1, done = () => {}) {
+  applyTransform(
+    transform: string,
+    transitionDuration: NodeProps['transitionDuration'],
+    opacity = 1,
+    done = () => {}
+  ) {
     if (transitionDuration === 0) {
       select(this.nodeRef)
         .attr('transform', transform)
