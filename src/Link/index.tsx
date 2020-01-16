@@ -28,7 +28,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     styles: {},
   };
 
-  private link: SVGPathElement = null;
+  private linkRef: SVGPathElement = null;
 
   state = {
     initialStyle: {
@@ -50,10 +50,10 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     done = () => {}
   ) {
     if (transitionDuration === 0) {
-      select(this.link).style('opacity', opacity);
+      select(this.linkRef).style('opacity', opacity);
       done();
     } else {
-      select(this.link)
+      select(this.linkRef)
         .transition()
         .duration(transitionDuration)
         .style('opacity', opacity)
@@ -139,7 +139,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     return (
       <path
         ref={l => {
-          this.link = l;
+          this.linkRef = l;
         }}
         style={{ ...this.state.initialStyle, ...styles }}
         className="linkBase"
