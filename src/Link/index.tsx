@@ -1,10 +1,41 @@
 import React from 'react';
-import T from 'prop-types';
 import { svg, select } from 'd3';
-
+import { Orientation } from '../types/common';
 import './style.css';
 
-export default class Link extends React.PureComponent {
+type NodeElement= {
+  id: string,
+  x: number,
+  y: number
+}
+
+type LinkEventHandler = (source: NodeElement, target: NodeElement, evt: Event) => void;
+
+type LinkProps = {
+  linkData: {
+    source: NodeElement,
+    target: NodeElement
+  };
+  orientation: Orientation
+  pathFunc: ('diagonal' | 'elbow' | 'straight' | 'step') | ((...args: any[]) => any);
+  transitionDuration: number;
+  onClick: LinkEventHandler;
+  onMouseOver: LinkEventHandler
+  onMouseOut: LinkEventHandler
+  styles?: object;
+};
+
+type LinkState = {
+  initialStyle: { opacity: number };
+};
+
+export default class Link extends React.PureComponent<LinkProps, LinkState> {
+  static defaultProps = {
+    styles: {},
+  }
+
+  private link: SVGPathElement = null;
+
   state = {
     initialStyle: {
       opacity: 0,
@@ -19,7 +50,7 @@ export default class Link extends React.PureComponent {
     this.applyOpacity(0, this.props.transitionDuration, done);
   }
 
-  applyOpacity(opacity, transitionDuration, done = () => {}) {
+  applyOpacity(opacity: number, transitionDuration: LinkProps['transitionDuration'], done = () => {}) {
     if (transitionDuration === 0) {
       select(this.link).style('opacity', opacity);
       done();
@@ -32,23 +63,22 @@ export default class Link extends React.PureComponent {
     }
   }
 
-  drawStepPath(linkData, orientation) {
+  drawStepPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     const { source, target } = linkData;
     const deltaY = target.y - source.y;
-
     return orientation === 'horizontal'
       ? `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`
       : `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`;
   }
 
-  drawDiagonalPath(linkData, orientation) {
+  drawDiagonalPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     const diagonal = svg
       .diagonal()
       .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]));
     return diagonal(linkData);
   }
 
-  drawStraightPath(linkData, orientation) {
+  drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     const straight = svg
       .line()
       .interpolate('basis')
@@ -70,10 +100,10 @@ export default class Link extends React.PureComponent {
     return straight(data);
   }
 
-  drawElbowPath(d, orientation) {
+  drawElbowPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     return orientation === 'horizontal'
-      ? `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`
-      : `M${d.source.x},${d.source.y}V${d.target.y}H${d.target.x}`;
+      ? `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`
+      : `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`;
   }
 
   drawPath() {
@@ -82,19 +112,15 @@ export default class Link extends React.PureComponent {
     if (typeof pathFunc === 'function') {
       return pathFunc(linkData, orientation);
     }
-
     if (pathFunc === 'elbow') {
       return this.drawElbowPath(linkData, orientation);
     }
-
     if (pathFunc === 'straight') {
       return this.drawStraightPath(linkData, orientation);
     }
-
     if (pathFunc === 'step') {
       return this.drawStepPath(linkData, orientation);
     }
-
     return this.drawDiagonalPath(linkData, orientation);
   }
 
@@ -129,18 +155,3 @@ export default class Link extends React.PureComponent {
     );
   }
 }
-
-Link.defaultProps = {
-  styles: {},
-};
-
-Link.propTypes = {
-  linkData: T.object.isRequired,
-  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
-  pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'step']), T.func]).isRequired,
-  transitionDuration: T.number.isRequired,
-  onClick: T.func.isRequired,
-  onMouseOver: T.func.isRequired,
-  onMouseOut: T.func.isRequired,
-  styles: T.object,
-};
