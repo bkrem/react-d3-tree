@@ -1,20 +1,14 @@
 import React from 'react';
 import { svg, select } from 'd3';
-import { Orientation } from '../types/common';
+import { Orientation, NodeData } from '../types/common';
 import './style.css';
 
-type NodeElement= {
-  id: string,
-  x: number,
-  y: number
-}
-
-type LinkEventHandler = (source: NodeElement, target: NodeElement, evt: Event) => void;
+type LinkEventHandler = (source: NodeData, target: NodeData, evt: Event) => void;
 
 type LinkProps = {
   linkData: {
-    source: NodeElement,
-    target: NodeElement
+    source: NodeData,
+    target: NodeData
   };
   orientation: Orientation
   pathFunc: ('diagonal' | 'elbow' | 'straight' | 'step') | ((...args: any[]) => any);
@@ -137,7 +131,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   };
 
   render() {
-    const { styles } = this.props;
+    const { linkData, styles } = this.props;
     return (
       <path
         ref={l => {
@@ -149,8 +143,8 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
-        data-source-id={this.props.linkData.source.id}
-        data-target-id={this.props.linkData.target.id}
+        data-source-id={linkData.source.id}
+        data-target-id={linkData.target.id}
       />
     );
   }

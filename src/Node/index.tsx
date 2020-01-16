@@ -1,12 +1,61 @@
 import React from 'react';
-import T from 'prop-types';
 import { select } from 'd3';
-
 import SvgTextElement from './SvgTextElement';
 import ForeignObjectElement from './ForeignObjectElement';
+import { Orientation, NodeData, FIXME } from '../types/common';
 import './style.css';
 
-export default class Node extends React.Component {
+type NodeEventHandler = (id: string, evt: Event) => void;
+
+type NodeProps = {
+  nodeData: NodeData
+  nodeElement: {
+    shape: string,
+    baseProps: FIXME,
+    branchNodeProps: FIXME,
+    leafNodeProps: FIXME,
+  };
+  nodeLabelProps: FIXME;
+  nodeLabelComponent?: FIXME;
+  nodeSize: {
+    x: number,
+    y: number
+  };
+  orientation: Orientation;
+  transitionDuration: number;
+  onClick: NodeEventHandler;
+  onMouseOver: NodeEventHandler;
+  onMouseOut: NodeEventHandler;
+  textLayout: FIXME;
+  subscriptions: object;
+  allowForeignObjects: boolean;
+  styles?: object;
+};
+
+type NodeState = {
+  transform: string;
+  initialStyle: { opacity: number };
+};
+
+export default class Node extends React.Component<NodeProps, NodeState> {
+  static defaultProps = {
+    nodeLabelComponent: null,
+    styles: {
+      node: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+      leafNode: {
+        circle: {},
+        name: {},
+        attributes: {},
+      },
+    },
+  };
+
+  private nodeRef: SVGGElement = null;
+
   state = {
     transform: this.setTransform(this.props.nodeData, this.props.orientation, true),
     initialStyle: {
@@ -22,17 +71,17 @@ export default class Node extends React.Component {
     this.commitTransform();
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: NodeProps) {
     return this.shouldNodeTransform(this.props, nextProps);
   }
 
-  shouldNodeTransform = (ownProps, nextProps) =>
+  shouldNodeTransform = (ownProps: NodeProps, nextProps: NodeProps) =>
     nextProps.subscriptions !== ownProps.subscriptions ||
     nextProps.nodeData.x !== ownProps.nodeData.x ||
     nextProps.nodeData.y !== ownProps.nodeData.y ||
     nextProps.orientation !== ownProps.orientation;
 
-  setTransform(nodeData, orientation, shouldTranslateToOrigin = false) {
+  setTransform(nodeData: NodeProps['nodeData'], orientation: NodeProps['orientation'], shouldTranslateToOrigin = false) {
     const { x, y, parent } = nodeData;
     if (shouldTranslateToOrigin) {
       const hasParent = typeof parent === 'object';
@@ -45,14 +94,14 @@ export default class Node extends React.Component {
     return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
   }
 
-  applyTransform(transform, transitionDuration, opacity = 1, done = () => {}) {
+  applyTransform(transform: string, transitionDuration: NodeProps['transitionDuration'], opacity = 1, done = () => {}) {
     if (transitionDuration === 0) {
-      select(this.node)
+      select(this.nodeRef)
         .attr('transform', transform)
         .style('opacity', opacity);
       done();
     } else {
-      select(this.node)
+      select(this.nodeRef)
         .transition()
         .duration(transitionDuration)
         .attr('transform', transform)
@@ -64,7 +113,6 @@ export default class Node extends React.Component {
   commitTransform() {
     const { nodeData, orientation, transitionDuration } = this.props;
     const transform = this.setTransform(nodeData, orientation);
-
     this.applyTransform(transform, transitionDuration);
   }
 
@@ -85,7 +133,6 @@ export default class Node extends React.Component {
       nodeSize,
       nodeLabelProps,
     } = this.props;
-
     return allowForeignObjects && nodeLabelComponent ? (
       <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
     ) : (
@@ -121,7 +168,7 @@ export default class Node extends React.Component {
       <g
         id={nodeData.id}
         ref={n => {
-          this.node = n;
+          this.nodeRef = n;
         }}
         style={this.state.initialStyle}
         className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
@@ -136,36 +183,3 @@ export default class Node extends React.Component {
     );
   }
 }
-
-Node.defaultProps = {
-  nodeLabelComponent: null,
-  styles: {
-    node: {
-      circle: {},
-      name: {},
-      attributes: {},
-    },
-    leafNode: {
-      circle: {},
-      name: {},
-      attributes: {},
-    },
-  },
-};
-
-Node.propTypes = {
-  nodeData: T.object.isRequired,
-  nodeElement: T.object.isRequired,
-  nodeLabelProps: T.object.isRequired,
-  nodeLabelComponent: T.object,
-  nodeSize: T.object.isRequired,
-  orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
-  transitionDuration: T.number.isRequired,
-  onClick: T.func.isRequired,
-  onMouseOver: T.func.isRequired,
-  onMouseOut: T.func.isRequired,
-  textLayout: T.object.isRequired,
-  subscriptions: T.object.isRequired, // eslint-disable-line react/no-unused-prop-types
-  allowForeignObjects: T.bool.isRequired,
-  styles: T.object,
-};
