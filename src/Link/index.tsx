@@ -1,17 +1,14 @@
 import React from 'react';
 import { svg, select } from 'd3';
-import { Orientation, NodeData } from '../types/common';
+import { Orientation, NodeData, LinkData, PathFunctionOption, PathFunction } from '../types/common';
 import './style.css';
 
 type LinkEventHandler = (source: NodeData, target: NodeData, evt: Event) => void;
 
 type LinkProps = {
-  linkData: {
-    source: NodeData;
-    target: NodeData;
-  };
+  linkData: LinkData;
   orientation: Orientation;
-  pathFunc: ('diagonal' | 'elbow' | 'straight' | 'step') | ((...args: any[]) => any);
+  pathFunc: PathFunctionOption | PathFunction;
   transitionDuration: number;
   onClick: LinkEventHandler;
   onMouseOver: LinkEventHandler;

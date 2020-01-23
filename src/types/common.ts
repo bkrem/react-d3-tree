@@ -12,3 +12,11 @@ export type NodeData = {
   _children?: FIXME;
   _collapsed: boolean;
 };
+
+export type LinkData = {
+  source: NodeData;
+  target: NodeData;
+};
+
+export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
+export type PathFunction = (linkData: LinkData, orientation: Orientation) => string;
