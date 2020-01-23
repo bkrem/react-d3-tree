@@ -7,7 +7,6 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "precommit": "lint-staged",
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
     "build": "rimraf dist && yarn cp:css && tsc",
     "build:watch": "rimraf dist && yarn cp:css && tsc -w",
@@ -23,6 +22,33 @@
     "docs:util": "jsdoc2md src/util/index.js > docs/util/util.md",
     "docs:clean": "rimraf docs/components/* && rimraf docs/util/*",
     "release": "yarn test && yarn build && yarn docs && git commit -a"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bkrem/react-d3-tree.git"
+  },
+  "keywords": [
+    "react",
+    "d3",
+    "tree",
+    "component",
+    "graph",
+    "svg",
+    "hierarchical-data",
+    "hierarchy",
+    "d3-visualization",
+    "chart"
+  ],
+  "author": "Ben Kremer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bkrem/react-d3-tree/issues"
+  },
+  "homepage": "https://github.com/bkrem/react-d3-tree",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "src/**/*.js": [
@@ -93,27 +119,5 @@
     "ts-node": "^8.3.0",
     "tsconfig-paths": "^3.8.0",
     "typescript": "^3.6.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bkrem/react-d3-tree.git"
-  },
-  "keywords": [
-    "react",
-    "d3",
-    "tree",
-    "component",
-    "graph",
-    "svg",
-    "hierarchical-data",
-    "hierarchy",
-    "d3-visualization",
-    "chart"
-  ],
-  "author": "Ben Kremer",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bkrem/react-d3-tree/issues"
-  },
-  "homepage": "https://github.com/bkrem/react-d3-tree"
+  }
 }
