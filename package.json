@@ -27,11 +27,11 @@
   "lint-staged": {
     "src/**/*.js": [
       "eslint",
-      "prettier",
+      "prettier --write",
       "git add"
     ],
-    "src/**/*.tsx": [
-      "prettier",
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
       "git add"
     ]
   },
