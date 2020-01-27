@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 export default class SvgTextElement extends React.PureComponent {
   render() {
-    const { name, nodeStyle, textLayout, attributes } = this.props;
+    const { name, nodeStyle, textLayout, attributes, entity } = this.props;
     return (
       <g>
         <text
@@ -25,8 +25,24 @@ export default class SvgTextElement extends React.PureComponent {
           transform={textLayout.transform}
           style={nodeStyle.attributes}
         >
+          {attributes &&
+            Object.keys(attributes).map(labelKey => (
+              <div>
+                <tspan x={textLayout.x} dy="1.2em" key={uuid.v4()}>
+                  {labelKey}: {attributes[labelKey]}
+                </tspan>
+              </div>
+            ))}
         </text>
-        <g />
+        <g>
+          { entity && Object.keys(entity).map ( ent =>(
+            <div>
+              <button key={entity.id}>
+                {ent.name}
+              </button>
+            </div>
+           ))}
+        </g>
       </g>
     );
   }
@@ -34,6 +50,7 @@ export default class SvgTextElement extends React.PureComponent {
 
 SvgTextElement.defaultProps = {
   attributes: undefined,
+  entity: undefined,
 };
 
 SvgTextElement.propTypes = {
@@ -41,4 +58,5 @@ SvgTextElement.propTypes = {
   attributes: T.object,
   textLayout: T.object.isRequired,
   nodeStyle: T.object.isRequired,
+  entity: T.object,
 };
