@@ -505,50 +505,7 @@ class Tree extends React.Component {
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
-        <svg className={rd3tSvgClassName} width="100%" height="100%">
-          <NodeWrapper
-            transitionDuration={transitionDuration}
-            component="g"
-            className={rd3tGClassName}
-            transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
-          >
-            {links.map(linkData => (
-              <Link
-                key={uuid.v4()}
-                orientation={orientation}
-                pathFunc={pathFunc}
-                linkData={linkData}
-                onClick={this.handleOnLinkClickCb}
-                onMouseOver={this.handleOnLinkMouseOverCb}
-                onMouseOut={this.handleOnLinkMouseOutCb}
-                transitionDuration={transitionDuration}
-                styles={styles.links}
-              />
-            ))}
-
-            {nodes.map(nodeData => (
-              <Node
-                key={nodeData.id}
-                nodeSvgShape={{ ...nodeSvgShape, ...nodeData.nodeSvgShape }}
-                nodeLabelComponent={nodeLabelComponent}
-                nodeSize={nodeSize}
-                orientation={orientation}
-                transitionDuration={transitionDuration}
-                nodeData={nodeData}
-                name={nodeData.name}
-                attributes={nodeData.attributes}
-                onClick={this.handleNodeToggle}
-                onMouseOver={this.handleOnMouseOverCb}
-                onMouseOut={this.handleOnMouseOutCb}
-                textLayout={nodeData.textLayout || textLayout}
-                circleRadius={circleRadius}
-                subscriptions={subscriptions}
-                allowForeignObjects={allowForeignObjects}
-                styles={styles.nodes}
-              />
-            ))}
-          </NodeWrapper>
-        </svg>
+      <h1> Test </h1>
       </div>
     );
   }
