@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 export default class SvgTextElement extends React.PureComponent {
   render() {
-    const { name, nodeStyle, textLayout, attributes, entity } = this.props;
+    const { name, nodeStyle, textLayout, attributes, type } = this.props;
     return (
       <g>
         <text
@@ -35,13 +35,11 @@ export default class SvgTextElement extends React.PureComponent {
             ))}
         </text>
         <g>
-          { entity && Object.keys(entity).map ( ent =>(
-            <div>
-              <button key={entity.id}>
-                {ent.name}
-              </button>
-            </div>
-           ))}
+          {
+            <button className='node_btn'>
+             add new{type}
+            </button>
+          }
         </g>
       </g>
     );
@@ -50,7 +48,7 @@ export default class SvgTextElement extends React.PureComponent {
 
 SvgTextElement.defaultProps = {
   attributes: undefined,
-  entity: undefined,
+  type: undefined,
 };
 
 SvgTextElement.propTypes = {
@@ -58,5 +56,5 @@ SvgTextElement.propTypes = {
   attributes: T.object,
   textLayout: T.object.isRequired,
   nodeStyle: T.object.isRequired,
-  entity: T.object,
+  type: T.object,
 };
