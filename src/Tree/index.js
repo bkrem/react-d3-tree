@@ -270,6 +270,7 @@ class Tree extends React.Component {
 
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNode._collapsed) {
+        console.log("button");
         Tree.expandNode(targetNode);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
       } else {
