@@ -118,7 +118,7 @@ export default class Node extends React.Component {
         onMouseOut={this.handleOnMouseOut}
       >
         {this.renderNodeElement(nodeStyle)}
-
+        {/* Change that to the needed Component */}
         {allowForeignObjects && nodeLabelComponent ? (
           <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
         ) : (
@@ -130,6 +130,7 @@ export default class Node extends React.Component {
 }
 
 Node.defaultProps = {
+  nodeDesComponent: null,
   nodeLabelComponent: null,
   name: '',
   attributes: undefined,
@@ -151,6 +152,7 @@ Node.defaultProps = {
 Node.propTypes = {
   nodeData: T.object.isRequired,
   nodeSvgShape: T.object.isRequired,
+  nodeDesComponent: T.object,
   nodeLabelComponent: T.object,
   nodeSize: T.object.isRequired,
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
