@@ -28,11 +28,11 @@ export default class SvgTextElement extends React.PureComponent {
           {attributes &&
             Object.keys(attributes).map(labelKey => (
               <div>
-                <button>test</button>
+             
 
-                <tspan x={textLayout.x} dy="1.2em" key={uuid.v4()}>
+                <button key={uuid.v4()}>
                   {labelKey}: {attributes[labelKey]}
-                </tspan>
+                </button>
               </div>
             ))}
         </text>
