@@ -25,16 +25,6 @@ export default class SvgTextElement extends React.PureComponent {
           transform={textLayout.transform}
           style={nodeStyle.attributes}
         >
-          {attributes &&
-            Object.keys(attributes).map(labelKey => (
-              <div>
-             
-
-                <button key={uuid.v4()}>
-                  {labelKey}: {attributes[labelKey]}
-                </button>
-              </div>
-            ))}
         </text>
         <g />
       </g>
