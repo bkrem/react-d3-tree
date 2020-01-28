@@ -1,12 +1,24 @@
-import React from 'react';
-import uuid from 'uuid';
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable camelcase */
+import React, { Fragment } from 'react';
 import T from 'prop-types';
 
 export default class SvgTextElement extends React.PureComponent {
   render() {
-    const { name, nodeStyle, textLayout, attributes, type } = this.props;
+    const { id, name, nodeStyle, textLayout, entityType, description } = this.props;
     return (
       <g>
+        <text
+          className="nodeIdBase"
+          style={nodeStyle.id}
+          textAnchor={textLayout.textAnchor}
+          x={textLayout.x}
+          y={textLayout.y}
+          transform={textLayout.transform}
+          dy=".35em"
+        >
+          {id}
+        </text>
         <text
           className="nodeNameBase"
           style={nodeStyle.name}
@@ -19,27 +31,36 @@ export default class SvgTextElement extends React.PureComponent {
           {name}
         </text>
         <text
-          className="nodeAttributesBase"
-          y={textLayout.y + 10}
+          className="nodeDescBase"
+          style={nodeStyle.description}
           textAnchor={textLayout.textAnchor}
+          x={textLayout.x}
+          y={textLayout.y}
           transform={textLayout.transform}
-          style={nodeStyle.attributes}
+          dy=".35em"
         >
-          {attributes &&
-            Object.keys(attributes).map(labelKey => (
-              <div>
-                <tspan x={textLayout.x} dy="1.2em" key={uuid.v4()}>
-                  {labelKey}: {attributes[labelKey]}
-                </tspan>
-              </div>
-            ))}
+          {description}
         </text>
-        <g>
-          {
-            <button className='node_btn'>
-             add new{type}
-            </button>
-          }
+        <g className="nodePropBase">
+          {entityType === 'asset' && (
+            <Fragment>
+              <input type="checkbox" value="review" /> Reviewed <br />
+              <button className="assetNode">New Threat</button>
+              {/* add comments as popup */}
+            </Fragment>
+          )}
+          {entityType === 'threat' && (
+            <Fragment>
+              <div>
+                <label className="threatBase">
+                  <input type="checkbox" checked />
+                  <span className="slider" />
+                </label>
+              </div>
+              <input type="checkbox" value="review" /> Reviewed <br />
+              <button className="threatNode">New Vulnerability</button>
+            </Fragment>
+          )}
         </g>
       </g>
     );
@@ -47,14 +68,14 @@ export default class SvgTextElement extends React.PureComponent {
 }
 
 SvgTextElement.defaultProps = {
-  attributes: undefined,
-  type: undefined,
+  entityType: undefined,
 };
 
 SvgTextElement.propTypes = {
+  id: T.number.isRequired,
   name: T.string.isRequired,
-  attributes: T.object,
+  description: T.string.isRequired,
   textLayout: T.object.isRequired,
   nodeStyle: T.object.isRequired,
-  type: T.object,
+  entityType: T.string,
 };
