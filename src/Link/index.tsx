@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { svg, select } from 'd3';
-import { Orientation, NodeData, LinkData, PathFunctionOption, PathFunction } from '../types/common';
+import {
+  Orientation,
+  EnhancedTreeNode,
+  TreeLink,
+  PathFunctionOption,
+  PathFunction,
+} from '../types/common';
 import './style.css';
 
-type LinkEventHandler = (source: NodeData, target: NodeData, evt: Event) => void;
+type LinkEventHandler = (
+  source: EnhancedTreeNode,
+  target: EnhancedTreeNode,
+  evt: SyntheticEvent
+) => void;
 
 type LinkProps = {
-  linkData: LinkData;
+  linkData: TreeLink;
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
   transitionDuration: number;

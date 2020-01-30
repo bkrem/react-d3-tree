@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import Node from '../index';
+import Node from '../index.tsx';
 
 describe('<Node />', () => {
   const nodeData = {
@@ -23,7 +23,7 @@ describe('<Node />', () => {
       y: 321,
     },
     nodeElement: {
-      shape: 'circle',
+      tag: 'circle',
       baseProps: {
         r: 10,
       },
@@ -44,7 +44,6 @@ describe('<Node />', () => {
       y: -10,
     },
     subscriptions: {},
-    styles: {},
     allowForeignObjects: false,
   };
 
@@ -62,7 +61,7 @@ describe('<Node />', () => {
   it('applies correct base className if `nodeData._children` is defined', () => {
     const leafNodeComponent = shallow(<Node {...mockProps} />);
     const nodeComponent = shallow(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} />,
+      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} />
     );
 
     expect(leafNodeComponent.find('g').prop('className')).toBe('leafNodeBase');
@@ -116,7 +115,7 @@ describe('<Node />', () => {
 
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
       fixture,
-      mockProps.transitionDuration,
+      mockProps.transitionDuration
     );
   });
 
@@ -136,14 +135,14 @@ describe('<Node />', () => {
 
       expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
         initialTransform,
-        mockProps.transitionDuration,
+        mockProps.transitionDuration
       );
 
       renderedComponent.setProps(updatedProps);
 
       expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
         updatedTransform,
-        mockProps.transitionDuration,
+        mockProps.transitionDuration
       );
     });
 
@@ -153,7 +152,7 @@ describe('<Node />', () => {
       const renderedComponent = mount(<Node {...thisProps} />);
       const nextProps = { ...thisProps, orientation: 'vertical' };
       expect(
-        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
+        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps)
       ).toBe(true);
     });
 
@@ -163,30 +162,30 @@ describe('<Node />', () => {
       const nextProps = { ...mockProps, subscriptions: { ...subscriptions, initialDepth: 1 } };
 
       expect(
-        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps),
+        renderedComponent.instance().shouldNodeTransform(renderedComponent.props(), nextProps)
       ).toBe(true);
     });
   });
 
-  // TODO: should default to circle shape if not provided
+  // TODO: should default to circle tag if not provided
   describe('NodeElement', () => {
-    it('allows passing SVG shape elements + baseProps to be used as the node element', () => {
-      const fixture = { shape: 'ellipse', baseProps: { rx: 20, ry: 10 } };
+    it('allows passing SVG tag + baseProps to be used as the node element', () => {
+      const fixture = { tag: 'ellipse', baseProps: { rx: 20, ry: 10 } };
       const props = { ...mockProps, nodeElement: fixture };
       const renderedComponent = shallow(<Node {...props} />);
 
-      expect(renderedComponent.find(fixture.shape).length).toBe(1);
-      expect(renderedComponent.find(fixture.shape).props()).toEqual(fixture.baseProps);
+      expect(renderedComponent.find(fixture.tag).length).toBe(1);
+      expect(renderedComponent.find(fixture.tag).props()).toEqual(fixture.baseProps);
     });
     it('renders the appropriate SVG element if `props.nodeElement` is defined', () => {
-      const props = { ...mockProps, nodeElement: { shape: 'rect', baseProps: { y: 123 } } };
+      const props = { ...mockProps, nodeElement: { tag: 'rect', baseProps: { y: 123 } } };
       const renderedComponent = shallow(<Node {...props} />);
       expect(renderedComponent.find('rect').length).toBe(1);
       expect(renderedComponent.find('rect').prop('y')).toBe(123);
     });
 
-    it('renders nothing if `nodeElement.shape` is set to `none`', () => {
-      const props = { ...mockProps, nodeElement: { shape: 'none' } };
+    it('renders nothing if `nodeElement.tag` is set to `none`', () => {
+      const props = { ...mockProps, nodeElement: { tag: 'none' } };
       const renderedComponent = shallow(<Node {...props} />);
       expect(renderedComponent.instance().renderNodeElement({})).toBe(null);
     });
@@ -194,32 +193,32 @@ describe('<Node />', () => {
     it('merges `branchNodeProps` into `baseProps` if node has `_children`', () => {
       const fixture = {
         nodeElement: {
-          shape: 'rect',
+          tag: 'rect',
           branchNodeProps: { fill: 'green', r: 20 },
         },
       };
       // const leafNodeComponent = shallow(<Node {...mockProps} />);
       const renderedComponent = shallow(
-        <Node {...mockProps} {...fixture} nodeData={{ ...nodeData, _children: [{}] }} />,
+        <Node {...mockProps} {...fixture} nodeData={{ ...nodeData, _children: [{}] }} />
       );
 
-      expect(renderedComponent.find(fixture.nodeElement.shape).props()).toEqual(
-        fixture.nodeElement.branchNodeProps,
+      expect(renderedComponent.find(fixture.nodeElement.tag).props()).toEqual(
+        fixture.nodeElement.branchNodeProps
       );
     });
 
     it('merges `leafNodeProps` into `baseProps` if node has no children', () => {
       const fixture = {
         nodeElement: {
-          shape: 'rect',
+          tag: 'rect',
           leafNodeProps: { fill: 'red', r: 15 },
         },
       };
       // const leafNodeComponent = shallow(<Node {...mockProps} />);
       const renderedComponent = shallow(<Node {...mockProps} {...fixture} />);
 
-      expect(renderedComponent.find(fixture.nodeElement.shape).props()).toEqual(
-        fixture.nodeElement.leafNodeProps,
+      expect(renderedComponent.find(fixture.nodeElement.tag).props()).toEqual(
+        fixture.nodeElement.leafNodeProps
       );
     });
 
@@ -251,7 +250,7 @@ describe('<Node />', () => {
 
     it('renders a ForeignObjectElement if `props.allowForeignObjects && props.nodeLabelComponent`', () => {
       const renderedComponent = shallow(
-        <Node {...mockProps} nodeLabelComponent={{ render: <div /> }} allowForeignObjects />,
+        <Node {...mockProps} nodeLabelComponent={{ render: <div /> }} allowForeignObjects />
       );
       expect(renderedComponent.find('ForeignObjectElement').length).toBe(1);
     });

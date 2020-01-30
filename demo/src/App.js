@@ -680,6 +680,9 @@ class App extends Component {
                 depthFactor={this.state.depthFactor}
                 textLayout={this.state.textLayout}
                 styles={this.state.styles}
+                onUpdate={(...args) => {console.log(args)}}
+                onClick={(...args) => { console.log('onClick'); console.log(args) }}
+                onLinkClick={(...args) => { console.log('onLinkClick'); console.log(args) }}
               />
             </div>
           </div>

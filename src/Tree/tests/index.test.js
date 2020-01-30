@@ -3,9 +3,9 @@ import { shallow, mount } from 'enzyme';
 import { render } from 'react-dom';
 
 import NodeWrapper from '../NodeWrapper';
-import Node from '../../Node';
-import Link from '../../Link';
-import Tree from '../index';
+import Node from '../../Node/index.tsx';
+import Link from '../../Link/index.tsx';
+import Tree from '../index.tsx';
 import { mockData, mockData2, mockData3, mockData4 } from './mockData';
 
 describe('<Tree />', () => {
@@ -33,8 +33,8 @@ describe('<Tree />', () => {
   });
 
   it('passes individual `baseProps` to the specified <Node /> only', () => {
-    const svgShapeMock = {
-      shape: 'rect',
+    const svgTagMock = {
+      tag: 'rect',
       baseProps: {
         r: 3,
         fill: 'red',
@@ -44,7 +44,7 @@ describe('<Tree />', () => {
       {
         name: 'Top Level',
         parent: 'null',
-        nodeElement: svgShapeMock,
+        nodeElement: svgTagMock,
         children: [
           {
             name: 'Inner',
@@ -57,11 +57,11 @@ describe('<Tree />', () => {
     const renderedComponent = mount(<Tree data={mockTree} />);
     const rootNode = renderedComponent.find(Node).first();
     expect(rootNode).not.toBeUndefined();
-    expect(rootNode.props().nodeElement).toEqual(svgShapeMock);
+    expect(rootNode.props().nodeElement).toEqual(svgTagMock);
 
     const childNode = renderedComponent.find(Node).last();
     expect(childNode).not.toBeUndefined();
-    expect(childNode.props().nodeElement).not.toEqual(svgShapeMock);
+    expect(childNode.props().nodeElement).not.toEqual(svgTagMock);
   });
 
   it('maps every parent-child relation onto a <Link />', () => {
@@ -117,7 +117,7 @@ describe('<Tree />', () => {
       const depthFactor = 100;
       // const expectedY = nodeData.depth * depthFactor;
       const renderedComponent = shallow(
-        <Tree data={mockData} orientation="vertical" depthFactor={depthFactor} />,
+        <Tree data={mockData} orientation="vertical" depthFactor={depthFactor} />
       );
 
       const { nodes } = renderedComponent.instance().generateTree(mockData);
@@ -133,10 +133,10 @@ describe('<Tree />', () => {
       const renderedComponent = shallow(<Tree data={mockData} orientation={fixture} />);
 
       expect(renderedComponent.find(Node).everyWhere(n => n.prop('orientation') === fixture)).toBe(
-        true,
+        true
       );
       expect(renderedComponent.find(Link).everyWhere(n => n.prop('orientation') === fixture)).toBe(
-        true,
+        true
       );
     });
   });
@@ -148,7 +148,7 @@ describe('<Tree />', () => {
       expect(
         renderedComponent
           .find(Node)
-          .everyWhere(n => n.prop('onClick') === renderedComponent.instance().handleNodeToggle),
+          .everyWhere(n => n.prop('onClick') === renderedComponent.instance().handleNodeToggle)
       ).toBe(true);
     });
 
@@ -288,7 +288,7 @@ describe('<Tree />', () => {
 
       expect(zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(true);
       expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(
-        false,
+        false
       );
     });
   });
@@ -310,15 +310,15 @@ describe('<Tree />', () => {
       const scaleExtent = { min: 0.2, max: 0.8 };
 
       let renderedComponent = shallow(
-        <Tree data={mockData} scaleExtent={scaleExtent} zoom={0.9} />,
+        <Tree data={mockData} scaleExtent={scaleExtent} zoom={0.9} />
       );
       expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(
-        `scale(${scaleExtent.max})`,
+        `scale(${scaleExtent.max})`
       );
 
       renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={0.1} />);
       expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(
-        `scale(${scaleExtent.min})`,
+        `scale(${scaleExtent.min})`
       );
     });
 
@@ -372,7 +372,7 @@ describe('<Tree />', () => {
     it('calls the onClick callback even when `props.collapsible` is false', () => {
       const onClickSpy = jest.fn();
       const renderedComponent = mount(
-        <Tree data={mockData} collapsible={false} onClick={onClickSpy} />,
+        <Tree data={mockData} collapsible={false} onClick={onClickSpy} />
       );
 
       renderedComponent
@@ -398,7 +398,7 @@ describe('<Tree />', () => {
           .find(Node)
           .first()
           .prop('nodeData'),
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -456,7 +456,7 @@ describe('<Tree />', () => {
           .find(Node)
           .first()
           .prop('nodeData'),
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -514,7 +514,7 @@ describe('<Tree />', () => {
           .find(Node)
           .first()
           .prop('nodeData'),
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -560,7 +560,7 @@ describe('<Tree />', () => {
     it('calls the onLinkClick callback even when `props.collapsible` is false', () => {
       const onLinkClickSpy = jest.fn();
       const renderedComponent = mount(
-        <Tree data={mockData} collapsible={false} onLinkClick={onLinkClickSpy} />,
+        <Tree data={mockData} collapsible={false} onLinkClick={onLinkClickSpy} />
       );
 
       renderedComponent
@@ -590,7 +590,7 @@ describe('<Tree />', () => {
           .find(Link)
           .first()
           .prop('linkData').target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -612,7 +612,7 @@ describe('<Tree />', () => {
     it('calls the onLinkMouseOver callback when a node is hovered over', () => {
       const onLinkMouseOverOverSpy = jest.fn();
       const renderedComponent = mount(
-        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />,
+        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />
       );
 
       renderedComponent
@@ -639,7 +639,7 @@ describe('<Tree />', () => {
       const onLinkMouseOverOverSpy = jest.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = mount(
-        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />,
+        <Tree data={mockData} onLinkMouseOver={onLinkMouseOverOverSpy} />
       );
 
       renderedComponent
@@ -656,7 +656,7 @@ describe('<Tree />', () => {
           .find(Link)
           .first()
           .prop('linkData').target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -718,7 +718,7 @@ describe('<Tree />', () => {
           .find(Link)
           .first()
           .prop('linkData').target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -760,7 +760,7 @@ describe('<Tree />', () => {
       document.body.innerHTML += '<div id="reactContainer"></div>';
       render(
         <Tree data={mockData} onUpdate={onUpdateSpy} scaleExtent={{ min: 0.1, max: 10 }} />,
-        document.querySelector('#reactContainer'),
+        document.querySelector('#reactContainer')
       );
       const scrollableComponent = document.querySelector('.rd3t-tree-container > svg');
       scrollableComponent.dispatchEvent(new Event('wheel'));
@@ -778,7 +778,7 @@ describe('<Tree />', () => {
       document.body.innerHTML += '<div id="reactContainer"></div>';
       render(
         <Tree data={mockData} onUpdate scaleExtent={{ min: 0.1, max: 10 }} />,
-        document.querySelector('#reactContainer'),
+        document.querySelector('#reactContainer')
       );
       const scrollableComponent = document.querySelector('.rd3t-tree-container > svg');
       scrollableComponent.dispatchEvent(new Event('wheel'));
@@ -791,7 +791,7 @@ describe('<Tree />', () => {
       const translate = { x: 10, y: 5 };
 
       const renderedComponent = mount(
-        <Tree data={mockData} zoom={zoom} translate={translate} onUpdate={onUpdateSpy} />,
+        <Tree data={mockData} zoom={zoom} translate={translate} onUpdate={onUpdateSpy} />
       );
       renderedComponent
         .find(Node)
@@ -806,40 +806,12 @@ describe('<Tree />', () => {
       });
     });
   });
-
-  describe('nodeData', () => {
-    it('applies textLayout when nodeData has it specified', () => {
-      const renderedComponent = mount(<Tree data={mockData3} />);
-      expect(
-        renderedComponent
-          .find(Node)
-          .last()
-          .prop('textLayout'),
-      ).toEqual(expect.objectContaining({ textAnchor: 'middle' }));
-    });
-  });
-});
-
-describe('linkData', () => {
-  it('applies textLayout when nodeData has it specified', () => {
-    const renderedComponent = mount(<Tree data={mockData2} />);
-    const { name, attributes, children } = mockData2[0];
-    expect(
-      renderedComponent
-        .find(Link)
-        .last()
-        .prop('linkData'),
-    ).toMatchObject({
-      source: { name, attributes },
-      target: { name: children[0].name, attributes: children[0].attributes },
-    });
-  });
 });
 
 describe('commonNodeElement', () => {
   it('passes `commonNodeElement` to each Node by default', () => {
     const fixture = {
-      shape: 'rect',
+      tag: 'rect',
       baseProps: {
         width: 10,
         height: 10,
@@ -850,13 +822,13 @@ describe('commonNodeElement', () => {
       renderedComponent
         .find(Node)
         .first()
-        .prop('nodeElement'),
+        .prop('nodeElement')
     ).toEqual(fixture);
   });
-  
+
   it('allows overrides for individual Nodes from `nodeData.nodeElement` if specified', () => {
     const fixture = {
-      shape: 'rect',
+      tag: 'rect',
       baseProps: {
         width: 10,
         height: 10,
@@ -881,13 +853,13 @@ describe('commonNodeElement', () => {
       renderedComponent
         .find(Node)
         .first()
-        .prop('nodeElement'),
+        .prop('nodeElement')
     ).toEqual(fixture);
     expect(
       renderedComponent
         .find(Node)
         .last()
-        .prop('nodeElement'),
+        .prop('nodeElement')
     ).not.toEqual(fixture);
   });
 });

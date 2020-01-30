@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { select } from 'd3';
 import SvgTextElement from './SvgTextElement';
 import ForeignObjectElement from './ForeignObjectElement';
-import { Orientation, NodeData, FIXME } from '../types/common';
+import { Orientation, EnhancedTreeNode, FIXME, NodeElement } from '../types/common';
 import './style.css';
 
-type NodeEventHandler = (id: string, evt: Event) => void;
+type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
 type NodeProps = {
-  nodeData: NodeData;
-  nodeElement: {
-    shape: string;
-    baseProps: FIXME;
-    branchNodeProps: FIXME;
-    leafNodeProps: FIXME;
-  };
+  nodeData: EnhancedTreeNode;
+  nodeElement: NodeElement;
   nodeLabelProps: FIXME;
   nodeLabelComponent?: FIXME;
   nodeSize: {
@@ -26,10 +21,8 @@ type NodeProps = {
   onClick: NodeEventHandler;
   onMouseOver: NodeEventHandler;
   onMouseOut: NodeEventHandler;
-  textLayout: FIXME;
   subscriptions: object;
   allowForeignObjects: boolean;
-  styles?: object;
 };
 
 type NodeState = {
@@ -40,18 +33,6 @@ type NodeState = {
 export default class Node extends React.Component<NodeProps, NodeState> {
   static defaultProps = {
     nodeLabelComponent: null,
-    styles: {
-      node: {
-        circle: {},
-        name: {},
-        attributes: {},
-      },
-      leafNode: {
-        circle: {},
-        name: {},
-        attributes: {},
-      },
-    },
   };
 
   private nodeRef: SVGGElement = null;
@@ -127,11 +108,11 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   renderNodeElement = () => {
     const { nodeElement, nodeData } = this.props;
-    const { shape, baseProps, leafNodeProps, branchNodeProps } = nodeElement;
+    const { tag, baseProps, leafNodeProps = {}, branchNodeProps = {} } = nodeElement;
     const elemProps = nodeData._children
       ? { ...baseProps, ...branchNodeProps }
       : { ...baseProps, ...leafNodeProps };
-    return shape === 'none' ? null : React.createElement(shape, elemProps);
+    return tag === 'none' ? null : React.createElement(tag, elemProps);
   };
 
   renderNodeLabelElement = () => {

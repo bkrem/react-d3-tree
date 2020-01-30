@@ -2,21 +2,37 @@ export type FIXME = any;
 
 export type Orientation = 'horizontal' | 'vertical';
 
-export type NodeData = {
-  id: string;
-  x: number;
-  y: number;
+export type TreeNode = {
   name: string;
-  attributes: Record<string, FIXME>;
-  parent?: NodeData;
-  _children?: FIXME;
-  _collapsed: boolean;
+  attributes?: Record<string, string>;
+  children?: TreeNode[];
+  nodeElement: NodeElement;
+  _collapsed?: boolean;
 };
 
-export type LinkData = {
-  source: NodeData;
-  target: NodeData;
+export type InternalNodeProperties = {
+  id: string;
+  depth: number;
+  x: number;
+  y: number;
+  parent?: EnhancedTreeNode;
+  _collapsed: boolean;
+  _children?: EnhancedTreeNode[];
+};
+
+export type EnhancedTreeNode = TreeNode & InternalNodeProperties;
+
+export type TreeLink = {
+  source: EnhancedTreeNode;
+  target: EnhancedTreeNode;
 };
 
 export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
-export type PathFunction = (linkData: LinkData, orientation: Orientation) => string;
+export type PathFunction = (linkData: TreeLink, orientation: Orientation) => string;
+
+export type NodeElement = {
+  tag: string;
+  baseProps: Record<string, FIXME>;
+  branchNodeProps?: Record<string, FIXME>;
+  leafNodeProps?: Record<string, FIXME>;
+};
