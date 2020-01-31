@@ -1,14 +1,22 @@
 import React, { SyntheticEvent } from 'react';
-import { select } from 'd3';
+import { select, HierarchyPointNode } from 'd3';
 import SvgTextElement from './SvgTextElement';
 import ForeignObjectElement from './ForeignObjectElement';
-import { Orientation, EnhancedTreeNode, FIXME, NodeElement } from '../types/common';
+import {
+  Orientation,
+  FIXME,
+  NodeElement,
+  PositionCoordinates,
+  TreeNodeDatum,
+} from '../types/common';
 import './style.css';
 
 type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
 type NodeProps = {
-  nodeData: EnhancedTreeNode;
+  data: TreeNodeDatum;
+  position: PositionCoordinates;
+  parent: HierarchyPointNode<TreeNodeDatum> | null;
   nodeElement: NodeElement;
   nodeLabelProps: FIXME;
   nodeLabelComponent?: FIXME;
@@ -38,7 +46,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   private nodeRef: SVGGElement = null;
 
   state = {
-    transform: this.setTransform(this.props.nodeData, this.props.orientation, true),
+    transform: this.setTransform(
+      this.props.position,
+      this.props.parent,
+      this.props.orientation,
+      true
+    ),
     initialStyle: {
       opacity: 0,
     },
@@ -58,25 +71,27 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   shouldNodeTransform = (ownProps: NodeProps, nextProps: NodeProps) =>
     nextProps.subscriptions !== ownProps.subscriptions ||
-    nextProps.nodeData.x !== ownProps.nodeData.x ||
-    nextProps.nodeData.y !== ownProps.nodeData.y ||
+    nextProps.position.x !== ownProps.position.x ||
+    nextProps.position.y !== ownProps.position.y ||
     nextProps.orientation !== ownProps.orientation;
 
   setTransform(
-    nodeData: NodeProps['nodeData'],
+    position: NodeProps['position'],
+    parent: NodeProps['parent'],
     orientation: NodeProps['orientation'],
     shouldTranslateToOrigin = false
   ) {
-    const { x, y, parent } = nodeData;
     if (shouldTranslateToOrigin) {
-      const hasParent = typeof parent === 'object';
+      const hasParent = parent !== null && parent !== undefined;
       const originX = hasParent ? parent.x : 0;
       const originY = hasParent ? parent.y : 0;
       return orientation === 'horizontal'
         ? `translate(${originY},${originX})`
         : `translate(${originX},${originY})`;
     }
-    return orientation === 'horizontal' ? `translate(${y},${x})` : `translate(${x},${y})`;
+    return orientation === 'horizontal'
+      ? `translate(${position.y},${position.x})`
+      : `translate(${position.x},${position.y})`;
   }
 
   applyTransform(
@@ -96,72 +111,62 @@ export default class Node extends React.Component<NodeProps, NodeState> {
         .duration(transitionDuration)
         .attr('transform', transform)
         .style('opacity', opacity)
-        .each('end', done);
+        .on('end', done);
     }
   }
 
   commitTransform() {
-    const { nodeData, orientation, transitionDuration } = this.props;
-    const transform = this.setTransform(nodeData, orientation);
+    const { orientation, transitionDuration, position, parent } = this.props;
+    const transform = this.setTransform(position, parent, orientation);
     this.applyTransform(transform, transitionDuration);
   }
 
   renderNodeElement = () => {
-    const { nodeElement, nodeData } = this.props;
+    const { nodeElement, data } = this.props;
     const { tag, baseProps, leafNodeProps = {}, branchNodeProps = {} } = nodeElement;
-    const elemProps = nodeData._children
+    const elemProps = data._children
       ? { ...baseProps, ...branchNodeProps }
       : { ...baseProps, ...leafNodeProps };
     return tag === 'none' ? null : React.createElement(tag, elemProps);
   };
 
   renderNodeLabelElement = () => {
-    const {
-      allowForeignObjects,
-      nodeLabelComponent,
-      nodeData,
-      nodeSize,
-      nodeLabelProps,
-    } = this.props;
+    const { allowForeignObjects, nodeLabelComponent, data, nodeSize, nodeLabelProps } = this.props;
     return allowForeignObjects && nodeLabelComponent ? (
-      <ForeignObjectElement nodeData={nodeData} nodeSize={nodeSize} {...nodeLabelComponent} />
+      <ForeignObjectElement nodeData={data} nodeSize={nodeSize} {...nodeLabelComponent} />
     ) : (
-      <SvgTextElement
-        nameData={nodeData.name}
-        attributesData={nodeData.attributes}
-        {...nodeLabelProps}
-      />
+      <SvgTextElement nameData={data.name} attributesData={data.attributes} {...nodeLabelProps} />
     );
   };
 
   handleOnClick = evt => {
-    this.props.onClick(this.props.nodeData.id, evt);
+    this.props.onClick(this.props.data.id, evt);
   };
 
   handleOnMouseOver = evt => {
-    this.props.onMouseOver(this.props.nodeData.id, evt);
+    this.props.onMouseOver(this.props.data.id, evt);
   };
 
   handleOnMouseOut = evt => {
-    this.props.onMouseOut(this.props.nodeData.id, evt);
+    this.props.onMouseOut(this.props.data.id, evt);
   };
 
   componentWillLeave(done) {
-    const { nodeData, orientation, transitionDuration } = this.props;
-    const transform = this.setTransform(nodeData, orientation, true);
+    const { orientation, transitionDuration, position, parent } = this.props;
+    const transform = this.setTransform(position, parent, orientation, true);
     this.applyTransform(transform, transitionDuration, 0, done);
   }
 
   render() {
-    const { nodeData } = this.props;
+    const { data } = this.props;
     return (
       <g
-        id={nodeData.id}
+        id={data.id}
         ref={n => {
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
-        className={nodeData._children ? 'nodeBase' : 'leafNodeBase'}
+        className={data._children ? 'nodeBase' : 'leafNodeBase'}
         transform={this.state.transform}
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}

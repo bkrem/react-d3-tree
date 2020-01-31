@@ -1,6 +1,14 @@
 import React, { ReactElement, SyntheticEvent } from 'react';
 import { polyfill } from 'react-lifecycles-compat';
-import { layout, select, behavior, event } from 'd3';
+import {
+  tree as d3tree,
+  select,
+  hierarchy,
+  zoom as d3zoom,
+  event,
+  zoomIdentity,
+  HierarchyPointNode,
+} from 'd3';
 import clone from 'clone';
 import deepEqual from 'deep-equal';
 import uuid from 'uuid';
@@ -9,27 +17,26 @@ import Node from '../Node';
 import Link from '../Link';
 import {
   FIXME,
-  EnhancedTreeNode,
   Orientation,
   PathFunctionOption,
   PathFunction,
-  TreeNode,
+  TreeNodeDatum,
   TreeLink,
   NodeElement,
+  PositionCoordinates,
+  RawNodeDatum,
 } from '../types/common';
 import './style.css';
 
-type TreeNodeEventCallback = (node: EnhancedTreeNode, event: SyntheticEvent) => any;
+export type TreeNodeEventCallback = (node: TreeNodeDatum, event: SyntheticEvent) => any;
 type TreeLinkEventCallback = (
-  sourceNode: EnhancedTreeNode,
-  targetNode: EnhancedTreeNode,
+  sourceNode: HierarchyPointNode<TreeNodeDatum>,
+  targetNode: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
 ) => any;
 
-type Translate = { x: number; y: number };
-
-type TreeProps = {
-  data: TreeNode[] | TreeNode;
+export type TreeProps = {
+  data: RawNodeDatum[] | RawNodeDatum;
   commonNodeElement?: NodeElement;
   nodeLabelProps?: Record<string, FIXME>;
   nodeLabelComponent?: {
@@ -42,9 +49,13 @@ type TreeProps = {
   onLinkClick?: TreeLinkEventCallback;
   onLinkMouseOver?: TreeLinkEventCallback;
   onLinkMouseOut?: TreeLinkEventCallback;
-  onUpdate?: (target: { node: EnhancedTreeNode | null; zoom: number; translate: Translate }) => any;
+  onUpdate?: (target: {
+    node: TreeNodeDatum | null;
+    zoom: number;
+    translate: PositionCoordinates;
+  }) => any;
   orientation?: Orientation;
-  translate?: Translate;
+  translate?: PositionCoordinates;
   pathFunc?: PathFunctionOption | PathFunction;
   transitionDuration?: number;
   depthFactor?: number;
@@ -71,8 +82,8 @@ type TreeProps = {
 
 type TreeState = {
   dataRef: TreeProps['data'];
-  data: EnhancedTreeNode[];
-  d3: { translate: Translate; scale: number };
+  data: TreeNodeDatum[];
+  d3: { translate: PositionCoordinates; scale: number };
   rd3tSvgClassName: string;
   rd3tGClassName: string;
   isTransitioning: boolean;
@@ -148,9 +159,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  setInitialTreeDepth(nodeSet: EnhancedTreeNode[], initialDepth: number) {
+  setInitialTreeDepth(nodeSet: HierarchyPointNode<TreeNodeDatum>[], initialDepth: number) {
     nodeSet.forEach(n => {
-      n._collapsed = n.depth >= initialDepth;
+      n.data._collapsed = n.depth >= initialDepth;
     });
   }
 
@@ -167,30 +178,31 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const svg = select(`.${rd3tSvgClassName}`);
     const g = select(`.${rd3tGClassName}`);
     if (zoomable) {
+      // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
+      svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
       svg.call(
-        behavior
-          .zoom()
+        d3zoom()
           .scaleExtent([scaleExtent.min, scaleExtent.max])
+          // TODO: break this out into a separate zoom handler fn, rather than inlining it.
           .on('zoom', () => {
-            g.attr('transform', `translate(${event.translate}) scale(${event.scale})`);
+            g.attr('transform', event.transform);
             if (typeof onUpdate === 'function') {
               // This callback is magically called not only on "zoom", but on "drag", as well,
               // even though event.type == "zoom".
               // Taking advantage of this and not writing a "drag" handler.
               onUpdate({
                 node: null,
-                zoom: event.scale,
-                translate: { x: event.translate[0], y: event.translate[1] },
+                zoom: event.transform.k,
+                translate: { x: event.transform.x, y: event.transform.y },
               });
-              this.state.d3.scale = event.scale;
+              // TODO: remove this? Shouldn't be mutating state keys directly.
+              this.state.d3.scale = event.transform.k;
               this.state.d3.translate = {
-                x: event.translate[0],
-                y: event.translate[1],
+                x: event.transform.x,
+                y: event.transform.y,
               };
             }
           })
-          .scale(zoom)
-          .translate([translate.x, translate.y])
       );
     }
   }
@@ -205,18 +217,22 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {array} `data` array with internal properties added
    */
-  static assignInternalProperties(data: TreeNode[]) {
+  static assignInternalProperties(data: RawNodeDatum[], currentDepth: number = 0): TreeNodeDatum[] {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
     const d = Array.isArray(data) ? data : [data];
-    return d.map((node: FIXME) => {
+    return d.map(n => {
+      const node = n as TreeNodeDatum;
       node.id = uuid.v4();
+      // D3@v5 compat: manually assign `_depth` to node.data so we don't have to hold full node+link sets in state.
+      // TODO: avoid this extra step by checking D3's node.depth directly.
+      node._depth = currentDepth;
       // If the node's `_collapsed` state wasn't defined by the data set -> default to `false`.
       if (node._collapsed === undefined) {
         node._collapsed = false;
       }
-      // If there are children, recursively assign properties to them too
+      // If there are children, recursively assign properties to them too.
       if (node.children && node.children.length > 0) {
-        node.children = Tree.assignInternalProperties(node.children);
+        node.children = Tree.assignInternalProperties(node.children, currentDepth + 1);
         node._children = node.children;
       }
       return node;
@@ -225,14 +241,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   /**
    * Recursively walks the nested `nodeSet` until a node matching `nodeId` is found.
-   *
-   * @param {string} nodeId The `node.id` being searched for
-   * @param {EnhancedTreeNode[]} nodeSet Array of nested `node` objects
-   * @param {EnhancedTreeNode[]} hits Accumulator for matches, passed between recursive calls
-   * @returns {EnhancedTreeNode[]} Set of nodes matching `nodeId`
-   * @memberof Tree
    */
-  findNodesById(nodeId: string, nodeSet: EnhancedTreeNode[], hits: EnhancedTreeNode[]) {
+  findNodesById(nodeId: string, nodeSet: TreeNodeDatum[], hits: TreeNodeDatum[]) {
     if (hits.length > 0) {
       return hits;
     }
@@ -253,8 +263,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * @param {array} accumulator Accumulator for matches, passed between recursive calls
    * @return
    */
-  findNodesAtDepth(depth: number, nodeSet: EnhancedTreeNode[], accumulator: EnhancedTreeNode[]) {
-    accumulator = accumulator.concat(nodeSet.filter(node => node.depth === depth));
+  findNodesAtDepth(depth: number, nodeSet: TreeNodeDatum[], accumulator: TreeNodeDatum[]) {
+    accumulator = accumulator.concat(nodeSet.filter(node => node._depth === depth));
     nodeSet.forEach(node => {
       if (node._children && node._children.length > 0) {
         accumulator = this.findNodesAtDepth(depth, node._children, accumulator);
@@ -271,7 +281,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static collapseNode(node: EnhancedTreeNode) {
+  static collapseNode(node: FIXME) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
       node._children.forEach(child => {
@@ -288,7 +298,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static expandNode(node: EnhancedTreeNode) {
+  static expandNode(node: FIXME) {
     node._collapsed = false;
   }
 
@@ -300,8 +310,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  collapseNeighborNodes(targetNode: EnhancedTreeNode, nodeSet: EnhancedTreeNode[]) {
-    const neighbors = this.findNodesAtDepth(targetNode.depth, nodeSet, []).filter(
+  collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
+    // FIXME: depth prop isn't available on TreeNodeDatum -> undefined behaviour here
+    const neighbors = this.findNodesAtDepth(targetNode._depth, nodeSet, []).filter(
       node => node.id !== targetNode.id
     );
     neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
@@ -355,7 +366,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  handleOnClickCb = (targetNode: EnhancedTreeNode, evt: SyntheticEvent) => {
+  handleOnClickCb = (targetNode: FIXME, evt: SyntheticEvent) => {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
       onClick(clone(targetNode), evt);
@@ -472,7 +483,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {object} Object containing `nodes` and `links`.
    */
-  generateTree(): { nodes: EnhancedTreeNode[]; links: TreeLink[] } {
+  generateTree() {
     const {
       initialDepth,
       useCollapseData,
@@ -481,30 +492,33 @@ class Tree extends React.Component<TreeProps, TreeState> {
       nodeSize,
       orientation,
     } = this.props;
-    const tree = layout
-      .tree()
+    const tree = d3tree<TreeNodeDatum>()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
       .separation((a, b) =>
-        a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings
-      )
-      .children(d => (d._collapsed ? null : d._children));
-    const rootNode = this.state.data[0];
-    let nodes = tree.nodes(rootNode);
-    // set `initialDepth` on first render if specified
+        a.parent.data.id === b.parent.data.id ? separation.siblings : separation.nonSiblings
+      );
+
+    const rootNode = tree(hierarchy(this.state.data[0], d => (d._collapsed ? null : d._children)));
+    let nodes = rootNode.descendants();
+    const links = rootNode.links();
+
+    // Set `initialDepth` on first render if specified
     if (
       useCollapseData === false &&
       initialDepth !== undefined &&
       this.internalState.initialRender
     ) {
+      // TODO: refactor to avoid mutating input parameter.
       this.setInitialTreeDepth(nodes, initialDepth);
-      nodes = tree.nodes(rootNode);
     }
+
+    // TODO: refactor to avoid mutating nodes const.
     if (depthFactor) {
       nodes.forEach(node => {
         node.y = node.depth * depthFactor;
       });
     }
-    const links = tree.links(nodes);
+
     return { nodes, links };
   }
 
@@ -566,36 +580,46 @@ class Tree extends React.Component<TreeProps, TreeState> {
             className={rd3tGClassName}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
-            {links.map(linkData => (
-              <Link
-                key={uuid.v4()}
-                orientation={orientation}
-                pathFunc={pathFunc}
-                linkData={linkData}
-                onClick={this.handleOnLinkClickCb}
-                onMouseOver={this.handleOnLinkMouseOverCb}
-                onMouseOut={this.handleOnLinkMouseOutCb}
-                transitionDuration={transitionDuration}
-              />
-            ))}
+            {links.map(linkData => {
+              // console.log(linkData);
+              return (
+                <Link
+                  key={uuid.v4()}
+                  orientation={orientation}
+                  pathFunc={pathFunc}
+                  // FIXME:
+                  // @ts-ignore
+                  linkData={linkData}
+                  onClick={this.handleOnLinkClickCb}
+                  onMouseOver={this.handleOnLinkMouseOverCb}
+                  onMouseOut={this.handleOnLinkMouseOutCb}
+                  transitionDuration={transitionDuration}
+                />
+              );
+            })}
 
-            {nodes.map(nodeData => (
-              <Node
-                key={nodeData.id}
-                nodeElement={nodeData.nodeElement ? nodeData.nodeElement : commonNodeElement}
-                nodeLabelProps={nodeLabelProps}
-                nodeLabelComponent={nodeLabelComponent}
-                nodeSize={nodeSize}
-                orientation={orientation}
-                transitionDuration={transitionDuration}
-                nodeData={nodeData}
-                onClick={this.handleNodeToggle}
-                onMouseOver={this.handleOnMouseOverCb}
-                onMouseOut={this.handleOnMouseOutCb}
-                subscriptions={subscriptions}
-                allowForeignObjects={allowForeignObjects}
-              />
-            ))}
+            {nodes.map(({ data, x, y, parent, ...rest }) => {
+              console.log({ data, x, y, parent, ...rest });
+              return (
+                <Node
+                  key={data.id}
+                  data={data}
+                  position={{ x, y }}
+                  parent={parent}
+                  nodeElement={data.nodeElement ? data.nodeElement : commonNodeElement}
+                  nodeLabelProps={nodeLabelProps}
+                  nodeLabelComponent={nodeLabelComponent}
+                  nodeSize={nodeSize}
+                  orientation={orientation}
+                  transitionDuration={transitionDuration}
+                  onClick={this.handleNodeToggle}
+                  onMouseOver={this.handleOnMouseOverCb}
+                  onMouseOut={this.handleOnMouseOutCb}
+                  subscriptions={subscriptions}
+                  allowForeignObjects={allowForeignObjects}
+                />
+              );
+            })}
           </NodeWrapper>
         </svg>
       </div>

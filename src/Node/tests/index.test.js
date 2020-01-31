@@ -4,36 +4,37 @@ import { shallow, mount } from 'enzyme';
 import Node from '../index.tsx';
 
 describe('<Node />', () => {
-  const nodeData = {
+  const data = {
     id: 'abc123',
     name: 'mockNode',
-    depth: 3,
-    x: 111,
-    y: 222,
-    parent: {
-      x: 999,
-      y: 888,
-    },
   };
 
   const mockProps = {
-    nodeData,
+    data,
     nodeSize: {
       x: 123,
       y: 321,
     },
+    position: {
+      x: 111,
+      y: 222,
+    },
+    depth: 3,
     nodeElement: {
       tag: 'circle',
       baseProps: {
         r: 10,
       },
     },
-    name: nodeData.name,
     attributes: {
       testkeyA: 'testvalA',
       testKeyB: 'testvalB',
     },
     orientation: 'horizontal',
+    parent: {
+      x: 999,
+      y: 888,
+    },
     transitionDuration: 500,
     onClick: () => {},
     onMouseOver: () => {},
@@ -55,22 +56,20 @@ describe('<Node />', () => {
   it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(<Node {...mockProps} />);
 
-    expect(renderedComponent.find('g').prop('id')).toBe(nodeData.id);
+    expect(renderedComponent.find('g').prop('id')).toBe(data.id);
   });
 
-  it('applies correct base className if `nodeData._children` is defined', () => {
+  it('applies correct base className if `data._children` is defined', () => {
     const leafNodeComponent = shallow(<Node {...mockProps} />);
-    const nodeComponent = shallow(
-      <Node {...mockProps} nodeData={{ ...nodeData, _children: [] }} />
-    );
+    const nodeComponent = shallow(<Node {...mockProps} data={{ ...data, _children: [] }} />);
 
     expect(leafNodeComponent.find('g').prop('className')).toBe('leafNodeBase');
     expect(nodeComponent.find('g').prop('className')).toBe('nodeBase');
   });
 
   it('applies correct `transform` prop based on its `orientation`', () => {
-    const horizontalTransform = `translate(${nodeData.parent.y},${nodeData.parent.x})`;
-    const verticalTransform = `translate(${nodeData.parent.x},${nodeData.parent.y})`;
+    const horizontalTransform = `translate(${mockProps.parent.y},${mockProps.parent.x})`;
+    const verticalTransform = `translate(${mockProps.parent.x},${mockProps.parent.y})`;
     const horizontalComponent = shallow(<Node {...mockProps} />);
     const verticalComponent = shallow(<Node {...mockProps} orientation="vertical" />);
     expect(horizontalComponent.find('g').prop('transform')).toBe(horizontalTransform);
@@ -85,7 +84,7 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('click', mockEvt);
       expect(onClickSpy).toHaveBeenCalledTimes(1);
-      expect(onClickSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
+      expect(onClickSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
     });
 
     it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
@@ -95,7 +94,7 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('mouseover', mockEvt);
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOverSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
+      expect(onMouseOverSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
     });
 
     it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
@@ -105,12 +104,12 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('mouseout', mockEvt);
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOutSpy).toHaveBeenCalledWith(nodeData.id, expect.objectContaining(mockEvt));
+      expect(onMouseOutSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
     });
   });
 
   it('applies its own x/y coords on `transform` once mounted', () => {
-    const fixture = `translate(${nodeData.y},${nodeData.x})`;
+    const fixture = `translate(${mockProps.position.y},${mockProps.position.x})`;
     const renderedComponent = mount(<Node {...mockProps} />);
 
     expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
@@ -120,17 +119,17 @@ describe('<Node />', () => {
   });
 
   describe('Update Positioning', () => {
-    it('updates its position if `nodeData.x` or `nodeData.y` changes', () => {
+    it('updates its position if `data.x` or `data.y` changes', () => {
       const updatedProps = {
         ...mockProps,
-        nodeData: {
-          ...mockProps.nodeData,
-          x: 1,
-          y: 2,
+        x: 1,
+        y: 2,
+        data: {
+          ...mockProps.data,
         },
       };
-      const initialTransform = `translate(${mockProps.nodeData.y},${mockProps.nodeData.x})`;
-      const updatedTransform = `translate(${updatedProps.nodeData.y},${updatedProps.nodeData.x})`;
+      const initialTransform = `translate(${mockProps.position.y},${mockProps.position.x})`;
+      const updatedTransform = `translate(${updatedProps.position.y},${updatedProps.position.x})`;
       const renderedComponent = mount(<Node {...mockProps} />);
 
       expect(renderedComponent.instance().applyTransform).toHaveBeenCalledWith(
@@ -199,7 +198,7 @@ describe('<Node />', () => {
       };
       // const leafNodeComponent = shallow(<Node {...mockProps} />);
       const renderedComponent = shallow(
-        <Node {...mockProps} {...fixture} nodeData={{ ...nodeData, _children: [{}] }} />
+        <Node {...mockProps} {...fixture} data={{ ...data, _children: [{}] }} />
       );
 
       expect(renderedComponent.find(fixture.nodeElement.tag).props()).toEqual(

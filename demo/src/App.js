@@ -58,6 +58,7 @@ class App extends Component {
       translateX: 200,
       translateY: 300,
       collapsible: true,
+      shouldCollapseNeighborNodes: false,
       initialDepth: 1,
       depthFactor: undefined,
       zoomable: true,
@@ -199,6 +200,10 @@ class App extends Component {
 
   toggleCollapsible() {
     this.setState(prevState => ({ collapsible: !prevState.collapsible }));
+  }
+
+  toggleCollapseNeighborNodes = () =>  {
+    this.setState(prevState => ({ shouldCollapseNeighborNodes: !prevState.shouldCollapseNeighborNodes }));
   }
 
   toggleZoomable() {
@@ -419,6 +424,13 @@ class App extends Component {
                 >
                   {'Straight'}
                 </button>
+                <button
+                  type="button"
+                  className="btn btn-controls btn-block"
+                  onClick={() => this.setPathFunc('step')}
+                >
+                  {'Step'}
+                </button>
               </div>
 
               <div className="prop-container">
@@ -427,6 +439,15 @@ class App extends Component {
                   name="collapsibleBtn"
                   checked={this.state.collapsible}
                   onChange={this.toggleCollapsible}
+                />
+              </div>
+
+              <div className="prop-container">
+                <span className="prop">Collapse neighbor nodes</span>
+                <Switch
+                  name="collapseNeighborsBtn"
+                  checked={this.state.shouldCollapseNeighborNodes}
+                  onChange={this.toggleCollapseNeighborNodes}
                 />
               </div>
 
@@ -680,6 +701,7 @@ class App extends Component {
                 depthFactor={this.state.depthFactor}
                 textLayout={this.state.textLayout}
                 styles={this.state.styles}
+                shouldCollapseNeighborNodes={this.state.shouldCollapseNeighborNodes}
                 onUpdate={(...args) => {console.log(args)}}
                 onClick={(...args) => { console.log('onClick'); console.log(args) }}
                 onLinkClick={(...args) => { console.log('onLinkClick'); console.log(args) }}

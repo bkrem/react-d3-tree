@@ -1,17 +1,17 @@
 import React, { SyntheticEvent } from 'react';
-import { svg, select } from 'd3';
+import { select, linkHorizontal, linkVertical, HierarchyPointNode } from 'd3';
 import {
   Orientation,
-  EnhancedTreeNode,
   TreeLink,
   PathFunctionOption,
   PathFunction,
+  TreeNodeDatum,
 } from '../types/common';
 import './style.css';
 
 type LinkEventHandler = (
-  source: EnhancedTreeNode,
-  target: EnhancedTreeNode,
+  source: HierarchyPointNode<TreeNodeDatum>,
+  target: HierarchyPointNode<TreeNodeDatum>,
   evt: SyntheticEvent
 ) => void;
 
@@ -64,7 +64,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
         .transition()
         .duration(transitionDuration)
         .style('opacity', opacity)
-        .each('end', done);
+        .on('end', done);
     }
   }
 
@@ -77,32 +77,17 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   }
 
   drawDiagonalPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
-    const diagonal = svg
-      .diagonal()
-      .projection(d => (orientation === 'horizontal' ? [d.y, d.x] : [d.x, d.y]));
-    return diagonal(linkData);
+    const { source, target } = linkData;
+    return orientation === 'horizontal'
+      ? linkHorizontal()({ source: [source.y, source.x], target: [target.y, target.x] })
+      : linkVertical()({ source: [source.x, source.y], target: [target.x, target.y] });
   }
 
   drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
-    const straight = svg
-      .line()
-      .interpolate('basis')
-      .x(d => d.x)
-      .y(d => d.y);
-
-    let data = [
-      { x: linkData.source.x, y: linkData.source.y },
-      { x: linkData.target.x, y: linkData.target.y },
-    ];
-
-    if (orientation === 'horizontal') {
-      data = [
-        { x: linkData.source.y, y: linkData.source.x },
-        { x: linkData.target.y, y: linkData.target.x },
-      ];
-    }
-
-    return straight(data);
+    const { source, target } = linkData;
+    return orientation === 'horizontal'
+      ? `M${source.y},${source.x}L${target.y},${target.x}`
+      : `M${source.x},${source.y}L${target.x},${target.y}`;
   }
 
   drawElbowPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {

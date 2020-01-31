@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import Link from '../index';
+import Link from '../index.tsx';
 
 describe('<Link />', () => {
   const linkData = {
@@ -83,10 +83,10 @@ describe('<Link />', () => {
 
   it('returns an appropriate elbowPath according to `props.orientation`', () => {
     expect(Link.prototype.drawElbowPath(linkData, 'horizontal')).toBe(
-      `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`,
+      `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`
     );
     expect(Link.prototype.drawElbowPath(linkData, 'vertical')).toBe(
-      `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`,
+      `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`
     );
   });
 
@@ -94,22 +94,22 @@ describe('<Link />', () => {
     const ymean = (linkData.target.y + linkData.source.y) / 2;
     expect(Link.prototype.drawDiagonalPath(linkData, 'horizontal')).toBe(
       `M${linkData.source.y},${linkData.source.x}` +
-        `C${ymean},${linkData.source.x} ${ymean},${linkData.target.x} ` +
-        `${linkData.target.y},${linkData.target.x}`,
+        `C${ymean},${linkData.source.x},${ymean},${linkData.target.x},` +
+        `${linkData.target.y},${linkData.target.x}`
     );
     expect(Link.prototype.drawDiagonalPath(linkData, 'vertical')).toBe(
       `M${linkData.source.x},${linkData.source.y}` +
-        `C${linkData.source.x},${ymean} ${linkData.target.x},${ymean} ` +
-        `${linkData.target.x},${linkData.target.y}`,
+        `C${linkData.source.x},${ymean},${linkData.target.x},${ymean},` +
+        `${linkData.target.x},${linkData.target.y}`
     );
   });
 
   it('returns an appropriate straightPath according to `props.orientation`', () => {
     expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
-      `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`,
+      `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`
     );
     expect(Link.prototype.drawStraightPath(linkData, 'vertical')).toBe(
-      `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`,
+      `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`
     );
   });
 
@@ -118,10 +118,10 @@ describe('<Link />', () => {
     const deltaY = target.y - source.y;
 
     expect(Link.prototype.drawStepPath(linkData, 'horizontal')).toBe(
-      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`,
+      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`
     );
     expect(Link.prototype.drawStepPath(linkData, 'vertical')).toBe(
-      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`,
+      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`
     );
   });
 
@@ -131,7 +131,7 @@ describe('<Link />', () => {
 
     expect(renderedComponent.instance().applyOpacity).toHaveBeenCalledWith(
       fixture,
-      mockProps.transitionDuration,
+      mockProps.transitionDuration
     );
   });
 
@@ -146,7 +146,7 @@ describe('<Link />', () => {
       expect(onClickSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -160,7 +160,7 @@ describe('<Link />', () => {
       expect(onMouseOverSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -174,7 +174,7 @@ describe('<Link />', () => {
       expect(onMouseOutSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
   });

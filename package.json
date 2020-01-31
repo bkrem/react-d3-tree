@@ -54,10 +54,12 @@
     "src/**/*.js": [
       "eslint",
       "prettier --write",
+      "jest --findRelatedTests",
       "git add"
     ],
     "src/**/*.{ts,tsx}": [
       "prettier --write",
+      "jest --findRelatedTests",
       "git add"
     ]
   },
@@ -69,7 +71,6 @@
   },
   "dependencies": {
     "clone": "^2.1.1",
-    "d3": "3.5.17",
     "deep-equal": "^2.0.1",
     "prop-types": "^15.5.10",
     "react-lifecycles-compat": "^3.0.4",
@@ -77,6 +78,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
+    "d3": "^5.0.0",
     "react": "^15.0.0 || ^16.0.0",
     "react-dom": "^15.0.0 || ^16.0.0"
   },
@@ -86,10 +88,12 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
+    "@types/d3": "^5.7.2",
     "@types/react": "^16.9.17",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "coveralls": "^3.0.0",
+    "d3": "^5.15.0",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "4.16.0",
