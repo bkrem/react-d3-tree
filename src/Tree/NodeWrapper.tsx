@@ -1,9 +1,15 @@
 import React from 'react';
-import T from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 
-// eslint-disable-next-line
-const NodeWrapper = props =>
+type NodeWrapperProps = {
+  transitionDuration: number;
+  component: string;
+  className: string;
+  transform: string;
+  children: any;
+};
+
+const NodeWrapper: React.FC<NodeWrapperProps> = props =>
   props.transitionDuration > 0 ? (
     <TransitionGroup
       component={props.component}
@@ -17,17 +23,5 @@ const NodeWrapper = props =>
       {props.children}
     </g>
   );
-
-NodeWrapper.defaultProps = {
-  component: 'g',
-};
-
-NodeWrapper.propTypes = {
-  transitionDuration: T.number.isRequired,
-  component: T.string,
-  className: T.string.isRequired,
-  transform: T.string.isRequired,
-  children: T.array.isRequired,
-};
 
 export default NodeWrapper;
