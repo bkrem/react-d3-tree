@@ -10,6 +10,8 @@ import {
   TreeNodeDatum,
 } from '../types/common';
 import './style.css';
+import { Transition } from 'react-transition-group';
+import { AnimationContext } from '../Tree/AnimationContext';
 
 type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
@@ -34,6 +36,7 @@ type NodeProps = {
 };
 
 type NodeState = {
+  in: boolean;
   transform: string;
   initialStyle: { opacity: number };
 };
@@ -45,7 +48,42 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   private nodeRef: SVGGElement = null;
 
+  // private transitionStyles = {
+  //   entering: () => ({
+  //     transform: this.setTransform(
+  //       this.props.position,
+  //       this.props.parent,
+  //       this.props.orientation,
+  //       true
+  //     ),
+  //     opacity: 1,
+  //   }),
+  //   entered: () => ({
+  //     transform: this.setTransform(this.props.position, this.props.parent, this.props.orientation),
+  //     opacity: 1,
+  //   }),
+  //   exiting: () => ({
+  //     transform: this.setTransform(
+  //       this.props.position,
+  //       this.props.parent,
+  //       this.props.orientation,
+  //       true
+  //     ),
+  //     opacity: 0,
+  //   }),
+  //   exited: () => ({
+  //     transform: this.setTransform(
+  //       this.props.position,
+  //       this.props.parent,
+  //       this.props.orientation,
+  //       true
+  //     ),
+  //     opacity: 0,
+  //   }),
+  // };
+
   state = {
+    in: true,
     transform: this.setTransform(
       this.props.position,
       this.props.parent,
@@ -57,12 +95,34 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     },
   };
 
+  private triggerNodeCollapse = null;
+
   componentDidMount() {
-    this.commitTransform();
+    // this.setState({ in: true });
+    // this.commitTransform();
+    document.addEventListener('click', this.handleCollapsingParent);
   }
 
+  handleCollapsingParent = () => {
+    const { parent } = this.props;
+    if (parent) {
+      const parentEl = document.getElementById(parent.data.id);
+      if (parentEl.dataset.isCollapsing === '1') {
+        console.log(this.props.data.name, ': PARENT IS COLLAPSING');
+        this.setState({ in: false }, () => {
+          const { orientation, transitionDuration, position, parent } = this.props;
+          const transform = this.setTransform(position, parent, orientation, true);
+          this.applyTransform(transform, transitionDuration, 0);
+        });
+      } else if (parentEl.dataset.isCollapsing === '0') {
+        console.log(this.props.data.name, ': PARENT IS EXPANDING');
+        this.setState({ in: true });
+      }
+    }
+  };
+
   componentDidUpdate() {
-    this.commitTransform();
+    // this.commitTransform();
   }
 
   shouldComponentUpdate(nextProps: NodeProps) {
@@ -140,6 +200,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   };
 
   handleOnClick = evt => {
+    const { data } = this.props;
+    // const elem = document.getElementById(data.id);
+    // console.log('isCollapsed?: ', data._collapsed)
+    if (!data._collapsed) {
+      this.triggerNodeCollapse(data.id);
+    }
     this.props.onClick(this.props.data.id, evt);
   };
 
@@ -151,30 +217,79 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.props.onMouseOut(this.props.data.id, evt);
   };
 
-  componentWillLeave(done) {
-    const { orientation, transitionDuration, position, parent } = this.props;
-    const transform = this.setTransform(position, parent, orientation, true);
-    this.applyTransform(transform, transitionDuration, 0, done);
+  componentWillUnmount() {
+    console.log('------------ WILL UNMOUNT -----------', this.props.data.name);
+    // const { orientation, transitionDuration, position, parent } = this.props;
+    // const transform = this.setTransform(position, parent, orientation, true);
+    // this.applyTransform(transform, transitionDuration, 0);
   }
 
+  handleParentCollapse = () => {
+    console.log('COLLAPSE CALLBACK ++++++++++++', this.props.data.id);
+    this.setState({ in: false });
+  };
+
   render() {
-    const { data } = this.props;
+    const { data, transitionDuration } = this.props;
     return (
-      <g
-        id={data.id}
-        ref={n => {
-          this.nodeRef = n;
-        }}
-        style={this.state.initialStyle}
-        className={data._children ? 'nodeBase' : 'leafNodeBase'}
-        transform={this.state.transform}
-        onClick={this.handleOnClick}
-        onMouseOver={this.handleOnMouseOver}
-        onMouseOut={this.handleOnMouseOut}
-      >
-        {this.renderNodeElement()}
-        {this.renderNodeLabelElement()}
-      </g>
+      <AnimationContext.Consumer>
+        {animContext => (
+          <Transition
+            in={this.state.in}
+            timeout={transitionDuration}
+            appear
+            unmountOnExit
+            onEnter={() => {
+              this.triggerNodeCollapse = animContext.triggerNodeCollapse;
+              animContext.registerTreeNodeId(data.id, () => {
+                if (this.props.parent) {
+                  animContext.subscribeToParentNode(
+                    this.props.parent.data.id,
+                    this.handleParentCollapse
+                  );
+                }
+              });
+              // console.log('PARENT: ', this.props.parent);
+              this.commitTransform();
+            }}
+            onEntered={() => {
+              console.log(animContext);
+            }}
+            onExit={() => {
+              console.log('++++++++++++ WILL EXIT +++++++++++++');
+              const { orientation, transitionDuration, position, parent } = this.props;
+              const transform = this.setTransform(position, parent, orientation, true);
+              this.applyTransform(transform, transitionDuration, 0);
+            }}
+          >
+            {transitionState => {
+              console.log('transitionState:', transitionState, data.name);
+              return (
+                <g
+                  id={data.id}
+                  ref={n => {
+                    this.nodeRef = n;
+                  }}
+                  // style={
+                  //   {
+                  //     ...this.state.initialStyle,
+                  //     opacity: this.transitionStyles[transitionState]().opacity,
+                  //   }
+                  // }
+                  className={data._children ? 'nodeBase' : 'leafNodeBase'}
+                  // transform={this.transitionStyles[transitionState]().transform}
+                  onClick={this.handleOnClick}
+                  onMouseOver={this.handleOnMouseOver}
+                  onMouseOut={this.handleOnMouseOut}
+                >
+                  {this.renderNodeElement()}
+                  {this.renderNodeLabelElement()}
+                </g>
+              );
+            }}
+          </Transition>
+        )}
+      </AnimationContext.Consumer>
     );
   }
 }

@@ -27,6 +27,7 @@ import {
   RawNodeDatum,
 } from '../types/common';
 import './style.css';
+import { AnimationContextProvider } from './AnimationContext';
 
 export type TreeNodeEventCallback = (node: TreeNodeDatum, event: SyntheticEvent) => any;
 type TreeLinkEventCallback = (
@@ -281,7 +282,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static collapseNode(node: FIXME) {
+  static collapseNode(node: TreeNodeDatum) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
       node._children.forEach(child => {
@@ -298,7 +299,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static expandNode(node: FIXME) {
+  static expandNode(node: TreeNodeDatum) {
     node._collapsed = false;
   }
 
@@ -311,7 +312,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * @return {void}
    */
   collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
-    // FIXME: depth prop isn't available on TreeNodeDatum -> undefined behaviour here
     const neighbors = this.findNodesAtDepth(targetNode._depth, nodeSet, []).filter(
       node => node.id !== targetNode.id
     );
@@ -339,9 +339,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
     evt.persist();
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNode._collapsed) {
+        console.log('EXPANDING NODE');
         Tree.expandNode(targetNode);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
       } else {
+        console.log('COLLAPSING NODE');
         Tree.collapseNode(targetNode);
       }
       // Lock node toggling while transition takes place
@@ -366,7 +368,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  handleOnClickCb = (targetNode: FIXME, evt: SyntheticEvent) => {
+  handleOnClickCb = (targetNode: TreeNodeDatum, evt: SyntheticEvent) => {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
       onClick(clone(targetNode), evt);
@@ -509,7 +511,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       this.internalState.initialRender
     ) {
       // TODO: refactor to avoid mutating input parameter.
-      this.setInitialTreeDepth(nodes, initialDepth);
+      // this.setInitialTreeDepth(nodes, initialDepth);
     }
 
     // TODO: refactor to avoid mutating nodes const.
@@ -571,16 +573,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
       initialDepth,
     };
 
+    console.log('RENDER*******************');
+
     return (
-      <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
-        <svg className={rd3tSvgClassName} width="100%" height="100%">
-          <NodeWrapper
-            transitionDuration={transitionDuration}
-            component="g"
-            className={rd3tGClassName}
-            transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
-          >
-            {links.map(linkData => {
+      <AnimationContextProvider>
+        <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
+          <svg className={rd3tSvgClassName} width="100%" height="100%">
+            <NodeWrapper
+              transitionDuration={transitionDuration}
+              component="g"
+              className={rd3tGClassName}
+              transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
+            >
+              {/* {links.map(linkData => {
               // console.log(linkData);
               return (
                 <Link
@@ -596,33 +601,34 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   transitionDuration={transitionDuration}
                 />
               );
-            })}
+            })} */}
 
-            {nodes.map(({ data, x, y, parent, ...rest }) => {
-              console.log({ data, x, y, parent, ...rest });
-              return (
-                <Node
-                  key={data.id}
-                  data={data}
-                  position={{ x, y }}
-                  parent={parent}
-                  nodeElement={data.nodeElement ? data.nodeElement : commonNodeElement}
-                  nodeLabelProps={nodeLabelProps}
-                  nodeLabelComponent={nodeLabelComponent}
-                  nodeSize={nodeSize}
-                  orientation={orientation}
-                  transitionDuration={transitionDuration}
-                  onClick={this.handleNodeToggle}
-                  onMouseOver={this.handleOnMouseOverCb}
-                  onMouseOut={this.handleOnMouseOutCb}
-                  subscriptions={subscriptions}
-                  allowForeignObjects={allowForeignObjects}
-                />
-              );
-            })}
-          </NodeWrapper>
-        </svg>
-      </div>
+              {nodes.map(({ data, x, y, parent, ...rest }) => {
+                console.log({ data, x, y, parent, ...rest });
+                return (
+                  <Node
+                    key={data.id}
+                    data={data}
+                    position={{ x, y }}
+                    parent={parent}
+                    nodeElement={data.nodeElement ? data.nodeElement : commonNodeElement}
+                    nodeLabelProps={nodeLabelProps}
+                    nodeLabelComponent={nodeLabelComponent}
+                    nodeSize={nodeSize}
+                    orientation={orientation}
+                    transitionDuration={transitionDuration}
+                    onClick={this.handleNodeToggle}
+                    onMouseOver={this.handleOnMouseOverCb}
+                    onMouseOut={this.handleOnMouseOutCb}
+                    subscriptions={subscriptions}
+                    allowForeignObjects={allowForeignObjects}
+                  />
+                );
+              })}
+            </NodeWrapper>
+          </svg>
+        </div>
+      </AnimationContextProvider>
     );
   }
 }
