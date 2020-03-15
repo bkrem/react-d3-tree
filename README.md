@@ -338,6 +338,8 @@ For examples of each data type that can be parsed with `treeUtil`, please check 
 ## Using foreignObjects
 > ⚠️  Requires `allowForeignObjects` prop to be set due to limited browser support: [IE does not currently support `foreignObject` elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Browser_compatibility).
 
+> ⚠️  There is a [known bug in Safari](https://github.com/bkrem/react-d3-tree/issues/284) relating to the positioning of `foreignObject` elements. Please take this into account before opting in via `allowForeignObjects`.
+
 The SVG spec's `foreignObject` element allows foreign XML content to be rendered into the SVG namespace, unlocking the ability to use regular React components for elements of the tree graph.
 
 ### `nodeLabelComponent`
