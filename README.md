@@ -171,7 +171,9 @@ const myTreeData = [
       keyC: 'val C',
     },
     nodeSvgShape: {
+      shape: 'circle',
       shapeProps: {
+        r: 10,
         fill: 'blue',
       },
     },
@@ -204,7 +206,6 @@ const myTreeData = [
 ...
 
 ```
-In the above, "Parent Node" will only be blue, but it will keep the default size and geometrical shape. "Inner Node", however, will completely change to a red rectangle with the given dimensions. Omitting `shape`, will keep node's default appearance.
 
 ## Styling
 The tree's `styles` prop may be used to override any of the tree's default styling.
