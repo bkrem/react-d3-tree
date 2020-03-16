@@ -10,7 +10,6 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{js,jsx,ts,tsx}",
     "!src/index.js",
-    "!src/util/*",
     "!src/**/*.test.{js,jsx,ts,tsx}",
   ],
   coverageThreshold: {
