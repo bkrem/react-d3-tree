@@ -1,5 +1,4 @@
 import React, { ReactElement, SyntheticEvent } from 'react';
-import { polyfill } from 'react-lifecycles-compat';
 import {
   tree as d3tree,
   select,
@@ -679,8 +678,5 @@ Tree.defaultProps = {
   shouldCollapseNeighborNodes: false,
   styles: {},
 };
-
-// Polyfill React 16 lifecycle methods for compat with React 15.
-polyfill(Tree);
 
 export default Tree;
