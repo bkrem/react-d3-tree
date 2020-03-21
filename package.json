@@ -99,7 +99,7 @@
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^6.0.0",
     "postcss-loader": "^3.0.0",
-    "prettier": "^1.6.1",
+    "prettier": "^2.0.0",
     "react": "^16.6.3",
     "react-docgen": "^2.16.0",
     "react-dom": "^16.6.3",
