@@ -452,6 +452,22 @@ class Tree extends React.Component {
     }
 
     const links = tree.links(nodes);
+
+    // custom leaf node placement
+    nodes.forEach(function (d) {
+      d.y = d.depth * 180;
+      if (d.parent != null) {
+          d.x =  d.parent.x - (d.parent.children.length-1)*30/2 + (d.parent.children.indexOf(d))*30;
+      }
+      if (d.children != null && d.children.length > 4) {
+          d.children.forEach(function (d, i) {
+              d.y = (d.depth * 180 + i % 2 * 100);
+              d.x =  d.parent.x - (d.parent.children.length-1)*30/4 + (d.parent.children.indexOf(d))*30/2 - i % 2 * 15;
+          });
+      }
+    });
+    // end custom placement
+    
     return { nodes, links };
   }
 
