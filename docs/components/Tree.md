@@ -18,6 +18,12 @@ type: `number`
 defaultValue: `undefined`
 
 
+### `className`
+
+type: `string`
+defaultValue: `undefined`
+
+
 ### `collapsible`
 
 type: `bool`
@@ -110,6 +116,11 @@ defaultValue: `undefined`
 
 type: `enum('horizontal'|'vertical')`
 defaultValue: `'horizontal'`
+
+
+### `pathClass`
+
+type: `func`
 
 
 ### `pathFunc`

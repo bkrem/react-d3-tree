@@ -485,10 +485,12 @@ class Tree extends React.Component {
     const { nodes, links } = this.generateTree();
     const { rd3tSvgClassName, rd3tGClassName } = this.state;
     const {
+      className,
       nodeSvgShape,
       nodeLabelComponent,
       orientation,
       pathFunc,
+      pathClass,
       transitionDuration,
       zoomable,
       textLayout,
@@ -504,7 +506,7 @@ class Tree extends React.Component {
     const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
-        <svg className={rd3tSvgClassName} width="100%" height="100%">
+        <svg className={[rd3tSvgClassName, className].join(' ')} width="100%" height="100%">
           <NodeWrapper
             transitionDuration={transitionDuration}
             component="g"
@@ -516,6 +518,7 @@ class Tree extends React.Component {
                 key={uuid.v4()}
                 orientation={orientation}
                 pathFunc={pathFunc}
+                pathClass={pathClass}
                 linkData={linkData}
                 onClick={this.handleOnLinkClickCb}
                 onMouseOver={this.handleOnLinkMouseOverCb}
@@ -554,6 +557,7 @@ class Tree extends React.Component {
 }
 
 Tree.defaultProps = {
+  className: undefined,
   nodeSvgShape: {
     shape: 'circle',
     shapeProps: {
@@ -570,6 +574,7 @@ Tree.defaultProps = {
   onUpdate: undefined,
   orientation: 'horizontal',
   translate: { x: 0, y: 0 },
+  pathClass: undefined,
   pathFunc: 'diagonal',
   transitionDuration: 500,
   depthFactor: undefined,
@@ -594,6 +599,7 @@ Tree.defaultProps = {
 };
 
 Tree.propTypes = {
+  className: T.string,
   data: T.oneOfType([T.array, T.object]).isRequired,
   nodeSvgShape: T.shape({
     shape: T.string,
@@ -612,6 +618,7 @@ Tree.propTypes = {
     x: T.number,
     y: T.number,
   }),
+  pathClass: T.func,
   pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'step']), T.func]),
   transitionDuration: T.number,
   depthFactor: T.number,
