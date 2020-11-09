@@ -105,7 +105,7 @@
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^9.4.2",
     "prettier": "^1.19.1",
-    "react": "^16.6.3",
+    "react": "^16.14.0",
     "react-docgen": "^2.16.0",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.6.3",
