@@ -66,6 +66,7 @@ class App extends Component {
       scaleExtent: { min: 0.1, max: 1 },
       separation: { siblings: 1, nonSiblings: 2 },
       nodeSize: { x: 140, y: 140 },
+      enableLegacyTransitions: false,
       transitionDuration: 500,
       styles: {
         nodes: {
@@ -447,6 +448,15 @@ class App extends Component {
                 />
               </div>
 
+            <div className="prop-container">
+                <span className="prop">Enable Legacy Transitions</span>
+                <Switch
+                  name="enableLegacyTransitionsBtn"
+                  checked={this.state.enableLegacyTransitions}
+                  onChange={() => this.setState((prevState) => ({enableLegacyTransitions: !prevState.enableLegacyTransitions}))}
+                />
+              </div>
+
               <div className="prop-container">
                 <label className="prop" htmlFor="nodeSvgShape">
                   Node SVG Shape
@@ -693,12 +703,13 @@ class App extends Component {
                 scaleExtent={this.state.scaleExtent}
                 nodeSize={this.state.nodeSize}
                 separation={this.state.separation}
+                enableLegacyTransitions={this.state.enableLegacyTransitions}
                 transitionDuration={this.state.transitionDuration}
                 depthFactor={this.state.depthFactor}
                 textLayout={this.state.textLayout}
                 styles={this.state.styles}
                 shouldCollapseNeighborNodes={this.state.shouldCollapseNeighborNodes}
-                onUpdate={(...args) => {console.log(args)}}
+                // onUpdate={(...args) => {console.log(args)}}
                 onClick={(...args) => { console.log('onClick'); console.log(args) }}
                 onLinkClick={(...args) => { console.log('onLinkClick'); console.log(args) }}
               />
