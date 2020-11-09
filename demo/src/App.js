@@ -91,10 +91,10 @@ class App extends Component {
 
     this.setTreeData = this.setTreeData.bind(this);
     this.setLargeTree = this.setLargeTree.bind(this);
-    this.setTreeDataFromCSV = this.setTreeDataFromCSV.bind(this);
-    this.setTreeDataFromJSON = this.setTreeDataFromJSON.bind(this);
-    this.setTreeDataFromFlatJSON = this.setTreeDataFromFlatJSON.bind(this);
-    this.setTreeDataFromFlatArray = this.setTreeDataFromFlatArray.bind(this);
+    // this.setTreeDataFromCSV = this.setTreeDataFromCSV.bind(this);
+    // this.setTreeDataFromJSON = this.setTreeDataFromJSON.bind(this);
+    // this.setTreeDataFromFlatJSON = this.setTreeDataFromFlatJSON.bind(this);
+    // this.setTreeDataFromFlatArray = this.setTreeDataFromFlatArray.bind(this);
     this.setOrientation = this.setOrientation.bind(this);
     this.setPathFunc = this.setPathFunc.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -118,41 +118,41 @@ class App extends Component {
     })
   }
 
-  setTreeDataFromCSV(csvFile, attributeFields) {
-    treeUtil
-      .parseCSV(csvFile, attributeFields)
-      .then(data => {
-        console.log(data);
-        this.setState({ data });
-      })
-      .catch(err => console.error(err));
-  }
+  // setTreeDataFromCSV(csvFile, attributeFields) {
+  //   treeUtil
+  //     .parseCSV(csvFile, attributeFields)
+  //     .then(data => {
+  //       console.log(data);
+  //       this.setState({ data });
+  //     })
+  //     .catch(err => console.error(err));
+  // }
 
-  setTreeDataFromJSON(jsonFile) {
-    treeUtil
-      .parseJSON(jsonFile)
-      .then(data => {
-        console.log(data);
-        this.setState({ data });
-      })
-      .catch(err => console.error(err));
-  }
+  // setTreeDataFromJSON(jsonFile) {
+  //   treeUtil
+  //     .parseJSON(jsonFile)
+  //     .then(data => {
+  //       console.log(data);
+  //       this.setState({ data });
+  //     })
+  //     .catch(err => console.error(err));
+  // }
 
-  setTreeDataFromFlatJSON(jsonFile, attributeFields) {
-    treeUtil
-      .parseFlatJSON(jsonFile, attributeFields)
-      .then(data => {
-        console.log(data);
-        this.setState({ data });
-      })
-      .catch(err => console.error(err));
-  }
+  // setTreeDataFromFlatJSON(jsonFile, attributeFields) {
+  //   treeUtil
+  //     .parseFlatJSON(jsonFile, attributeFields)
+  //     .then(data => {
+  //       console.log(data);
+  //       this.setState({ data });
+  //     })
+  //     .catch(err => console.error(err));
+  // }
 
-  setTreeDataFromFlatArray(flatArray) {
-    const data = treeUtil.generateHierarchy(flatArray);
-    console.log(data);
-    this.setState({ data });
-  }
+  // setTreeDataFromFlatArray(flatArray) {
+  //   const data = treeUtil.generateHierarchy(flatArray);
+  //   console.log(data);
+  //   this.setState({ data });
+  // }
 
   setOrientation(orientation) {
     this.setState({ orientation });
@@ -297,6 +297,7 @@ class App extends Component {
                     Individual Node Shapes
                   </button>
                   <button
+                    disabled
                     type="button"
                     className="btn btn-controls btn-block"
                     onClick={() => this.setTreeDataFromFlatArray(mockFlatArray)}
@@ -347,6 +348,7 @@ class App extends Component {
                 <span className="prop">Data parsed from static source</span>
                 <div>
                   <button
+                    disabled
                     type="button"
                     className="btn btn-controls btn-block"
                     onClick={() =>
@@ -358,14 +360,8 @@ class App extends Component {
                   >
                     From CSV File
                   </button>
-                  {/* <button
-                    type="button"
-                    className="btn btn-controls btn-block"
-                    onClick={() => this.setTreeDataFromJSON('json-example.json')}
-                  >
-                    From JSON File
-                  </button> */}
                   <button
+                    disabled
                     type="button"
                     className="btn btn-controls btn-block"
                     onClick={() =>
