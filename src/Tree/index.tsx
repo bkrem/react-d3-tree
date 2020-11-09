@@ -11,7 +11,7 @@ import {
 import clone from 'clone';
 import deepEqual from 'deep-equal';
 import uuid from 'uuid';
-import NodeWrapper from './NodeWrapper';
+import TransitionGroupWrapper from './TransitionGroupWrapper';
 import Node from '../Node';
 import Link from '../Link';
 import {
@@ -75,8 +75,9 @@ export type TreeProps = {
     siblings?: number;
     nonSiblings?: number;
   };
-  allowForeignObjects?: boolean;
   shouldCollapseNeighborNodes?: boolean;
+  allowForeignObjects?: boolean;
+  enableLegacyTransitions?: boolean;
 };
 
 type TreeState = {
@@ -130,12 +131,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   componentDidUpdate(prevProps: TreeProps) {
     // If zoom-specific props change -> rebind listener with new values
-    // Or: rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
+    // Or: rebind zoom listeners to new DOM nodes in case legacy transitions were enabled/disabled.
     if (
       !deepEqual(this.props.translate, prevProps.translate) ||
       !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
       this.props.zoom !== prevProps.zoom ||
-      this.props.transitionDuration !== prevProps.transitionDuration
+      this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions
     ) {
       this.bindZoomListener(this.props);
     }
@@ -560,6 +561,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       initialDepth,
       separation,
       allowForeignObjects,
+      enableLegacyTransitions,
     } = this.props;
     const { translate, scale } = this.state.d3;
     const subscriptions = {
@@ -572,8 +574,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <svg className={rd3tSvgClassName} width="100%" height="100%">
-          <NodeWrapper
-            transitionDuration={transitionDuration}
+          <TransitionGroupWrapper
+            enableLegacyTransitions={enableLegacyTransitions}
             component="g"
             className={rd3tGClassName}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
@@ -589,6 +591,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   onClick={this.handleOnLinkClickCb}
                   onMouseOver={this.handleOnLinkMouseOverCb}
                   onMouseOut={this.handleOnLinkMouseOutCb}
+                  enableLegacyTransitions={enableLegacyTransitions}
                   transitionDuration={transitionDuration}
                 />
               );
@@ -607,6 +610,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   nodeLabelComponent={nodeLabelComponent}
                   nodeSize={nodeSize}
                   orientation={orientation}
+                  enableLegacyTransitions={enableLegacyTransitions}
                   transitionDuration={transitionDuration}
                   onClick={this.handleNodeToggle}
                   onMouseOver={this.handleOnMouseOverCb}
@@ -616,7 +620,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 />
               );
             })}
-          </NodeWrapper>
+          </TransitionGroupWrapper>
         </svg>
       </div>
     );
@@ -671,9 +675,10 @@ Tree.defaultProps = {
     y: -10,
     transform: undefined,
   },
-  allowForeignObjects: false,
   shouldCollapseNeighborNodes: false,
   styles: {},
+  allowForeignObjects: false,
+  enableLegacyTransitions: false,
 };
 
 export default Tree;

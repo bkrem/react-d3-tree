@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { render } from 'react-dom';
 
-import NodeWrapper from '../NodeWrapper';
+import TransitionGroupWrapper from '../TransitionGroupWrapper';
 import Node from '../../Node/index.tsx';
 import Link from '../../Link/index.tsx';
 import Tree from '../index.tsx';
@@ -108,7 +108,7 @@ describe('<Tree />', () => {
       const fixture = { x: 123, y: 321 };
       const expected = `translate(${fixture.x},${fixture.y})`;
       const renderedComponent = shallow(<Tree data={mockData} translate={fixture} />);
-      expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(expected);
+      expect(renderedComponent.find(TransitionGroupWrapper).prop('transform')).toContain(expected);
     });
   });
 
@@ -261,7 +261,7 @@ describe('<Tree />', () => {
 
       renderedComponent
         .find(Node)
-        .at(1)
+        .first()
         .simulate('click'); // re-expand
 
       expect(Tree.prototype.collapseNeighborNodes).toHaveBeenCalledTimes(1);
@@ -297,12 +297,14 @@ describe('<Tree />', () => {
       const zoomLevel = 0.3;
       const expected = `scale(${zoomLevel})`;
       const renderedComponent = shallow(<Tree data={mockData} zoom={zoomLevel} />);
-      expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(expected);
+      expect(renderedComponent.find(TransitionGroupWrapper).prop('transform')).toContain(expected);
     });
 
     it('applies default zoom level when `zoom` is not specified', () => {
       const renderedComponent = shallow(<Tree data={mockData} />);
-      expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(`scale(1)`);
+      expect(renderedComponent.find(TransitionGroupWrapper).prop('transform')).toContain(
+        `scale(1)`
+      );
     });
 
     it('respects `scaleExtent` constraints on initial display', () => {
@@ -311,12 +313,12 @@ describe('<Tree />', () => {
       let renderedComponent = shallow(
         <Tree data={mockData} scaleExtent={scaleExtent} zoom={0.9} />
       );
-      expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(
+      expect(renderedComponent.find(TransitionGroupWrapper).prop('transform')).toContain(
         `scale(${scaleExtent.max})`
       );
 
       renderedComponent = shallow(<Tree data={mockData} scaleExtent={scaleExtent} zoom={0.1} />);
-      expect(renderedComponent.find(NodeWrapper).prop('transform')).toContain(
+      expect(renderedComponent.find(TransitionGroupWrapper).prop('transform')).toContain(
         `scale(${scaleExtent.min})`
       );
     });
@@ -335,10 +337,10 @@ describe('<Tree />', () => {
       expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(4);
     });
 
-    it('rebinds on `props.transitionDuration` change to handle switched DOM nodes from NodeWrapper', () => {
+    it('rebinds on `props.enableLegacyTransitions` change to handle switched DOM nodes from TransitionGroupWrapper', () => {
       const renderedComponent = mount(<Tree data={mockData} />);
       expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(1);
-      renderedComponent.setProps({ transitionDuration: 0 });
+      renderedComponent.setProps({ enableLegacyTransitions: true });
       expect(renderedComponent.instance().bindZoomListener).toHaveBeenCalledTimes(2);
     });
   });

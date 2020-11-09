@@ -2,9 +2,8 @@ import React from 'react';
 import T from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 
-// eslint-disable-next-line
-const NodeWrapper = props =>
-  props.transitionDuration > 0 ? (
+const TransitionGroupWrapper = props =>
+  props.enableLegacyTransitions ? (
     <TransitionGroup
       component={props.component}
       className={props.className}
@@ -18,16 +17,12 @@ const NodeWrapper = props =>
     </g>
   );
 
-NodeWrapper.defaultProps = {
-  component: 'g',
-};
-
-NodeWrapper.propTypes = {
-  transitionDuration: T.number.isRequired,
-  component: T.string,
+TransitionGroupWrapper.propTypes = {
+  enableLegacyTransitions: T.bool.isRequired,
+  component: T.string.isRequired,
   className: T.string.isRequired,
   transform: T.string.isRequired,
   children: T.array.isRequired,
 };
 
-export default NodeWrapper;
+export default TransitionGroupWrapper;

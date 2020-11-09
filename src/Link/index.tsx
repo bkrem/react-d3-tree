@@ -19,6 +19,7 @@ type LinkProps = {
   linkData: TreeLink;
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
+  enableLegacyTransitions: boolean;
   transitionDuration: number;
   onClick: LinkEventHandler;
   onMouseOver: LinkEventHandler;
@@ -56,15 +57,15 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     transitionDuration: LinkProps['transitionDuration'],
     done = () => {}
   ) {
-    if (transitionDuration === 0) {
-      select(this.linkRef).style('opacity', opacity);
-      done();
-    } else {
+    if (this.props.enableLegacyTransitions) {
       select(this.linkRef)
         .transition()
         .duration(transitionDuration)
         .style('opacity', opacity)
         .on('end', done);
+    } else {
+      select(this.linkRef).style('opacity', opacity);
+      done();
     }
   }
 

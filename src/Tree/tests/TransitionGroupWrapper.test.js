@@ -2,17 +2,21 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { TransitionGroup } from 'react-transition-group';
 
-import NodeWrapper from '../NodeWrapper';
+import TransitionGroupWrapper from '../TransitionGroupWrapper';
 
-describe('<NodeWrapper />', () => {
+describe('<TransitionGroupWrapper />', () => {
   it('renders a <g> when transitions are disabled', () => {
     const fixture = {
+      component: 'g',
       transform: 't',
       className: 'cls',
-      transitionDuration: 0,
+      enableLegacyTransitions: false,
+      transitionDuration: 500,
     };
 
-    const renderedComponent = shallow(<NodeWrapper {...fixture}>{[]}</NodeWrapper>);
+    const renderedComponent = shallow(
+      <TransitionGroupWrapper {...fixture}>{[]}</TransitionGroupWrapper>
+    );
     expect(renderedComponent.find('g').prop('transform')).toContain(fixture.transform);
     expect(renderedComponent.find('g').prop('className')).toContain(fixture.className);
   });
@@ -22,10 +26,13 @@ describe('<NodeWrapper />', () => {
       component: 'g',
       transform: 't',
       className: 'cls',
-      transitionDuration: 10,
+      enableLegacyTransitions: true,
+      transitionDuration: 500,
     };
 
-    const renderedComponent = shallow(<NodeWrapper {...fixture}>{[]}</NodeWrapper>);
+    const renderedComponent = shallow(
+      <TransitionGroupWrapper {...fixture}>{[]}</TransitionGroupWrapper>
+    );
     expect(renderedComponent.find(TransitionGroup).prop('transform')).toContain(fixture.transform);
     expect(renderedComponent.find(TransitionGroup).prop('className')).toContain(fixture.className);
     expect(renderedComponent.find(TransitionGroup).prop('component')).toContain(fixture.component);

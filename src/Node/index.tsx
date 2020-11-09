@@ -25,6 +25,7 @@ type NodeProps = {
     y: number;
   };
   orientation: Orientation;
+  enableLegacyTransitions: boolean;
   transitionDuration: number;
   onClick: NodeEventHandler;
   onMouseOver: NodeEventHandler;
@@ -100,18 +101,18 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     opacity = 1,
     done = () => {}
   ) {
-    if (transitionDuration === 0) {
-      select(this.nodeRef)
-        .attr('transform', transform)
-        .style('opacity', opacity);
-      done();
-    } else {
+    if (this.props.enableLegacyTransitions) {
       select(this.nodeRef)
         .transition()
         .duration(transitionDuration)
         .attr('transform', transform)
         .style('opacity', opacity)
         .on('end', done);
+    } else {
+      select(this.nodeRef)
+        .attr('transform', transform)
+        .style('opacity', opacity);
+      done();
     }
   }
 
