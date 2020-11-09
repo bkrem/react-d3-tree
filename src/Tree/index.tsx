@@ -310,7 +310,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * @return {void}
    */
   collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
-    // FIXME: depth prop isn't available on TreeNodeDatum -> undefined behaviour here
     const neighbors = this.findNodesAtDepth(targetNode._depth, nodeSet, []).filter(
       node => node.id !== targetNode.id
     );
@@ -586,8 +585,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   key={uuid.v4()}
                   orientation={orientation}
                   pathFunc={pathFunc}
-                  // FIXME:
-                  // @ts-ignore
                   linkData={linkData}
                   onClick={this.handleOnLinkClickCb}
                   onMouseOver={this.handleOnLinkMouseOverCb}
@@ -598,7 +595,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
             })}
 
             {nodes.map(({ data, x, y, parent, ...rest }) => {
-              console.log({ data, x, y, parent, ...rest });
+              // console.log({ data, x, y, parent, ...rest });
               return (
                 <Node
                   key={data.id}
