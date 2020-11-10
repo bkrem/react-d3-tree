@@ -281,7 +281,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static collapseNode(node: FIXME) {
+  static collapseNode(node: TreeNodeDatum) {
     node._collapsed = true;
     if (node._children && node._children.length > 0) {
       node._children.forEach(child => {
@@ -298,7 +298,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  static expandNode(node: FIXME) {
+  static expandNode(node: TreeNodeDatum) {
     node._collapsed = false;
   }
 
@@ -343,13 +343,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
       } else {
         Tree.collapseNode(targetNode);
       }
-      // Lock node toggling while transition takes place
-      this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
-      // Await transitionDuration + 10 ms before unlocking node toggling again
-      setTimeout(
-        () => this.setState({ isTransitioning: false }),
-        this.props.transitionDuration + 10
-      );
+
+      if (this.props.enableLegacyTransitions) {
+        // Lock node toggling while transition takes place.
+        this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
+        // Await transitionDuration + 10 ms before unlocking node toggling again.
+        setTimeout(
+          () => this.setState({ isTransitioning: false }),
+          this.props.transitionDuration + 10
+        );
+      } else {
+        this.setState({ data }, () => this.handleOnClickCb(targetNode, evt));
+      }
+
       this.internalState.targetNode = targetNode;
     } else {
       this.handleOnClickCb(targetNode, evt);
@@ -365,7 +371,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @return {void}
    */
-  handleOnClickCb = (targetNode: FIXME, evt: SyntheticEvent) => {
+  handleOnClickCb = (targetNode: TreeNodeDatum, evt: SyntheticEvent) => {
     const { onClick } = this.props;
     if (onClick && typeof onClick === 'function') {
       onClick(clone(targetNode), evt);

@@ -163,15 +163,12 @@ describe('<Tree />', () => {
     });
 
     it("expands a node's children when it is clicked in a collapsed state", () => {
-      jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} />);
       const nodeCount = renderedComponent.find(Node).length;
       renderedComponent
         .find(Node)
         .first()
         .simulate('click'); // collapse
-
-      jest.runAllTimers();
 
       renderedComponent
         .find(Node)
@@ -192,54 +189,53 @@ describe('<Tree />', () => {
       expect(Tree.collapseNode).toHaveBeenCalledTimes(0);
     });
 
-    it('does not toggle any nodes again until `transitionDuration` has completed', () => {
-      const renderedComponent = mount(<Tree data={mockData} />);
-      const nodeCount = renderedComponent.find(Node).length;
-      renderedComponent
-        .find(Node)
-        .first()
-        .simulate('click');
+    describe('with `props.enableLegacyTransitions`', () => {
+      it('does not toggle any nodes again until `transitionDuration` has completed', () => {
+        const renderedComponent = mount(<Tree data={mockData} enableLegacyTransitions />);
+        const nodeCount = renderedComponent.find(Node).length;
+        renderedComponent
+          .find(Node)
+          .first()
+          .simulate('click');
 
-      renderedComponent
-        .find(Node)
-        .first()
-        .simulate('click');
+        renderedComponent
+          .find(Node)
+          .first()
+          .simulate('click');
 
-      expect(Tree.collapseNode).toHaveBeenCalledTimes(nodeCount);
-      expect(Tree.expandNode).not.toHaveBeenCalled();
-    });
+        expect(Tree.collapseNode).toHaveBeenCalledTimes(nodeCount);
+        expect(Tree.expandNode).not.toHaveBeenCalled();
+      });
 
-    it('allows toggling nodes again after `transitionDuration` + 10ms has expired', () => {
-      jest.useFakeTimers();
-      const renderedComponent = mount(<Tree data={mockData} />);
-      const nodeCount = renderedComponent.find(Node).length;
-      renderedComponent
-        .find(Node)
-        .first()
-        .simulate('click');
+      it('allows toggling nodes again after `transitionDuration` + 10ms has expired', () => {
+        jest.useFakeTimers();
+        const renderedComponent = mount(<Tree data={mockData} enableLegacyTransitions />);
+        const nodeCount = renderedComponent.find(Node).length;
+        renderedComponent
+          .find(Node)
+          .first()
+          .simulate('click');
 
-      jest.runAllTimers();
+        jest.runAllTimers();
 
-      renderedComponent
-        .find(Node)
-        .first()
-        .simulate('click');
+        renderedComponent
+          .find(Node)
+          .first()
+          .simulate('click');
 
-      expect(Tree.collapseNode).toHaveBeenCalledTimes(nodeCount);
-      expect(Tree.expandNode).toHaveBeenCalledTimes(1);
+        expect(Tree.collapseNode).toHaveBeenCalledTimes(nodeCount);
+        expect(Tree.expandNode).toHaveBeenCalledTimes(1);
+      });
     });
   });
 
   describe('shouldCollapseNeighborNodes', () => {
     it('is inactive by default', () => {
-      jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} />);
       renderedComponent
         .find(Node)
         .first()
         .simulate('click'); // collapse
-
-      jest.runAllTimers();
 
       renderedComponent
         .find(Node)
@@ -250,14 +246,11 @@ describe('<Tree />', () => {
     });
 
     it('collapses all neighbor nodes of the targetNode if it is about to be expanded', () => {
-      jest.useFakeTimers();
       const renderedComponent = mount(<Tree data={mockData} shouldCollapseNeighborNodes />);
       renderedComponent
         .find(Node)
         .first()
         .simulate('click'); // collapse
-
-      jest.runAllTimers();
 
       renderedComponent
         .find(Node)
