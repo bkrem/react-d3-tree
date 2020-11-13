@@ -1,4 +1,4 @@
-import React, { ReactElement, SyntheticEvent } from 'react';
+import React, { SyntheticEvent } from 'react';
 import {
   tree as d3tree,
   select,
@@ -15,15 +15,14 @@ import TransitionGroupWrapper from './TransitionGroupWrapper';
 import Node from '../Node';
 import Link from '../Link';
 import {
-  FIXME,
   Orientation,
   PathFunctionOption,
   PathFunction,
   TreeNodeDatum,
   TreeLink,
-  NodeElement,
   PositionCoordinates,
   RawNodeDatum,
+  RenderCustomNodeElementFn,
 } from '../types/common';
 import './style.css';
 
@@ -36,12 +35,7 @@ type TreeLinkEventCallback = (
 
 export type TreeProps = {
   data: RawNodeDatum[] | RawNodeDatum;
-  commonNodeElement?: NodeElement;
-  nodeLabelProps?: Record<string, FIXME>;
-  nodeLabelComponent?: {
-    render: ReactElement;
-    foreignObjectWrapper?: Record<string, FIXME>;
-  };
+  renderCustomNodeElement?: RenderCustomNodeElementFn;
   onClick?: TreeNodeEventCallback;
   onMouseOver?: TreeNodeEventCallback;
   onMouseOut?: TreeNodeEventCallback;
@@ -76,7 +70,6 @@ export type TreeProps = {
     nonSiblings?: number;
   };
   shouldCollapseNeighborNodes?: boolean;
-  allowForeignObjects?: boolean;
   enableLegacyTransitions?: boolean;
 };
 
@@ -555,9 +548,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { nodes, links } = this.generateTree();
     const { rd3tSvgClassName, rd3tGClassName } = this.state;
     const {
-      commonNodeElement,
-      nodeLabelComponent,
-      nodeLabelProps,
+      renderCustomNodeElement,
       orientation,
       pathFunc,
       transitionDuration,
@@ -566,7 +557,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       depthFactor,
       initialDepth,
       separation,
-      allowForeignObjects,
       enableLegacyTransitions,
     } = this.props;
     const { translate, scale } = this.state.d3;
@@ -611,9 +601,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   data={data}
                   position={{ x, y }}
                   parent={parent}
-                  nodeElement={data.nodeElement ? data.nodeElement : commonNodeElement}
-                  nodeLabelProps={nodeLabelProps}
-                  nodeLabelComponent={nodeLabelComponent}
+                  renderCustomNodeElement={renderCustomNodeElement}
                   nodeSize={nodeSize}
                   orientation={orientation}
                   enableLegacyTransitions={enableLegacyTransitions}
@@ -622,7 +610,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   onMouseOver={this.handleOnMouseOverCb}
                   onMouseOut={this.handleOnMouseOutCb}
                   subscriptions={subscriptions}
-                  allowForeignObjects={allowForeignObjects}
                 />
               );
             })}
@@ -635,26 +622,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
 // @ts-ignore
 Tree.defaultProps = {
-  commonNodeElement: {
-    tag: 'circle',
-    baseProps: {
-      r: 10,
-    },
-  },
-  nodeLabelProps: {
-    labelNameProps: {
-      textAnchor: 'start',
-      x: 10,
-      y: -10,
-      style: { stroke: 'green' },
-    },
-    labelAttributeProps: {
-      x: 10,
-      dy: '1.2em',
-      style: { stroke: 'purple' },
-    },
-  },
-  nodeLabelComponent: null,
   onClick: undefined,
   onMouseOver: undefined,
   onMouseOut: undefined,
@@ -682,8 +649,6 @@ Tree.defaultProps = {
     transform: undefined,
   },
   shouldCollapseNeighborNodes: false,
-  styles: {},
-  allowForeignObjects: false,
   enableLegacyTransitions: false,
 };
 

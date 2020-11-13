@@ -32,38 +32,6 @@ describe('<Tree />', () => {
     expect(renderedComponent.find(Node).length).toBe(nodeCount);
   });
 
-  it('passes individual `baseProps` to the specified <Node /> only', () => {
-    const svgTagMock = {
-      tag: 'rect',
-      baseProps: {
-        r: 3,
-        fill: 'red',
-      },
-    };
-    const mockTree = [
-      {
-        name: 'Top Level',
-        parent: 'null',
-        nodeElement: svgTagMock,
-        children: [
-          {
-            name: 'Inner',
-            parent: 'Top Level',
-          },
-        ],
-      },
-    ];
-
-    const renderedComponent = mount(<Tree data={mockTree} />);
-    const rootNode = renderedComponent.find(Node).first();
-    expect(rootNode).not.toBeUndefined();
-    expect(rootNode.props().nodeElement).toEqual(svgTagMock);
-
-    const childNode = renderedComponent.find(Node).last();
-    expect(childNode).not.toBeUndefined();
-    expect(childNode.props().nodeElement).not.toEqual(svgTagMock);
-  });
-
   it('maps every parent-child relation onto a <Link />', () => {
     const linkCount = 4;
     const renderedComponent = shallow(<Tree data={mockData} />);
@@ -805,61 +773,5 @@ describe('<Tree />', () => {
         zoom,
       });
     });
-  });
-});
-
-describe('commonNodeElement', () => {
-  it('passes `commonNodeElement` to each Node by default', () => {
-    const fixture = {
-      tag: 'rect',
-      baseProps: {
-        width: 10,
-        height: 10,
-      },
-    };
-    const renderedComponent = mount(<Tree data={mockData} commonNodeElement={fixture} />);
-    expect(
-      renderedComponent
-        .find(Node)
-        .first()
-        .prop('nodeElement')
-    ).toEqual(fixture);
-  });
-
-  it('allows overrides for individual Nodes from `data.nodeElement` if specified', () => {
-    const fixture = {
-      tag: 'rect',
-      baseProps: {
-        width: 10,
-        height: 10,
-      },
-    };
-    const dataWithNodeElement = [
-      {
-        name: 'Top Level',
-        nodeElement: fixture,
-        children: [
-          {
-            name: 'Level 2: A',
-          },
-          {
-            name: 'Level 2: B',
-          },
-        ],
-      },
-    ];
-    const renderedComponent = mount(<Tree data={dataWithNodeElement} />);
-    expect(
-      renderedComponent
-        .find(Node)
-        .first()
-        .prop('nodeElement')
-    ).toEqual(fixture);
-    expect(
-      renderedComponent
-        .find(Node)
-        .last()
-        .prop('nodeElement')
-    ).not.toEqual(fixture);
   });
 });

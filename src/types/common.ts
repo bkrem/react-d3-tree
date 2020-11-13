@@ -9,7 +9,6 @@ export type PositionCoordinates = { x: number; y: number };
 export type RawNodeDatum = {
   name: string;
   attributes?: Record<string, string>;
-  nodeElement?: NodeElement;
   children?: RawNodeDatum[];
   _collapsed?: boolean;
 };
@@ -31,9 +30,4 @@ export type TreeLink = {
 export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
 export type PathFunction = (linkData: TreeLink, orientation: Orientation) => string;
 
-export type NodeElement = {
-  tag: string;
-  baseProps: Record<string, FIXME>;
-  branchNodeProps?: Record<string, FIXME>;
-  leafNodeProps?: Record<string, FIXME>;
-};
+export type RenderCustomNodeElementFn = (nodeDatum: TreeNodeDatum) => JSX.Element;

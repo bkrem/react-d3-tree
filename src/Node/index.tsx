@@ -1,15 +1,13 @@
 import React, { SyntheticEvent } from 'react';
 import { select, HierarchyPointNode } from 'd3';
-import SvgTextElement from './SvgTextElement';
-import ForeignObjectElement from './ForeignObjectElement';
 import {
   Orientation,
-  FIXME,
-  NodeElement,
   PositionCoordinates,
   TreeNodeDatum,
+  RenderCustomNodeElementFn,
 } from '../types/common';
 import './style.css';
+import DefaultNodeElement from './DefaultNodeElement';
 
 type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
@@ -17,9 +15,6 @@ type NodeProps = {
   data: TreeNodeDatum;
   position: PositionCoordinates;
   parent: HierarchyPointNode<TreeNodeDatum> | null;
-  nodeElement: NodeElement;
-  nodeLabelProps: FIXME;
-  nodeLabelComponent?: FIXME;
   nodeSize: {
     x: number;
     y: number;
@@ -27,11 +22,11 @@ type NodeProps = {
   orientation: Orientation;
   enableLegacyTransitions: boolean;
   transitionDuration: number;
+  renderCustomNodeElement: RenderCustomNodeElementFn;
   onClick: NodeEventHandler;
   onMouseOver: NodeEventHandler;
   onMouseOut: NodeEventHandler;
   subscriptions: object;
-  allowForeignObjects: boolean;
 };
 
 type NodeState = {
@@ -41,7 +36,7 @@ type NodeState = {
 
 export default class Node extends React.Component<NodeProps, NodeState> {
   static defaultProps = {
-    nodeLabelComponent: null,
+    renderCustomNodeElement: (nodeDatum: TreeNodeDatum) => DefaultNodeElement({ nodeDatum }),
   };
 
   private nodeRef: SVGGElement = null;
@@ -122,24 +117,6 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.applyTransform(transform, transitionDuration);
   }
 
-  renderNodeElement = () => {
-    const { nodeElement, data } = this.props;
-    const { tag, baseProps, leafNodeProps = {}, branchNodeProps = {} } = nodeElement;
-    const elemProps = data._children
-      ? { ...baseProps, ...branchNodeProps }
-      : { ...baseProps, ...leafNodeProps };
-    return tag === 'none' ? null : React.createElement(tag, elemProps);
-  };
-
-  renderNodeLabelElement = () => {
-    const { allowForeignObjects, nodeLabelComponent, data, nodeSize, nodeLabelProps } = this.props;
-    return allowForeignObjects && nodeLabelComponent ? (
-      <ForeignObjectElement nodeData={data} nodeSize={nodeSize} {...nodeLabelComponent} />
-    ) : (
-      <SvgTextElement nameData={data.name} attributesData={data.attributes} {...nodeLabelProps} />
-    );
-  };
-
   handleOnClick = evt => {
     this.props.onClick(this.props.data.id, evt);
   };
@@ -159,7 +136,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, renderCustomNodeElement } = this.props;
     return (
       <g
         id={data.id}
@@ -167,14 +144,13 @@ export default class Node extends React.Component<NodeProps, NodeState> {
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
-        className={data._children ? 'nodeBase' : 'leafNodeBase'}
+        className={data._children ? 'rd3t-node' : 'rd3t-leaf-node'}
         transform={this.state.transform}
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
       >
-        {this.renderNodeElement()}
-        {this.renderNodeLabelElement()}
+        {renderCustomNodeElement(data)}
       </g>
     );
   }

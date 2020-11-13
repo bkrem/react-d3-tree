@@ -1,23 +1,23 @@
-.nodeBase {
+.rd3t-node {
   cursor: pointer;
   fill: #777;
   stroke: #000;
   stroke-width: 2;
 }
 
-.leafNodeBase {
+.rd3t-leaf-node {
   cursor: pointer;
   fill: transparent;
   stroke: #000;
   stroke-width: 2;
 }
 
-.labelNameBase {
+.rd3t-label__title {
   stroke: #000;
   stroke-width: 1;
 }
 
-.labelAttributesBase {
+.rd3t-label__attributes {
   stroke: #777;
   stroke-width: 1;
   font-size: smaller;

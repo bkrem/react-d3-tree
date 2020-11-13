@@ -1,41 +1,42 @@
 import React, { Component } from 'react';
-import clone from 'clone'
+import clone from 'clone';
 import { treeData, treeData2, mockFlatArray, debugData, individualShapesData } from './mockData';
 import Tree from 'react-d3-tree';
-import {version} from 'react-d3-tree/package.json'
+import { version } from 'react-d3-tree/package.json';
 import Switch from './components/Switch';
 import './App.css';
-import reactTree from './directory-trees/react-tree'
-import scTree from './directory-trees/sc-tree'
+import reactTree from './directory-trees/react-tree';
+import scTree from './directory-trees/sc-tree';
+import ForeignObjectNodeComponent from './components/ForeignObjectNodeComponent';
+import DefaultNodeElement from './components/DefaultNodeElement';
 
-console.log('React version: ', React.version)
+console.log('Demo React version: ', React.version);
 
-const shapes = {
-  circle: {
-    shape: 'circle',
-    shapeProps: {
-      r: 10,
-    },
+const customNodeFnMapping = {
+  default: {
+    description: 'Default - SVG `circle`, no label',
+    fn: () => <circle r={20}></circle>,
   },
-  ellipse: {
-    shape: 'ellipse',
-    shapeProps: {
-      rx: 10,
-      ry: 20,
-    },
+  svg: {
+    description: 'Pure SVG node & label (IE11 compatible)',
+    fn: (nodeDatum, appState) => (
+      <DefaultNodeElement nodeDatum={nodeDatum} orientation={appState.orientation} />
+    ),
   },
-  rect: {
-    shape: 'rect',
-    shapeProps: {
-      width: 140,
-      height: 20,
-      y: -10,
-      x: -10,
-    },
+  mixed: {
+    description: 'Mixed - SVG `circle` + `foreignObject` label',
+    fn: (nodeDatum, appState) => (
+      <ForeignObjectNodeComponent
+        nodeData={nodeDatum}
+        foreignObjectProps={{
+          width: appState.nodeSize.x,
+          height: appState.nodeSize.y,
+          x: -50,
+          y: 50,
+        }}
+      />
+    ),
   },
-  none: {
-    shape: 'none'
-  }
 };
 
 class App extends Component {
@@ -46,14 +47,7 @@ class App extends Component {
 
     this.state = {
       data: treeData,
-      nodeSvgShape: {
-        shape: 'circle',
-        shapeProps: {
-          r: 10,
-        },
-      },
       // pathFunc: (d, orientation) => orientation && `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`,
-      circleRadius: undefined,
       orientation: 'horizontal',
       translateX: 200,
       translateY: 300,
@@ -64,10 +58,11 @@ class App extends Component {
       zoomable: true,
       zoom: 1,
       scaleExtent: { min: 0.1, max: 1 },
-      separation: { siblings: 1, nonSiblings: 2 },
-      nodeSize: { x: 140, y: 140 },
+      separation: { siblings: 2, nonSiblings: 2 },
+      nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
+      renderCustomNodeElement: customNodeFnMapping['svg'].fn,
       styles: {
         nodes: {
           node: {
@@ -100,7 +95,6 @@ class App extends Component {
     this.setPathFunc = this.setPathFunc.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFloatChange = this.handleFloatChange.bind(this);
-    this.handleShapeChange = this.handleShapeChange.bind(this);
     this.toggleCollapsible = this.toggleCollapsible.bind(this);
     this.toggleZoomable = this.toggleZoomable.bind(this);
     this.setScaleExtent = this.setScaleExtent.bind(this);
@@ -116,7 +110,7 @@ class App extends Component {
     this.setState({
       data,
       transitionDuration: 0,
-    })
+    });
   }
 
   // setTreeDataFromCSV(csvFile, attributeFields) {
@@ -183,29 +177,21 @@ class App extends Component {
     }
   }
 
-  handleShapeChange(evt) {
-    const targetShape = evt.target.value;
-    if (targetShape === 'rect') {
-      this.setState({
-        nodeSvgShape: shapes[targetShape],
-        textLayout: {
-          textAnchor: 'start',
-          x: 0,
-          y: 0,
-        },
-      });
-    } else {
-      this.setState({ nodeSvgShape: shapes[targetShape] });
-    }
-  }
+  handleCustomNodeFnChange = evt => {
+    const customNodeKey = evt.target.value;
+
+    this.setState({ renderCustomNodeElement: customNodeFnMapping[customNodeKey].fn });
+  };
 
   toggleCollapsible() {
     this.setState(prevState => ({ collapsible: !prevState.collapsible }));
   }
 
-  toggleCollapseNeighborNodes = () =>  {
-    this.setState(prevState => ({ shouldCollapseNeighborNodes: !prevState.shouldCollapseNeighborNodes }));
-  }
+  toggleCollapseNeighborNodes = () => {
+    this.setState(prevState => ({
+      shouldCollapseNeighborNodes: !prevState.shouldCollapseNeighborNodes,
+    }));
+  };
 
   toggleZoomable() {
     this.setState(prevState => ({ zoomable: !prevState.zoomable }));
@@ -228,25 +214,27 @@ class App extends Component {
   }
 
   addChildNode = () => {
-    const data = clone(this.state.data)
-    const target = data[0].children ? data[0].children : data[0]._children
+    const data = clone(this.state.data);
+    const target = data[0].children ? data[0].children : data[0]._children;
     this.addedNodesCount++;
-    target.push({ name: `Inserted Node ${this.addedNodesCount}`, id: `inserted-node-${this.addedNodesCount}` })
+    target.push({
+      name: `Inserted Node ${this.addedNodesCount}`,
+      id: `inserted-node-${this.addedNodesCount}`,
+    });
     this.setState({
-      data
-    })
-  }
+      data,
+    });
+  };
 
   removeChildNode = () => {
-    const data = clone(this.state.data)
-    const target = data[0].children ? data[0].children : data[0]._children
-    target.pop()
+    const data = clone(this.state.data);
+    const target = data[0].children ? data[0].children : data[0]._children;
+    target.pop();
     this.addedNodesCount--;
     this.setState({
-      data
-    })
-  }
-
+      data,
+    });
+  };
 
   componentDidMount() {
     const dimensions = this.treeContainer.getBoundingClientRect();
@@ -317,14 +305,14 @@ class App extends Component {
                   onClick={() => this.setLargeTree(reactTree)}
                 >
                   React Repo
-                  </button>
+                </button>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
                   onClick={() => this.setLargeTree(scTree)}
                 >
                   Styled Components Repo
-                  </button>
+                </button>
               </div>
 
               <div className="prop-container">
@@ -335,14 +323,14 @@ class App extends Component {
                   onClick={() => this.addChildNode()}
                 >
                   Insert Node
-                  </button>
+                </button>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
                   onClick={() => this.removeChildNode()}
                 >
                   Remove Node
-                  </button>
+                </button>
               </div>
 
               <div className="prop-container">
@@ -374,9 +362,6 @@ class App extends Component {
                   >
                     From Flat JSON File
                   </button>
-                  {/* <button type="button" className="btn btn-controls" onClick={() => this.setTreeData(ast)}>
-                  AST (experimental)
-                </button> */}
                 </div>
               </div>
 
@@ -448,32 +433,33 @@ class App extends Component {
                 />
               </div>
 
-            <div className="prop-container">
+              <div className="prop-container">
                 <span className="prop">Enable Legacy Transitions</span>
                 <Switch
                   name="enableLegacyTransitionsBtn"
                   checked={this.state.enableLegacyTransitions}
-                  onChange={() => this.setState((prevState) => ({enableLegacyTransitions: !prevState.enableLegacyTransitions}))}
+                  onChange={() =>
+                    this.setState(prevState => ({
+                      enableLegacyTransitions: !prevState.enableLegacyTransitions,
+                    }))
+                  }
                 />
               </div>
 
               <div className="prop-container">
-                <label className="prop" htmlFor="nodeSvgShape">
-                  Node SVG Shape
+                <label className="prop" htmlFor="customNodeElement">
+                  Custom Node Element
                 </label>
-                <select className="form-control" onChange={this.handleShapeChange}>
-                  <option value="circle">{'<circle />'}</option>
-                  <option value="ellipse">{'<ellipse />'}</option>
-                  <option value="rect">{'<rect />'}</option>
-                  <option value="none">{'None'}</option>
+                <select className="form-control" onChange={this.handleCustomNodeFnChange}>
+                  {Object.entries(customNodeFnMapping).map(([key, { description }]) => (
+                    <option key={key} value={key}>
+                      {description}
+                    </option>
+                  ))}
+                  {/* <option value="default">Default</option>
+                  <option value="svg">{'Pure SVG (IE11 compatible)'}</option>
+                  <option value="mixed">{'Mixed - SVG `circle` + `foreignObject` label'}</option> */}
                 </select>
-                <textarea
-                  className="form-control"
-                  style={{ height: '90px' }}
-                  name="nodeSvgShape"
-                  value={JSON.stringify(this.state.nodeSvgShape, null, 2)}
-                  readOnly
-                />
               </div>
 
               <div className="prop-container">
@@ -653,46 +639,16 @@ class App extends Component {
                   onChange={this.handleChange}
                 />
               </div>
-
-              <div className="prop-container">
-                <label className="prop" htmlFor="circleRadius">
-                  Circle Radius (Legacy)
-                </label>
-                <input
-                  className="form-control"
-                  name="circleRadius"
-                  type="number"
-                  defaultValue={this.state.circleRadius}
-                  onChange={this.handleChange}
-                />
-              </div>
-
-              {/* <div>
-                <label htmlFor="styles">Styles:</label>
-                <textarea
-                  name="styles"
-                  value={JSON.sringify(this.state.styles, null, 2)}
-                  onChange={this.onStylesChange}
-                />
-              </div> */}
             </div>
-
-            {/* <div className="state-container">
-              <h4>Current Props:</h4>
-              <textarea
-                className="state"
-                value={JSON.stringify(this.state, null, 2)}
-                readOnly
-              />
-            </div> */}
           </div>
 
           <div className="column-right">
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
                 data={this.state.data}
-                nodeSvgShape={this.state.nodeSvgShape}
-                circleRadius={this.state.circleRadius}
+                renderCustomNodeElement={nodeDatum =>
+                  this.state.renderCustomNodeElement(nodeDatum, this.state)
+                }
                 orientation={this.state.orientation}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
                 pathFunc={this.state.pathFunc}
@@ -710,8 +666,15 @@ class App extends Component {
                 styles={this.state.styles}
                 shouldCollapseNeighborNodes={this.state.shouldCollapseNeighborNodes}
                 // onUpdate={(...args) => {console.log(args)}}
-                onClick={(...args) => { console.log('onClick'); console.log(args) }}
-                onLinkClick={(...args) => { console.log('onLinkClick'); console.log(args) }}
+                onClick={(...args) => {
+                  console.log('onClick');
+                  console.log(args);
+                }}
+                onLinkClick={(...args) => {
+                  console.log('onLinkClick');
+                  console.log(args);
+                }}
+                allowForeignObjects
               />
             </div>
           </div>
