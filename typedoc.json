@@ -1,0 +1,7 @@
+{
+  "inputFiles": ["./src"],
+  "exclude": ["**/tests/*", "**/*.test.js"],
+  "mode": "modules",
+  "out": "docs",
+  "includeVersion": true
+}

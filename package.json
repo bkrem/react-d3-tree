@@ -2,14 +2,13 @@
   "name": "react-d3-tree",
   "version": "2.0.0-beta.0",
   "description": "React component to create interactive D3 tree hierarchies",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "dist/index.js",
   "scripts": {
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
-    "build": "rimraf dist && yarn cp:css && tsc",
-    "build:watch": "rimraf dist && yarn cp:css && tsc -w",
+    "build:docs": "typedoc",
+    "build": "rimraf dist && npm run cp:css && tsc && npm run build:docs",
+    "build:watch": "rimraf dist && npm run cp:css && tsc -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
@@ -17,10 +16,8 @@
     "test:cov": "jest --coverage --verbose",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
-    "docs:react": "react-docgen src -e src/**/*.test.js$|scripts/buildDocs.sh",
-    "docs": "yarn docs:react",
-    "docs:clean": "rimraf docs/components/*",
-    "release": "yarn test && yarn build && yarn docs && git commit -a"
+    "show:docs": "open docs/index.html",
+    "release": "npm run test && npm run build && npm run docs && git commit -a"
   },
   "repository": {
     "type": "git",
@@ -50,23 +47,11 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "eslint",
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ]
+    "src/**/*.js": ["eslint", "prettier --write", "jest --findRelatedTests", "git add"],
+    "src/**/*.{ts,tsx}": ["prettier --write", "jest --findRelatedTests", "git add"]
   },
   "greenkeeper": {
-    "ignore": [
-      "d3",
-      "react-transition-group"
-    ]
+    "ignore": ["d3", "react-transition-group"]
   },
   "dependencies": {
     "clone": "^2.1.1",
@@ -121,6 +106,7 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "tsconfig-paths": "^3.8.0",
-    "typescript": "^3.6.2"
+    "typedoc": "^0.19.2",
+    "typescript": "^3.9.7"
   }
 }

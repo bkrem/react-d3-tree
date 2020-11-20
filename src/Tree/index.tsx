@@ -20,7 +20,7 @@ import {
   PathFunction,
   TreeNodeDatum,
   TreeLink,
-  PositionCoordinates,
+  Point,
   RawNodeDatum,
   RenderCustomNodeElementFn,
 } from '../types/common';
@@ -33,56 +33,251 @@ type TreeLinkEventCallback = (
   event: SyntheticEvent
 ) => any;
 
-export type TreeProps = {
+/**
+ * Props accepted by the `Tree` component.
+ *
+ * @export
+ * @interface TreeProps
+ * {@link Tree.defaultProps | Default Props}
+ */
+export interface TreeProps {
+  /**
+   * The root node object, in which child nodes (also of type `RawNodeDatum`)
+   * are recursively defined in the `children` key.
+   *
+   * `react-d3-tree` will automatically attach a unique `id` attribute to each node in the DOM,
+   * as well as `data-source-id` & `data-target-id` attributes to each link connecting two nodes.
+   */
   data: RawNodeDatum[] | RawNodeDatum;
+
   renderCustomNodeElement?: RenderCustomNodeElementFn;
+
+  /**
+   * Called when a node is clicked.
+   *
+   * {@link Tree.defaultProps.onClick | Default value}
+   */
   onClick?: TreeNodeEventCallback;
+
+  /**
+   * Called when mouse enters the space belonging to a node.
+   *
+   * {@link Tree.defaultProps.onMouseOver | Default value}
+   */
   onMouseOver?: TreeNodeEventCallback;
+
+  /**
+   * Called when mouse leaves the space belonging to a node.
+   *
+   * {@link Tree.defaultProps.onMouseOut | Default value}
+   */
   onMouseOut?: TreeNodeEventCallback;
+
+  /**
+   * Called when a link is clicked.
+   *
+   * {@link Tree.defaultProps.onLinkClick | Default value}
+   */
   onLinkClick?: TreeLinkEventCallback;
+
+  /**
+   * Called when mouse enters the space belonging to a link.
+   *
+   * {@link Tree.defaultProps.onLinkMouseOver | Default value}
+   */
   onLinkMouseOver?: TreeLinkEventCallback;
+
+  /**
+   * Called when mouse leaves the space belonging to a link.
+   *
+   * {@link Tree.defaultProps.onLinkMouseOut | Default value}
+   */
   onLinkMouseOut?: TreeLinkEventCallback;
-  onUpdate?: (target: {
-    node: TreeNodeDatum | null;
-    zoom: number;
-    translate: PositionCoordinates;
-  }) => any;
+
+  /**
+   * Called when the inner D3 component updates. That is - on every zoom or translate event,
+   * or when tree branches are toggled.
+   *
+   * {@link Tree.defaultProps.onUpdate | Default value}
+   */
+  onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => any;
+
+  /**
+   * Determines along which axis the tree is oriented.
+   *
+   * horizontal - Tree expands along x-axis (left-to-right).
+   *
+   * vertical - Tree expands along y-axis (top-to-bottom).
+   *
+   * {@link Tree.defaultProps.orientation | Default value}
+   */
   orientation?: Orientation;
-  translate?: PositionCoordinates;
+
+  /**
+   * Translates the graph along the x/y axis by the specified amount of pixels.
+   *
+   * By default, the graph will render in the top-left corner of the SVG canvas.
+   *
+   * {@link Tree.defaultProps.translate | Default value}
+   */
+  translate?: Point;
+
+  /**
+   * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
+   * `PathFunctionOption` or a user-defined `PathFunction`.
+   *
+   * For details draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
+   *
+   * {@link Tree.defaultProps.pathFunc | Default value}
+   */
   pathFunc?: PathFunctionOption | PathFunction;
-  transitionDuration?: number;
+
+  /**
+   * Determines the spacing between parent & child nodes.
+   *
+   * **Tip: Negative values invert the tree's direction.**
+   *
+   * `node.y = node.depth * depthFactor`
+   *
+   * Example: `depthFactor: 0` renders all nodes on the same height (since node.y === 0 for all).
+   *
+   * {@link Tree.defaultProps.depthFactor | Default value}
+   */
   depthFactor?: number;
+
+  /**
+   * Determines whether the tree's nodes can collapse/expand.
+   *
+   * {@link Tree.defaultProps.collapsible | Default value}
+   */
   collapsible?: boolean;
+
+  /**
+   * Determines whether the tree should automatically use any `_collapsed: boolean` properties it
+   * finds on nodes in `data` to configure its initial layout.
+   *
+   * {@link Tree.defaultProps.useCollapseData | Default value}
+   */
   useCollapseData?: boolean;
+
+  /**
+   * Sets the maximum node depth to which the tree is expanded on its initial render.
+   *
+   * By default, the tree renders to full depth.
+   *
+   * {@link Tree.defaultProps.initialDepth | Default value}
+   */
   initialDepth?: number;
+
+  /**
+   * Toggles ability to zoom in/out on the Tree by scaling it according to `scaleExtent`.
+   *
+   * {@link Tree.defaultProps.zoomable | Default value}
+   */
   zoomable?: boolean;
+
+  /**
+   * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
+   *
+   * {@link Tree.defaultProps.zoom | Default value}
+   */
   zoom?: number;
+
+  /**
+   * Sets the minimum/maximum extent to which the tree can be scaled if `zoomable` is true.
+   *
+   * {@link Tree.defaultProps.scaleExtent | Default value}
+   */
   scaleExtent?: {
     min?: number;
     max?: number;
   };
+
+  /**
+   * The amount of space each node element occupies.
+   *
+   * {@link Tree.defaultProps.nodeSize | Default value}
+   */
   nodeSize?: {
     x: number;
     y: number;
   };
+
+  /**
+   * Sets separation between neighboring nodes, differentiating between siblings (same parent node)
+   * and non-siblings.
+   *
+   * {@link Tree.defaultProps.separation | Default value}
+   */
   separation?: {
     siblings?: number;
     nonSiblings?: number;
   };
+
+  /**
+   * If a node is currently being expanded, all other nodes at the same depth will be collapsed.
+   *
+   * {@link Tree.defaultProps.shouldCollapseNeighborNodes | Default value}
+   */
   shouldCollapseNeighborNodes?: boolean;
+
+  /**
+   * Enables/disables legacy transitions using `react-transition-group`.
+   *
+   * {@link Tree.defaultProps.enableLegacyTransitions | Default value}
+   */
   enableLegacyTransitions?: boolean;
-};
+
+  /**
+   * Sets the animation duration (in milliseconds) of each expansion/collapse of a tree node.
+   * Requires `enableLegacyTransition` to be `true`.
+   *
+   * {@link Tree.defaultProps.transitionDuration | Default value}
+   */
+  transitionDuration?: number;
+}
 
 type TreeState = {
   dataRef: TreeProps['data'];
   data: TreeNodeDatum[];
-  d3: { translate: PositionCoordinates; scale: number };
+  d3: { translate: Point; scale: number };
   rd3tSvgClassName: string;
   rd3tGClassName: string;
   isTransitioning: boolean;
 };
 
 class Tree extends React.Component<TreeProps, TreeState> {
+  static defaultProps = {
+    onClick: undefined,
+    onMouseOver: undefined,
+    onMouseOut: undefined,
+    onLinkClick: undefined,
+    onLinkMouseOver: undefined,
+    onLinkMouseOut: undefined,
+    onUpdate: undefined,
+    orientation: 'horizontal',
+    translate: { x: 0, y: 0 },
+    pathFunc: 'diagonal',
+    transitionDuration: 500,
+    depthFactor: undefined,
+    collapsible: true,
+    useCollapseData: false,
+    initialDepth: undefined,
+    zoomable: true,
+    zoom: 1,
+    scaleExtent: { min: 0.1, max: 1 },
+    nodeSize: { x: 140, y: 140 },
+    separation: { siblings: 1, nonSiblings: 2 },
+    textLayout: {
+      textAnchor: 'start',
+      x: 10,
+      y: -10,
+      transform: undefined,
+    },
+    shouldCollapseNeighborNodes: false,
+    enableLegacyTransitions: false,
+  };
+
   state = {
     // eslint-disable-next-line react/no-unused-state
     dataRef: this.props.data,
@@ -619,37 +814,5 @@ class Tree extends React.Component<TreeProps, TreeState> {
     );
   }
 }
-
-// @ts-ignore
-Tree.defaultProps = {
-  onClick: undefined,
-  onMouseOver: undefined,
-  onMouseOut: undefined,
-  onLinkClick: undefined,
-  onLinkMouseOver: undefined,
-  onLinkMouseOut: undefined,
-  onUpdate: undefined,
-  orientation: 'horizontal',
-  translate: { x: 0, y: 0 },
-  pathFunc: 'diagonal',
-  transitionDuration: 500,
-  depthFactor: undefined,
-  collapsible: true,
-  useCollapseData: false,
-  initialDepth: undefined,
-  zoomable: true,
-  zoom: 1,
-  scaleExtent: { min: 0.1, max: 1 },
-  nodeSize: { x: 140, y: 140 },
-  separation: { siblings: 1, nonSiblings: 2 },
-  textLayout: {
-    textAnchor: 'start',
-    x: 10,
-    y: -10,
-    transform: undefined,
-  },
-  shouldCollapseNeighborNodes: false,
-  enableLegacyTransitions: false,
-};
 
 export default Tree;

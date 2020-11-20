@@ -1,11 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { select, HierarchyPointNode } from 'd3';
-import {
-  Orientation,
-  PositionCoordinates,
-  TreeNodeDatum,
-  RenderCustomNodeElementFn,
-} from '../types/common';
+import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
 import './style.css';
 import DefaultNodeElement from './DefaultNodeElement';
 
@@ -13,7 +8,7 @@ type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
 type NodeProps = {
   data: TreeNodeDatum;
-  position: PositionCoordinates;
+  position: Point;
   parent: HierarchyPointNode<TreeNodeDatum> | null;
   nodeSize: {
     x: number;
