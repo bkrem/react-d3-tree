@@ -23,7 +23,6 @@ describe('<Link />', () => {
     onClick: () => {},
     onMouseOver: () => {},
     onMouseOut: () => {},
-    styles: {},
   };
 
   const pathFuncs = {
@@ -46,14 +45,6 @@ describe('<Link />', () => {
     const renderedComponent = shallow(<Link {...mockProps} />);
 
     expect(renderedComponent.prop('className')).toBe('linkBase');
-  });
-
-  it('applies `props.styles` when defined', () => {
-    const initialStyle = { opacity: 0 }; // state.initialStyle
-    const fixture = { ...initialStyle, stroke: '#777', strokeWidth: 2 };
-    const renderedComponent = shallow(<Link {...mockProps} styles={fixture} />);
-
-    expect(renderedComponent.prop('style')).toEqual(fixture);
   });
 
   it('binds IDs of source & target nodes to data-source-id/data-target-id', () => {

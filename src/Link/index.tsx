@@ -15,7 +15,7 @@ type LinkEventHandler = (
   evt: SyntheticEvent
 ) => void;
 
-type LinkProps = {
+interface LinkProps {
   linkData: TreeLink;
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
@@ -24,18 +24,13 @@ type LinkProps = {
   onClick: LinkEventHandler;
   onMouseOver: LinkEventHandler;
   onMouseOut: LinkEventHandler;
-  styles?: object;
-};
+}
 
 type LinkState = {
   initialStyle: { opacity: number };
 };
 
 export default class Link extends React.PureComponent<LinkProps, LinkState> {
-  static defaultProps = {
-    styles: {},
-  };
-
   private linkRef: SVGPathElement = null;
 
   state = {
@@ -128,13 +123,13 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   };
 
   render() {
-    const { linkData, styles } = this.props;
+    const { linkData } = this.props;
     return (
       <path
         ref={l => {
           this.linkRef = l;
         }}
-        style={{ ...this.state.initialStyle, ...styles }}
+        style={{ ...this.state.initialStyle }}
         className="linkBase"
         d={this.drawPath()}
         onClick={this.handleOnClick}
