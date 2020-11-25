@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
-    "build:docs": "typedoc",
+    "build:docs": "rimraf ./docs && typedoc",
     "build": "rimraf dist && npm run cp:css && tsc && npm run build:docs",
     "build:watch": "rimraf dist && npm run cp:css && tsc -w",
     "lint": "eslint src/**/*.js",
