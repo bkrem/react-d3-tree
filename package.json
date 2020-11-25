@@ -2,7 +2,15 @@
   "name": "react-d3-tree",
   "version": "2.0.0-beta.0",
   "description": "React component to create interactive D3 tree hierarchies",
-  "files": ["dist"],
+  "author": "Ben Kremer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bkrem/react-d3-tree/issues"
+  },
+  "homepage": "https://github.com/bkrem/react-d3-tree",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "scripts": {
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
@@ -35,23 +43,23 @@
     "d3-visualization",
     "chart"
   ],
-  "author": "Ben Kremer",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bkrem/react-d3-tree/issues"
-  },
-  "homepage": "https://github.com/bkrem/react-d3-tree",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "src/**/*.js": ["eslint", "prettier --write", "jest --findRelatedTests", "git add"],
-    "src/**/*.{ts,tsx}": ["prettier --write", "jest --findRelatedTests", "git add"]
-  },
-  "greenkeeper": {
-    "ignore": ["d3", "react-transition-group"]
+    "src/**/*.js": [
+      "eslint",
+      "prettier --write",
+      "jest --findRelatedTests",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "jest --findRelatedTests",
+      "git add"
+    ]
   },
   "dependencies": {
     "clone": "^2.1.1",
