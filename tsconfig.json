@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "commonjs",
     "allowJs": true,
-    "removeComments": true,
     "target": "es5",
     "jsx": "react",
     "sourceMap": true,
@@ -10,14 +9,8 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/tests/*", "**/*.spec.ts", "**/*.test.ts", "**/*.test.js"]
 }
