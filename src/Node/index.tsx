@@ -1,5 +1,7 @@
 import React, { SyntheticEvent } from 'react';
-import { select, HierarchyPointNode } from 'd3';
+import { HierarchyPointNode } from 'd3-hierarchy';
+import { select } from 'd3-selection';
+
 import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
 import './style.css';
 import DefaultNodeElement from './DefaultNodeElement';
@@ -93,6 +95,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   ) {
     if (this.props.enableLegacyTransitions) {
       select(this.nodeRef)
+        // @ts-ignore
         .transition()
         .duration(transitionDuration)
         .attr('transform', transform)

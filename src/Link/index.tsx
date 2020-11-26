@@ -1,5 +1,7 @@
 import React, { SyntheticEvent } from 'react';
-import { select, linkHorizontal, linkVertical, HierarchyPointNode } from 'd3';
+import { linkHorizontal, linkVertical } from 'd3-shape';
+import { HierarchyPointNode } from 'd3-hierarchy';
+import { select } from 'd3-selection';
 import {
   Orientation,
   TreeLink,
@@ -54,6 +56,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   ) {
     if (this.props.enableLegacyTransitions) {
       select(this.linkRef)
+        // @ts-ignore
         .transition()
         .duration(transitionDuration)
         .style('opacity', opacity)

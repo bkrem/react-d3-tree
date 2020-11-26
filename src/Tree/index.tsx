@@ -1,13 +1,8 @@
 import React, { SyntheticEvent } from 'react';
-import {
-  tree as d3tree,
-  select,
-  hierarchy,
-  zoom as d3zoom,
-  event,
-  zoomIdentity,
-  HierarchyPointNode,
-} from 'd3';
+
+import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
+import { select, event } from 'd3-selection';
+import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import clone from 'clone';
 import deepEqual from 'deep-equal';
 import uuid from 'uuid';
@@ -367,6 +362,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const g = select(`.${rd3tGClassName}`);
     if (zoomable) {
       // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
+      // @ts-ignore
       svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
       svg.call(
         d3zoom()
