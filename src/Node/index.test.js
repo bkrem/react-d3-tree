@@ -39,11 +39,6 @@ describe('<Node />', () => {
     onClick: () => {},
     onMouseOver: () => {},
     onMouseOut: () => {},
-    textLayout: {
-      textAnchor: 'start',
-      x: 10,
-      y: -10,
-    },
     subscriptions: {},
     allowForeignObjects: false,
   };

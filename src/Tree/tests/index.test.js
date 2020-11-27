@@ -6,7 +6,7 @@ import TransitionGroupWrapper from '../TransitionGroupWrapper';
 import Node from '../../Node/index.tsx';
 import Link from '../../Link/index.tsx';
 import Tree from '../index.tsx';
-import { mockData, mockData2, mockData3, mockData4 } from './mockData';
+import { mockData, mockData2, mockData4 } from './mockData';
 
 describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');

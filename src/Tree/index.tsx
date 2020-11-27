@@ -263,12 +263,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
     scaleExtent: { min: 0.1, max: 1 },
     nodeSize: { x: 140, y: 140 },
     separation: { siblings: 1, nonSiblings: 2 },
-    textLayout: {
-      textAnchor: 'start',
-      x: 10,
-      y: -10,
-      transform: undefined,
-    },
     shouldCollapseNeighborNodes: false,
     enableLegacyTransitions: false,
   };
