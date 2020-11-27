@@ -14,7 +14,6 @@ import {
   PathFunctionOption,
   PathFunction,
   TreeNodeDatum,
-  TreeLink,
   Point,
   RawNodeDatum,
   RenderCustomNodeElementFn,
@@ -236,10 +235,11 @@ type TreeState = {
   dataRef: TreeProps['data'];
   data: TreeNodeDatum[];
   d3: { translate: Point; scale: number };
-  rd3tSvgClassName: string;
-  rd3tGClassName: string;
   isTransitioning: boolean;
 };
+
+const rd3tSvgClassName = 'rd3t-svg';
+const rd3tGClassName = 'rd3t-g';
 
 class Tree extends React.Component<TreeProps, TreeState> {
   static defaultProps = {
@@ -274,12 +274,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   state = {
-    // eslint-disable-next-line react/no-unused-state
     dataRef: this.props.data,
     data: Tree.assignInternalProperties(clone(this.props.data)),
     d3: Tree.calculateD3Geometry(this.props),
-    rd3tSvgClassName: `_${uuid.v4()}`,
-    rd3tGClassName: `_${uuid.v4()}`,
     isTransitioning: false,
   };
 
@@ -357,7 +354,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
    */
   bindZoomListener(props: TreeProps) {
     const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
-    const { rd3tSvgClassName, rd3tGClassName } = this.state;
     const svg = select(`.${rd3tSvgClassName}`);
     const g = select(`.${rd3tGClassName}`);
     if (zoomable) {
@@ -737,7 +733,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   render() {
     const { nodes, links } = this.generateTree();
-    const { rd3tSvgClassName, rd3tGClassName } = this.state;
     const {
       renderCustomNodeElement,
       orientation,
