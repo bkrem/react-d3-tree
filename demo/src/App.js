@@ -674,7 +674,6 @@ class App extends Component {
                   console.log('onLinkClick');
                   console.log(args);
                 }}
-                allowForeignObjects
               />
             </div>
           </div>

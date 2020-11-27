@@ -77,6 +77,18 @@ describe('<Node />', () => {
     ).toBe('rd3t-node');
   });
 
+  it('applies `nodeClassName` if defined', () => {
+    const fixture = 'additionalNodeClass';
+    const leafNodeComponent = shallow(<Node {...mockProps} nodeClassName={fixture} />);
+
+    expect(
+      leafNodeComponent
+        .find('g')
+        .first()
+        .prop('className')
+    ).toBe(['rd3t-leaf-node', fixture].join(' '));
+  });
+
   it('applies correct `transform` prop based on its `orientation`', () => {
     const horizontalTransform = `translate(${mockProps.parent.y},${mockProps.parent.x})`;
     const verticalTransform = `translate(${mockProps.parent.x},${mockProps.parent.y})`;

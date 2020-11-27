@@ -216,6 +216,26 @@ export interface TreeProps {
   shouldCollapseNeighborNodes?: boolean;
 
   /**
+   * Allows for additional className(s) to be passed to the `svg` element wrapping the tree.
+   */
+  svgClassName?: string;
+
+  /**
+   * Allows for additional className(s) to be passed to the root node.
+   */
+  rootNodeClassName?: string;
+
+  /**
+   * Allows for additional className(s) to be passed to all branch nodes (nodes with children).
+   */
+  branchNodeClassName?: string;
+
+  /**
+   * Allows for additional className(s) to be passed to all leaf nodes (nodes without children).
+   */
+  leafNodeClassName?: string;
+
+  /**
    * Enables/disables legacy transitions using `react-transition-group`.
    *
    * {@link Tree.defaultProps.enableLegacyTransitions | Default value}
@@ -264,6 +284,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
     nodeSize: { x: 140, y: 140 },
     separation: { siblings: 1, nonSiblings: 2 },
     shouldCollapseNeighborNodes: false,
+    svgClassName: '',
+    rootNodeClassName: '',
+    branchNodeClassName: '',
+    leafNodeClassName: '',
     enableLegacyTransitions: false,
   };
 
@@ -725,6 +749,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
     };
   }
 
+  /**
+   * Determines which additional `className` prop should be passed to the node & returns it.
+   */
+  getNodeClassName = (parent: HierarchyPointNode<TreeNodeDatum>, nodeDatum: TreeNodeDatum) => {
+    const { rootNodeClassName, branchNodeClassName, leafNodeClassName } = this.props;
+    const hasParent = parent !== null && parent !== undefined;
+    if (hasParent) {
+      return nodeDatum._children ? branchNodeClassName : leafNodeClassName;
+    } else {
+      return rootNodeClassName;
+    }
+  };
+
   render() {
     const { nodes, links } = this.generateTree();
     const {
@@ -738,6 +775,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       initialDepth,
       separation,
       enableLegacyTransitions,
+      svgClassName,
     } = this.props;
     const { translate, scale } = this.state.d3;
     const subscriptions = {
@@ -749,7 +787,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
-        <svg className={rd3tSvgClassName} width="100%" height="100%">
+        <svg className={[rd3tSvgClassName, svgClassName].join(' ')} width="100%" height="100%">
           <TransitionGroupWrapper
             enableLegacyTransitions={enableLegacyTransitions}
             component="g"
@@ -781,6 +819,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   data={data}
                   position={{ x, y }}
                   parent={parent}
+                  nodeClassName={this.getNodeClassName(parent, data)}
                   renderCustomNodeElement={renderCustomNodeElement}
                   nodeSize={nodeSize}
                   orientation={orientation}

@@ -12,6 +12,7 @@ type NodeProps = {
   data: TreeNodeDatum;
   position: Point;
   parent: HierarchyPointNode<TreeNodeDatum> | null;
+  nodeClassName: string;
   nodeSize: {
     x: number;
     y: number;
@@ -134,7 +135,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data, renderCustomNodeElement } = this.props;
+    const { data, renderCustomNodeElement, nodeClassName } = this.props;
     return (
       <g
         id={data.id}
@@ -142,7 +143,9 @@ export default class Node extends React.Component<NodeProps, NodeState> {
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
-        className={data._children ? 'rd3t-node' : 'rd3t-leaf-node'}
+        className={[data._children ? 'rd3t-node' : 'rd3t-leaf-node', nodeClassName]
+          .join(' ')
+          .trim()}
         transform={this.state.transform}
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}

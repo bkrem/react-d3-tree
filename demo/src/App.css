@@ -85,3 +85,15 @@
   color: rgba(255, 255, 255, 0.9);
   background-color: #FC5C7D;
 }
+
+/* Custom node classes */
+.my-root-node {
+  fill: red;
+}
+.my-branch-node {
+  fill: yellow
+}
+.my-leaf-node {
+  fill: green;
+}
+
