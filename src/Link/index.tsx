@@ -4,10 +4,11 @@ import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import {
   Orientation,
-  TreeLink,
+  TreeLinkDatum,
   PathFunctionOption,
   PathFunction,
   TreeNodeDatum,
+  PathClassFunction,
 } from '../types/common';
 import './style.css';
 
@@ -18,9 +19,10 @@ type LinkEventHandler = (
 ) => void;
 
 interface LinkProps {
-  linkData: TreeLink;
+  linkData: TreeLinkDatum;
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
+  pathClassFunc?: PathClassFunction;
   enableLegacyTransitions: boolean;
   transitionDuration: number;
   onClick: LinkEventHandler;
@@ -78,8 +80,14 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   drawDiagonalPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     const { source, target } = linkData;
     return orientation === 'horizontal'
-      ? linkHorizontal()({ source: [source.y, source.x], target: [target.y, target.x] })
-      : linkVertical()({ source: [source.x, source.y], target: [target.x, target.y] });
+      ? linkHorizontal()({
+          source: [source.y, source.x],
+          target: [target.y, target.x],
+        })
+      : linkVertical()({
+          source: [source.x, source.y],
+          target: [target.x, target.y],
+        });
   }
 
   drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
@@ -113,6 +121,17 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     return this.drawDiagonalPath(linkData, orientation);
   }
 
+  getClassNames() {
+    const { linkData, orientation, pathClassFunc } = this.props;
+    const classNames = ['rd3t-link'];
+
+    if (typeof pathClassFunc === 'function') {
+      classNames.push(pathClassFunc(linkData, orientation));
+    }
+
+    return classNames.join(' ').trim();
+  }
+
   handleOnClick = evt => {
     this.props.onClick(this.props.linkData.source, this.props.linkData.target, evt);
   };
@@ -133,7 +152,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
           this.linkRef = l;
         }}
         style={{ ...this.state.initialStyle }}
-        className="linkBase"
+        className={this.getClassNames()}
         d={this.drawPath()}
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}

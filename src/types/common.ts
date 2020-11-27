@@ -1,7 +1,5 @@
 import { HierarchyPointNode } from 'd3-hierarchy';
 
-export type FIXME = any;
-
 export type Orientation = 'horizontal' | 'vertical';
 
 export interface Point {
@@ -25,13 +23,14 @@ export interface TreeNodeDatum extends RawNodeDatum {
   _depth: number;
 }
 
-export interface TreeLink {
+export interface TreeLinkDatum {
   source: HierarchyPointNode<TreeNodeDatum>;
   target: HierarchyPointNode<TreeNodeDatum>;
 }
 
 export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
-export type PathFunction = (link: TreeLink, orientation: Orientation) => string;
+export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
+export type PathClassFunction = PathFunction;
 
 /**
  * Function to render a custom node element. Should return a `ReactElement`.

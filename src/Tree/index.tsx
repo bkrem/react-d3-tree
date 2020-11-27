@@ -17,6 +17,7 @@ import {
   Point,
   RawNodeDatum,
   RenderCustomNodeElementFn,
+  PathClassFunction,
 } from '../types/common';
 import './style.css';
 
@@ -120,11 +121,25 @@ export interface TreeProps {
    * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
    * `PathFunctionOption` or a user-defined `PathFunction`.
    *
-   * For details draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
+   * See the `PathFunction` type for more information.
+   *
+   * For details on draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
    *
    * {@link Tree.defaultProps.pathFunc | Default value}
    */
   pathFunc?: PathFunctionOption | PathFunction;
+
+  /**
+   * Allows for additional className(s) to be passed to links.
+   *
+   * Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
+   * Expects a `className` string to be returned.
+   *
+   * See the `PathClassFunction` type for more information.
+   *
+   * {@link Tree.defaultProps.pathClassFunc | Default value}
+   */
+  pathClassFunc?: PathClassFunction;
 
   /**
    * Determines the spacing between parent & child nodes.
@@ -217,21 +232,29 @@ export interface TreeProps {
 
   /**
    * Allows for additional className(s) to be passed to the `svg` element wrapping the tree.
+   *
+   * {@link Tree.defaultProps.svgClassName | Default value}
    */
   svgClassName?: string;
 
   /**
    * Allows for additional className(s) to be passed to the root node.
+   *
+   * {@link Tree.defaultProps.rootNodeClassName | Default value}
    */
   rootNodeClassName?: string;
 
   /**
    * Allows for additional className(s) to be passed to all branch nodes (nodes with children).
+   *
+   * {@link Tree.defaultProps.branchNodeClassName | Default value}
    */
   branchNodeClassName?: string;
 
   /**
    * Allows for additional className(s) to be passed to all leaf nodes (nodes without children).
+   *
+   * {@link Tree.defaultProps.leafNodeClassName | Default value}
    */
   leafNodeClassName?: string;
 
@@ -262,7 +285,7 @@ const rd3tSvgClassName = 'rd3t-svg';
 const rd3tGClassName = 'rd3t-g';
 
 class Tree extends React.Component<TreeProps, TreeState> {
-  static defaultProps = {
+  static defaultProps: Partial<TreeProps> = {
     onClick: undefined,
     onMouseOver: undefined,
     onMouseOut: undefined,
@@ -273,6 +296,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     orientation: 'horizontal',
     translate: { x: 0, y: 0 },
     pathFunc: 'diagonal',
+    pathClassFunc: undefined,
     transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
@@ -776,6 +800,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       separation,
       enableLegacyTransitions,
       svgClassName,
+      pathClassFunc,
     } = this.props;
     const { translate, scale } = this.state.d3;
     const subscriptions = {
@@ -801,6 +826,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   key={uuid.v4()}
                   orientation={orientation}
                   pathFunc={pathFunc}
+                  pathClassFunc={pathClassFunc}
                   linkData={linkData}
                   onClick={this.handleOnLinkClickCb}
                   onMouseOver={this.handleOnLinkMouseOverCb}
