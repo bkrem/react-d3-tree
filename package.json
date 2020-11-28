@@ -8,9 +8,7 @@
     "url": "https://github.com/bkrem/react-d3-tree/issues"
   },
   "homepage": "https://github.com/bkrem/react-d3-tree",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "dist/index.js",
   "scripts": {
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../dist && cd ..",
@@ -49,17 +47,8 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "eslint",
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ]
+    "src/**/*.js": ["eslint", "prettier --write", "jest --findRelatedTests", "git add"],
+    "src/**/*.{ts,tsx}": ["prettier --write", "jest --findRelatedTests", "git add"]
   },
   "dependencies": {
     "clone": "^2.1.1",
@@ -73,8 +62,8 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "react": "16.x",
-    "react-dom": "16.x"
+    "react": "16.x || 17.x",
+    "react-dom": "16.x || 17.x"
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
