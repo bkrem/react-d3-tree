@@ -3,5 +3,6 @@
   "exclude": ["**/tests/*", "**/*.test.js"],
   "mode": "modules",
   "out": "docs",
+  "readme": "none",
   "includeVersion": true
 }
