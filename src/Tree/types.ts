@@ -154,14 +154,6 @@ export interface TreeProps {
   collapsible?: boolean;
 
   /**
-   * Determines whether the tree should automatically use any `_collapsed: boolean` properties it
-   * finds on nodes in `data` to configure its initial layout.
-   *
-   * {@link Tree.defaultProps.useCollapseData | Default value}
-   */
-  useCollapseData?: boolean;
-
-  /**
    * Sets the maximum node depth to which the tree is expanded on its initial render.
    *
    * By default, the tree renders to full depth.

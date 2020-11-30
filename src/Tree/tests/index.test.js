@@ -234,11 +234,6 @@ describe('<Tree />', () => {
       mount(<Tree data={mockData} initialDepth={1} />);
       expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
     });
-
-    it('does not set an initialDepth if `props.useCollapseData` is true', () => {
-      mount(<Tree data={mockData} initialDepth={1} useCollapseData />);
-      expect(Tree.prototype.setInitialTreeDepth).not.toHaveBeenCalled();
-    });
   });
 
   describe('zoomable', () => {

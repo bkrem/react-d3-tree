@@ -5,8 +5,10 @@ import Node from './index.tsx';
 
 describe('<Node />', () => {
   const data = {
-    id: 'abc123',
     name: 'mockNode',
+    __rd3t: {
+      id: 'abc123',
+    },
   };
 
   const mockProps = {
@@ -56,12 +58,12 @@ describe('<Node />', () => {
         .find('g')
         .first()
         .prop('id')
-    ).toBe(data.id);
+    ).toBe(data.__rd3t.id);
   });
 
-  it('applies correct base className if `data._children` is defined', () => {
+  it('applies correct base className if `data.children` is defined', () => {
     const leafNodeComponent = shallow(<Node {...mockProps} />);
-    const nodeComponent = shallow(<Node {...mockProps} data={{ ...data, _children: [] }} />);
+    const nodeComponent = shallow(<Node {...mockProps} data={{ ...data, children: [] }} />);
 
     expect(
       leafNodeComponent
@@ -116,7 +118,7 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('click', mockEvt);
       expect(onClickSpy).toHaveBeenCalledTimes(1);
-      expect(onClickSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
+      expect(onClickSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });
 
     it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
@@ -126,7 +128,7 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('mouseover', mockEvt);
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOverSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
+      expect(onMouseOverSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });
 
     it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
@@ -136,7 +138,7 @@ describe('<Node />', () => {
 
       renderedComponent.simulate('mouseout', mockEvt);
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOutSpy).toHaveBeenCalledWith(data.id, expect.objectContaining(mockEvt));
+      expect(onMouseOutSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });
   });
 

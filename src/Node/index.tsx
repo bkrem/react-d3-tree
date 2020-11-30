@@ -117,15 +117,15 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   handleOnClick = evt => {
-    this.props.onClick(this.props.data.id, evt);
+    this.props.onClick(this.props.data.__rd3t.id, evt);
   };
 
   handleOnMouseOver = evt => {
-    this.props.onMouseOver(this.props.data.id, evt);
+    this.props.onMouseOver(this.props.data.__rd3t.id, evt);
   };
 
   handleOnMouseOut = evt => {
-    this.props.onMouseOut(this.props.data.id, evt);
+    this.props.onMouseOut(this.props.data.__rd3t.id, evt);
   };
 
   componentWillLeave(done) {
@@ -138,14 +138,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     const { data, renderCustomNodeElement, nodeClassName } = this.props;
     return (
       <g
-        id={data.id}
+        id={data.__rd3t.id}
         ref={n => {
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
-        className={[data._children ? 'rd3t-node' : 'rd3t-leaf-node', nodeClassName]
-          .join(' ')
-          .trim()}
+        className={[data.children ? 'rd3t-node' : 'rd3t-leaf-node', nodeClassName].join(' ').trim()}
         transform={this.state.transform}
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}

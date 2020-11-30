@@ -116,7 +116,6 @@ const mockData4 = [
           {
             name: 'Level 3: B',
             parent: 'Level 2: A',
-            _collapsed: true,
           },
         ],
       },

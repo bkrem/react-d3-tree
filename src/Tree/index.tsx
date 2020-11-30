@@ -39,7 +39,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
     transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
-    useCollapseData: false,
     initialDepth: undefined,
     zoomable: true,
     zoom: 1,
@@ -120,7 +119,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    */
   setInitialTreeDepth(nodeSet: HierarchyPointNode<TreeNodeDatum>[], initialDepth: number) {
     nodeSet.forEach(n => {
-      n.data._collapsed = n.depth >= initialDepth;
+      n.data.__rd3t.collapsed = n.depth >= initialDepth;
     });
   }
 
@@ -165,8 +164,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
   }
 
   /**
-   * Assigns internal properties to each node in the `data` set that are required for tree
-   * manipulation and returns a new `data` array.
+   * Assigns internal properties that are required for tree
+   * manipulation to each node in the `data` set and returns a new `data` array.
    *
    * @static
    */
@@ -174,21 +173,18 @@ class Tree extends React.Component<TreeProps, TreeState> {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
     const d = Array.isArray(data) ? data : [data];
     return d.map(n => {
-      const node = n as TreeNodeDatum;
-      node.id = uuid.v4();
-      // D3@v5 compat: manually assign `_depth` to node.data so we don't have to hold full node+link sets in state.
+      const nodeDatum = n as TreeNodeDatum;
+      nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
+      nodeDatum.__rd3t.id = uuid.v4();
+      // D3@v5 compat: manually assign `depth` to node.data so we don't have
+      // to hold full node+link sets in state.
       // TODO: avoid this extra step by checking D3's node.depth directly.
-      node._depth = currentDepth;
-      // If the node's `_collapsed` state wasn't defined by the data set -> default to `false`.
-      if (node._collapsed === undefined) {
-        node._collapsed = false;
-      }
+      nodeDatum.__rd3t.depth = currentDepth;
       // If there are children, recursively assign properties to them too.
-      if (node.children && node.children.length > 0) {
-        node.children = Tree.assignInternalProperties(node.children, currentDepth + 1);
-        node._children = node.children;
+      if (nodeDatum.children && nodeDatum.children.length > 0) {
+        nodeDatum.children = Tree.assignInternalProperties(nodeDatum.children, currentDepth + 1);
       }
-      return node;
+      return nodeDatum;
     });
   }
 
@@ -199,10 +195,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
     if (hits.length > 0) {
       return hits;
     }
-    hits = hits.concat(nodeSet.filter(node => node.id === nodeId));
+    hits = hits.concat(nodeSet.filter(node => node.__rd3t.id === nodeId));
     nodeSet.forEach(node => {
-      if (node._children && node._children.length > 0) {
-        hits = this.findNodesById(nodeId, node._children, hits);
+      if (node.children && node.children.length > 0) {
+        hits = this.findNodesById(nodeId, node.children, hits);
       }
     });
     return hits;
@@ -216,46 +212,46 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * @param {array} accumulator Accumulator for matches, passed between recursive calls
    */
   findNodesAtDepth(depth: number, nodeSet: TreeNodeDatum[], accumulator: TreeNodeDatum[]) {
-    accumulator = accumulator.concat(nodeSet.filter(node => node._depth === depth));
+    accumulator = accumulator.concat(nodeSet.filter(node => node.__rd3t.depth === depth));
     nodeSet.forEach(node => {
-      if (node._children && node._children.length > 0) {
-        accumulator = this.findNodesAtDepth(depth, node._children, accumulator);
+      if (node.children && node.children.length > 0) {
+        accumulator = this.findNodesAtDepth(depth, node.children, accumulator);
       }
     });
     return accumulator;
   }
 
   /**
-   * Recursively sets the `_collapsed` property of
-   * the passed `node` object and its children to `true`.
+   * Recursively sets the internal `collapsed` property of
+   * the passed `TreeNodeDatum` and its children to `true`.
    *
    * @static
    */
-  static collapseNode(node: TreeNodeDatum) {
-    node._collapsed = true;
-    if (node._children && node._children.length > 0) {
-      node._children.forEach(child => {
+  static collapseNode(nodeDatum: TreeNodeDatum) {
+    nodeDatum.__rd3t.collapsed = true;
+    if (nodeDatum.children && nodeDatum.children.length > 0) {
+      nodeDatum.children.forEach(child => {
         Tree.collapseNode(child);
       });
     }
   }
 
   /**
-   * Sets the `_collapsed` property of
-   * the passed `node` object to `false`.
+   * Sets the internal `collapsed` property of
+   * the passed `TreeNodeDatum` object to `false`.
    *
    * @static
    */
-  static expandNode(node: TreeNodeDatum) {
-    node._collapsed = false;
+  static expandNode(nodeDatum: TreeNodeDatum) {
+    nodeDatum.__rd3t.collapsed = false;
   }
 
   /**
    * Collapses all nodes in `nodeSet` that are neighbors (same depth) of `targetNode`.
    */
   collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
-    const neighbors = this.findNodesAtDepth(targetNode._depth, nodeSet, []).filter(
-      node => node.id !== targetNode.id
+    const neighbors = this.findNodesAtDepth(targetNode.__rd3t.depth, nodeSet, []).filter(
+      node => node.__rd3t.id !== targetNode.__rd3t.id
     );
     neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
   }
@@ -263,42 +259,44 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Finds the node matching `nodeId` and
    * expands/collapses it, depending on the current state of
-   * its `_collapsed` property.
+   * its internal `collapsed` property.
    * `setState` callback receives targetNode and handles
    * `props.onClick` if defined.
    *
-   * @param {string} nodeId A node object's `id` field.
+   * @param {string} nodeId A TreeNodeDatum's `id` field.
    * @param {object} evt React `SyntheticEvent`
    */
   handleNodeToggle = (nodeId: string, evt: SyntheticEvent) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
-    const targetNode = matches[0];
+    const targetNodeDatum = matches[0];
     // Persist the SyntheticEvent for downstream handling by users.
     evt.persist();
     if (this.props.collapsible && !this.state.isTransitioning) {
-      if (targetNode._collapsed) {
-        Tree.expandNode(targetNode);
-        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNode, data);
+      if (targetNodeDatum.__rd3t.collapsed) {
+        Tree.expandNode(targetNodeDatum);
+        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNodeDatum, data);
       } else {
-        Tree.collapseNode(targetNode);
+        Tree.collapseNode(targetNodeDatum);
       }
 
       if (this.props.enableLegacyTransitions) {
         // Lock node toggling while transition takes place.
-        this.setState({ data, isTransitioning: true }, () => this.handleOnClickCb(targetNode, evt));
+        this.setState({ data, isTransitioning: true }, () =>
+          this.handleOnClickCb(targetNodeDatum, evt)
+        );
         // Await transitionDuration + 10 ms before unlocking node toggling again.
         setTimeout(
           () => this.setState({ isTransitioning: false }),
           this.props.transitionDuration + 10
         );
       } else {
-        this.setState({ data }, () => this.handleOnClickCb(targetNode, evt));
+        this.setState({ data }, () => this.handleOnClickCb(targetNodeDatum, evt));
       }
 
-      this.internalState.targetNode = targetNode;
+      this.internalState.targetNode = targetNodeDatum;
     } else {
-      this.handleOnClickCb(targetNode, evt);
+      this.handleOnClickCb(targetNodeDatum, evt);
     }
   };
 
@@ -385,30 +383,23 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * the initial render of the tree.
    */
   generateTree() {
-    const {
-      initialDepth,
-      useCollapseData,
-      depthFactor,
-      separation,
-      nodeSize,
-      orientation,
-    } = this.props;
+    const { initialDepth, depthFactor, separation, nodeSize, orientation } = this.props;
     const tree = d3tree<TreeNodeDatum>()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
       .separation((a, b) =>
-        a.parent.data.id === b.parent.data.id ? separation.siblings : separation.nonSiblings
+        a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
+          ? separation.siblings
+          : separation.nonSiblings
       );
 
-    const rootNode = tree(hierarchy(this.state.data[0], d => (d._collapsed ? null : d._children)));
+    const rootNode = tree(
+      hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children))
+    );
     let nodes = rootNode.descendants();
     const links = rootNode.links();
 
     // Set `initialDepth` on first render if specified
-    if (
-      useCollapseData === false &&
-      initialDepth !== undefined &&
-      this.internalState.initialRender
-    ) {
+    if (initialDepth !== undefined && this.internalState.initialRender) {
       // TODO: refactor to avoid mutating input parameter.
       this.setInitialTreeDepth(nodes, initialDepth);
     }
@@ -453,7 +444,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { rootNodeClassName, branchNodeClassName, leafNodeClassName } = this.props;
     const hasParent = parent !== null && parent !== undefined;
     if (hasParent) {
-      return nodeDatum._children ? branchNodeClassName : leafNodeClassName;
+      return nodeDatum.children ? branchNodeClassName : leafNodeClassName;
     } else {
       return rootNodeClassName;
     }
@@ -511,10 +502,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
             })}
 
             {nodes.map(({ data, x, y, parent, ...rest }) => {
-              // console.log({ data, x, y, parent, ...rest });
+              console.log({ data, x, y, parent, ...rest });
               return (
                 <Node
-                  key={data.id}
+                  key={data.__rd3t.id}
                   data={data}
                   position={{ x, y }}
                   parent={parent}
