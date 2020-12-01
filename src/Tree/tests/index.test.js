@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { render } from 'react-dom';
@@ -6,7 +7,7 @@ import TransitionGroupWrapper from '../TransitionGroupWrapper';
 import Node from '../../Node/index.tsx';
 import Link from '../../Link/index.tsx';
 import Tree from '../index.tsx';
-import { mockData, mockData2, mockData4 } from './mockData';
+import { mockData, mockData2, mockData4, mockTree_D1N2_D2N2 } from './mockData';
 
 describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');
@@ -230,9 +231,19 @@ describe('<Tree />', () => {
   });
 
   describe('initialDepth', () => {
-    it('sets tree depth to `props.initialDepth` if specified', () => {
-      mount(<Tree data={mockData} initialDepth={1} />);
-      expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
+    it('expands tree to full depth by default', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} />);
+      expect(renderedComponent.find(Node).length).toBe(5);
+    });
+
+    it('expands tree to `props.initialDepth` if specified', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} initialDepth={1} />);
+      expect(renderedComponent.find(Node).length).toBe(3);
+    });
+
+    it('renders only the root node if `initialDepth === 0`', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} initialDepth={0} />);
+      expect(renderedComponent.find(Node).length).toBe(1);
     });
   });
 
@@ -703,7 +714,6 @@ describe('<Tree />', () => {
         .first()
         .simulate('click'); // collapse
 
-      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: expect.any(Object),
         zoom: 1,
@@ -761,7 +771,6 @@ describe('<Tree />', () => {
         .first()
         .simulate('click');
 
-      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: expect.any(Object),
         translate,

@@ -46,7 +46,7 @@ class App extends Component {
     this.addedNodesCount = 0;
 
     this.state = {
-      data: treeData,
+      data: individualShapesData,
       // pathFunc: (d, orientation) => orientation && `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`,
       orientation: 'horizontal',
       translateX: 200,
@@ -159,20 +159,28 @@ class App extends Component {
 
   handleChange(evt) {
     const target = evt.target;
-    const value = parseInt(target.value, 10);
-    if (!isNaN(value)) {
+    const parsedIntValue = parseInt(target.value, 10);
+    if (target.value === '') {
       this.setState({
-        [target.name]: value,
+        [target.name]: undefined,
+      });
+    } else if (!isNaN(parsedIntValue)) {
+      this.setState({
+        [target.name]: parsedIntValue,
       });
     }
   }
 
   handleFloatChange(evt) {
     const target = evt.target;
-    const value = parseFloat(target.value);
-    if (!isNaN(value)) {
+    const parsedFloatValue = parseFloat(target.value);
+    if (target.value === '') {
       this.setState({
-        [target.name]: value,
+        [target.name]: undefined,
+      });
+    } else if (!isNaN(parsedFloatValue)) {
+      this.setState({
+        [target.name]: parsedFloatValue,
       });
     }
   }
@@ -498,8 +506,8 @@ class App extends Component {
                   style={{ color: 'grey' }}
                   name="initialDepth"
                   type="text"
-                  value={this.state.initialDepth || 'maximum'}
-                  readOnly
+                  value={this.state.initialDepth}
+                  onChange={this.handleChange}
                 />
               </div>
 
