@@ -1,8 +1,15 @@
 import React from 'react';
-import T from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 
-const TransitionGroupWrapper = props =>
+interface TransitionGroupWrapperProps {
+  enableLegacyTransitions: boolean;
+  component: string;
+  className: string;
+  transform: string;
+  children: React.ReactNode;
+}
+
+const TransitionGroupWrapper = (props: TransitionGroupWrapperProps) =>
   props.enableLegacyTransitions ? (
     <TransitionGroup
       component={props.component}
@@ -16,13 +23,5 @@ const TransitionGroupWrapper = props =>
       {props.children}
     </g>
   );
-
-TransitionGroupWrapper.propTypes = {
-  enableLegacyTransitions: T.bool.isRequired,
-  component: T.string.isRequired,
-  className: T.string.isRequired,
-  transform: T.string.isRequired,
-  children: T.array.isRequired,
-};
 
 export default TransitionGroupWrapper;
