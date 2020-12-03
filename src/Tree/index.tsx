@@ -2,8 +2,8 @@ import React, { SyntheticEvent } from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select, event } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
+import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
-import deepEqual from 'deep-equal';
 import uuid from 'uuid';
 
 import TransitionGroupWrapper from './TransitionGroupWrapper';
