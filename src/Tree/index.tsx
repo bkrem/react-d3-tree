@@ -4,7 +4,7 @@ import { select, event } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 import TransitionGroupWrapper from './TransitionGroupWrapper';
 import Node from '../Node';
@@ -182,7 +182,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     return d.map(n => {
       const nodeDatum = n as TreeNodeDatum;
       nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
-      nodeDatum.__rd3t.id = uuid.v4();
+      nodeDatum.__rd3t.id = uuidv4();
       // D3@v5 compat: manually assign `depth` to node.data so we don't have
       // to hold full node+link sets in state.
       // TODO: avoid this extra step by checking D3's node.depth directly.
@@ -498,11 +498,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
             className={rd3tGClassName}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
-            {links.map(linkData => {
+            {links.map((linkData, i) => {
               // console.log(linkData);
               return (
                 <Link
-                  key={uuid.v4()}
+                  key={'link-' + i}
                   orientation={orientation}
                   pathFunc={pathFunc}
                   pathClassFunc={pathClassFunc}
@@ -516,11 +516,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
               );
             })}
 
-            {nodes.map(({ data, x, y, parent, ...rest }) => {
+            {nodes.map(({ data, x, y, parent, ...rest }, i) => {
               // console.log({ data, x, y, parent, ...rest });
               return (
                 <Node
-                  key={data.__rd3t.id}
+                  key={'node-' + i}
                   data={data}
                   position={{ x, y }}
                   parent={parent}
