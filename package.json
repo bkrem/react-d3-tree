@@ -23,7 +23,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "show:docs": "open docs/index.html",
-    "release": "npm run test && npm run build && npm run docs && git commit -a"
+    "deploy:demo": "npm run build:docs && cd demo && npm run build && npm run deploy"
   },
   "repository": {
     "type": "git",

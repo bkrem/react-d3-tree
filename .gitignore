@@ -37,3 +37,4 @@ stats.json
 dist
 lib
 demo/build
+demo/public/docs

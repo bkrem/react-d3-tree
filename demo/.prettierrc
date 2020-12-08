@@ -8,7 +8,7 @@
   "parser": "typescript",
   "overrides": [
     {
-      "files": "*.yaml",
+      "files": "*.yml",
       "options": { "parser": "yaml" }
     },
     {

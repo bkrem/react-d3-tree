@@ -1,0 +1,4 @@
+# We need this to allow GH Pages to include underscore-prefixed Typedoc pages.
+include:
+  - '_*_.html'
+  - '_*_.*.html'
