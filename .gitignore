@@ -36,3 +36,4 @@ stats.json
 # Build outputs
 dist
 lib
+demo/build
