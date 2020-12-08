@@ -33,4 +33,6 @@ node_modules
 # ignore Webpack stats output
 stats.json
 
+# Build outputs
 dist
+lib
