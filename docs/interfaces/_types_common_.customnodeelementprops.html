@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TreeLinkDatum | react-d3-tree - v2.0.0-beta.0</title>
+	<title>CustomNodeElementProps | react-d3-tree - v2.0.0-beta.0</title>
 	<meta name="description" content="Documentation for react-d3-tree - v2.0.0-beta.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_types_common_.html">&quot;types/common&quot;</a>
 				</li>
 				<li>
-					<a href="_types_common_.treelinkdatum.html">TreeLinkDatum</a>
+					<a href="_types_common_.customnodeelementprops.html">CustomNodeElementProps</a>
 				</li>
 			</ul>
-			<h1>Interface TreeLinkDatum</h1>
+			<h1>Interface CustomNodeElementProps</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">TreeLinkDatum</span>
+						<span class="target">CustomNodeElementProps</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="_node_defaultnodeelement_.defaultnodeelementprops.html" class="tsd-signature-type">DefaultNodeElementProps</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -84,8 +89,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_common_.treelinkdatum.html#source" class="tsd-kind-icon">source</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_common_.treelinkdatum.html#target" class="tsd-kind-icon">target</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_common_.customnodeelementprops.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_common_.customnodeelementprops.html#togglenode" class="tsd-kind-icon">toggle<wbr>Node</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,24 +99,39 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="source" class="tsd-anchor"></a>
-					<h3>source</h3>
-					<div class="tsd-signature tsd-kind-icon">source<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HierarchyPointNode</span><span class="tsd-signature-symbol">&lt;</span><a href="_types_common_.treenodedatum.html" class="tsd-signature-type">TreeNodeDatum</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="data" class="tsd-anchor"></a>
+					<h3>data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <a href="_types_common_.treenodedatum.html" class="tsd-signature-type">TreeNodeDatum</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/290fd8a/src/types/common.ts#L26">src/types/common.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/290fd8a/src/types/common.ts#L37">src/types/common.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="target" class="tsd-anchor"></a>
-					<h3>target</h3>
-					<div class="tsd-signature tsd-kind-icon">target<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HierarchyPointNode</span><span class="tsd-signature-symbol">&lt;</span><a href="_types_common_.treenodedatum.html" class="tsd-signature-type">TreeNodeDatum</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="togglenode" class="tsd-anchor"></a>
+					<h3>toggle<wbr>Node</h3>
+					<div class="tsd-signature tsd-kind-icon">toggle<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/290fd8a/src/types/common.ts#L27">src/types/common.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/290fd8a/src/types/common.ts#L38">src/types/common.ts:38</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -146,30 +166,30 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="_types_common_.customnodeelementprops.html" class="tsd-kind-icon">Custom<wbr>Node<wbr>Element<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_types_common_.customnodeelementprops.html#data" class="tsd-kind-icon">data</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_types_common_.customnodeelementprops.html#togglenode" class="tsd-kind-icon">toggle<wbr>Node</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="_types_common_.point.html" class="tsd-kind-icon">Point</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="_types_common_.rawnodedatum.html" class="tsd-kind-icon">Raw<wbr>Node<wbr>Datum</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="_types_common_.treelinkdatum.html" class="tsd-kind-icon">Tree<wbr>Link<wbr>Datum</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_common_.treelinkdatum.html#source" class="tsd-kind-icon">source</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_common_.treelinkdatum.html#target" class="tsd-kind-icon">target</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="_types_common_.treenodedatum.html" class="tsd-kind-icon">Tree<wbr>Node<wbr>Datum</a>
 					</li>
