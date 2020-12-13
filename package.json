@@ -13,7 +13,7 @@
   "scripts": {
     "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../lib && cd ..",
     "build:docs": "rimraf ./docs && typedoc",
-    "build": "rimraf lib && npm run cp:css && tsc && npm run build:docs",
+    "build": "rimraf lib && npm run cp:css && tsc",
     "build:watch": "rimraf lib && npm run cp:css && tsc -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
@@ -23,7 +23,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "show:docs": "open docs/index.html",
-    "deploy:demo": "npm run build:docs && cd demo && npm run build && npm run deploy"
+    "deploy:demo": "npm run build && npm run build:docs && cd demo && npm run build && npm run deploy"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ForeignObjectNodeComponent = ({ nodeData = {}, foreignObjectProps = {} }) => {
+const MixedNodeElement = ({ nodeData = {}, triggerNodeToggle, foreignObjectProps = {} }) => {
+  console.log("rendering demo's MixedNodeElement");
   return (
     <React.Fragment>
       <circle r={20}></circle>
@@ -15,11 +16,15 @@ const ForeignObjectNodeComponent = ({ nodeData = {}, foreignObjectProps = {} }) 
                 </li>
               ))}
           </ul>
-          {nodeData._children && <button>{nodeData._collapsed ? 'Expand' : 'Collapse'}</button>}
+          {nodeData.children && (
+            <button onClick={triggerNodeToggle}>
+              {nodeData.__rd3t.collapsed ? 'Expand' : 'Collapse'}
+            </button>
+          )}
         </div>
       </foreignObject>
     </React.Fragment>
   );
 };
 
-export default ForeignObjectNodeComponent;
+export default MixedNodeElement;

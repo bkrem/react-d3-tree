@@ -111,32 +111,46 @@ describe('<Node />', () => {
   });
 
   describe('Events', () => {
-    it('handles onClick events and passes its nodeId & event object to onClick handler', () => {
+    it('handles onNodeToggle and passes its nodeId to handler', () => {
+      const onNodeToggleSpy = jest.fn();
+      const mockEvt = { mock: 'event' };
+      const renderedComponent = shallow(
+        <Node {...mockProps} onNodeToggle={onNodeToggleSpy} onNodeClick={() => {}} />
+      );
+
+      renderedComponent.find('circle').simulate('click', mockEvt);
+      expect(onNodeToggleSpy).toHaveBeenCalledTimes(1);
+      expect(onNodeToggleSpy).toHaveBeenCalledWith(data.__rd3t.id);
+    });
+
+    it('handles onNodeClick events and passes its nodeId & event object to handler', () => {
       const onClickSpy = jest.fn();
       const mockEvt = { mock: 'event' };
-      const renderedComponent = shallow(<Node {...mockProps} onClick={onClickSpy} />);
+      const renderedComponent = shallow(
+        <Node {...mockProps} onNodeToggle={() => {}} onNodeClick={onClickSpy} />
+      );
 
-      renderedComponent.simulate('click', mockEvt);
+      renderedComponent.find('circle').simulate('click', mockEvt);
       expect(onClickSpy).toHaveBeenCalledTimes(1);
       expect(onClickSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });
 
-    it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
+    it('handles onNodeMouseOver events and passes its nodeId & event object to handler', () => {
       const onMouseOverSpy = jest.fn();
       const mockEvt = { mock: 'event' };
-      const renderedComponent = shallow(<Node {...mockProps} onMouseOver={onMouseOverSpy} />);
+      const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOver={onMouseOverSpy} />);
 
-      renderedComponent.simulate('mouseover', mockEvt);
+      renderedComponent.find('circle').simulate('mouseover', mockEvt);
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
       expect(onMouseOverSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });
 
-    it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
+    it('handles onNodeMouseOut events and passes its nodeId & event object to handler', () => {
       const onMouseOutSpy = jest.fn();
       const mockEvt = { mock: 'event' };
-      const renderedComponent = shallow(<Node {...mockProps} onMouseOut={onMouseOutSpy} />);
+      const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOut={onMouseOutSpy} />);
 
-      renderedComponent.simulate('mouseout', mockEvt);
+      renderedComponent.find('circle').simulate('mouseout', mockEvt);
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
       expect(onMouseOutSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
     });

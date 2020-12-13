@@ -26,9 +26,9 @@ const rd3tGClassName = 'rd3t-g';
 
 class Tree extends React.Component<TreeProps, TreeState> {
   static defaultProps: Partial<TreeProps> = {
-    onClick: undefined,
-    onMouseOver: undefined,
-    onMouseOut: undefined,
+    onNodeClick: undefined,
+    onNodeMouseOver: undefined,
+    onNodeMouseOut: undefined,
     onLinkClick: undefined,
     onLinkMouseOver: undefined,
     onLinkMouseOut: undefined,
@@ -269,16 +269,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * its internal `collapsed` property.
    * `setState` callback receives targetNode and handles
    * `props.onClick` if defined.
-   *
-   * @param {string} nodeId A TreeNodeDatum's `id` field.
-   * @param {object} evt React `SyntheticEvent`
    */
-  handleNodeToggle = (nodeId: string, evt: SyntheticEvent) => {
+  handleNodeToggle = (nodeId: string) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     const targetNodeDatum = matches[0];
-    // Persist the SyntheticEvent for downstream handling by users.
-    evt.persist();
+
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNodeDatum.__rd3t.collapsed) {
         Tree.expandNode(targetNodeDatum);
@@ -289,31 +285,32 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
       if (this.props.enableLegacyTransitions) {
         // Lock node toggling while transition takes place.
-        this.setState({ data, isTransitioning: true }, () =>
-          this.handleOnClickCb(targetNodeDatum, evt)
-        );
+        this.setState({ data, isTransitioning: true });
         // Await transitionDuration + 10 ms before unlocking node toggling again.
         setTimeout(
           () => this.setState({ isTransitioning: false }),
           this.props.transitionDuration + 10
         );
       } else {
-        this.setState({ data }, () => this.handleOnClickCb(targetNodeDatum, evt));
+        this.setState({ data });
       }
 
       this.internalState.targetNode = targetNodeDatum;
-    } else {
-      this.handleOnClickCb(targetNodeDatum, evt);
     }
   };
 
   /**
-   * Handles the user-defined `onClick` function.
+   * Handles the user-defined `onNodeClick` function.
    */
-  handleOnClickCb = (targetNode: TreeNodeDatum, evt: SyntheticEvent) => {
-    const { onClick } = this.props;
-    if (onClick && typeof onClick === 'function') {
-      onClick(clone(targetNode), evt);
+  handleOnNodeClickCb = (nodeId: string, evt: SyntheticEvent) => {
+    const { onNodeClick } = this.props;
+    if (onNodeClick && typeof onNodeClick === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
+      // Persist the SyntheticEvent for downstream handling by users.
+      evt.persist();
+      onNodeClick(clone(targetNode), evt);
     }
   };
 
@@ -330,17 +327,17 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   /**
-   * Handles the user-defined `onMouseOver` function.
+   * Handles the user-defined `onNodeMouseOver` function.
    */
-  handleOnMouseOverCb = (nodeId: string, evt: SyntheticEvent) => {
-    const { onMouseOver } = this.props;
-    if (onMouseOver && typeof onMouseOver === 'function') {
+  handleOnNodeMouseOverCb = (nodeId: string, evt: SyntheticEvent) => {
+    const { onNodeMouseOver } = this.props;
+    if (onNodeMouseOver && typeof onNodeMouseOver === 'function') {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
-      onMouseOver(clone(targetNode), evt);
+      onNodeMouseOver(clone(targetNode), evt);
     }
   };
 
@@ -357,17 +354,17 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   /**
-   * Handles the user-defined `onMouseOut` function.
+   * Handles the user-defined `onNodeMouseOut` function.
    */
-  handleOnMouseOutCb = (nodeId: string, evt: SyntheticEvent) => {
-    const { onMouseOut } = this.props;
-    if (onMouseOut && typeof onMouseOut === 'function') {
+  handleOnNodeMouseOutCb = (nodeId: string, evt: SyntheticEvent) => {
+    const { onNodeMouseOut } = this.props;
+    if (onNodeMouseOut && typeof onNodeMouseOut === 'function') {
       const data = clone(this.state.data);
       const matches = this.findNodesById(nodeId, data, []);
       const targetNode = matches[0];
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
-      onMouseOut(clone(targetNode), evt);
+      onNodeMouseOut(clone(targetNode), evt);
     }
   };
 
@@ -530,9 +527,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   orientation={orientation}
                   enableLegacyTransitions={enableLegacyTransitions}
                   transitionDuration={transitionDuration}
-                  onClick={this.handleNodeToggle}
-                  onMouseOver={this.handleOnMouseOverCb}
-                  onMouseOut={this.handleOnMouseOutCb}
+                  onNodeToggle={this.handleNodeToggle}
+                  onNodeClick={this.handleOnNodeClickCb}
+                  onNodeMouseOver={this.handleOnNodeMouseOverCb}
+                  onNodeMouseOut={this.handleOnNodeMouseOutCb}
                   subscriptions={subscriptions}
                 />
               );

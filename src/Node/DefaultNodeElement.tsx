@@ -1,5 +1,5 @@
-import React from 'react';
-import { TreeNodeDatum } from '../types/common';
+import React, { SyntheticEvent } from 'react';
+import { CustomNodeElementProps, TreeNodeDatum, SyntheticEventHandler } from '../types/common';
 
 const textLayout = {
   title: {
@@ -12,20 +12,36 @@ const textLayout = {
   },
 };
 
-type DefaultNodeElementProps = {
-  nodeDatum: TreeNodeDatum;
-};
+export interface DefaultNodeElementProps extends CustomNodeElementProps {
+  onNodeClick: SyntheticEventHandler;
+  onNodeMouseOver: SyntheticEventHandler;
+  onNodeMouseOut: SyntheticEventHandler;
+}
 
-const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({ nodeDatum }) => (
+const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({
+  data,
+  toggleNode,
+  onNodeClick,
+  onNodeMouseOver,
+  onNodeMouseOut,
+}) => (
   <>
-    <circle r={20}></circle>
+    <circle
+      r={20}
+      onClick={evt => {
+        toggleNode();
+        onNodeClick(evt);
+      }}
+      onMouseOver={onNodeMouseOver}
+      onMouseOut={onNodeMouseOut}
+    ></circle>
     <g className="rd3t-label">
       <text className="rd3t-label__title" {...textLayout.title}>
-        {nodeDatum.name}
+        {data.name}
       </text>
       <text className="rd3t-label__attributes">
-        {nodeDatum.attributes &&
-          Object.entries(nodeDatum.attributes).map(([labelKey, labelValue], i) => (
+        {data.attributes &&
+          Object.entries(data.attributes).map(([labelKey, labelValue], i) => (
             <tspan key={`${labelKey}-${i}`} {...textLayout.attribute}>
               {labelKey}: {labelValue}
             </tspan>

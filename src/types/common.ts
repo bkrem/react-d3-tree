@@ -31,7 +31,14 @@ export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
 export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
 export type PathClassFunction = PathFunction;
 
+export type SyntheticEventHandler = (evt: React.SyntheticEvent) => void;
+
+export interface CustomNodeElementProps {
+  data: TreeNodeDatum;
+  toggleNode: () => void;
+}
+
 /**
  * Function to render a custom node element. Should return a `ReactElement`.
  */
-export type RenderCustomNodeElementFn = (nodeDatum: TreeNodeDatum) => JSX.Element;
+export type RenderCustomNodeElementFn = (rd3tProps: CustomNodeElementProps) => JSX.Element;

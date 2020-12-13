@@ -39,23 +39,23 @@ export interface TreeProps {
   /**
    * Called when a node is clicked.
    *
-   * {@link Tree.defaultProps.onClick | Default value}
+   * {@link Tree.defaultProps.onNodeClick | Default value}
    */
-  onClick?: TreeNodeEventCallback;
+  onNodeClick?: TreeNodeEventCallback;
 
   /**
    * Called when mouse enters the space belonging to a node.
    *
-   * {@link Tree.defaultProps.onMouseOver | Default value}
+   * {@link Tree.defaultProps.onNodeMouseOver | Default value}
    */
-  onMouseOver?: TreeNodeEventCallback;
+  onNodeMouseOver?: TreeNodeEventCallback;
 
   /**
    * Called when mouse leaves the space belonging to a node.
    *
-   * {@link Tree.defaultProps.onMouseOut | Default value}
+   * {@link Tree.defaultProps.onNodeMouseOut | Default value}
    */
-  onMouseOut?: TreeNodeEventCallback;
+  onNodeMouseOut?: TreeNodeEventCallback;
 
   /**
    * Called when a link is clicked.
