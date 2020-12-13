@@ -24,7 +24,7 @@ const customNodeFnMapping = {
     description: 'PureSvgNodeElement - Pure SVG node & label (IE11 compatible)',
     fn: (rd3tProps, appState) => (
       <PureSvgNodeElement
-        nodeDatum={rd3tProps.data}
+        nodeDatum={rd3tProps.nodeDatum}
         toggleNode={rd3tProps.toggleNode}
         orientation={appState.orientation}
       />
@@ -32,9 +32,9 @@ const customNodeFnMapping = {
   },
   mixed: {
     description: 'MixedNodeElement - SVG `circle` + `foreignObject` label',
-    fn: ({ data, toggleNode }, appState) => (
+    fn: ({ nodeDatum, toggleNode }, appState) => (
       <MixedNodeElement
-        nodeData={data}
+        nodeData={nodeDatum}
         triggerNodeToggle={toggleNode}
         foreignObjectProps={{
           width: appState.nodeSize.x,

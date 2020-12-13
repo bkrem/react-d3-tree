@@ -34,7 +34,7 @@ export type PathClassFunction = PathFunction;
 export type SyntheticEventHandler = (evt: React.SyntheticEvent) => void;
 
 export interface CustomNodeElementProps {
-  data: TreeNodeDatum;
+  nodeDatum: TreeNodeDatum;
   toggleNode: () => void;
 }
 

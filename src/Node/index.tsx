@@ -113,14 +113,15 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.applyTransform(transform, transitionDuration);
   }
 
+  // TODO: needs tests
   renderNodeElement = () => {
     const { data, renderCustomNodeElement } = this.props;
     if (typeof renderCustomNodeElement === 'function') {
-      return renderCustomNodeElement({ data, toggleNode: this.handleNodeToggle });
+      return renderCustomNodeElement({ nodeDatum: data, toggleNode: this.handleNodeToggle });
     }
 
     return DefaultNodeElement({
-      data,
+      nodeDatum: data,
       toggleNode: this.handleNodeToggle,
       onNodeClick: this.handleOnClick,
       onNodeMouseOver: this.handleOnMouseOver,
