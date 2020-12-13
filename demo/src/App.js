@@ -11,7 +11,7 @@ import './App.css';
 // Data examples
 import orgChartJson from './examples/org-chart.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
-import reactTree from './examples/react-repo';
+import reactTree from './examples/react-tree';
 
 console.log('Demo React version: ', React.version);
 
@@ -233,7 +233,7 @@ class App extends Component {
               <div className="prop-container">
                 <h2 className="title">React D3 Tree</h2>
                 <h3 className="title">v{version}</h3>
-                <span className="prop">Examples</span>
+                <h4 className="prop">Examples</h4>
                 <div style={{ marginBottom: '5px' }}>
                   <button
                     type="button"
@@ -269,9 +269,9 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">
+                <h4 className="prop">
                   Dynamically updating <code>data</code>
-                </span>
+                </h4>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
@@ -289,7 +289,7 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">Orientation</span>
+                <h4 className="prop">Orientation</h4>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
@@ -307,7 +307,7 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">Path Function</span>
+                <h4 className="prop">Path Function</h4>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
@@ -352,7 +352,7 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">Collapsible</span>
+                <h4 className="prop">Collapsible</h4>
                 <Switch
                   name="collapsibleBtn"
                   checked={this.state.collapsible}
@@ -361,7 +361,7 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">Collapse neighbor nodes</span>
+                <h4 className="prop">Collapse neighbor nodes</h4>
                 <Switch
                   name="collapseNeighborsBtn"
                   checked={this.state.shouldCollapseNeighborNodes}
@@ -370,7 +370,7 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <span className="prop">Enable Legacy Transitions</span>
+                <h4 className="prop">Enable Legacy Transitions</h4>
                 <Switch
                   name="enableLegacyTransitionsBtn"
                   checked={this.state.enableLegacyTransitions}

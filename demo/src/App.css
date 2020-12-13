@@ -7,7 +7,6 @@
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .demo-container {
@@ -22,9 +21,7 @@
   width: 30%;
   display: flex;
   flex-direction: column;
-  background: #FC5C7D;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #6A82FB, #FC5C7D);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #6A82FB, #FC5C7D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #f9c0c0;
 }
 
 .controls-container {
@@ -32,7 +29,6 @@
   flex-direction: column;
   flex-basis: 1;
   overflow-y: scroll;
-  background: rgba(0,0,0,0.4)
 }
 
 .state-container {
@@ -57,9 +53,7 @@
 
 .tree-container {
   height: 100%;
-  background: #FC5C7D;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #6A82FB, #FC5C7D);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #6A82FB, #FC5C7D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #ccf6c8;
 }
 
 .prop-container {
@@ -68,7 +62,6 @@
 }
 .prop {
   font-weight: bold;
-  color: rgba(255,255,255,0.9);
   display: block;
 }
 
@@ -77,13 +70,19 @@
 }
 
 .sub-prop {
-  color: rgba(255,255,255,0.9);
   padding: 5px;
 }
 
 .btn-controls {
-  color: rgba(255, 255, 255, 0.9);
-  background-color: #FC5C7D;
+  background-color: white;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+  
+.btn-controls:hover,
+.btn-controls:focus,
+.btn-controls:active {
+  color: #0070f3;
+  border-color: #0070f3;
 }
 
 /* Custom node classes */
