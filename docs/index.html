@@ -67,28 +67,27 @@
 				<a href="#react-d3-tree-" id="react-d3-tree-" style="color: inherit; text-decoration: none;">
 					<h1>React D3 Tree <!-- omit in toc --></h1>
 				</a>
-				<p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/bkrem/react-d3-tree.svg" alt="Greenkeeper badge"></a>
-					<a href="https://travis-ci.org/bkrem/react-d3-tree"><img src="https://travis-ci.org/bkrem/react-d3-tree.svg?branch=master" alt="Build Status"></a>
+				<p><img src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg" alt="Build Status">
 					<a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master"><img src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master" alt="Coverage Status"></a>
-					<a href="https://www.codacy.com/app/ben.kremer/react-d3-tree?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bkrem/react-d3-tree&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/f9ed4796ee9c448dbcd80af2954cc0d1" alt="Codacy Badge"></a>
 					<a href="https://badge.fury.io/js/react-d3-tree"><img src="https://badge.fury.io/js/react-d3-tree.svg" alt="npm version"></a>
 				<a href="https://www.npmjs.com/package/react-d3-tree"><img src="https://img.shields.io/npm/dm/react-d3-tree.svg" alt="npm"></a></p>
-				<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. ancestor trees, organisational structure, package dependencies) as an animated &amp; interactive tree graph by leveraging <a href="https://d3js.org/">D3</a>&#39;s <code>tree</code> layout.</p>
+				<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph by leveraging <a href="https://d3js.org/">D3</a>&#39;s <code>tree</code> layout.</p>
+				<a href="#👾-playground" id="👾-playground" style="color: inherit; text-decoration: none;">
+					<h3>👾 <a href="https://bkrem.github.io/react-d3-tree">Playground</a></h3>
+				</a>
+				<a href="#📖-api-documentation" id="📖-api-documentation" style="color: inherit; text-decoration: none;">
+					<h3>📖 <a href="https://bkrem.github.io/react-d3-tree/docs">API Documentation</a></h3>
+				</a>
+				<blockquote>
+					<p><strong>Looking for the v1 API?</strong> Click <a href="https://github.com/bkrem/react-d3-tree/tree/v1">here</a>.</p>
+				</blockquote>
 				<a href="#contents-" id="contents-" style="color: inherit; text-decoration: none;">
 					<h2>Contents <!-- omit in toc --></h2>
 				</a>
 				<ul>
-					<li><a href="#demo">Demo</a></li>
 					<li><a href="#installation">Installation</a></li>
 					<li><a href="#usage">Usage</a></li>
 					<li><a href="#props">Props</a></li>
-					<li><a href="#node-shapes">Node shapes</a><ul>
-							<li><a href="#overridable-shapeprops">Overridable <code>shapeProps</code></a></li>
-							<li><a href="#individual-shapeprops">Individual <code>shapeProps</code></a></li>
-						</ul>
-					</li>
-					<li><a href="#styling">Styling</a></li>
-					<li><a href="#pre-defining-a-nodes-_collapsed-state">Pre-defining a node&#39;s <code>_collapsed</code> state</a></li>
 					<li><a href="#keeping-large-trees-responsive">Keeping large trees responsive</a></li>
 					<li><a href="#external-data-sources">External data sources</a><ul>
 							<li><a href="#example">Example</a></li>
@@ -107,17 +106,9 @@
 						</ul>
 					</li>
 				</ul>
-				<a href="#demo" id="demo" style="color: inherit; text-decoration: none;">
-					<h2>Demo</h2>
-				</a>
-				<ul>
-					<li>Current release: <a href="https://bkrem.github.io/react-d3-tree-demo/">https://bkrem.github.io/react-d3-tree-demo/</a></li>
-				</ul>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
 				</a>
-				<pre><code class="language-bash">yarn add react-d3-tree</code></pre>
-				<p>or</p>
 				<pre><code class="language-bash">npm i --save react-d3-tree</code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
@@ -125,435 +116,54 @@
 				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
 
-<span class="hljs-keyword">const</span> myTreeData = [
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Top Level&#x27;</span>,
-    <span class="hljs-attr">attributes</span>: {
-      <span class="hljs-attr">keyA</span>: <span class="hljs-string">&#x27;val A&#x27;</span>,
-      <span class="hljs-attr">keyB</span>: <span class="hljs-string">&#x27;val B&#x27;</span>,
-      <span class="hljs-attr">keyC</span>: <span class="hljs-string">&#x27;val C&#x27;</span>,
-    },
-    <span class="hljs-attr">children</span>: [
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Level 2: A&#x27;</span>,
-        <span class="hljs-attr">attributes</span>: {
-          <span class="hljs-attr">keyA</span>: <span class="hljs-string">&#x27;val A&#x27;</span>,
-          <span class="hljs-attr">keyB</span>: <span class="hljs-string">&#x27;val B&#x27;</span>,
-          <span class="hljs-attr">keyC</span>: <span class="hljs-string">&#x27;val C&#x27;</span>,
+<span class="hljs-keyword">const</span> orgChartJson = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;CEO&#x27;</span>,
+  <span class="hljs-attr">children</span>: [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Manager&#x27;</span>,
+      <span class="hljs-attr">attributes</span>: {
+        <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Production&#x27;</span>,
+      },
+      <span class="hljs-attr">children</span>: [
+        {
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Foreman&#x27;</span>,
+          <span class="hljs-attr">attributes</span>: {
+            <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Fabrication&#x27;</span>,
+          },
+          <span class="hljs-attr">children</span>: [
+            {
+              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Workers&#x27;</span>,
+            },
+          ],
         },
-      },
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Level 2: B&#x27;</span>,
-      },
-    ],
-  },
-];
+        {
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Foreman&#x27;</span>,
+          <span class="hljs-attr">attributes</span>: {
+            <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Assembly&#x27;</span>,
+          },
+          <span class="hljs-attr">children</span>: [
+            {
+              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Workers&#x27;</span>,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-  <span class="hljs-function"><span class="hljs-title">render</span>(<span class="hljs-params"></span>)</span> {
-    <span class="hljs-keyword">return</span> (
-      {<span class="hljs-comment">/* &lt;Tree /&gt; will fill width/height of its container; in this case `#treeWrapper` */</span>}
-      &lt;div id=<span class="hljs-string">&quot;treeWrapper&quot;</span> style={{<span class="hljs-attr">width</span>: <span class="hljs-string">&#x27;50em&#x27;</span>, <span class="hljs-attr">height</span>: <span class="hljs-string">&#x27;20em&#x27;</span>}}&gt;
-
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span> <span class="hljs-attr">data</span>=<span class="hljs-string">{myTreeData}</span> /&gt;</span></span>
-
-      &lt;/div&gt;
-    );
-  }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">OrgChartTree</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-comment">// `&lt;Tree /&gt;` will fill width/height of its container; in this case `#treeWrapper`.</span>
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;treeWrapper&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">50em</span>&#x27;, <span class="hljs-attr">height:</span> &#x27;<span class="hljs-attr">20em</span>&#x27; }}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Tree</span> <span class="hljs-attr">data</span>=<span class="hljs-string">{orgChartJson}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
 }</code></pre>
 				<a href="#props" id="props" style="color: inherit; text-decoration: none;">
 					<h2>Props</h2>
 				</a>
-				<table>
-					<thead>
-						<tr>
-							<th align="left">Property</th>
-							<th align="left">Type</th>
-							<th align="left">Options</th>
-							<th align="left">Required?</th>
-							<th align="left">Default</th>
-							<th align="left">Description</th>
-						</tr>
-					</thead>
-					<tbody><tr>
-							<td align="left"><code>data</code></td>
-							<td align="left"><code>array</code><br/><code>object</code></td>
-							<td align="left"></td>
-							<td align="left">required</td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Single-element array containing the root node object (see <code>myTreeData</code> above). <br/> Passing the root node object without an array wrapping it is also possible. <br /><br /> <code>react-d3-tree</code> will automatically attach a unique <code>id</code> attribute to each node in the DOM, as well as <code>data-source-id</code> &amp; <code>data-target-id</code> attributes to each link connecting two nodes.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>nodeSvgShape</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left">see <a href="#node-shapes">Node shapes</a></td>
-							<td align="left"></td>
-							<td align="left"><code>{shape: &#39;circle&#39;, shapeProps: {r: 10}}</code></td>
-							<td align="left">Sets a specific SVG shape element + shapeProps to be used for each node.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>nodeLabelComponent</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left">see <a href="#using-foreignobjects">Using foreignObjects</a></td>
-							<td align="left"></td>
-							<td align="left"><code>null</code></td>
-							<td align="left">Allows using a React component as a node label; requires <code>allowForeignObjects</code> to be set.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onClick</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when a node is clicked. <br /><br />Has the function signature <code>(nodeData, evt)</code>. The clicked node&#39;s data object is passed as first parameter, event object as second.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onMouseOver</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when mouse enters the space belonging to a node. <br /><br />Has the function signature <code>(nodeData, evt)</code>. The clicked node&#39;s data object is passed as first parameter, event object as second.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onMouseOut</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when mouse leaves the space belonging to a node. <br /><br />Has the function signature <code>(nodeData, evt)</code>. The clicked node&#39;s data object is passed as first parameter, event object as second.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onLinkClick</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when a link is clicked. <br /><br />Has the function signature <code>(linkSource, linkTarget, evt)</code>. The clicked link&#39;s parent data object is passed as first parameter, the child&#39;s as second, the event object as third.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onLinkMouseOver</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when mouse enters the space belonging to a link. <br /><br />Has the function signature <code>(linkSource, linkTarget, evt)</code>. The clicked link&#39;s parent data object is passed as first parameter, the child&#39;s as second, the event object as third.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onLinkMouseOut</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when mouse leaves the space belonging to a link. <br /><br />Has the function signature <code>(linkSource, linkTarget, evt)</code>. The clicked link&#39;s parent data object is passed as first parameter, the child&#39;s as second, the event object as third.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>onUpdate</code></td>
-							<td align="left"><code>func</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Callback function to be called when the inner D3 component updates. That is - on every zoom or translate event, or when tree branches are toggled. <br /><br />Has the function signature <code>(updateTarget: {targetNode, currentTranslate, currentZoom})</code>.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>orientation</code></td>
-							<td align="left"><code>string</code> (enum)</td>
-							<td align="left"><code>horizontal</code> <code>vertical</code></td>
-							<td align="left"></td>
-							<td align="left"><code>horizontal</code></td>
-							<td align="left"><code>horizontal</code> - Tree expands left-to-right. <br /><br /> <code>vertical</code> - Tree expands top-to-bottom.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>translate</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>{x: 0, y: 0}</code></td>
-							<td align="left">Translates the graph along the x/y axis by the specified amount of pixels (avoids the graph being stuck in the top left canvas corner).</td>
-						</tr>
-						<tr>
-							<td align="left"><code>pathFunc</code></td>
-							<td align="left"><code>string (enum)</code>/<code>func</code></td>
-							<td align="left"><code>diagonal</code><br/><code>elbow</code><br/><code>straight</code><br/><code>customFunc(linkData, orientation)</code></td>
-							<td align="left"></td>
-							<td align="left"><code>diagonal</code></td>
-							<td align="left"><code>diagonal</code> - Smooth, curved edges between parent-child nodes. <br /><br /> <code>elbow</code> - Sharp edges at right angles between parent-child nodes.  <br /><br /> <code>straight</code> - Straight lines between parent-child nodes. <br /><br /> <code>customFunc</code> - Custom draw function that accepts <code>linkData</code> as its first param and <code>orientation</code> as its second.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>collapsible</code></td>
-							<td align="left"><code>bool</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>true</code></td>
-							<td align="left">Toggles ability to collapse/expand the tree&#39;s nodes by clicking them.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>useCollapseData</code></td>
-							<td align="left"><code>bool</code></td>
-							<td align="left">see <a href="#pre-defining-a-nodes-_collapsed-state">Pre-defining a node&#39;s <code>_collapsed</code> state</a></td>
-							<td align="left"></td>
-							<td align="left"><code>false</code></td>
-							<td align="left">Toggles whether the tree should automatically use any <code>_collapsed: bool</code> properties it finds on nodes in the passed data set to configure its initial layout.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>shouldCollapseNeighborNodes</code></td>
-							<td align="left"><code>bool</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>false</code></td>
-							<td align="left">If a node is currently being expanded, all other nodes at the same depth will be collapsed.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>initialDepth</code></td>
-							<td align="left"><code>number</code></td>
-							<td align="left"><code>0..n</code></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Sets the maximum node depth to which the tree is expanded on its initial render. <br /> Tree renders to full depth if prop is omitted.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>depthFactor</code></td>
-							<td align="left"><code>number</code></td>
-							<td align="left"><code>-n..0..n</code></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Ensures the tree takes up a fixed amount of space (<code>node.y = node.depth * depthFactor</code>), regardless of tree depth. <br /> <strong>TIP</strong>: Negative values invert the tree&#39;s direction.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>zoomable</code></td>
-							<td align="left"><code>bool</code></td>
-							<td align="left"></td>
-							<td align="left"></td>
-							<td align="left"><code>true</code></td>
-							<td align="left">Toggles ability to zoom in/out on the Tree by scaling it according to <code>props.scaleExtent</code>.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>zoom</code></td>
-							<td align="left"><code>number</code></td>
-							<td align="left"><code>0..n</code></td>
-							<td align="left"></td>
-							<td align="left"><code>1</code></td>
-							<td align="left">A floating point number to set the initial zoom level. It is constrained by <code>props.scaleExtent</code>. <code>1</code> is the default &quot;non-zoomed&quot; level.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>scaleExtent</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left"><code>{min: 0..n, max: 0..n}</code></td>
-							<td align="left"></td>
-							<td align="left"><code>{min: 0.1, max: 1}</code></td>
-							<td align="left">Sets the minimum/maximum extent to which the tree can be scaled if <code>props.zoomable</code> is true.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>nodeSize</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left"><code>{x: 0..n, y: 0..n}</code></td>
-							<td align="left"></td>
-							<td align="left"><code>{x: 140, y: 140}</code></td>
-							<td align="left">Sets a fixed size for each node. <br /><br /> This does not affect node circle sizes, circle sizes are handled by the <code>circleRadius</code> prop.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>separation</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left"><code>{siblings: 0..n, nonSiblings: 0..n}</code></td>
-							<td align="left"></td>
-							<td align="left"><code>{siblings: 1, nonSiblings: 2}</code></td>
-							<td align="left">Sets separation between neighbouring nodes, differentiating between siblings (same parent) and non-siblings.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>transitionDuration</code></td>
-							<td align="left"><code>number</code></td>
-							<td align="left"><code>0..n</code></td>
-							<td align="left"></td>
-							<td align="left"><code>500</code></td>
-							<td align="left">Sets the animation duration (in ms) of each expansion/collapse of a tree node. <br /><br /> Set this to <code>0</code> to deactivate animations completely.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>textLayout</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left"><code>{textAnchor: enum, x: -n..0..n, y: -n..0..n, transform: string}</code></td>
-							<td align="left"></td>
-							<td align="left"><code>{textAnchor: &quot;start&quot;, x: 10, y: -10, transform: undefined }</code></td>
-							<td align="left">Configures the positioning of each node&#39;s text (name &amp; attributes) relative to the node itself. Defining a <code>textLayout</code> property on a node passed in <code>props.data</code> will override this global configuration for that node.<br/><br/><code>textAnchor</code> enums mirror the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-anchor"><code>text-anchor</code> spec</a>.<br/><br/><code>x</code> &amp; <code>y</code> accept integers denoting <code>px</code> values.<br/><br/> <code>transform</code> mirrors the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">svg <code>transform</code> spec</a>.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>styles</code></td>
-							<td align="left"><code>object</code></td>
-							<td align="left">see <a href="#styling">Styling</a></td>
-							<td align="left"></td>
-							<td align="left"><code>Node</code>/<code>Link</code> CSS files</td>
-							<td align="left">Overrides and/or enhances the tree&#39;s default styling.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>allowForeignObjects</code></td>
-							<td align="left"><code>bool</code></td>
-							<td align="left">see <a href="#using-foreignobjects">Using foreignObjects</a></td>
-							<td align="left"></td>
-							<td align="left"><code>false</code></td>
-							<td align="left">Allows use of partially supported <code>&lt;foreignObject /&gt;</code> elements.</td>
-						</tr>
-						<tr>
-							<td align="left"><code>circleRadius</code> (legacy)</td>
-							<td align="left"><code>number</code></td>
-							<td align="left"><code>0..n</code></td>
-							<td align="left"></td>
-							<td align="left"><code>undefined</code></td>
-							<td align="left">Sets the radius of each node&#39;s <code>&lt;circle&gt;</code> element.<br /><br /> <strong>Will be deprecated in v2, please use <code>nodeSvgShape</code> instead.</strong></td>
-						</tr>
-				</tbody></table>
-				<a href="#node-shapes" id="node-shapes" style="color: inherit; text-decoration: none;">
-					<h2>Node shapes</h2>
-				</a>
-				<p>The <code>nodeSvgShape</code> prop allows specifying any <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">SVG shape primitive</a> to describe how the tree&#39;s nodes should be shaped.</p>
-				<p>For example, assuming we want to use squares instead of the default circles, we can do:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> svgSquare = {
-  <span class="hljs-attr">shape</span>: <span class="hljs-string">&#x27;rect&#x27;</span>,
-  <span class="hljs-attr">shapeProps</span>: {
-    <span class="hljs-attr">width</span>: <span class="hljs-number">20</span>,
-    <span class="hljs-attr">height</span>: <span class="hljs-number">20</span>,
-    <span class="hljs-attr">x</span>: -<span class="hljs-number">10</span>,
-    <span class="hljs-attr">y</span>: -<span class="hljs-number">10</span>,
-  }
-}
-
-<span class="hljs-comment">// ...</span>
-
-&lt;Tree data={myTreeData} nodeSvgShape={svgSquare}&gt;</code></pre>
-				<p>To avoid rendering any node element, simply set <code>nodeSvgShape</code> to <code>{ shape: &#39;none&#39; }</code>.</p>
-				<a href="#overridable-shapeprops" id="overridable-shapeprops" style="color: inherit; text-decoration: none;">
-					<h3>Overridable <code>shapeProps</code></h3>
-				</a>
-				<p> <code>shapeProps</code> is currently merged with <code>node.circle</code>/<code>leafNode.circle</code> (see <a href="#styling">Styling</a>).</p>
-				<p> This means any properties passed in <code>shapeProps</code> will be overridden by <strong>properties with the same key</strong> in the <code>node.circle</code>/<code>leafNode.circle</code> style props.
-				This is to prevent breaking the legacy usage of <code>circleRadius</code> + styling via <code>node/leafNode</code> properties until it is deprecated fully in v2.</p>
-				<p><strong>From v1.5.x onwards, it is therefore recommended to pass all node styling properties through <code>shapeProps</code></strong>.</p>
-				<a href="#individual-shapeprops" id="individual-shapeprops" style="color: inherit; text-decoration: none;">
-					<h3>Individual <code>shapeProps</code></h3>
-				</a>
-				<p><code>shapeProps</code> can be passed to a node individually by adding the <code>nodeSvgShape</code> property to the relevant node&#39;s data set. This allows setting each node&#39;s style, shape and size independently of the tree&#39;s overall <code>shapeProps</code> configuration (see <a href="#styling">Styling</a>).</p>
-				<p>The usage example above can be extended to include individual <code>shapeProps</code>:</p>
-				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-<span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
-
-<span class="hljs-keyword">const</span> myTreeData = [
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Parent Node&#x27;</span>,
-    <span class="hljs-attr">attributes</span>: {
-      <span class="hljs-attr">keyA</span>: <span class="hljs-string">&#x27;val A&#x27;</span>,
-      <span class="hljs-attr">keyB</span>: <span class="hljs-string">&#x27;val B&#x27;</span>,
-      <span class="hljs-attr">keyC</span>: <span class="hljs-string">&#x27;val C&#x27;</span>,
-    },
-    <span class="hljs-attr">nodeSvgShape</span>: {
-      <span class="hljs-attr">shape</span>: <span class="hljs-string">&#x27;circle&#x27;</span>,
-      <span class="hljs-attr">shapeProps</span>: {
-        <span class="hljs-attr">r</span>: <span class="hljs-number">10</span>,
-        <span class="hljs-attr">fill</span>: <span class="hljs-string">&#x27;blue&#x27;</span>,
-      },
-    },
-    <span class="hljs-attr">children</span>: [
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Inner Node&#x27;</span>,
-        <span class="hljs-attr">attributes</span>: {
-          <span class="hljs-attr">keyA</span>: <span class="hljs-string">&#x27;val A&#x27;</span>,
-          <span class="hljs-attr">keyB</span>: <span class="hljs-string">&#x27;val B&#x27;</span>,
-          <span class="hljs-attr">keyC</span>: <span class="hljs-string">&#x27;val C&#x27;</span>,
-        },
-        <span class="hljs-attr">nodeSvgShape</span>: {
-          <span class="hljs-attr">shape</span>: <span class="hljs-string">&#x27;rect&#x27;</span>,
-          <span class="hljs-attr">shapeProps</span>: {
-            <span class="hljs-attr">width</span>: <span class="hljs-number">20</span>,
-            <span class="hljs-attr">height</span>: <span class="hljs-number">20</span>,
-            <span class="hljs-attr">x</span>: -<span class="hljs-number">10</span>,
-            <span class="hljs-attr">y</span>: -<span class="hljs-number">10</span>,
-            <span class="hljs-attr">fill</span>: <span class="hljs-string">&#x27;red&#x27;</span>,
-          },
-        },
-      },
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Level 2: B&#x27;</span>,
-      },
-    ],
-  },
-];
-
-...
-</code></pre>
-				<a href="#styling" id="styling" style="color: inherit; text-decoration: none;">
-					<h2>Styling</h2>
-				</a>
-				<p>The tree&#39;s <code>styles</code> prop may be used to override any of the tree&#39;s default styling.
-				The following object shape is expected by <code>styles</code>:</p>
-				<pre><code class="language-js">{
-  <span class="hljs-attr">links</span>: &lt;svgStyleObject&gt;,
-  nodes: {
-    <span class="hljs-attr">node</span>: {
-      <span class="hljs-attr">circle</span>: &lt;svgStyleObject&gt;,
-      name: &lt;svgStyleObject&gt;,
-      attributes: &lt;svgStyleObject&gt;,
-    },
-    <span class="hljs-attr">leafNode</span>: {
-      <span class="hljs-attr">circle</span>: &lt;svgStyleObject&gt;,
-      name: &lt;svgStyleObject&gt;,
-      attributes: &lt;svgStyleObject&gt;,
-    },
-  },
-}</code></pre>
-				<p>where <code>&lt;svgStyleObject&gt;</code> is any object containing CSS-like properties that are compatible with an <code>&lt;svg&gt;</code> element&#39;s <code>style</code> attribute, for example:</p>
-				<pre><code class="language-js">{
-  <span class="hljs-attr">stroke</span>: <span class="hljs-string">&#x27;blue&#x27;</span>,
-  <span class="hljs-attr">strokeWidth</span>: <span class="hljs-number">3</span>,
-}</code></pre>
-				<p>For more information on the SVG <code>style</code> attribute, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/style">check this out</a>.</p>
-				<a href="#pre-defining-a-node39s-_collapsed-state" id="pre-defining-a-node39s-_collapsed-state" style="color: inherit; text-decoration: none;">
-					<h2>Pre-defining a node&#39;s <code>_collapsed</code> state</h2>
-				</a>
-				<p>The tree&#39;s initial layout can be specified node-for-node by enabling the <code>useCollapseData</code> prop.
-				If activated, <code>react-d3-tree</code> will look for nodes specifying their own <code>_collapsed</code> property and structure the initial layout accordingly.</p>
-				<p>For example, given an input data set of the shape:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> dataWithCollapsedProperties = [
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Top Level&#x27;</span>,
-    <span class="hljs-attr">children</span>: [
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;2: A&#x27;</span>,
-        <span class="hljs-attr">children</span>: [
-          {
-            <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;3: Collapsed son of A&#x27;</span>,
-            <span class="hljs-attr">_collapsed</span>: <span class="hljs-literal">true</span>,
-            <span class="hljs-attr">children</span>: [
-              {
-                <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;4: Son of A&#x27;</span>,
-              },
-              {
-                <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;4: Daughter of A&#x27;</span>,
-              },
-            ],
-          },
-          {
-            <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;3: Daughter of A&#x27;</span>,
-          },
-        ],
-      },
-      {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;2: B&#x27;</span>,
-      },
-    ],
-  },
-];</code></pre>
-				<p>all nodes (with children) will be expanded except the <code>Collapsed son of A</code> node.</p>
-				<p>Clarifications:</p>
-				<ul>
-					<li>Why is a leading underscore required for <code>_collapsed</code>?<ul>
-							<li>D3 binds its own internal <code>collapsed</code> property to each node, <code>react-d3-tree</code> simply adds a leading underscore to create a separate namespace.</li>
-						</ul>
-					</li>
-					<li>Should <code>_collapsed: false</code> be explicitly set?<ul>
-							<li>No, there&#39;s no need to do this since <code>react-d3-tree</code> assumes a node to be expanded unless specified otherwise.</li>
-						</ul>
-					</li>
-				</ul>
-				<blockquote>
-					<p><strong>Note:</strong> <code>props.useCollapseData</code> and <code>props.initialDepth</code> are mutually exclusive. If <code>useCollapseData</code> is set, <code>initialDepth</code> values will be ignored.</p>
-				</blockquote>
+				<p>For details on the props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html">TreeProps docs</a>.</p>
 				<a href="#keeping-large-trees-responsive" id="keeping-large-trees-responsive" style="color: inherit; text-decoration: none;">
 					<h2>Keeping large trees responsive</h2>
 				</a>
