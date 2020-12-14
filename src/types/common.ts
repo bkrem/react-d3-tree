@@ -33,12 +33,21 @@ export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: React.SyntheticEvent) => void;
 
+/**
+ * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
+ */
 export interface CustomNodeElementProps {
+  /**
+   * The full datum of the node that is being rendered.
+   */
   nodeDatum: TreeNodeDatum;
+  /**
+   * Toggles the expanded/collapsed state of the node.
+   *
+   * Provided for customized control flow; e.g. if we want to toggle the node when its
+   * label is clicked instead of the node itself.
+   */
   toggleNode: () => void;
 }
 
-/**
- * Function to render a custom node element. Should return a `ReactElement`.
- */
 export type RenderCustomNodeElementFn = (rd3tProps: CustomNodeElementProps) => JSX.Element;

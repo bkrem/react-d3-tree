@@ -34,6 +34,16 @@ export interface TreeProps {
    */
   data: RawNodeDatum[] | RawNodeDatum;
 
+  /**
+   * Custom render function that will be used for every node in the tree.
+   *
+   * The function is passed `CustomNodeElementProps` as its first argument.
+   * `react-d3-tree` expects the function to return a `ReactElement`.
+   *
+   * See the `RenderCustomNodeElementFn` type for more details.
+   *
+   * {@link Tree.defaultProps.renderCustomNodeElement | Default value}
+   */
   renderCustomNodeElement?: RenderCustomNodeElementFn;
 
   /**

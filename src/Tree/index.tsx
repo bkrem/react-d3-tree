@@ -51,6 +51,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     rootNodeClassName: '',
     branchNodeClassName: '',
     leafNodeClassName: '',
+    renderCustomNodeElement: undefined,
     enableLegacyTransitions: false,
   };
 
