@@ -8,13 +8,13 @@
     <img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
   </a>
   <a href="https://www.npmjs.com/package/react-d3-tree">
-    <img alt="npm package" src="https://badge.fury.io/js/react-d3-tree.svg">
+    <img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
   </a>
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
   </a>
   <a href="https://github.com/prettier/prettier">
-    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=plastic">
+    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
   </a>
 </p>
 
