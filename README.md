@@ -31,6 +31,10 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
+- [Up & Running](#up--running)
+  - [Styling nodes](#styling-nodes)
+  - [Styling links](#styling-links)
+- [Rendering custom nodes](#rendering-custom-nodes)
 - [Development](#development)
   - [Setup](#setup)
   - [Hot reloading](#hot-reloading)
@@ -56,6 +60,8 @@ npm i --save react-d3-tree
 import React from 'react';
 import Tree from 'react-d3-tree';
 
+// This is a simplified example of an org chart with a depth of 2.
+// Note how deeper levels are defined recursively via the `children` property.
 const orgChartJson = {
   name: 'CEO',
   children: [
@@ -72,7 +78,7 @@ const orgChartJson = {
           },
           children: [
             {
-              name: 'Workers',
+              name: 'Worker',
             },
           ],
         },
@@ -83,7 +89,7 @@ const orgChartJson = {
           },
           children: [
             {
-              name: 'Workers',
+              name: 'Worker',
             },
           ],
         },
@@ -104,6 +110,94 @@ export default function OrgChartTree() {
 
 ## Props
 For details on the props accepted by  `Tree`, check out the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
+
+ <!--(TODO: REVISE TITLE) -->
+## Up & Running
+### Styling nodes
+`Tree` provides the following props to style different types of nodes, all of which use an SVG `circle` by default:
+
+- `rootNodeClassName` - will be applied to the root node.
+- `branchNodeClassName` - will be applied to any node with 1+ children.
+- `leafNodeClassName` - will be applied to any node without children.
+
+To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:
+
+```css
+/* custom-tree.css */
+
+.node__root {
+  fill: red;
+}
+.node__branch {
+  fill: yellow
+}
+.node__leaf {
+  fill: green;
+}
+```
+
+```jsx
+import React from 'react';
+import Tree from 'react-d3-tree';
+import './custom-tree.css';
+
+// ...
+
+export default function StyledNodesTree() {
+  return (
+    <div id="treeWrapper" style={{ width: '50em', height: '20em' }}>
+      <Tree
+        data={data}
+        rootNodeClassName="node__root"
+        branchNodeClassName="node__branch"
+        leafNodeClassName="node__leaf"
+      />
+    </div>
+  );
+}
+```
+
+ TODO: link to TreeProps page
+
+ > For more details on the `className` props for nodes, see the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
+
+ <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
+
+### Styling links
+`Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
+
+Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`. `Tree` expects `pathClassFunc` to return a `className` string.
+
+```jsx
+function StyledLinksTree() {
+  const getDynamicPathClass = ({ sourceNode, targetNode }, orientation) => {
+    if (!targetNode.children) {
+      // Node has no children -> this link leads to a leaf node.
+      return 'link__to-leaf';
+    }
+
+    // Style it as a link connecting two branch nodes by default.
+    return 'link__to-branch';
+  };
+
+  return (
+    <Tree
+      data={data}
+      // Statically apply same className(s) to all links
+      pathClassFunc={() => 'custom-link'}
+      // Want to apply multiple static classes? `Array.join` is your friend :)
+      pathClassFunc={() => ['custom-link', 'extra-custom-link'].join(' ')}
+      // Dynamically determine which `className` to pass based on the link's properties.
+      pathClassFunc={getDynamicPathClass}
+    />
+  );
+}
+```
+
+> For more details, see the `PathClassFunction` [reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction).
+
+## Rendering custom nodes
+TODO:
 
 ## Development
 ### Setup
