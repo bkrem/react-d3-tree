@@ -41,14 +41,6 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [FAQ](#faq)
 - [Contributors](#contributors)
 - [License](#license)
-- [Keeping large trees responsive](#keeping-large-trees-responsive)
-- [External data sources](#external-data-sources)
-  - [Example](#example)
-- [Using foreignObjects](#using-foreignobjects)
-  - [`nodeLabelComponent`](#nodelabelcomponent)
-    - [Example](#example-1)
-- [Recipes](#recipes)
-    - [Auto-centering inside `treeContainer`](#auto-centering-inside-treecontainer)
 
 ## Installation
 ```bash
@@ -157,8 +149,6 @@ export default function StyledNodesTree() {
 }
 ```
 
- TODO: link to TreeProps page
-
  > For more details on the `className` props for nodes, see the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
 
  <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
@@ -237,120 +227,3 @@ npm start
 
 ## License
 MIT
-
-----
-
-## Keeping large trees responsive
-Attempting to render large trees with animated transitions may cause significant input lag. This is due to limitations related to the way D3's `select().transition()` enqueues calls to `requestAnimationFrame`, discussed [here](https://github.com/bkrem/react-d3-tree/issues/41#issuecomment-338425414).
-
-Until a custom debounce for expand/collapse has been implemented, **it is therefore recommended to set `props.transitionDuration` to `0` for large tree graphs** if you're experiencing responsiveness issues.
-
-
-## External data sources
-Statically hosted JSON or CSV files can be used as data sources via the additional `treeUtil` module.
-
-### Example
-
-```jsx
-import React from 'react';
-import { Tree, treeUtil } from 'react-d3-tree';
-
-const csvSource = 'https://raw.githubusercontent.com/bkrem/react-d3-tree/master/docs/examples/data/csv-example.csv';
-
-constructor() {
-  super();
-
-  this.state = {
-    data: undefined,
-  };
-}
-
-componentWillMount() {
-  treeUtil.parseCSV(csvSource)
-  .then((data) => {
-    this.setState({ data })
-  })
-  .catch((err) => console.error(err));
-}
-
-class MyComponent extends React.Component {
-  render() {
-    return (
-      {/* <Tree /> will fill width/height of its container; in this case `#treeWrapper` */}
-      <div id="treeWrapper" style={{width: '50em', height: '20em'}}>
-
-        <Tree data={this.state.data} />
-
-      </div>
-    );
-  }
-}
-```
-
-For details regarding the `treeUtil` module, please check the module's [API docs](docs/util/util.md).  
-For examples of each data type that can be parsed with `treeUtil`, please check the [data source examples](docs/examples/data).
-
-
-## Using foreignObjects
-> ⚠️  Requires `allowForeignObjects` prop to be set due to limited browser support: [IE does not currently support `foreignObject` elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Browser_compatibility).
-
-> ⚠️  There is a [known bug in Safari](https://github.com/bkrem/react-d3-tree/issues/284) relating to the positioning of `foreignObject` elements. Please take this into account before opting in via `allowForeignObjects`.
-
-The SVG spec's `foreignObject` element allows foreign XML content to be rendered into the SVG namespace, unlocking the ability to use regular React components for elements of the tree graph.
-
-### `nodeLabelComponent`
-The `nodeLabelComponent` prop provides a way to use a React component for each node's label. It accepts an object with the following signature:
-```ts
-{
-  render: ReactElement,
-  foreignObjectWrapper?: object
-}
-```
-* `render` is the XML React-D3-Tree will use to render each node's label.
-* `foreignObjectWrapper` contains a set of attributes that should be passed to the `<foreignObject />` that wraps `nodeLabelComponent`. For possible attributes please check the [spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Global_attributes).
-
-**Note: By default, `foreignObjectWrapper` will set its width and height attributes to `nodeSize.x - 24px` and `nodeSize.y - 24px` respectively; where a base margin of 24px is subtracted to avoid the overlapping of elements.** 
-To override this behaviour for each attribute, specify `width` and/or `height` properties for your `foreignObjectWrapper`.
-
-**Note:** The ReactElement passed to `render` is cloned with its existing props and **receives an additional `nodeData` object prop, containing information about the current node.**
-
-#### Example
-Assuming we have a React component `NodeLabel` and we want to avoid node's label overlapping with the node itself by moving its position along the Y-axis, we could implement `nodeLabelComponent` like so:
-```jsx
-class NodeLabel extends React.PureComponent {
-  render() {
-    const {className, nodeData} = this.props
-    return (
-      <div className={className}>
-        <h2>{nodeData.name}</h2>
-        {nodeData._children && 
-          <button>{nodeData._collapsed ? 'Expand' : 'Collapse'}</button>
-        }
-      </div>
-    )
-  }
-}
-
-/* ... */
-
-render() {
-  return (
-    <Tree 
-      data={myTreeData}
-      allowForeignObjects
-      nodeLabelComponent={{
-        render: <NodeLabel className='myLabelComponentInSvg' />,
-        foreignObjectWrapper: {
-          y: 24
-        }
-      }}
-    />
-    )
-}
-```
-
-
-
-## Recipes
-#### [Auto-centering inside `treeContainer`](https://codesandbox.io/s/vvz51w5n63)
-
