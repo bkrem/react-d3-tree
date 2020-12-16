@@ -215,11 +215,9 @@ The [`renderCustomNodeElement` prop](https://bkrem.github.io/react-d3-tree/docs/
 
 Cases where you may find rendering your own `Node` element useful include:
 
-<!-- TODO: attach examples for each use case -->
-
-- Using a **different SVG tag for your nodes** (instead of the default `<circle>`).
-- Gaining **fine-grained control over event handling** (e.g. to implement events not covered by the default API).
-- Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace.
+- Using a **different SVG tag for your nodes** (instead of the default `<circle>`) - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js)
+- Gaining **fine-grained control over event handling** (e.g. to implement events not covered by the default API) - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-event-handlers-5pwxw?file=/src/App.js)
+- Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-with-foreignobject-0mfj8?file=/src/App.js)
 
 ### `pathFunc`
 TODO
