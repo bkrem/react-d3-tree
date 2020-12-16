@@ -73,13 +73,13 @@
 						<img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
 					</a>
 					<a href="https://www.npmjs.com/package/react-d3-tree">
-						<img alt="npm package" src="https://badge.fury.io/js/react-d3-tree.svg">
+						<img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
 					</a>
 					<a href="https://www.npmjs.com/package/react-d3-tree">
 						<img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
 					</a>
 					<a href="https://github.com/prettier/prettier">
-						<img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=plastic">
+						<img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
 					</a>
 				</p>
 				<p align="center">
@@ -97,6 +97,17 @@
 					<li><a href="#installation">Installation</a></li>
 					<li><a href="#usage">Usage</a></li>
 					<li><a href="#props">Props</a></li>
+					<li><a href="#up--running">Up &amp; Running</a><ul>
+							<li><a href="#styling-nodes">Styling nodes</a></li>
+							<li><a href="#styling-links">Styling links</a></li>
+							<li><a href="#event-handlers">Event handlers</a></li>
+						</ul>
+					</li>
+					<li><a href="#customizing-the-tree">Customizing the tree</a><ul>
+							<li><a href="#rendercustomnodeelement"><code>renderCustomNodeElement</code></a></li>
+							<li><a href="#pathfunc"><code>pathFunc</code></a></li>
+						</ul>
+					</li>
 					<li><a href="#development">Development</a><ul>
 							<li><a href="#setup">Setup</a></li>
 							<li><a href="#hot-reloading">Hot reloading</a></li>
@@ -105,22 +116,6 @@
 					<li><a href="#faq">FAQ</a></li>
 					<li><a href="#contributors">Contributors</a></li>
 					<li><a href="#license">License</a></li>
-					<li><a href="#keeping-large-trees-responsive">Keeping large trees responsive</a></li>
-					<li><a href="#external-data-sources">External data sources</a><ul>
-							<li><a href="#example">Example</a></li>
-						</ul>
-					</li>
-					<li><a href="#using-foreignobjects">Using foreignObjects</a><ul>
-							<li><a href="#nodelabelcomponent"><code>nodeLabelComponent</code></a><ul>
-									<li><a href="#example-1">Example</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<li><a href="#recipes">Recipes</a><ul>
-							<li><a href="#auto-centering-inside-treecontainer">Auto-centering inside <code>treeContainer</code></a></li>
-						</ul>
-					</li>
 				</ul>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
@@ -132,6 +127,8 @@
 				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
 
+<span class="hljs-comment">// This is a simplified example of an org chart with a depth of 2.</span>
+<span class="hljs-comment">// Note how deeper levels are defined recursively via the `children` property.</span>
 <span class="hljs-keyword">const</span> orgChartJson = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;CEO&#x27;</span>,
   <span class="hljs-attr">children</span>: [
@@ -148,7 +145,7 @@
           },
           <span class="hljs-attr">children</span>: [
             {
-              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Workers&#x27;</span>,
+              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Worker&#x27;</span>,
             },
           ],
         },
@@ -159,7 +156,7 @@
           },
           <span class="hljs-attr">children</span>: [
             {
-              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Workers&#x27;</span>,
+              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Worker&#x27;</span>,
             },
           ],
         },
@@ -180,6 +177,108 @@
 					<h2>Props</h2>
 				</a>
 				<p>For details on the props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+				<p>The only required prop is <a href="">data</a>, all other props on <code>Tree</code> are optional/pre-defined (see &quot;Default value&quot; on each prop).</p>
+				<!--(TODO: REVISE TITLE) -->
+				<a href="#up-amp-running" id="up-amp-running" style="color: inherit; text-decoration: none;">
+					<h2>Up &amp; Running</h2>
+				</a>
+				<a href="#styling-nodes" id="styling-nodes" style="color: inherit; text-decoration: none;">
+					<h3>Styling nodes</h3>
+				</a>
+				<p><code>Tree</code> provides the following props to style different types of nodes, all of which use an SVG <code>circle</code> by default:</p>
+				<ul>
+					<li><code>rootNodeClassName</code> - will be applied to the root node.</li>
+					<li><code>branchNodeClassName</code> - will be applied to any node with 1+ children.</li>
+					<li><code>leafNodeClassName</code> - will be applied to any node without children.</li>
+				</ul>
+				<p>To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:</p>
+				<pre><code class="language-css"><span class="hljs-comment">/* custom-tree.css */</span>
+
+<span class="hljs-selector-class">.node__root</span> {
+  <span class="hljs-attribute">fill</span>: red;
+}
+<span class="hljs-selector-class">.node__branch</span> {
+  <span class="hljs-attribute">fill</span>: yellow
+}
+<span class="hljs-selector-class">.node__leaf</span> {
+  <span class="hljs-attribute">fill</span>: green;
+}</code></pre>
+				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;./custom-tree.css&#x27;</span>;
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">StyledNodesTree</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;treeWrapper&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">50em</span>&#x27;, <span class="hljs-attr">height:</span> &#x27;<span class="hljs-attr">20em</span>&#x27; }}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Tree</span>
+        <span class="hljs-attr">data</span>=<span class="hljs-string">{data}</span>
+        <span class="hljs-attr">rootNodeClassName</span>=<span class="hljs-string">&quot;node__root&quot;</span>
+        <span class="hljs-attr">branchNodeClassName</span>=<span class="hljs-string">&quot;node__branch&quot;</span>
+        <span class="hljs-attr">leafNodeClassName</span>=<span class="hljs-string">&quot;node__leaf&quot;</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}</code></pre>
+				<blockquote>
+					<p>For more details on the <code>className</code> props for nodes, see the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+				</blockquote>
+				<!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
+				<a href="#styling-links" id="styling-links" style="color: inherit; text-decoration: none;">
+					<h3>Styling links</h3>
+				</a>
+				<p><code>Tree</code> provides the <code>pathClassFunc</code> property to pass additional classNames to every link to be rendered.</p>
+				<p>Each link calls <code>pathClassFunc</code> with its own <code>TreeLinkDatum</code> and the tree&#39;s current <code>orientation</code>. <code>Tree</code> expects <code>pathClassFunc</code> to return a <code>className</code> string.</p>
+				<pre><code class="language-jsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">StyledLinksTree</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> getDynamicPathClass = <span class="hljs-function">(<span class="hljs-params">{ sourceNode, targetNode }, orientation</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!targetNode.children) {
+      <span class="hljs-comment">// Node has no children -&gt; this link leads to a leaf node.</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;link__to-leaf&#x27;</span>;
+    }
+
+    <span class="hljs-comment">// Style it as a link connecting two branch nodes by default.</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;link__to-branch&#x27;</span>;
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span>
+      <span class="hljs-attr">data</span>=<span class="hljs-string">{data}</span>
+      // <span class="hljs-attr">Statically</span> <span class="hljs-attr">apply</span> <span class="hljs-attr">same</span> <span class="hljs-attr">className</span>(<span class="hljs-attr">s</span>) <span class="hljs-attr">to</span> <span class="hljs-attr">all</span> <span class="hljs-attr">links</span>
+      <span class="hljs-attr">pathClassFunc</span>=<span class="hljs-string">{()</span> =&gt;</span> &#x27;custom-link&#x27;}
+      // Want to apply multiple static classes? `Array.join` is your friend :)
+      pathClassFunc={() =&gt; [&#x27;custom-link&#x27;, &#x27;extra-custom-link&#x27;].join(&#x27; &#x27;)}
+      // Dynamically determine which `className` to pass based on the link&#x27;s properties.
+      pathClassFunc={getDynamicPathClass}
+    /&gt;</span>
+  );
+}</code></pre>
+				<blockquote>
+					<p>For more details, see the <code>PathClassFunction</code> <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction">reference docs</a>.</p>
+				</blockquote>
+				<a href="#event-handlers" id="event-handlers" style="color: inherit; text-decoration: none;">
+					<h3>Event handlers</h3>
+				</a>
+				<p><code>Tree</code> exposes the following event handler callbacks by default:</p>
+				<ul>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkclick">onLinkClick</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseout">onLinkMouseOut</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseover">onLinkMouseOver</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodeclick">onNodeClick</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseout">onNodeMouseOut</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseover">onNodeMouseOver</a></li>
+				</ul>
+				<a href="#customizing-the-tree" id="customizing-the-tree" style="color: inherit; text-decoration: none;">
+					<h2>Customizing the tree</h2>
+				</a>
+				<p>Using the <code>&lt;nodeType&gt;NodeClassName</code> and <code>pathClassFunc</code> approaches above should give </p>
+				<a href="#rendercustomnodeelement" id="rendercustomnodeelement" style="color: inherit; text-decoration: none;">
+					<h3><code>renderCustomNodeElement</code></h3>
+				</a>
+				<p>The <code>renderCustomNodeElement</code> prop allows</p>
+				<a href="#pathfunc" id="pathfunc" style="color: inherit; text-decoration: none;">
+					<h3><code>pathFunc</code></h3>
+				</a>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h2>Development</h2>
 				</a>
@@ -217,118 +316,6 @@ npm link react-d3-tree</code></pre>
 					<h2>License</h2>
 				</a>
 				<p>MIT</p>
-				<hr>
-				<a href="#keeping-large-trees-responsive" id="keeping-large-trees-responsive" style="color: inherit; text-decoration: none;">
-					<h2>Keeping large trees responsive</h2>
-				</a>
-				<p>Attempting to render large trees with animated transitions may cause significant input lag. This is due to limitations related to the way D3&#39;s <code>select().transition()</code> enqueues calls to <code>requestAnimationFrame</code>, discussed <a href="https://github.com/bkrem/react-d3-tree/issues/41#issuecomment-338425414">here</a>.</p>
-				<p>Until a custom debounce for expand/collapse has been implemented, <strong>it is therefore recommended to set <code>props.transitionDuration</code> to <code>0</code> for large tree graphs</strong> if you&#39;re experiencing responsiveness issues.</p>
-				<a href="#external-data-sources" id="external-data-sources" style="color: inherit; text-decoration: none;">
-					<h2>External data sources</h2>
-				</a>
-				<p>Statically hosted JSON or CSV files can be used as data sources via the additional <code>treeUtil</code> module.</p>
-				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-					<h3>Example</h3>
-				</a>
-				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-<span class="hljs-keyword">import</span> { Tree, treeUtil } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
-
-<span class="hljs-keyword">const</span> csvSource = <span class="hljs-string">&#x27;https://raw.githubusercontent.com/bkrem/react-d3-tree/master/docs/examples/data/csv-example.csv&#x27;</span>;
-
-<span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
-  <span class="hljs-built_in">super</span>();
-
-  <span class="hljs-built_in">this</span>.state = {
-    <span class="hljs-attr">data</span>: <span class="hljs-literal">undefined</span>,
-  };
-}
-
-<span class="hljs-function"><span class="hljs-title">componentWillMount</span>(<span class="hljs-params"></span>)</span> {
-  treeUtil.parseCSV(csvSource)
-  .then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-    <span class="hljs-built_in">this</span>.setState({ data })
-  })
-  .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> <span class="hljs-built_in">console</span>.error(err));
-}
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-  <span class="hljs-function"><span class="hljs-title">render</span>(<span class="hljs-params"></span>)</span> {
-    <span class="hljs-keyword">return</span> (
-      {<span class="hljs-comment">/* &lt;Tree /&gt; will fill width/height of its container; in this case `#treeWrapper` */</span>}
-      &lt;div id=<span class="hljs-string">&quot;treeWrapper&quot;</span> style={{<span class="hljs-attr">width</span>: <span class="hljs-string">&#x27;50em&#x27;</span>, <span class="hljs-attr">height</span>: <span class="hljs-string">&#x27;20em&#x27;</span>}}&gt;
-
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span> <span class="hljs-attr">data</span>=<span class="hljs-string">{this.state.data}</span> /&gt;</span></span>
-
-      &lt;/div&gt;
-    );
-  }
-}</code></pre>
-				<p>For details regarding the <code>treeUtil</code> module, please check the module&#39;s <a href="docs/util/util.md">API docs</a>.<br>For examples of each data type that can be parsed with <code>treeUtil</code>, please check the <a href="docs/examples/data">data source examples</a>.</p>
-				<a href="#using-foreignobjects" id="using-foreignobjects" style="color: inherit; text-decoration: none;">
-					<h2>Using foreignObjects</h2>
-				</a>
-				<blockquote>
-					<p>⚠️  Requires <code>allowForeignObjects</code> prop to be set due to limited browser support: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Browser_compatibility">IE does not currently support <code>foreignObject</code> elements</a>.</p>
-				</blockquote>
-				<blockquote>
-					<p>⚠️  There is a <a href="https://github.com/bkrem/react-d3-tree/issues/284">known bug in Safari</a> relating to the positioning of <code>foreignObject</code> elements. Please take this into account before opting in via <code>allowForeignObjects</code>.</p>
-				</blockquote>
-				<p>The SVG spec&#39;s <code>foreignObject</code> element allows foreign XML content to be rendered into the SVG namespace, unlocking the ability to use regular React components for elements of the tree graph.</p>
-				<a href="#nodelabelcomponent" id="nodelabelcomponent" style="color: inherit; text-decoration: none;">
-					<h3><code>nodeLabelComponent</code></h3>
-				</a>
-				<p>The <code>nodeLabelComponent</code> prop provides a way to use a React component for each node&#39;s label. It accepts an object with the following signature:</p>
-				<pre><code class="language-ts">{
-  <span class="hljs-attr">render</span>: ReactElement,
-  foreignObjectWrapper?: <span class="hljs-built_in">object</span>
-}</code></pre>
-				<ul>
-					<li><code>render</code> is the XML React-D3-Tree will use to render each node&#39;s label.</li>
-					<li><code>foreignObjectWrapper</code> contains a set of attributes that should be passed to the <code>&lt;foreignObject /&gt;</code> that wraps <code>nodeLabelComponent</code>. For possible attributes please check the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject#Global_attributes">spec</a>.</li>
-				</ul>
-				<p><strong>Note: By default, <code>foreignObjectWrapper</code> will set its width and height attributes to <code>nodeSize.x - 24px</code> and <code>nodeSize.y - 24px</code> respectively; where a base margin of 24px is subtracted to avoid the overlapping of elements.</strong>
-				To override this behaviour for each attribute, specify <code>width</code> and/or <code>height</code> properties for your <code>foreignObjectWrapper</code>.</p>
-				<p><strong>Note:</strong> The ReactElement passed to <code>render</code> is cloned with its existing props and <strong>receives an additional <code>nodeData</code> object prop, containing information about the current node.</strong></p>
-				<a href="#example-1" id="example-1" style="color: inherit; text-decoration: none;">
-					<h4>Example</h4>
-				</a>
-				<p>Assuming we have a React component <code>NodeLabel</code> and we want to avoid node&#39;s label overlapping with the node itself by moving its position along the Y-axis, we could implement <code>nodeLabelComponent</code> like so:</p>
-				<pre><code class="language-jsx"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NodeLabel</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">PureComponent</span> </span>{
-  <span class="hljs-function"><span class="hljs-title">render</span>(<span class="hljs-params"></span>)</span> {
-    <span class="hljs-keyword">const</span> {className, nodeData} = <span class="hljs-built_in">this</span>.props
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{className}</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>{nodeData.name}<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
-        {nodeData._children &amp;&amp; 
-          <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>{nodeData._collapsed ? &#x27;Expand&#x27; : &#x27;Collapse&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        }
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-    )
-  }
-}
-
-<span class="hljs-comment">/* ... */</span>
-
-<span class="hljs-function"><span class="hljs-title">render</span>(<span class="hljs-params"></span>)</span> {
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span> 
-      <span class="hljs-attr">data</span>=<span class="hljs-string">{myTreeData}</span>
-      <span class="hljs-attr">allowForeignObjects</span>
-      <span class="hljs-attr">nodeLabelComponent</span>=<span class="hljs-string">{{</span>
-        <span class="hljs-attr">render:</span> &lt;<span class="hljs-attr">NodeLabel</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&#x27;myLabelComponentInSvg&#x27;</span> /&gt;</span>,
-        foreignObjectWrapper: {
-          y: 24
-        }
-      }}
-    /&gt;</span>
-    )
-}</code></pre>
-				<a href="#recipes" id="recipes" style="color: inherit; text-decoration: none;">
-					<h2>Recipes</h2>
-				</a>
-				<a href="#auto-centering-inside-treecontainer" id="auto-centering-inside-treecontainer" style="color: inherit; text-decoration: none;">
-					<h4><a href="https://codesandbox.io/s/vvz51w5n63">Auto-centering inside <code>treeContainer</code></a></h4>
-				</a>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
