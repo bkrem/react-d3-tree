@@ -32,9 +32,12 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Usage](#usage)
 - [Props](#props)
 - [Up & Running](#up--running)
-  - [Styling nodes](#styling-nodes)
-  - [Styling links](#styling-links)
-- [Rendering custom nodes](#rendering-custom-nodes)
+  - [Styling Nodes](#styling-nodes)
+  - [Styling Links](#styling-links)
+  - [Event Handlers](#event-handlers)
+- [Customizing the Tree](#customizing-the-tree)
+  - [`renderCustomNodeElement`](#rendercustomnodeelement)
+  - [`pathFunc`](#pathfunc)
 - [Development](#development)
   - [Setup](#setup)
   - [Hot reloading](#hot-reloading)
@@ -54,7 +57,7 @@ import Tree from 'react-d3-tree';
 
 // This is a simplified example of an org chart with a depth of 2.
 // Note how deeper levels are defined recursively via the `children` property.
-const orgChartJson = {
+const orgChart = {
   name: 'CEO',
   children: [
     {
@@ -94,7 +97,7 @@ export default function OrgChartTree() {
   return (
     // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
     <div id="treeWrapper" style={{ width: '50em', height: '20em' }}>
-      <Tree data={orgChartJson} />
+      <Tree data={orgChart} />
     </div>
   );
 }
@@ -103,9 +106,11 @@ export default function OrgChartTree() {
 ## Props
 For details on the props accepted by  `Tree`, check out the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
 
+The only required prop is [data](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#data), all other props on `Tree` are optional/pre-defined (see "Default value" on each prop).
+
  <!--(TODO: REVISE TITLE) -->
 ## Up & Running
-### Styling nodes
+### Styling Nodes
 `Tree` provides the following props to style different types of nodes, all of which use an SVG `circle` by default:
 
 - `rootNodeClassName` - will be applied to the root node.
@@ -117,14 +122,17 @@ To visually distinguish these three types of nodes from each other by color, we 
 ```css
 /* custom-tree.css */
 
-.node__root {
+.node__root > circle {
   fill: red;
 }
-.node__branch {
-  fill: yellow
+
+.node__branch > circle {
+  fill: yellow;
 }
-.node__leaf {
-  fill: green;
+
+.node__leaf > circle {
+  /* Let's make the radius of leaf nodes larger */
+  r: 40;
 }
 ```
 
@@ -153,7 +161,7 @@ export default function StyledNodesTree() {
 
  <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
 
-### Styling links
+### Styling Links
 `Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
 
 Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`. `Tree` expects `pathClassFunc` to return a `className` string.
@@ -186,8 +194,35 @@ function StyledLinksTree() {
 
 > For more details, see the `PathClassFunction` [reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction).
 
-## Rendering custom nodes
-TODO:
+### Event Handlers
+`Tree` exposes the following event handler callbacks by default:
+
+- [onLinkClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkclick)
+- [onLinkMouseOut](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseout)
+- [onLinkMouseOver](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseover)
+- [onNodeClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodeclick)
+- [onNodeMouseOut](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseout)
+- [onNodeMouseOver](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseover)
+
+> **Note:** Nodes are expanded/collapsed whenever `onNodeClick` fires. To prevent this, set the [`collapsible` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#collapsible) to `false`.  
+> `onNodeClick` will still fire, but it will not change the target node's expanded/collapsed state.
+
+## Customizing the Tree
+<!-- Using the `<nodeType>NodeClassName` and `pathClassFunc` approaches above should give  -->
+
+### `renderCustomNodeElement`
+The [`renderCustomNodeElement` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#rendercustomnodeelement) accepts a **custom render function that will be used for every node in the tree.**
+
+Cases where you may find rendering your own `Node` element useful include:
+
+<!-- TODO: attach examples for each use case -->
+
+- Using a **different SVG tag for your nodes** (instead of the default `<circle>`).
+- Gaining **fine-grained control over event handling** (e.g. to implement events not covered by the default API).
+- Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace.
+
+### `pathFunc`
+TODO
 
 ## Development
 ### Setup
