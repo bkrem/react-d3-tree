@@ -31,13 +31,13 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
-- [Up & Running](#up--running)
-  - [Styling Nodes](#styling-nodes)
-  - [Styling Links](#styling-links)
-  - [Event Handlers](#event-handlers)
+- [Styling Nodes](#styling-nodes)
+- [Styling Links](#styling-links)
+- [Event Handlers](#event-handlers)
 - [Customizing the Tree](#customizing-the-tree)
   - [`renderCustomNodeElement`](#rendercustomnodeelement)
   - [`pathFunc`](#pathfunc)
+    - [Providing your own `pathFunc`](#providing-your-own-pathfunc)
 - [Development](#development)
   - [Setup](#setup)
   - [Hot reloading](#hot-reloading)
@@ -104,18 +104,16 @@ export default function OrgChartTree() {
 ```
 
 ## Props
-For details on the props accepted by  `Tree`, check out the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
+For details on all props accepted by  `Tree`, check out the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
 
-The only required prop is [data](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#data), all other props on `Tree` are optional/pre-defined (see "Default value" on each prop).
+The only required prop is [data](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#data), all other props on `Tree` are optional/pre-defined (see "Default value" on each prop definition).
 
- <!--(TODO: REVISE TITLE) -->
-## Up & Running
-### Styling Nodes
+## Styling Nodes
 `Tree` provides the following props to style different types of nodes, all of which use an SVG `circle` by default:
 
-- `rootNodeClassName` - will be applied to the root node.
-- `branchNodeClassName` - will be applied to any node with 1+ children.
-- `leafNodeClassName` - will be applied to any node without children.
+- `rootNodeClassName` - applied to the root node.
+- `branchNodeClassName` - applied to any node with 1+ children.
+- `leafNodeClassName` - applied to any node without children.
 
 To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:
 
@@ -161,7 +159,7 @@ export default function StyledNodesTree() {
 
  <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
 
-### Styling Links
+## Styling Links
 `Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
 
 Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`. `Tree` expects `pathClassFunc` to return a `className` string.
@@ -194,7 +192,7 @@ function StyledLinksTree() {
 
 > For more details, see the `PathClassFunction` [reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction).
 
-### Event Handlers
+## Event Handlers
 `Tree` exposes the following event handler callbacks by default:
 
 - [onLinkClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkclick)
@@ -220,7 +218,41 @@ Cases where you may find rendering your own `Node` element useful include:
 - Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-with-foreignobject-0mfj8?file=/src/App.js)
 
 ### `pathFunc`
-TODO
+The [`pathFunc` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#pathfunc) accepts a predefined `PathFunctionOption` enum or a user-defined `PathFunction`.
+
+By changing or providing your own `pathFunc`, you are able to change how links between nodes of the tree (which are SVG `path` tags under the hood) are drawn.
+
+The currently [available enums](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunctionoption) are:
+- `diagonal` (default)
+- `elbow`
+- `straight`
+- `step`
+
+> Want to see how each option looks? [Try them out on the playground](https://bkrem.github.io/react-d3-tree).
+
+#### Providing your own `pathFunc`
+If none of the available path functions suit your needs, you're also able to provide a custom `PathFunction`:
+
+```jsx
+function CustomPathFuncTree() {
+  const straightPathFunc = (linkDatum, orientation) => {
+    const { source, target } = linkDatum;
+    return orientation === 'horizontal'
+      ? `M${source.y},${source.x}L${target.y},${target.x}`
+      : `M${source.x},${source.y}L${target.x},${target.y}`;
+  };
+
+  return (
+    <Tree
+      data={data}
+      // Passing `straight` function as a custom `PathFunction`.
+      pathFunc={straightPathFunc}
+    />
+  );
+}
+```
+
+> For more details, see the [`PathFunction` reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunction).
 
 ## Development
 ### Setup
