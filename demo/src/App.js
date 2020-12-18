@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import clone from 'clone';
-import { debugData, individualShapesData } from './mockData';
 import Tree from 'react-d3-tree';
 import { version } from 'react-d3-tree/package.json';
 import Switch from './components/Switch';
@@ -9,6 +8,7 @@ import PureSvgNodeElement from './components/PureSvgNodeElement';
 import './App.css';
 
 // Data examples
+import { debugData } from './mockData';
 import orgChartJson from './examples/org-chart.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
 import reactTree from './examples/react-tree';
@@ -54,8 +54,7 @@ class App extends Component {
     this.addedNodesCount = 0;
 
     this.state = {
-      data: individualShapesData,
-      // pathFunc: (d, orientation) => orientation && `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`,
+      data: orgChartJson,
       orientation: 'horizontal',
       translateX: 200,
       translateY: 300,
