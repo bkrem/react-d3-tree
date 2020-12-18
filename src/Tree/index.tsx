@@ -11,7 +11,7 @@ import Node from '../Node';
 import Link from '../Link';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common';
 import { TreeLinkEventCallback, TreeProps } from './types';
-import './style.css';
+import globalCss from '../globalCss';
 
 type TreeState = {
   dataRef: TreeProps['data'];
@@ -489,6 +489,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
+        <style>{globalCss}</style>
         <svg className={[rd3tSvgClassName, svgClassName].join(' ')} width="100%" height="100%">
           <TransitionGroupWrapper
             enableLegacyTransitions={enableLegacyTransitions}

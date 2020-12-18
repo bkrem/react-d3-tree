@@ -8,15 +8,12 @@
     "url": "https://github.com/bkrem/react-d3-tree/issues"
   },
   "homepage": "https://github.com/bkrem/react-d3-tree",
-  "files": [
-    "lib"
-  ],
+  "files": ["lib"],
   "main": "lib/index.js",
   "scripts": {
-    "cp:css": "cd src && find . -name '*.css' | cpio -pdm ../lib && cd ..",
     "build:docs": "rimraf ./docs && typedoc",
-    "build": "rimraf lib && npm run cp:css && tsc",
-    "build:watch": "rimraf lib && npm run cp:css && tsc -w",
+    "build": "rimraf lib && tsc",
+    "build:watch": "rimraf lib && tsc -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
@@ -49,17 +46,8 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "eslint",
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "jest --findRelatedTests",
-      "git add"
-    ]
+    "src/**/*.js": ["eslint", "prettier --write", "jest --findRelatedTests", "git add"],
+    "src/**/*.{ts,tsx}": ["prettier --write", "jest --findRelatedTests", "git add"]
   },
   "dependencies": {
     "clone": "^2.1.1",

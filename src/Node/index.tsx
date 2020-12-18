@@ -4,7 +4,6 @@ import { select } from 'd3-selection';
 
 import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
 import DefaultNodeElement from './DefaultNodeElement';
-import './style.css';
 
 type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 

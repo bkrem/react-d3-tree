@@ -1,3 +1,4 @@
+import { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 
 export type Orientation = 'horizontal' | 'vertical';
@@ -31,7 +32,7 @@ export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
 export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
 export type PathClassFunction = PathFunction;
 
-export type SyntheticEventHandler = (evt: React.SyntheticEvent) => void;
+export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
 
 /**
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
@@ -50,4 +51,4 @@ export interface CustomNodeElementProps {
   toggleNode: () => void;
 }
 
-export type RenderCustomNodeElementFn = (rd3tProps: CustomNodeElementProps) => JSX.Element;
+export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => JSX.Element;

@@ -10,7 +10,6 @@ import {
   TreeNodeDatum,
   PathClassFunction,
 } from '../types/common';
-import './style.css';
 
 type LinkEventHandler = (
   source: HierarchyPointNode<TreeNodeDatum>,
