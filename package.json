@@ -1,6 +1,6 @@
 {
   "name": "react-d3-tree",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "React component to create interactive D3 tree hierarchies",
   "author": "Ben Kremer",
   "license": "MIT",
@@ -8,7 +8,9 @@
     "url": "https://github.com/bkrem/react-d3-tree/issues"
   },
   "homepage": "https://github.com/bkrem/react-d3-tree",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "main": "lib/index.js",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
@@ -46,8 +48,17 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": ["eslint", "prettier --write", "jest --findRelatedTests", "git add"],
-    "src/**/*.{ts,tsx}": ["prettier --write", "jest --findRelatedTests", "git add"]
+    "src/**/*.js": [
+      "eslint",
+      "prettier --write",
+      "jest --findRelatedTests",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "jest --findRelatedTests",
+      "git add"
+    ]
   },
   "dependencies": {
     "clone": "^2.1.1",
