@@ -31,9 +31,11 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
-- [Styling Nodes](#styling-nodes)
-- [Styling Links](#styling-links)
-- [Event Handlers](#event-handlers)
+- [Working with the default Tree](#working-with-the-default-tree)
+  - [Providing `data`](#providing-data)
+  - [Styling Nodes](#styling-nodes)
+  - [Styling Links](#styling-links)
+  - [Event Handlers](#event-handlers)
 - [Customizing the Tree](#customizing-the-tree)
   - [`renderCustomNodeElement`](#rendercustomnodeelement)
   - [`pathFunc`](#pathfunc)
@@ -108,7 +110,31 @@ For details on all props accepted by  `Tree`, check out the [TreeProps reference
 
 The only required prop is [data](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#data), all other props on `Tree` are optional/pre-defined (see "Default value" on each prop definition).
 
-## Styling Nodes
+## Working with the default Tree
+`react-d3-tree` provides default implementations for `Tree`'s nodes & links, which are intended to get you up & running with a working tree quickly. 
+
+This section is focused on explaining **how to provide data, styles and event handlers for the default `Tree` implementation**. 
+
+> Need more fine-grained control over how nodes & links appear/behave? Check out the [Customizing the Tree](#customizing-the-tree) section below.
+
+### Providing `data`
+By default, `Tree` expects each node object in `data` to implement the [`RawNodeDatum` interface](https://bkrem.github.io/react-d3-tree/docs/interfaces/_types_common_.rawnodedatum.html):
+
+```ts
+interface RawNodeDatum {
+  name: string;
+  attributes?: Record<string, string>;
+  children?: RawNodeDatum[];
+}
+```
+
+The `orgChart` example in the [Usage](#usage) section above is an example of this:
+
+- Every node has at least a `name`. This is rendered as the **node's primary label**.
+- Some nodes have `attributes` defined (the `CEO` node does not). **The key-value pairs in `attributes` are rendered as a list of secondary labels**.
+- Nodes can have further `RawNodeDatum` objects nested inside them via the `children` key, creating a hierarchy from which the tree graph can be generated.
+
+### Styling Nodes
 `Tree` provides the following props to style different types of nodes, all of which use an SVG `circle` by default:
 
 - `rootNodeClassName` - applied to the root node.
@@ -129,7 +155,8 @@ To visually distinguish these three types of nodes from each other by color, we 
 }
 
 .node__leaf > circle {
-  /* Let's make the radius of leaf nodes larger */
+  fill: green
+  /* Let's also make the radius of leaf nodes larger */
   r: 40;
 }
 ```
@@ -159,7 +186,7 @@ export default function StyledNodesTree() {
 
  <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
 
-## Styling Links
+### Styling Links
 `Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
 
 Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`. `Tree` expects `pathClassFunc` to return a `className` string.
@@ -192,7 +219,7 @@ function StyledLinksTree() {
 
 > For more details, see the `PathClassFunction` [reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction).
 
-## Event Handlers
+### Event Handlers
 `Tree` exposes the following event handler callbacks by default:
 
 - [onLinkClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkclick)
