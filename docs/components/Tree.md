@@ -18,12 +18,6 @@ type: `number`
 defaultValue: `undefined`
 
 
-### `className`
-
-type: `string`
-defaultValue: `undefined`
-
-
 ### `collapsible`
 
 type: `bool`
@@ -118,9 +112,10 @@ type: `enum('horizontal'|'vertical')`
 defaultValue: `'horizontal'`
 
 
-### `pathClass`
+### `pathClassFunc`
 
 type: `func`
+defaultValue: `undefined`
 
 
 ### `pathFunc`
@@ -151,6 +146,12 @@ defaultValue: `false`
 
 type: `shape[object Object]`
 defaultValue: `{}`
+
+
+### `svgClassName`
+
+type: `string`
+defaultValue: `undefined`
 
 
 ### `textLayout`

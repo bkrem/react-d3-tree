@@ -31,9 +31,10 @@ type: `func`
 type: `enum('horizontal'|'vertical')`
 
 
-### `pathClass`
+### `pathClassFunc`
 
 type: `func`
+defaultValue: `undefined`
 
 
 ### `pathFunc` (required)
