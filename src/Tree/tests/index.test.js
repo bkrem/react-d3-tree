@@ -245,6 +245,17 @@ describe('<Tree />', () => {
       const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} initialDepth={0} />);
       expect(renderedComponent.find(Node).length).toBe(1);
     });
+
+    it('increases tree depth by no more than 1 level when a node is expanded after initialising to `initialDepth`', () => {
+      const renderedComponent = mount(<Tree data={mockTree_D1N2_D2N2} initialDepth={0} />);
+      expect(renderedComponent.find(Node).length).toBe(1);
+      renderedComponent
+        .find(Node)
+        .first()
+        .find('circle')
+        .simulate('click');
+      expect(renderedComponent.find(Node).length).toBe(3);
+    });
   });
 
   describe('zoomable', () => {

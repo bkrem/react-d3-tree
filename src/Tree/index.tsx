@@ -399,16 +399,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       );
 
     const rootNode = tree(
-      hierarchy(this.state.data[0], d => {
-        if (initialDepth !== undefined && isInitialRenderForDataset) {
-          // If `initialDepth` is defined, a node's depth determines
-          // whether we append `children` on the first render.
-          return d.__rd3t.depth >= initialDepth ? null : d.children;
-        } else {
-          // Node's `collapsed` property determines appending of `children` for subsequent renders.
-          return d.__rd3t.collapsed ? null : d.children;
-        }
-      })
+      hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children))
     );
     let nodes = rootNode.descendants();
     const links = rootNode.links();
@@ -498,7 +489,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map((linkData, i) => {
-              // console.log(linkData);
               return (
                 <Link
                   key={'link-' + i}
@@ -516,7 +506,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
             })}
 
             {nodes.map(({ data, x, y, parent, ...rest }, i) => {
-              // console.log({ data, x, y, parent, ...rest });
               return (
                 <Node
                   key={'node-' + i}
