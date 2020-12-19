@@ -17,6 +17,7 @@ declare module "react-d3-tree" {
   type ReactD3TreeTranslate = {x: number, y: number}
 
   type ReactD3TreeProps = {
+    className?: string,
     data: ReactD3TreeItem[] | ReactD3TreeItem,
     nodeSvgShape?: NodeSvgShape,
     nodeLabelComponent?: object,
@@ -30,6 +31,7 @@ declare module "react-d3-tree" {
     orientation?: "horizontal" | "vertical",
     translate?: Partial<ReactD3TreeTranslate>,
     pathFunc?: ("diagonal" | "elbow" | "straight" | "step") | ((...args: any[]) => any),
+    pathClass?: ((...args: any[]) => any),
     transitionDuration?: number,
     depthFactor?: number,
     collapsible?: boolean,
@@ -60,7 +62,7 @@ declare module "react-d3-tree" {
   };
 
   var Tree: React.ComponentClass<ReactD3TreeProps>;
-  
+
   export {Tree, ReactD3TreeProps, ReactD3TreeItem, ReactD3TreeTranslate, NodeSvgShape};
   export default Tree;
 }

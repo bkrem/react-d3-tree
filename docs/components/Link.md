@@ -31,6 +31,11 @@ type: `func`
 type: `enum('horizontal'|'vertical')`
 
 
+### `pathClass`
+
+type: `func`
+
+
 ### `pathFunc` (required)
 
 type: `union(enum|func)`
