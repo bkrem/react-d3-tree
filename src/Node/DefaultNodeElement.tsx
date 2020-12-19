@@ -1,5 +1,7 @@
-import React, { SyntheticEvent } from 'react';
-import { CustomNodeElementProps, TreeNodeDatum, SyntheticEventHandler } from '../types/common';
+import React from 'react';
+import { CustomNodeElementProps, SyntheticEventHandler } from '../types/common';
+
+const DEFAULT_NODE_CIRCLE_RADIUS = 15;
 
 const textLayout = {
   title: {
@@ -27,7 +29,7 @@ const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({
 }) => (
   <>
     <circle
-      r={20}
+      r={DEFAULT_NODE_CIRCLE_RADIUS}
       onClick={evt => {
         toggleNode();
         onNodeClick(evt);
