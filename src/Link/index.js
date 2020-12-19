@@ -99,11 +99,11 @@ export default class Link extends React.PureComponent {
   }
 
   getClassNames() {
-    const { linkData, pathClass } = this.props;
+    const { linkData, orientation, pathClassFunc } = this.props;
     const classNames = ['linkBase'];
 
-    if (typeof pathClass === 'function') {
-      classNames.push(pathClass(linkData));
+    if (typeof pathClassFunc === 'function') {
+      classNames.push(pathClassFunc(linkData, orientation));
     }
 
     return classNames.join(' ');
@@ -143,13 +143,13 @@ export default class Link extends React.PureComponent {
 
 Link.defaultProps = {
   styles: {},
-  pathClass: undefined,
+  pathClassFunc: undefined,
 };
 
 Link.propTypes = {
   linkData: T.object.isRequired,
   orientation: T.oneOf(['horizontal', 'vertical']).isRequired,
-  pathClass: T.func,
+  pathClassFunc: T.func,
   pathFunc: T.oneOfType([T.oneOf(['diagonal', 'elbow', 'straight', 'step']), T.func]).isRequired,
   transitionDuration: T.number.isRequired,
   onClick: T.func.isRequired,
