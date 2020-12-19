@@ -1,3 +1,47 @@
+/* eslint-disable camelcase */
+
+export const mockTree_D1N2_D2N2 = [
+  {
+    name: 'Top Level',
+    attributes: {
+      keyA: 'val A',
+      keyB: 'val B',
+      keyC: 'val C',
+    },
+    children: [
+      {
+        name: 'Level 2: A',
+        attributes: {
+          keyA: 'val A',
+          keyB: 'val B',
+          keyC: 'val C',
+        },
+        children: [
+          {
+            name: '3: Son of A',
+            attributes: {
+              keyA: 'val A',
+              keyB: 'val B',
+              keyC: 'val C',
+            },
+          },
+          {
+            name: '3: Daughter of A',
+            attributes: {
+              keyA: 'val A',
+              keyB: 'val B',
+              keyC: 'val C',
+            },
+          },
+        ],
+      },
+      {
+        name: 'Level 2: B',
+      },
+    ],
+  },
+];
+
 const mockData = [
   {
     name: 'Top Level',

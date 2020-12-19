@@ -19,10 +19,10 @@ class Tree extends React.Component {
     d3: Tree.calculateD3Geometry(this.props),
     rd3tSvgClassName: `_${uuid.v4()}`,
     rd3tGClassName: `_${uuid.v4()}`,
+    isInitialRenderForDataset: true,
   };
 
   internalState = {
-    initialRender: true,
     targetNode: null,
     isTransitioning: false,
   };
@@ -36,6 +36,7 @@ class Tree extends React.Component {
         // eslint-disable-next-line react/no-unused-state
         dataRef: nextProps.data,
         data: Tree.assignInternalProperties(clone(nextProps.data)),
+        isInitialRenderForDataset: true,
       };
     }
 
@@ -50,10 +51,17 @@ class Tree extends React.Component {
 
   componentDidMount() {
     this.bindZoomListener(this.props);
-    this.internalState.initialRender = false;
+    // eslint-disable-next-line
+    this.setState({ isInitialRenderForDataset: false });
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.data !== prevProps.data) {
+      // If last `render` was due to change in dataset -> mark the initial render as done.
+      // eslint-disable-next-line
+      this.setState({ isInitialRenderForDataset: false });
+    }
+
     // If zoom-specific props change -> rebind listener with new values
     // Or: rebind zoom listeners to new DOM nodes in case NodeWrapper switched <TransitionGroup> <-> <g>
     if (
@@ -423,6 +431,7 @@ class Tree extends React.Component {
       nodeSize,
       orientation,
     } = this.props;
+    const { isInitialRenderForDataset } = this.state;
 
     const tree = layout
       .tree()
@@ -430,17 +439,21 @@ class Tree extends React.Component {
       .separation(
         (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings),
       )
-      .children(d => (d._collapsed ? null : d._children));
+      .children(d => {
+        if (initialDepth !== undefined && isInitialRenderForDataset) {
+          // If `initialDepth` is defined, a node's depth determines
+          // whether we append `children` on the first render.
+          return d.depth >= initialDepth ? null : d._children;
+        }
+        // Node's `collapsed` property determines appending of `children` for subsequent renders.
+        return d._collapsed ? null : d._children;
+      });
 
     const rootNode = this.state.data[0];
     let nodes = tree.nodes(rootNode);
 
     // set `initialDepth` on first render if specified
-    if (
-      useCollapseData === false &&
-      initialDepth !== undefined &&
-      this.internalState.initialRender
-    ) {
+    if (useCollapseData === false && initialDepth !== undefined && isInitialRenderForDataset) {
       this.setInitialTreeDepth(nodes, initialDepth);
       nodes = tree.nodes(rootNode);
     }

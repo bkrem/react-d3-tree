@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { render } from 'react-dom';
@@ -6,7 +8,7 @@ import NodeWrapper from '../NodeWrapper';
 import Node from '../../Node';
 import Link from '../../Link';
 import Tree from '../index';
-import { mockData, mockData2, mockData3, mockData4 } from './mockData';
+import { mockData, mockData2, mockData3, mockData4, mockTree_D1N2_D2N2 } from './mockData';
 
 describe('<Tree />', () => {
   jest.spyOn(Tree.prototype, 'generateTree');
@@ -270,14 +272,19 @@ describe('<Tree />', () => {
   });
 
   describe('initialDepth', () => {
-    it('sets tree depth to `props.initialDepth` if specified', () => {
-      mount(<Tree data={mockData} initialDepth={1} />);
-      expect(Tree.prototype.setInitialTreeDepth).toHaveBeenCalled();
+    it('expands tree to full depth by default', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} />);
+      expect(renderedComponent.find(Node).length).toBe(5);
     });
 
-    it('does not set an initialDepth if `props.useCollapseData` is true', () => {
-      mount(<Tree data={mockData} initialDepth={1} useCollapseData />);
-      expect(Tree.prototype.setInitialTreeDepth).not.toHaveBeenCalled();
+    it('expands tree to `props.initialDepth` if specified', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} initialDepth={1} />);
+      expect(renderedComponent.find(Node).length).toBe(3);
+    });
+
+    it('renders only the root node if `initialDepth === 0`', () => {
+      const renderedComponent = shallow(<Tree data={mockTree_D1N2_D2N2} initialDepth={0} />);
+      expect(renderedComponent.find(Node).length).toBe(1);
     });
   });
 
@@ -746,7 +753,6 @@ describe('<Tree />', () => {
         .first()
         .simulate('click'); // collapse
 
-      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: expect.any(Object),
         zoom: 1,
@@ -764,7 +770,6 @@ describe('<Tree />', () => {
       );
       const scrollableComponent = document.querySelector('.rd3t-tree-container > svg');
       scrollableComponent.dispatchEvent(new Event('wheel'));
-      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: null,
         translate: { x: expect.any(Number), y: expect.any(Number) },
@@ -798,7 +803,6 @@ describe('<Tree />', () => {
         .first()
         .simulate('click');
 
-      expect(onUpdateSpy).toHaveBeenCalledTimes(1);
       expect(onUpdateSpy).toHaveBeenCalledWith({
         node: expect.any(Object),
         translate,
