@@ -4,13 +4,13 @@
     {
       "name": "Manager",
       "attributes": {
-        "department": "Production"
+        "Department": "Production"
       },
       "children": [
         {
           "name": "Foreman",
           "attributes": {
-            "department": "Fabrication"
+            "Department": "Fabrication"
           },
           "children": [
             {
@@ -21,7 +21,7 @@
         {
           "name": "Foreman",
           "attributes": {
-            "department": "Assembly"
+            "Department": "Assembly"
           },
           "children": [
             {
@@ -34,13 +34,13 @@
     {
       "name": "Manager",
       "attributes": {
-        "department": "Marketing"
+        "Department": "Marketing"
       },
       "children": [
         {
           "name": "Sales Officer",
           "attributes": {
-            "department": "A"
+            "Department": "A"
           },
           "children": [
             {
@@ -51,7 +51,7 @@
         {
           "name": "Sales Officer",
           "attributes": {
-            "department": "B"
+            "Department": "B"
           },
           "children": [
             {

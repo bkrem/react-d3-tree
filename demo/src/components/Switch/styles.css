@@ -44,7 +44,7 @@
   content: "YES";
   padding-left: 8px;
   background-color: #ffffff;
-  color: #FC5C7D;
+  color: #2d3748;
 }
 
 .onoffswitch-inner:after {
@@ -75,5 +75,5 @@
 
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
   right: 0px;
-  background-color: #FC5C7D;
+  background-color: #2d3748;
 }

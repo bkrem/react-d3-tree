@@ -21,7 +21,8 @@
   width: 30%;
   display: flex;
   flex-direction: column;
-  background: #f9c0c0;
+  background: #f7fafc;
+  border-right: 1px solid #2d3748;
 }
 
 .controls-container {
@@ -53,7 +54,7 @@
 
 .tree-container {
   height: 100%;
-  background: #ccf6c8;
+  /* background: #ccf6c8; */
 }
 
 .prop-container {
@@ -74,15 +75,16 @@
 }
 
 .btn-controls {
-  background-color: white;
+  color: #f7fafc;
+  background-color: #2d3748;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
   
 .btn-controls:hover,
 .btn-controls:focus,
 .btn-controls:active {
-  color: #0070f3;
-  border-color: #0070f3;
+  color: white;
+  border-color: #f7fafc;
 }
 
 /* Custom node classes */
