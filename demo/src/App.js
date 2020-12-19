@@ -8,7 +8,6 @@ import PureSvgNodeElement from './components/PureSvgNodeElement';
 import './App.css';
 
 // Data examples
-import { debugData } from './mockData';
 import orgChartJson from './examples/org-chart.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
 import reactTree from './examples/react-tree';
@@ -237,13 +236,6 @@ class App extends Component {
                   <button
                     type="button"
                     className="btn btn-controls btn-block"
-                    onClick={() => this.setTreeData(debugData)}
-                  >
-                    Debug
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-controls btn-block"
                     onClick={() => this.setTreeData(orgChartJson)}
                   >
                     Org chart (small)
@@ -267,7 +259,7 @@ class App extends Component {
                 </div>
               </div>
 
-              <div className="prop-container">
+              {/* <div className="prop-container">
                 <h4 className="prop">
                   Dynamically updating <code>data</code>
                 </h4>
@@ -285,7 +277,7 @@ class App extends Component {
                 >
                   Remove Node
                 </button>
-              </div>
+              </div> */}
 
               <div className="prop-container">
                 <h4 className="prop">Orientation</h4>
