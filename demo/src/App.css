@@ -88,14 +88,8 @@
 }
 
 /* Custom node classes */
-.my-root-node {
-  fill: red;
-}
-.my-branch-node {
-  fill: yellow
-}
-.my-leaf-node {
-  fill: green;
+.demo-node > circle {
+  fill: #2d3748;
 }
 
 /* Custom path classes */

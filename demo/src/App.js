@@ -570,6 +570,8 @@ class App extends Component {
                     ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
                     : undefined
                 }
+                rootNodeClassName="demo-node"
+                branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
                 pathFunc={this.state.pathFunc}
