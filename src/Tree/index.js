@@ -439,15 +439,7 @@ class Tree extends React.Component {
       .separation(
         (a, b) => (a.parent.id === b.parent.id ? separation.siblings : separation.nonSiblings),
       )
-      .children(d => {
-        if (initialDepth !== undefined && isInitialRenderForDataset) {
-          // If `initialDepth` is defined, a node's depth determines
-          // whether we append `children` on the first render.
-          return d.depth >= initialDepth ? null : d._children;
-        }
-        // Node's `collapsed` property determines appending of `children` for subsequent renders.
-        return d._collapsed ? null : d._children;
-      });
+      .children(d => (d._collapsed ? null : d._children));
 
     const rootNode = this.state.data[0];
     let nodes = tree.nodes(rootNode);
