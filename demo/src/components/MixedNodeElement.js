@@ -1,7 +1,6 @@
 import React from 'react';
 
 const MixedNodeElement = ({ nodeData = {}, triggerNodeToggle, foreignObjectProps = {} }) => {
-  console.log("rendering demo's MixedNodeElement");
   return (
     <React.Fragment>
       <circle r={20}></circle>

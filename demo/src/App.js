@@ -15,12 +15,8 @@ import reactTree from './examples/react-tree';
 console.log('Demo React version: ', React.version);
 
 const customNodeFnMapping = {
-  default: {
-    description: 'Default - Pure SVG node & label (IE11 compatible)',
-    fn: undefined,
-  },
   svg: {
-    description: 'PureSvgNodeElement - Pure SVG node & label (IE11 compatible)',
+    description: 'Default - Pure SVG node & label (IE11 compatible)',
     fn: (rd3tProps, appState) => (
       <PureSvgNodeElement
         nodeDatum={rd3tProps.nodeDatum}
@@ -68,7 +64,7 @@ class App extends Component {
       nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
-      renderCustomNodeElement: customNodeFnMapping['default'].fn,
+      renderCustomNodeElement: customNodeFnMapping['svg'].fn,
       styles: {
         nodes: {
           node: {

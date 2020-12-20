@@ -29,7 +29,6 @@ const textLayout = {
 };
 
 const PureSvgNodeElement = ({ nodeDatum, orientation, toggleNode, onNodeClick }) => {
-  console.log("rendering demo's PureSvgNodeElement");
   return (
     <>
       <circle r={20} onClick={toggleNode}></circle>
