@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import Link from '../index';
+import Link from '../index.tsx';
 
-// TODO Find a way to meaningfully test `componentWillLeave`
 describe('<Link />', () => {
   const linkData = {
     source: {
@@ -24,7 +23,6 @@ describe('<Link />', () => {
     onClick: () => {},
     onMouseOver: () => {},
     onMouseOut: () => {},
-    styles: {},
   };
 
   const pathFuncs = {
@@ -43,20 +41,6 @@ describe('<Link />', () => {
   // Clear method spies on prototype after each test
   afterEach(() => jest.clearAllMocks());
 
-  it('applies the base className', () => {
-    const renderedComponent = shallow(<Link {...mockProps} />);
-
-    expect(renderedComponent.prop('className')).toBe('linkBase');
-  });
-
-  it('applies `props.styles` when defined', () => {
-    const initialStyle = { opacity: 0 }; // state.initialStyle
-    const fixture = { ...initialStyle, stroke: '#777', strokeWidth: 2 };
-    const renderedComponent = shallow(<Link {...mockProps} styles={fixture} />);
-
-    expect(renderedComponent.prop('style')).toEqual(fixture);
-  });
-
   it('binds IDs of source & target nodes to data-source-id/data-target-id', () => {
     linkData.source.id = 1;
     linkData.target.id = 2;
@@ -67,63 +51,78 @@ describe('<Link />', () => {
     delete linkData.target.id;
   });
 
-  it('calls the appropriate path func based on `props.pathFunc`', () => {
-    const diagonalComponent = shallow(<Link {...mockProps} />);
-    const elbowComponent = shallow(<Link {...mockProps} pathFunc="elbow" />);
-    const straightComponent = shallow(<Link {...mockProps} pathFunc="straight" />);
-    const stepComponent = shallow(<Link {...mockProps} pathFunc="step" />);
-    shallow(<Link {...mockProps} pathFunc={pathFuncs.testPathFunc} />);
+  describe('handling classNames', () => {
+    it('applies the expected internal className', () => {
+      const renderedComponent = shallow(<Link {...mockProps} />);
+      expect(renderedComponent.prop('className')).toBe('rd3t-link');
+    });
 
-    expect(diagonalComponent.instance().drawDiagonalPath).toHaveBeenCalled();
-    expect(elbowComponent.instance().drawElbowPath).toHaveBeenCalled();
-    expect(straightComponent.instance().drawStraightPath).toHaveBeenCalled();
-    expect(stepComponent.instance().drawStepPath).toHaveBeenCalled();
-    expect(pathFuncs.testPathFunc).toHaveBeenCalled();
-    expect(Link.prototype.drawPath).toHaveBeenCalledTimes(5);
+    it('applies any additional classNames returned by `pathClassFunc` if defined', () => {
+      const fixture = 'additionalPathClassName';
+      const renderedComponent = shallow(<Link {...mockProps} pathClassFunc={() => fixture} />);
+      expect(renderedComponent.prop('className')).toBe(['rd3t-link', fixture].join(' '));
+    });
   });
 
-  it('returns an appropriate elbowPath according to `props.orientation`', () => {
-    expect(Link.prototype.drawElbowPath(linkData, 'horizontal')).toBe(
-      `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`,
-    );
-    expect(Link.prototype.drawElbowPath(linkData, 'vertical')).toBe(
-      `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`,
-    );
-  });
+  describe('drawing paths', () => {
+    it('calls the appropriate path func based on `props.pathFunc`', () => {
+      const diagonalComponent = shallow(<Link {...mockProps} />);
+      const elbowComponent = shallow(<Link {...mockProps} pathFunc="elbow" />);
+      const straightComponent = shallow(<Link {...mockProps} pathFunc="straight" />);
+      const stepComponent = shallow(<Link {...mockProps} pathFunc="step" />);
+      shallow(<Link {...mockProps} pathFunc={pathFuncs.testPathFunc} />);
 
-  it('returns an appropriate diagonal according to `props.orientation`', () => {
-    const ymean = (linkData.target.y + linkData.source.y) / 2;
-    expect(Link.prototype.drawDiagonalPath(linkData, 'horizontal')).toBe(
-      `M${linkData.source.y},${linkData.source.x}` +
-        `C${ymean},${linkData.source.x} ${ymean},${linkData.target.x} ` +
-        `${linkData.target.y},${linkData.target.x}`,
-    );
-    expect(Link.prototype.drawDiagonalPath(linkData, 'vertical')).toBe(
-      `M${linkData.source.x},${linkData.source.y}` +
-        `C${linkData.source.x},${ymean} ${linkData.target.x},${ymean} ` +
-        `${linkData.target.x},${linkData.target.y}`,
-    );
-  });
+      expect(diagonalComponent.instance().drawDiagonalPath).toHaveBeenCalled();
+      expect(elbowComponent.instance().drawElbowPath).toHaveBeenCalled();
+      expect(straightComponent.instance().drawStraightPath).toHaveBeenCalled();
+      expect(stepComponent.instance().drawStepPath).toHaveBeenCalled();
+      expect(pathFuncs.testPathFunc).toHaveBeenCalled();
+      expect(Link.prototype.drawPath).toHaveBeenCalledTimes(5);
+    });
 
-  it('returns an appropriate straightPath according to `props.orientation`', () => {
-    expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
-      `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`,
-    );
-    expect(Link.prototype.drawStraightPath(linkData, 'vertical')).toBe(
-      `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`,
-    );
-  });
+    it('returns an appropriate elbowPath according to `props.orientation`', () => {
+      expect(Link.prototype.drawElbowPath(linkData, 'horizontal')).toBe(
+        `M${linkData.source.y},${linkData.source.x}V${linkData.target.x}H${linkData.target.y}`
+      );
+      expect(Link.prototype.drawElbowPath(linkData, 'vertical')).toBe(
+        `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`
+      );
+    });
 
-  it('return an appropriate stepPath according to `props.orientation`', () => {
-    const { source, target } = linkData;
-    const deltaY = target.y - source.y;
+    it('returns an appropriate diagonal according to `props.orientation`', () => {
+      const ymean = (linkData.target.y + linkData.source.y) / 2;
+      expect(Link.prototype.drawDiagonalPath(linkData, 'horizontal')).toBe(
+        `M${linkData.source.y},${linkData.source.x}` +
+          `C${ymean},${linkData.source.x},${ymean},${linkData.target.x},` +
+          `${linkData.target.y},${linkData.target.x}`
+      );
+      expect(Link.prototype.drawDiagonalPath(linkData, 'vertical')).toBe(
+        `M${linkData.source.x},${linkData.source.y}` +
+          `C${linkData.source.x},${ymean},${linkData.target.x},${ymean},` +
+          `${linkData.target.x},${linkData.target.y}`
+      );
+    });
 
-    expect(Link.prototype.drawStepPath(linkData, 'horizontal')).toBe(
-      `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`,
-    );
-    expect(Link.prototype.drawStepPath(linkData, 'vertical')).toBe(
-      `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`,
-    );
+    it('returns an appropriate straightPath according to `props.orientation`', () => {
+      expect(Link.prototype.drawStraightPath(linkData, 'horizontal')).toBe(
+        `M${linkData.source.y},${linkData.source.x}L${linkData.target.y},${linkData.target.x}`
+      );
+      expect(Link.prototype.drawStraightPath(linkData, 'vertical')).toBe(
+        `M${linkData.source.x},${linkData.source.y}L${linkData.target.x},${linkData.target.y}`
+      );
+    });
+
+    it('return an appropriate stepPath according to `props.orientation`', () => {
+      const { source, target } = linkData;
+      const deltaY = target.y - source.y;
+
+      expect(Link.prototype.drawStepPath(linkData, 'horizontal')).toBe(
+        `M${source.y},${source.x} H${source.y + deltaY / 2} V${target.x} H${target.y}`
+      );
+      expect(Link.prototype.drawStepPath(linkData, 'vertical')).toBe(
+        `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`
+      );
+    });
   });
 
   it('fades in once it has been mounted', () => {
@@ -132,7 +131,7 @@ describe('<Link />', () => {
 
     expect(renderedComponent.instance().applyOpacity).toHaveBeenCalledWith(
       fixture,
-      mockProps.transitionDuration,
+      mockProps.transitionDuration
     );
   });
 
@@ -147,7 +146,7 @@ describe('<Link />', () => {
       expect(onClickSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -161,7 +160,7 @@ describe('<Link />', () => {
       expect(onMouseOverSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
 
@@ -175,7 +174,7 @@ describe('<Link />', () => {
       expect(onMouseOutSpy).toHaveBeenCalledWith(
         linkData.source,
         linkData.target,
-        expect.objectContaining(mockEvt),
+        expect.objectContaining(mockEvt)
       );
     });
   });

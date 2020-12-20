@@ -30,8 +30,11 @@ node_modules
 .idea
 .vscode
 
-# ignore playground dir
-playground
-
 # ignore Webpack stats output
 stats.json
+
+# Build outputs
+dist
+lib
+demo/build
+demo/public/docs

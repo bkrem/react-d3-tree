@@ -1,0 +1,19 @@
+{
+  "printWidth": 100,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "parser": "typescript",
+  "overrides": [
+    {
+      "files": "*.yml",
+      "options": { "parser": "yaml" }
+    },
+    {
+      "files": "*.json",
+      "options": { "parser": "json" }
+    }
+  ]
+}

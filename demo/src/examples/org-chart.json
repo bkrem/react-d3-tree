@@ -1,0 +1,65 @@
+{
+  "name": "CEO",
+  "children": [
+    {
+      "name": "Manager",
+      "attributes": {
+        "Department": "Production"
+      },
+      "children": [
+        {
+          "name": "Foreman",
+          "attributes": {
+            "Department": "Fabrication"
+          },
+          "children": [
+            {
+              "name": "Workers"
+            }
+          ]
+        },
+        {
+          "name": "Foreman",
+          "attributes": {
+            "Department": "Assembly"
+          },
+          "children": [
+            {
+              "name": "Workers"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Manager",
+      "attributes": {
+        "Department": "Marketing"
+      },
+      "children": [
+        {
+          "name": "Sales Officer",
+          "attributes": {
+            "Department": "A"
+          },
+          "children": [
+            {
+              "name": "Salespeople"
+            }
+          ]
+        },
+        {
+          "name": "Sales Officer",
+          "attributes": {
+            "Department": "B"
+          },
+          "children": [
+            {
+              "name": "Salespeople"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

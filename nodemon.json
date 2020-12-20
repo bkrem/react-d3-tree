@@ -1,8 +1,0 @@
-{
-    "verbose": false,
-    "watch": [
-      "src",
-      "nodemon.json"
-    ],
-    "exec": "npm run dev"
-}

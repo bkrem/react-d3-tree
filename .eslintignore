@@ -2,3 +2,5 @@ lib
 scripts
 playground
 coverage
+*.ts
+*.tsx
