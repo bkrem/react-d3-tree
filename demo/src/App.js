@@ -227,6 +227,9 @@ class App extends Component {
               <div className="prop-container">
                 <h2 className="title">React D3 Tree</h2>
                 <h3 className="title">v{version}</h3>
+                <h3 className="title">
+                  <a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Docs (v2)</a>
+                </h3>
                 <h4 className="prop">Examples</h4>
                 <div style={{ marginBottom: '5px' }}>
                   <button
