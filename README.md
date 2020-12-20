@@ -25,6 +25,8 @@
 
 React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging [D3](https://d3js.org/)'s `tree` layout.
 
+> **Want to see what's changed in v2? Check out the [v2 release notes](https://github.com/bkrem/react-d3-tree/releases/tag/v2.0.0).**
+
 > **Looking for v1? Click [here](https://github.com/bkrem/react-d3-tree/tree/v1).**
 
 ## Contents <!-- omit in toc -->
