@@ -43,9 +43,7 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Development](#development)
   - [Setup](#setup)
   - [Hot reloading](#hot-reloading)
-- [FAQ](#faq)
 - [Contributors](#contributors)
-- [License](#license)
 
 ## Installation
 ```bash
@@ -184,8 +182,6 @@ export default function StyledNodesTree() {
 
  > For more details on the `className` props for nodes, see the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html).
 
- <!-- For a full list of options of CSS properties that can be used for the default nodes, check the SVG circle [specification](TODO:) -->
-
 ### Styling Links
 `Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
 
@@ -309,13 +305,5 @@ If you're using `react-d3-tree/demo` for development, open up another terminal w
 npm start
 ```
 
-## FAQ
-
--- TODO --
-
 ## Contributors
-
--- TODO --
-
-## License
-MIT
+A huge thank you to all the [contributors](https://github.com/bkrem/react-d3-tree/graphs/contributors), as well as users who have opened issues with thoughtful suggestions and feedback.
