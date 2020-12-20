@@ -37,13 +37,13 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 ## Installation
 
 ```bash
-yarn add react-d3-tree
+yarn add react-d3-tree@1
 ```
 
 or
 
 ```bash
-npm i --save react-d3-tree
+npm i --save react-d3-tree@1
 ```
 
 ## Usage
