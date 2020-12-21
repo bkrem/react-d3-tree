@@ -13,6 +13,12 @@
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
   </a>
+  <a href="https://bundlephobia.com/result?p=react-d3-tree">
+    <img alt="npm package: minzipped size" src="https://img.shields.io/bundlephobia/minzip/react-d3-tree">
+  </a>
+  <a href="https://www.npmjs.com/package/react-d3-tree">
+    <img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
+  </a>
   <a href="https://github.com/prettier/prettier">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
   </a>
