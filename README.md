@@ -197,9 +197,9 @@ Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's curr
 
 ```jsx
 function StyledLinksTree() {
-  const getDynamicPathClass = ({ sourceNode, targetNode }, orientation) => {
-    if (!targetNode.children) {
-      // Node has no children -> this link leads to a leaf node.
+  const getDynamicPathClass = ({ source, target }, orientation) => {
+    if (!target.children) {
+      // Target node has no children -> this link leads to a leaf node.
       return 'link__to-leaf';
     }
 
