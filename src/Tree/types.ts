@@ -255,6 +255,12 @@ export interface TreeProps {
   /**
    * Enables/disables legacy transitions using `react-transition-group`.
    *
+   * **Note:** This flag is considered legacy and **usage is discouraged for large trees**,
+   * as responsiveness may suffer.
+   *
+   * `enableLegacyTransitions` will be deprecated once a suitable
+   * replacement for transitions has been found.
+   *
    * {@link Tree.defaultProps.enableLegacyTransitions | Default value}
    */
   enableLegacyTransitions?: boolean;
