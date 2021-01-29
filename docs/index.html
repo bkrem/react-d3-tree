@@ -78,6 +78,12 @@
 					<a href="https://www.npmjs.com/package/react-d3-tree">
 						<img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
 					</a>
+					<a href="https://bundlephobia.com/result?p=react-d3-tree">
+						<img alt="npm package: minzipped size" src="https://img.shields.io/bundlephobia/minzip/react-d3-tree">
+					</a>
+					<a href="https://www.npmjs.com/package/react-d3-tree">
+						<img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
+					</a>
 					<a href="https://github.com/prettier/prettier">
 						<img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
 					</a>
@@ -87,6 +93,9 @@
 					<h3 align="center"><a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Documentation (v2)</a></h3>
 				</p>
 				<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging <a href="https://d3js.org/">D3</a>&#39;s <code>tree</code> layout.</p>
+				<blockquote>
+					<p><strong>Want to see what&#39;s changed in v2? Check out the <a href="https://github.com/bkrem/react-d3-tree/releases/tag/v2.0.0">v2 release notes</a>.</strong></p>
+				</blockquote>
 				<blockquote>
 					<p><strong>Looking for v1? Click <a href="https://github.com/bkrem/react-d3-tree/tree/v1">here</a>.</strong></p>
 				</blockquote>
@@ -255,9 +264,9 @@
 				<p><code>Tree</code> provides the <code>pathClassFunc</code> property to pass additional classNames to every link to be rendered.</p>
 				<p>Each link calls <code>pathClassFunc</code> with its own <code>TreeLinkDatum</code> and the tree&#39;s current <code>orientation</code>. <code>Tree</code> expects <code>pathClassFunc</code> to return a <code>className</code> string.</p>
 				<pre><code class="language-jsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">StyledLinksTree</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> getDynamicPathClass = <span class="hljs-function">(<span class="hljs-params">{ sourceNode, targetNode }, orientation</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (!targetNode.children) {
-      <span class="hljs-comment">// Node has no children -&gt; this link leads to a leaf node.</span>
+  <span class="hljs-keyword">const</span> getDynamicPathClass = <span class="hljs-function">(<span class="hljs-params">{ source, target }, orientation</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!target.children) {
+      <span class="hljs-comment">// Target node has no children -&gt; this link leads to a leaf node.</span>
       <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;link__to-leaf&#x27;</span>;
     }
 
