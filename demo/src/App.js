@@ -42,6 +42,19 @@ const customNodeFnMapping = {
   },
 };
 
+const countNodes = (count = 0, n) => {
+  // Count the current node
+  count += 1;
+
+  // Base case: reached a leaf node.
+  if (!n.children) {
+    return count;
+  }
+
+  // Keep traversing children while updating `count` until we reach the base case.
+  return n.children.reduce((sum, child) => countNodes(sum, child), count);
+};
+
 class App extends Component {
   constructor() {
     super();
@@ -50,6 +63,7 @@ class App extends Component {
 
     this.state = {
       data: orgChartJson,
+      totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
       translateX: 200,
       translateY: 300,
@@ -101,7 +115,10 @@ class App extends Component {
   }
 
   setTreeData(data) {
-    this.setState({ data });
+    this.setState({
+      data,
+      totalNodeCount: countNodes(0, Array.isArray(data) ? data[0] : data),
+    });
   }
 
   setLargeTree(data) {
@@ -553,6 +570,9 @@ class App extends Component {
           </div>
 
           <div className="column-right">
+            <div className="tree-stats-container">
+              Total nodes in tree: {this.state.totalNodeCount}
+            </div>
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
                 data={this.state.data}

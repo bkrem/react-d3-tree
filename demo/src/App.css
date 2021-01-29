@@ -87,6 +87,13 @@
   border-color: #f7fafc;
 }
 
+.tree-stats-container {
+  text-align: center;
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid #2d3748;
+  font-weight: bold;
+}
+
 /* Custom node classes */
 .demo-node > circle {
   fill: #2d3748;
