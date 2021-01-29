@@ -3,4 +3,4 @@ scripts
 playground
 coverage
 *.ts
-*.tsx
+# *.tsx
