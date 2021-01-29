@@ -10,7 +10,7 @@ import './App.css';
 // Data examples
 import orgChartJson from './examples/org-chart.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
-import reactTree from './examples/react-tree';
+import reactTree from './examples/reactRepoTree';
 
 console.log('Demo React version: ', React.version);
 
