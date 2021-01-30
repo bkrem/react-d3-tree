@@ -21,9 +21,6 @@ type TreeState = {
   isInitialRenderForDataset: boolean;
 };
 
-const rd3tSvgClassName = 'rd3t-svg';
-const rd3tGClassName = 'rd3t-g';
-
 class Tree extends React.Component<TreeProps, TreeState> {
   static defaultProps: Partial<TreeProps> = {
     onNodeClick: undefined,
@@ -67,6 +64,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
     targetNode: null,
     isTransitioning: false,
   };
+
+  svgInstanceRef = `rd3t-svg-${uuidv4()}`;
+  gInstanceRef = `rd3t-g-${uuidv4()}`;
 
   static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
     let derivedState: Partial<TreeState> = null;
@@ -138,8 +138,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
    */
   bindZoomListener(props: TreeProps) {
     const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
-    const svg = select(`.${rd3tSvgClassName}`);
-    const g = select(`.${rd3tGClassName}`);
+    const svg = select(`.${this.svgInstanceRef}`);
+    const g = select(`.${this.gInstanceRef}`);
     if (zoomable) {
       // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
       // @ts-ignore
@@ -481,11 +481,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
     return (
       <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
         <style>{globalCss}</style>
-        <svg className={[rd3tSvgClassName, svgClassName].join(' ')} width="100%" height="100%">
+        <svg
+          className={`rd3t-svg ${this.svgInstanceRef} ${svgClassName}`}
+          width="100%"
+          height="100%"
+        >
           <TransitionGroupWrapper
             enableLegacyTransitions={enableLegacyTransitions}
             component="g"
-            className={rd3tGClassName}
+            className={`rd3t-g ${this.gInstanceRef}`}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map((linkData, i) => {

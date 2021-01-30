@@ -47,6 +47,18 @@ describe('<Tree />', () => {
     expect(renderedComponent.find(Link).length).toBe(linkCount);
   });
 
+  // Ensures D3's pan & zoom listeners can bind to multiple trees in a single view (https://github.com/bkrem/react-d3-tree/issues/100).
+  it("assigns unique ref classNames to each Tree instance's `svg` and primary `g` tag", () => {
+    const tree1 = shallow(<Tree data={mockData} />);
+    const tree2 = shallow(<Tree data={mockData} />);
+    expect(tree1.find('.rd3t-svg').prop('className')).not.toBe(
+      tree2.find('.rd3t-svg').prop('className')
+    );
+    expect(tree1.find('.rd3t-g').prop('className')).not.toBe(
+      tree2.find('.rd3t-g').prop('className')
+    );
+  });
+
   it('reassigns internal props if `props.data` changes', () => {
     // `assignInternalProperties` recurses by depth: 1 level -> 1 call
     const mockDataDepth = 3;
