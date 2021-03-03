@@ -34,6 +34,8 @@ export interface TreeProps {
    */
   data: RawNodeDatum[] | RawNodeDatum;
 
+  dataKey: string | number;
+
   /**
    * Custom render function that will be used for every node in the tree.
    *

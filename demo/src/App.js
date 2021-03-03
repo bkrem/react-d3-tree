@@ -55,6 +55,42 @@ const countNodes = (count = 0, n) => {
   return n.children.reduce((sum, child) => countNodes(sum, child), count);
 };
 
+const apiChildrenPayload = [
+  {
+    name: 'Foreman',
+    attributes: {
+      department: 'Fabrication',
+    },
+    children: [
+      {
+        name: 'Worker',
+      },
+    ],
+  },
+  {
+    name: 'Foreman',
+    attributes: {
+      department: 'Assembly',
+    },
+    children: [
+      {
+        name: 'Worker',
+      },
+    ],
+  },
+];
+
+const fetchChildDataFromApi = () => Promise.resolve(apiChildrenPayload);
+
+// Get the first leaf node we find in the data set.
+const findLeafNode = node => {
+  if (!node.children) {
+    return node;
+  }
+  const nextNode = node.children[0];
+  return findLeafNode(nextNode);
+};
+
 class App extends Component {
   constructor() {
     super();
@@ -113,6 +149,15 @@ class App extends Component {
     this.setSeparation = this.setSeparation.bind(this);
     this.setNodeSize = this.setNodeSize.bind(this);
   }
+
+  updateDataFromApi = async () => {
+    console.log('UPDATE FROM API');
+    const nextData = clone(this.state.data);
+    const insertionNode = findLeafNode(nextData);
+    const childrenFromApi = await fetchChildDataFromApi();
+    insertionNode.children = childrenFromApi;
+    this.setState({ data: nextData });
+  };
 
   setTreeData(data) {
     this.setState({
@@ -576,11 +621,12 @@ class App extends Component {
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
                 data={this.state.data}
-                renderCustomNodeElement={
-                  this.state.renderCustomNodeElement
-                    ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
-                    : undefined
-                }
+                dataKey={1}
+                // renderCustomNodeElement={
+                //   this.state.renderCustomNodeElement
+                //     ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
+                //     : undefined
+                // }
                 rootNodeClassName="demo-node"
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
@@ -599,26 +645,23 @@ class App extends Component {
                 styles={this.state.styles}
                 shouldCollapseNeighborNodes={this.state.shouldCollapseNeighborNodes}
                 // onUpdate={(...args) => {console.log(args)}}
-                onNodeClick={(...args) => {
-                  console.log('onNodeClick');
-                  console.log(args);
-                }}
-                onNodeMouseOver={(...args) => {
-                  console.log('onNodeMouseOver', args);
-                }}
-                onNodeMouseOut={(...args) => {
-                  console.log('onNodeMouseOut', args);
-                }}
-                onLinkClick={(...args) => {
-                  console.log('onLinkClick');
-                  console.log(args);
-                }}
-                onLinkMouseOver={(...args) => {
-                  console.log('onLinkMouseOver', args);
-                }}
-                onLinkMouseOut={(...args) => {
-                  console.log('onLinkMouseOut', args);
-                }}
+                // onNodeClick={this.updateDataFromApi}
+                // onNodeMouseOver={(...args) => {
+                //   console.log('onNodeMouseOver', args);
+                // }}
+                // onNodeMouseOut={(...args) => {
+                //   console.log('onNodeMouseOut', args);
+                // }}
+                // onLinkClick={(...args) => {
+                //   console.log('onLinkClick');
+                //   console.log(args);
+                // }}
+                // onLinkMouseOver={(...args) => {
+                //   console.log('onLinkMouseOver', args);
+                // }}
+                // onLinkMouseOut={(...args) => {
+                //   console.log('onLinkMouseOut', args);
+                // }}
               />
             </div>
           </div>

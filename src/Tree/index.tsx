@@ -15,6 +15,7 @@ import globalCss from '../globalCss';
 
 type TreeState = {
   dataRef: TreeProps['data'];
+  dataKey: TreeProps['dataKey'];
   data: TreeNodeDatum[];
   d3: { translate: Point; scale: number };
   isTransitioning: boolean;
@@ -23,6 +24,8 @@ type TreeState = {
 
 const rd3tSvgClassName = 'rd3t-svg';
 const rd3tGClassName = 'rd3t-g';
+
+const getRootNode = data => (Array.isArray(data) ? data[0] : data);
 
 class Tree extends React.Component<TreeProps, TreeState> {
   static defaultProps: Partial<TreeProps> = {
@@ -57,6 +60,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   state: TreeState = {
     dataRef: this.props.data,
+    dataKey: this.props.dataKey,
     data: Tree.assignInternalProperties(clone(this.props.data)),
     d3: Tree.calculateD3Geometry(this.props),
     isTransitioning: false,
@@ -71,13 +75,31 @@ class Tree extends React.Component<TreeProps, TreeState> {
   static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
     let derivedState: Partial<TreeState> = null;
     // Clone new data & assign internal properties if `data` object reference changed.
-    if (nextProps.data !== prevState.dataRef) {
+    // console.log(
+    //   getRootNode(nextProps.data),
+    //   getRootNode(prevState.dataRef),
+    //   deepEqual(getRootNode(nextProps.data), getRootNode(prevState.dataRef))
+    // );
+    // if (!deepEqual(getRootNode(nextProps.data), getRootNode(prevState.dataRef))) {
+    if (nextProps.dataKey !== prevState.dataKey) {
+      console.log('DERIVED STATE - DATAKEY changed');
       derivedState = {
-        dataRef: nextProps.data,
+        // dataRef: nextProps.data,
+        dataKey: nextProps.dataKey,
         data: Tree.assignInternalProperties(clone(nextProps.data)),
         isInitialRenderForDataset: true,
       };
     }
+
+    if (nextProps.data !== prevState.dataRef) {
+      console.log('DERIVED STATE - DATA changed');
+      derivedState = {
+        dataRef: nextProps.data,
+        data: Tree.assignInternalProperties(clone(nextProps.data)),
+      };
+      console.log(derivedState.data);
+    }
+
     const d3 = Tree.calculateD3Geometry(nextProps);
     if (!deepEqual(d3, prevState.d3)) {
       derivedState = derivedState || {};
@@ -87,14 +109,25 @@ class Tree extends React.Component<TreeProps, TreeState> {
   }
 
   componentDidMount() {
+    console.log('DID MOUNT');
+
     this.bindZoomListener(this.props);
     this.setState({ isInitialRenderForDataset: false });
   }
 
   componentDidUpdate(prevProps: TreeProps) {
-    if (this.props.data !== prevProps.data) {
-      // If last `render` was due to change in dataset -> mark the initial render as done.
-      this.setState({ isInitialRenderForDataset: false });
+    if (this.props.dataKey) {
+      if (this.props.dataKey !== prevProps.dataKey) {
+        console.log('DID UPDATE - dataKey changed');
+        this.setState({ isInitialRenderForDataset: false });
+      }
+    } else {
+      if (this.props.data !== prevProps.data) {
+        console.log('DID UPDATE - data changed');
+        console.log('DID UPDATE - isInitial: ', this.state.isInitialRenderForDataset);
+        // If last `render` was due to change in dataset -> mark the initial render as done.
+        this.setState({ isInitialRenderForDataset: false });
+      }
     }
 
     if (
@@ -455,6 +488,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   render() {
+    console.log('--- RENDER ---');
+
     const { nodes, links } = this.generateTree();
     const {
       renderCustomNodeElement,
