@@ -1,5 +1,5 @@
 import React from 'react';
-import { TransitionGroup } from 'react-transition-group';
+import { TransitionGroup } from '@bkrem/react-transition-group';
 
 interface TransitionGroupWrapperProps {
   enableLegacyTransitions: boolean;
