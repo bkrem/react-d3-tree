@@ -365,11 +365,15 @@ describe('<Tree />', () => {
         expect(onClickSpy).toHaveBeenCalledTimes(1);
       });
 
-      // TODO: Fix expected vs received treeData state
-      it.skip("clones the clicked node's data & passes it to the onNodeClick callback if defined", () => {
+      it('clones the `hierarchyPointNode` representation & passes it to the onNodeClick callback if defined', () => {
         const onClickSpy = jest.fn();
         const mockEvt = { mock: 'event' };
-        const renderedComponent = mount(<Tree data={mockData} onNodeClick={onClickSpy} />);
+
+        const renderedComponent = mount(
+          // Disable `collapsible` here to avoid side-effects on the underlying tree structure,
+          // i.e. node's expanding/collapsing onClick.
+          <Tree data={mockData} onNodeClick={onClickSpy} collapsible={false} />
+        );
 
         renderedComponent
           .find(Node)
@@ -381,7 +385,7 @@ describe('<Tree />', () => {
           renderedComponent
             .find(Node)
             .first()
-            .prop('data'),
+            .prop('hierarchyPointNode'),
           expect.objectContaining(mockEvt)
         );
       });
@@ -428,7 +432,7 @@ describe('<Tree />', () => {
         expect(onMouseOverSpy).toHaveBeenCalledTimes(0);
       });
 
-      it("clones the hovered node's data & passes it to the onNodeMouseOver callback if defined", () => {
+      it('clones the `hierarchyPointNode` representation & passes it to the onNodeMouseOver callback if defined', () => {
         const onMouseOverSpy = jest.fn();
         const mockEvt = { mock: 'event' };
         const renderedComponent = mount(<Tree data={mockData} onNodeMouseOver={onMouseOverSpy} />);
@@ -443,7 +447,7 @@ describe('<Tree />', () => {
           renderedComponent
             .find(Node)
             .first()
-            .prop('data'),
+            .prop('hierarchyPointNode'),
           expect.objectContaining(mockEvt)
         );
       });
@@ -490,7 +494,7 @@ describe('<Tree />', () => {
         expect(onMouseOutSpy).toHaveBeenCalledTimes(0);
       });
 
-      it("clones the hovered node's data & passes it to the onNodeMouseOut callback if defined", () => {
+      it('clones the `hierarchyPointNode` representation & passes it to the onNodeMouseOut callback if defined', () => {
         const onMouseOutSpy = jest.fn();
         const mockEvt = { mock: 'event' };
         const renderedComponent = mount(<Tree data={mockData} onNodeMouseOut={onMouseOutSpy} />);
@@ -505,7 +509,7 @@ describe('<Tree />', () => {
           renderedComponent
             .find(Node)
             .first()
-            .prop('data'),
+            .prop('hierarchyPointNode'),
           expect.objectContaining(mockEvt)
         );
       });
