@@ -11,7 +11,10 @@ import {
   TreeNodeDatum,
 } from '../types/common';
 
-export type TreeNodeEventCallback = (node: TreeNodeDatum, event: SyntheticEvent) => any;
+export type TreeNodeEventCallback = (
+  node: HierarchyPointNode<TreeNodeDatum>,
+  event: SyntheticEvent
+) => any;
 
 export type TreeLinkEventCallback = (
   sourceNode: HierarchyPointNode<TreeNodeDatum>,
