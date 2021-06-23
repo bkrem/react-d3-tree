@@ -129,7 +129,7 @@ By default, `Tree` expects each node object in `data` to implement the [`RawNode
 ```ts
 interface RawNodeDatum {
   name: string;
-  attributes?: Record<string, string>;
+  attributes?: Record<string, string | number | boolean>;
   children?: RawNodeDatum[];
 }
 ```

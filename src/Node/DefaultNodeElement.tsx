@@ -45,7 +45,7 @@ const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({
         {nodeDatum.attributes &&
           Object.entries(nodeDatum.attributes).map(([labelKey, labelValue], i) => (
             <tspan key={`${labelKey}-${i}`} {...textLayout.attribute}>
-              {labelKey}: {labelValue}
+              {labelKey}: {typeof labelValue === 'boolean' ? labelValue.toString() : labelValue}
             </tspan>
           ))}
       </text>
