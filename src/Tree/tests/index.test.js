@@ -270,18 +270,6 @@ describe('<Tree />', () => {
     });
   });
 
-  describe('zoomable', () => {
-    it('adds the `.rd3t-grabbable` class if `props.zoomable`', () => {
-      const zoomableComponent = shallow(<Tree data={mockData} />);
-      const nonZoomableComponent = shallow(<Tree data={mockData} zoomable={false} />);
-
-      expect(zoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(true);
-      expect(nonZoomableComponent.find('.rd3t-tree-container').hasClass('rd3t-grabbable')).toBe(
-        false
-      );
-    });
-  });
-
   describe('zoom', () => {
     it('applies the `zoom` prop when specified', () => {
       const zoomLevel = 0.3;

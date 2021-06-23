@@ -100,6 +100,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     if (
       !deepEqual(this.props.translate, prevProps.translate) ||
       !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
+      this.props.zoomable !== prevProps.zoomable ||
       this.props.zoom !== prevProps.zoom ||
       this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions
     ) {
@@ -140,35 +141,34 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
     const svg = select(`.${this.svgInstanceRef}`);
     const g = select(`.${this.gInstanceRef}`);
-    if (zoomable) {
-      // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
-      // @ts-ignore
-      svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
-      svg.call(
-        d3zoom()
-          .scaleExtent([scaleExtent.min, scaleExtent.max])
-          // TODO: break this out into a separate zoom handler fn, rather than inlining it.
-          .on('zoom', () => {
-            g.attr('transform', event.transform);
-            if (typeof onUpdate === 'function') {
-              // This callback is magically called not only on "zoom", but on "drag", as well,
-              // even though event.type == "zoom".
-              // Taking advantage of this and not writing a "drag" handler.
-              onUpdate({
-                node: null,
-                zoom: event.transform.k,
-                translate: { x: event.transform.x, y: event.transform.y },
-              });
-              // TODO: remove this? Shouldn't be mutating state keys directly.
-              this.state.d3.scale = event.transform.k;
-              this.state.d3.translate = {
-                x: event.transform.x,
-                y: event.transform.y,
-              };
-            }
-          })
-      );
-    }
+
+    // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
+    // @ts-ignore
+    svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
+    svg.call(
+      d3zoom()
+        .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
+        // TODO: break this out into a separate zoom handler fn, rather than inlining it.
+        .on('zoom', () => {
+          g.attr('transform', event.transform);
+          if (typeof onUpdate === 'function') {
+            // This callback is magically called not only on "zoom", but on "drag", as well,
+            // even though event.type == "zoom".
+            // Taking advantage of this and not writing a "drag" handler.
+            onUpdate({
+              node: null,
+              zoom: event.transform.k,
+              translate: { x: event.transform.x, y: event.transform.y },
+            });
+            // TODO: remove this? Shouldn't be mutating state keys directly.
+            this.state.d3.scale = event.transform.k;
+            this.state.d3.translate = {
+              x: event.transform.x,
+              y: event.transform.y,
+            };
+          }
+        })
+    );
   }
 
   /**
@@ -470,7 +470,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     };
 
     return (
-      <div className={`rd3t-tree-container ${zoomable ? 'rd3t-grabbable' : undefined}`}>
+      <div className="rd3t-tree-container rd3t-grabbable">
         <style>{globalCss}</style>
         <svg
           className={`rd3t-svg ${this.svgInstanceRef} ${svgClassName}`}
