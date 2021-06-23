@@ -4,7 +4,9 @@
     {
       "name": "Manager",
       "attributes": {
-        "Department": "Production"
+        "Department": "Production",
+        "isFullTime": true,
+        "weeklyHours": 80
       },
       "children": [
         {
@@ -34,7 +36,9 @@
     {
       "name": "Manager",
       "attributes": {
-        "Department": "Marketing"
+        "Department": "Marketing",
+        "isFullTime": true,
+        "weeklyHours": 80
       },
       "children": [
         {

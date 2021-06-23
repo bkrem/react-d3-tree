@@ -231,10 +231,6 @@ class App extends Component {
     });
   }
 
-  handleNodeClick = () => {
-    console.log(this.state);
-  };
-
   render() {
     return (
       <div className="App">
@@ -245,7 +241,12 @@ class App extends Component {
                 <h2 className="title">React D3 Tree</h2>
                 <h3 className="title">v{version}</h3>
                 <h3 className="title">
-                  <a href="/react-d3-tree/docs">📖 API Docs (v2)</a>
+                  <a href="/react-d3-tree/docs">
+                    <span role="img" aria-label="open book emoji">
+                      📖
+                    </span>{' '}
+                    API Docs (v2)
+                  </a>
                 </h3>
                 <h4 className="prop">Examples</h4>
                 <div style={{ marginBottom: '5px' }}>
@@ -364,6 +365,15 @@ class App extends Component {
                   name="collapsibleBtn"
                   checked={this.state.collapsible}
                   onChange={this.toggleCollapsible}
+                />
+              </div>
+
+              <div className="prop-container">
+                <h4 className="prop">Zoomable</h4>
+                <Switch
+                  name="zoomableBtn"
+                  checked={this.state.zoomable}
+                  onChange={this.toggleZoomable}
                 />
               </div>
 
@@ -576,11 +586,11 @@ class App extends Component {
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
                 data={this.state.data}
-                renderCustomNodeElement={
-                  this.state.renderCustomNodeElement
-                    ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
-                    : undefined
-                }
+                // renderCustomNodeElement={
+                //   this.state.renderCustomNodeElement
+                //     ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
+                //     : undefined
+                // }
                 rootNodeClassName="demo-node"
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
@@ -599,9 +609,8 @@ class App extends Component {
                 styles={this.state.styles}
                 shouldCollapseNeighborNodes={this.state.shouldCollapseNeighborNodes}
                 // onUpdate={(...args) => {console.log(args)}}
-                onNodeClick={(...args) => {
-                  console.log('onNodeClick');
-                  console.log(args);
+                onNodeClick={(node, evt) => {
+                  console.log('onNodeClick', node, evt);
                 }}
                 onNodeMouseOver={(...args) => {
                   console.log('onNodeMouseOver', args);
