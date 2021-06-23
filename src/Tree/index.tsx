@@ -10,7 +10,7 @@ import TransitionGroupWrapper from './TransitionGroupWrapper';
 import Node from '../Node';
 import Link from '../Link';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common';
-import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types';
+import { TreeLinkEventCallback, TreeProps } from './types';
 import globalCss from '../globalCss';
 
 type TreeState = {
@@ -303,12 +303,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Handles the user-defined `onNodeClick` function.
    */
-  handleOnNodeClickCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
+  handleOnNodeClickCb = (nodeId: string, evt: SyntheticEvent) => {
     const { onNodeClick } = this.props;
     if (onNodeClick && typeof onNodeClick === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
-      onNodeClick(clone(hierarchyPointNode), evt);
+      onNodeClick(clone(targetNode), evt);
     }
   };
 
@@ -327,12 +330,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Handles the user-defined `onNodeMouseOver` function.
    */
-  handleOnNodeMouseOverCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
+  handleOnNodeMouseOverCb = (nodeId: string, evt: SyntheticEvent) => {
     const { onNodeMouseOver } = this.props;
     if (onNodeMouseOver && typeof onNodeMouseOver === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
-      onNodeMouseOver(clone(hierarchyPointNode), evt);
+      onNodeMouseOver(clone(targetNode), evt);
     }
   };
 
@@ -351,12 +357,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Handles the user-defined `onNodeMouseOut` function.
    */
-  handleOnNodeMouseOutCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
+  handleOnNodeMouseOutCb = (nodeId: string, evt: SyntheticEvent) => {
     const { onNodeMouseOut } = this.props;
     if (onNodeMouseOut && typeof onNodeMouseOut === 'function') {
+      const data = clone(this.state.data);
+      const matches = this.findNodesById(nodeId, data, []);
+      const targetNode = matches[0];
       // Persist the SyntheticEvent for downstream handling by users.
       evt.persist();
-      onNodeMouseOut(clone(hierarchyPointNode), evt);
+      onNodeMouseOut(clone(targetNode), evt);
     }
   };
 
@@ -500,14 +509,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
               );
             })}
 
-            {nodes.map((hierarchyPointNode, i) => {
-              const { data, x, y, parent } = hierarchyPointNode;
+            {nodes.map(({ data, x, y, parent, ...rest }, i) => {
               return (
                 <Node
                   key={'node-' + i}
                   data={data}
                   position={{ x, y }}
-                  hierarchyPointNode={hierarchyPointNode}
                   parent={parent}
                   nodeClassName={this.getNodeClassName(parent, data)}
                   renderCustomNodeElement={renderCustomNodeElement}

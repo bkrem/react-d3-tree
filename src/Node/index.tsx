@@ -5,15 +5,11 @@ import { select } from 'd3-selection';
 import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
 import DefaultNodeElement from './DefaultNodeElement';
 
-type NodeEventHandler = (
-  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>,
-  evt: SyntheticEvent
-) => void;
+type NodeEventHandler = (id: string, evt: SyntheticEvent) => void;
 
 type NodeProps = {
   data: TreeNodeDatum;
   position: Point;
-  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
   parent: HierarchyPointNode<TreeNodeDatum> | null;
   nodeClassName: string;
   nodeSize: {
@@ -135,15 +131,15 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   handleNodeToggle = () => this.props.onNodeToggle(this.props.data.__rd3t.id);
 
   handleOnClick = evt => {
-    this.props.onNodeClick(this.props.hierarchyPointNode, evt);
+    this.props.onNodeClick(this.props.data.__rd3t.id, evt);
   };
 
   handleOnMouseOver = evt => {
-    this.props.onNodeMouseOver(this.props.hierarchyPointNode, evt);
+    this.props.onNodeMouseOver(this.props.data.__rd3t.id, evt);
   };
 
   handleOnMouseOut = evt => {
-    this.props.onNodeMouseOut(this.props.hierarchyPointNode, evt);
+    this.props.onNodeMouseOut(this.props.data.__rd3t.id, evt);
   };
 
   componentWillLeave(done) {
