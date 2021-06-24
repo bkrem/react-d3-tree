@@ -11,8 +11,18 @@ describe('<Node />', () => {
     },
   };
 
+  const hierarchyPointNode = {
+    data,
+    depth: 1,
+    height: 0,
+    parent: null,
+    x: -200,
+    y: 200,
+  };
+
   const mockProps = {
     data,
+    hierarchyPointNode,
     nodeSize: {
       x: 123,
       y: 321,
@@ -123,7 +133,7 @@ describe('<Node />', () => {
       expect(onNodeToggleSpy).toHaveBeenCalledWith(data.__rd3t.id);
     });
 
-    it('handles onNodeClick events and passes its nodeId & event object to handler', () => {
+    it('handles onNodeClick events and passes its `hierarchyPointNode` representation & event object to handler', () => {
       const onClickSpy = jest.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(
@@ -132,27 +142,36 @@ describe('<Node />', () => {
 
       renderedComponent.find('circle').simulate('click', mockEvt);
       expect(onClickSpy).toHaveBeenCalledTimes(1);
-      expect(onClickSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
+      expect(onClickSpy).toHaveBeenCalledWith(
+        mockProps.hierarchyPointNode,
+        expect.objectContaining(mockEvt)
+      );
     });
 
-    it('handles onNodeMouseOver events and passes its nodeId & event object to handler', () => {
+    it('handles onNodeMouseOver events and passes its `hierarchyPointNode` representation & event object to handler', () => {
       const onMouseOverSpy = jest.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOver={onMouseOverSpy} />);
 
       renderedComponent.find('circle').simulate('mouseover', mockEvt);
       expect(onMouseOverSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOverSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
+      expect(onMouseOverSpy).toHaveBeenCalledWith(
+        mockProps.hierarchyPointNode,
+        expect.objectContaining(mockEvt)
+      );
     });
 
-    it('handles onNodeMouseOut events and passes its nodeId & event object to handler', () => {
+    it('handles onNodeMouseOut events and passes its `hierarchyPointNode` representation & event object to handler', () => {
       const onMouseOutSpy = jest.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOut={onMouseOutSpy} />);
 
       renderedComponent.find('circle').simulate('mouseout', mockEvt);
       expect(onMouseOutSpy).toHaveBeenCalledTimes(1);
-      expect(onMouseOutSpy).toHaveBeenCalledWith(data.__rd3t.id, expect.objectContaining(mockEvt));
+      expect(onMouseOutSpy).toHaveBeenCalledWith(
+        mockProps.hierarchyPointNode,
+        expect.objectContaining(mockEvt)
+      );
     });
   });
 
