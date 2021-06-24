@@ -245,7 +245,7 @@ class App extends Component {
                     <span role="img" aria-label="open book emoji">
                       📖
                     </span>{' '}
-                    API Docs (v2)
+                    API Docs (v3)
                   </a>
                 </h3>
                 <h4 className="prop">Examples</h4>
