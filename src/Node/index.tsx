@@ -120,11 +120,14 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   renderNodeElement = () => {
     const { data, renderCustomNodeElement } = this.props;
     if (typeof renderCustomNodeElement === 'function') {
-      return renderCustomNodeElement({ nodeDatum: data, toggleNode: this.handleNodeToggle });
+      return renderCustomNodeElement({
+        nodeDatum: this.props.hierarchyPointNode,
+        toggleNode: this.handleNodeToggle,
+      });
     }
 
     return DefaultNodeElement({
-      nodeDatum: data,
+      nodeDatum: this.props.hierarchyPointNode,
       toggleNode: this.handleNodeToggle,
       onNodeClick: this.handleOnClick,
       onNodeMouseOver: this.handleOnMouseOver,
