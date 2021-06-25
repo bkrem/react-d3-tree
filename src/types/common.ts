@@ -42,6 +42,7 @@ export interface CustomNodeElementProps {
    * The full datum of the node that is being rendered.
    */
   nodeDatum: TreeNodeDatum;
+  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
   /**
    * Toggles the expanded/collapsed state of the node.
    *
