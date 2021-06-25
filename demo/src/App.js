@@ -586,11 +586,11 @@ class App extends Component {
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
                 data={this.state.data}
-                // renderCustomNodeElement={
-                //   this.state.renderCustomNodeElement
-                //     ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
-                //     : undefined
-                // }
+                renderCustomNodeElement={
+                  this.state.renderCustomNodeElement
+                    ? rd3tProps => this.state.renderCustomNodeElement(rd3tProps, this.state)
+                    : undefined
+                }
                 rootNodeClassName="demo-node"
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
