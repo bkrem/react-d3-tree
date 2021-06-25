@@ -42,6 +42,10 @@ export interface CustomNodeElementProps {
    * The full datum of the node that is being rendered.
    */
   nodeDatum: TreeNodeDatum;
+  /**
+   * The D3 `HierarchyPointNode` representation of the node, which wraps `nodeDatum`
+   * with additional properties.
+   */
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
   /**
    * Toggles the expanded/collapsed state of the node.
