@@ -155,7 +155,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, pathColorFunc } = this.props;
     let color = pathColorFunc;
     if (typeof pathColorFunc === 'function') {
-      color =  pathColorFunc(linkData) as string;
+      color =  pathColorFunc(linkData)  as string | string[];
     }
 
     return color;
