@@ -33,6 +33,12 @@ type LinkState = {
   initialStyle: { opacity: number };
 };
 
+let _lastId = 0;
+function getId() {
+  _lastId++;
+  return "tree_link_id_" + _lastId;
+}
+
 export default class Link extends React.PureComponent<LinkProps, LinkState> {
   private linkRef: SVGPathElement = null;
 
@@ -143,22 +149,57 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
   };
 
+  getLinkColor(): ?Array<string> | ?string  {
+    const { linkData, pathColorFunc } = this.props;
+    let color = pathColorFunc;
+    if (typeof pathColorFunc === 'function') {
+      color = pathColorFunc(linkData);
+    }
+
+    return color;
+  }
+
+  shouldUseGradient(linkColor): boolean {
+    return Array.isArray(linkColor);
+  }
+
+  getStrokeValue(linkColor, gradientId): string {
+    if (this.shouldUseGradient(linkColor)) {
+      return `url(#${gradientId})`;
+    } else {
+      return linkColor;
+    }
+  }
+
   render() {
-    const { linkData } = this.props;
+    const { linkData, pathColorFunc } = this.props;
+    const gradientId = getId();
+    const linkColor = this.getLinkColor();
+    const [gradientStartColor, gradientEndColor] = shouldUseGradient(linkColor) ? linkColor : [undefined, undefined];
+
     return (
-      <path
-        ref={l => {
-          this.linkRef = l;
-        }}
-        style={{ ...this.state.initialStyle }}
-        className={this.getClassNames()}
-        d={this.drawPath()}
-        onClick={this.handleOnClick}
-        onMouseOver={this.handleOnMouseOver}
-        onMouseOut={this.handleOnMouseOut}
-        data-source-id={linkData.source.id}
-        data-target-id={linkData.target.id}
-      />
+      <>
+      {shouldUseGradient() && <defs>
+        <linearGradient x1={source.x} y1={source.y} x2={target.x} y2={target.y} id={gradientId} gradientUnits="userStepOnUse">
+        <stop offset="0%" stopColor={gradientStartColor} stopOpacity={1} />
+        <stop offset="100%" stopColor={gradientEndColor} stopOpacity={1} />
+        </linearGradient>
+      </defs>}
+        <path
+          ref={l => {
+            this.linkRef = l;
+          }}
+          style={{ ...this.state.initialStyle }}
+          className={this.getClassNames()}
+          d={this.drawPath()}
+          onClick={this.handleOnClick}
+          onMouseOver={this.handleOnMouseOver}
+          onMouseOut={this.handleOnMouseOut}
+          data-source-id={linkData.source.id}
+          data-target-id={linkData.target.id}
+          stroke={this.getStrokeValue(linkColor, gradientId)}
+        />
+      </>
     );
   }
 }
