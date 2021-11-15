@@ -34,7 +34,7 @@ type LinkState = {
 };
 
 let _lastId = 0;
-function getId() {
+function getId(): string {
   _lastId++;
   return "tree_link_id_" + _lastId;
 }
@@ -149,7 +149,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
   };
 
-  getLinkColor(): ?Array<string> | ?string  {
+  getLinkColor(): ?(string[] | string)  {
     const { linkData, pathColorFunc } = this.props;
     let color = pathColorFunc;
     if (typeof pathColorFunc === 'function') {
@@ -159,12 +159,9 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     return color;
   }
 
-  shouldUseGradient(linkColor): boolean {
-    return Array.isArray(linkColor);
-  }
 
   getStrokeValue(linkColor, gradientId): string {
-    if (this.shouldUseGradient(linkColor)) {
+    if (Array.isArray(linkColor)) {
       return `url(#${gradientId})`;
     } else {
       return linkColor;
@@ -175,12 +172,12 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, pathColorFunc } = this.props;
     const gradientId = getId();
     const linkColor = this.getLinkColor();
-    const [gradientStartColor, gradientEndColor] = shouldUseGradient(linkColor) ? linkColor : [undefined, undefined];
+    const [gradientStartColor, gradientEndColor] = Array.isArray(linkColor) ? linkColor : [undefined, undefined];
 
     return (
       <>
-      {shouldUseGradient() && <defs>
-        <linearGradient x1={source.x} y1={source.y} x2={target.x} y2={target.y} id={gradientId} gradientUnits="userStepOnUse">
+      {gradientStartColor && <defs>
+        <linearGradient x1={linkData.source.x} y1={linkData.source.y} x2={linkData.target.x} y2={linkData.target.y} id={gradientId} gradientUnits="userStepOnUse">
         <stop offset="0%" stopColor={gradientStartColor} stopOpacity={1} />
         <stop offset="100%" stopColor={gradientEndColor} stopOpacity={1} />
         </linearGradient>
