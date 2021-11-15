@@ -9,6 +9,7 @@ import {
   PathFunction,
   TreeNodeDatum,
   PathClassFunction,
+  PathColorFunction,
 } from '../types/common';
 
 type LinkEventHandler = (
@@ -22,6 +23,7 @@ interface LinkProps {
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
   pathClassFunc?: PathClassFunction;
+  pathColorFunc?: PathColorFunction;
   enableLegacyTransitions: boolean;
   transitionDuration: number;
   onClick: LinkEventHandler;
