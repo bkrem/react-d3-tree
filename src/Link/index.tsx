@@ -151,7 +151,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
   };
 
-  getLinkColor(): (string[] | string | undefined)  {
+  getLinkColor(): string[] | string | undefined| null  {
     const { linkData, pathColorFunc } = this.props;
     let color = pathColorFunc;
     if (typeof pathColorFunc === 'function') {
