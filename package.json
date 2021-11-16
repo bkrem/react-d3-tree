@@ -13,6 +13,7 @@
     "build:docs": "rimraf ./docs && typedoc",
     "build": "rimraf lib && tsc",
     "build:watch": "rimraf lib && tsc -w",
+    "install": "npm run build",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
