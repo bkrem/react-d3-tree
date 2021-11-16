@@ -114,6 +114,8 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, orientation, pathFunc } = this.props;
 
     if (typeof pathFunc === 'function') {
+    const a =3
+    a;
       return pathFunc(linkData, orientation);
     }
     if (pathFunc === 'elbow') {
