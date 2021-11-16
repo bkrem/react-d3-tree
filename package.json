@@ -8,9 +8,6 @@
     "url": "https://github.com/bkrem/react-d3-tree/issues"
   },
   "homepage": "https://github.com/bkrem/react-d3-tree",
-  "files": [
-    "lib"
-  ],
   "main": "lib/index.js",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
