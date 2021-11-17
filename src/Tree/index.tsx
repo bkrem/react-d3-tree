@@ -151,6 +151,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .on('zoom', () => {
+          if (!this.props.zoomable) return;
           g.attr('transform', event.transform);
           if (typeof onUpdate === 'function') {
             // This callback is magically called not only on "zoom", but on "drag", as well,
@@ -473,7 +474,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     };
 
     return (
-      <div className="rd3t-tree-container rd3t-grabbable">
+      <div className="rd3t-tree-container  rd3t-grabbable">
         <style>{globalCss}</style>
         <svg
           className={`rd3t-svg ${this.svgInstanceRef} ${svgClassName}`}

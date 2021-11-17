@@ -71,7 +71,7 @@ class App extends Component {
       shouldCollapseNeighborNodes: false,
       initialDepth: 1,
       depthFactor: undefined,
-      zoomable: true,
+      zoomable: false,
       zoom: 1,
       scaleExtent: { min: 0.1, max: 1 },
       separation: { siblings: 2, nonSiblings: 2 },
