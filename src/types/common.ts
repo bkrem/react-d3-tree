@@ -31,8 +31,7 @@ export interface TreeLinkDatum {
 export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
 export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
 export type PathClassFunction = PathFunction;
-export type PathColorFunction = (link: TreeLinkDatum) =>  string;
-
+export type PathColorFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
 
 /**

@@ -34,6 +34,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     translate: { x: 0, y: 0 },
     pathFunc: 'diagonal',
     pathClassFunc: undefined,
+    pathColorFunc: undefined,
     transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
@@ -460,6 +461,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       enableLegacyTransitions,
       svgClassName,
       pathClassFunc,
+
+      pathColorFunc,
     } = this.props;
     const { translate, scale } = this.state.d3;
     const subscriptions = {
@@ -491,6 +494,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   pathFunc={pathFunc}
                   pathClassFunc={pathClassFunc}
                   linkData={linkData}
+                  pathColorFunc={pathColorFunc}
                   onClick={this.handleOnLinkClickCb}
                   onMouseOver={this.handleOnLinkMouseOverCb}
                   onMouseOut={this.handleOnLinkMouseOutCb}

@@ -38,7 +38,7 @@ type LinkState = {
 let _lastId = 0;
 function getId(): string {
   _lastId++;
-  return "tree_link_id_" + _lastId;
+  return 'tree_link_id_' + _lastId;
 }
 
 export default class Link extends React.PureComponent<LinkProps, LinkState> {
@@ -114,8 +114,8 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, orientation, pathFunc } = this.props;
 
     if (typeof pathFunc === 'function') {
-    const a =3
-    a;
+      const a = 3;
+      a;
       return pathFunc(linkData, orientation);
     }
     if (pathFunc === 'elbow') {
@@ -153,16 +153,15 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
   };
 
-  getLinkColor(): string[] | string | undefined| null  {
-    const { linkData, pathColorFunc } = this.props;
-  
+  getLinkColor(): string[] | string | undefined | null {
+    const { linkData, pathColorFunc, orientation } = this.props;
+
     if (typeof pathColorFunc === 'function') {
-       return  pathColorFunc(linkData);
+      return pathColorFunc(linkData, orientation);
     }
 
     return undefined;
   }
-
 
   getStrokeValue(linkColor, gradientId): string {
     if (Array.isArray(linkColor)) {
@@ -172,25 +171,43 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     }
   }
 
+  getGradientDef(gradientId, linkData, gradientStartColor, gradientEndColor) {
+    return (
+      <defs>
+        <linearGradient
+          id={gradientId}
+          y2={this.props.orientation === 'horizontal' ? '0%' : '100%'}
+          x2={this.props.orientation === 'horizontal' ? '100%' : '0%'}
+          gradientUnits={
+            linkData.source.x === linkData.target.x ? 'userSpaceOnUse' : 'objectBoundingBox'
+          }
+        >
+          <stop offset="0%" stopColor={gradientStartColor} stopOpacity={1} />
+          <stop offset="100%" stopColor={gradientEndColor} stopOpacity={1} />
+        </linearGradient>
+      </defs>
+    );
+  }
+
   render() {
-    const { linkData, pathColorFunc } = this.props;
+    const { linkData } = this.props;
     const gradientId = getId();
     const linkColor = this.getLinkColor();
-    const [gradientStartColor, gradientEndColor] = Array.isArray(linkColor) ? linkColor : [undefined, undefined];
+    const pathStyle = { ...this.state.initialStyle };
+    const [gradientStartColor, gradientEndColor] = Array.isArray(linkColor)
+      ? linkColor
+      : [undefined, undefined];
 
+    if (gradientEndColor) {
+      pathStyle['stroke'] = this.getStrokeValue(linkColor, gradientId);
+    }
     return (
       <>
-      {gradientStartColor && <defs>
-        <linearGradient x1={linkData.source.x} y1={linkData.source.y} x2={linkData.target.x} y2={linkData.target.y} id={gradientId} gradientUnits="userStepOnUse">
-        <stop offset="0%" stopColor={gradientStartColor} stopOpacity={1} />
-        <stop offset="100%" stopColor={gradientEndColor} stopOpacity={1} />
-        </linearGradient>
-      </defs>}
         <path
           ref={l => {
             this.linkRef = l;
           }}
-          style={{ ...this.state.initialStyle }}
+          style={{ ...pathStyle }}
           className={this.getClassNames()}
           d={this.drawPath()}
           onClick={this.handleOnClick}
@@ -198,8 +215,9 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
           onMouseOut={this.handleOnMouseOut}
           data-source-id={linkData.source.id}
           data-target-id={linkData.target.id}
-          stroke={this.getStrokeValue(linkColor, gradientId)}
         />
+        {gradientStartColor &&
+          this.getGradientDef(gradientId, linkData, gradientStartColor, gradientEndColor)}
       </>
     );
   }

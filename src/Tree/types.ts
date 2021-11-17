@@ -3,6 +3,7 @@ import { SyntheticEvent } from 'react';
 import {
   Orientation,
   PathClassFunction,
+  PathColorFunction,
   PathFunction,
   PathFunctionOption,
   Point,
@@ -145,6 +146,18 @@ export interface TreeProps {
    * {@link Tree.defaultProps.pathClassFunc | Default value}
    */
   pathClassFunc?: PathClassFunction;
+
+  /**
+   * Allows for additional className(s) to be passed to links.
+   *
+   * Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
+   * Expects a `className` string to be returned.
+   *
+   * See the `PathClassFunction` type for more information.
+   *
+   * {@link Tree.defaultProps.pathClassFunc | Default value}
+   */
+  pathColorFunc?: PathColorFunction;
 
   /**
    * Determines the spacing between parent & child nodes.

@@ -595,6 +595,8 @@ class App extends Component {
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
+                pathClassFunc={() => 'path-class-name'}
+                pathColorFunc={() => ['#e5e5e5', '#003087']}
                 pathFunc={this.state.pathFunc}
                 collapsible={this.state.collapsible}
                 initialDepth={this.state.initialDepth}
