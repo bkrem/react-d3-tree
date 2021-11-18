@@ -148,9 +148,10 @@ export interface TreeProps {
   pathClassFunc?: PathClassFunction;
 
   /**
-   * Allows for additional className(s) to be passed to links.
+   * Allows for additional colors (single of array of 2 colors) be passed to links.
    *
-   * Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
+   *
+   * Each link calls `pathColorFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
    * Expects a `className` string to be returned.
    *
    * See the `PathClassFunction` type for more information.

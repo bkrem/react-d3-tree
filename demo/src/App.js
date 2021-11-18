@@ -71,7 +71,7 @@ class App extends Component {
       shouldCollapseNeighborNodes: false,
       initialDepth: 1,
       depthFactor: undefined,
-      zoomable: false,
+      zoomable: true,
       zoom: 1,
       scaleExtent: { min: 0.1, max: 1 },
       separation: { siblings: 2, nonSiblings: 2 },
@@ -595,8 +595,6 @@ class App extends Component {
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
-                pathClassFunc={() => 'path-class-name'}
-                pathColorFunc={() => ['#e5e5e5', '#003087']}
                 pathFunc={this.state.pathFunc}
                 collapsible={this.state.collapsible}
                 initialDepth={this.state.initialDepth}

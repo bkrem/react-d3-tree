@@ -94,7 +94,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
       : linkVertical()({
           source: [source.x, source.y],
           target: [target.x, target.y],
-        });
+        });Allows for additional className(s) to be passed to link
   }
 
   drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
@@ -114,9 +114,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, orientation, pathFunc } = this.props;
 
     if (typeof pathFunc === 'function') {
-      const a = 3;
-      a;
-      return pathFunc(linkData, orientation);
+    return pathFunc(linkData, orientation);
     }
     if (pathFunc === 'elbow') {
       return this.drawElbowPath(linkData, orientation);
