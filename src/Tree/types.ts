@@ -154,7 +154,7 @@ export interface TreeProps {
    * Each link calls `pathColorFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
    * Expects a `className` string to be returned.
    *
-   * See the `PathClassFunction` type for more information.
+   * See the `PathColorFunc` type for more information.
    *
    * {@link Tree.defaultProps.pathClassFunc | Default value}
    */
