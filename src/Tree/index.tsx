@@ -462,7 +462,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       enableLegacyTransitions,
       svgClassName,
       pathClassFunc,
-
       pathColorFunc,
     } = this.props;
     const { translate, scale } = this.state.d3;
@@ -474,7 +473,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     };
 
     return (
-      <div className="rd3t-tree-container  rd3t-grabbable">
+      <div className="rd3t-tree-container rd3t-grabbable">
         <style>{globalCss}</style>
         <svg
           className={`rd3t-svg ${this.svgInstanceRef} ${svgClassName}`}
