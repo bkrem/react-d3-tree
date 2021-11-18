@@ -151,16 +151,6 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     this.props.onMouseOut(this.props.linkData.source, this.props.linkData.target, evt);
   };
 
-  getLinkColor(): string[] | string | undefined | null {
-    const { linkData, pathColorFunc, orientation } = this.props;
-
-    if (typeof pathColorFunc === 'function') {
-      return pathColorFunc(linkData, orientation);
-    }
-
-    return undefined;
-  }
-
   getStrokeValue(linkColor, gradientId): string {
     if (Array.isArray(linkColor)) {
       return `url(#${gradientId})`;
@@ -190,7 +180,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   render() {
     const { linkData } = this.props;
     const gradientId = getId();
-    const linkColor = this.getLinkColor();
+    const linkColor = this.props.pathColorFunc?.(linkData, this.props.orientation)
     const pathStyle = { ...this.state.initialStyle };
     const [gradientStartColor, gradientEndColor] = Array.isArray(linkColor)
       ? linkColor
