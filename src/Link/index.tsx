@@ -164,11 +164,11 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
       <defs>
         <linearGradient
           id={gradientId}
-          y2={this.props.orientation === 'horizontal' ? '0%' : '100%'}
-          x2={this.props.orientation === 'horizontal' ? '100%' : '0%'}
-          gradientUnits={
-            linkData.source.x === linkData.target.x ? 'userSpaceOnUse' : 'objectBoundingBox'
-          }
+          x1={linkData.source.x}
+          y1={linkData.source.y}
+          x2={linkData.target.x}
+          y2={linkData.target.y}
+          gradientUnits="userSpaceOnUse"
         >
           <stop offset="0%" stopColor={gradientStartColor} stopOpacity={1} />
           <stop offset="100%" stopColor={gradientEndColor} stopOpacity={1} />
