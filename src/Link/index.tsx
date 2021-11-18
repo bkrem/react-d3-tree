@@ -195,7 +195,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
           ref={l => {
             this.linkRef = l;
           }}
-          style={{ ...pathStyle }}
+          style={pathStyle}
           className={this.getClassNames()}
           d={this.drawPath()}
           onClick={this.handleOnClick}
