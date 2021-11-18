@@ -148,7 +148,7 @@ export interface TreeProps {
   pathClassFunc?: PathClassFunction;
 
   /**
-   * Allows for additional colors (single of array of 2 colors) be passed to links.
+   * Allows for additional colors be passed to links, single solid color, or array of 2 colors to use a gradient.
    *
    *
    * Each link calls `pathColorFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
