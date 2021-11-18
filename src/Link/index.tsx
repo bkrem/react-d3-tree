@@ -94,7 +94,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
       : linkVertical()({
           source: [source.x, source.y],
           target: [target.x, target.y],
-        });Allows for additional className(s) to be passed to link
+        });
   }
 
   drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
@@ -114,7 +114,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     const { linkData, orientation, pathFunc } = this.props;
 
     if (typeof pathFunc === 'function') {
-    return pathFunc(linkData, orientation);
+      return pathFunc(linkData, orientation);
     }
     if (pathFunc === 'elbow') {
       return this.drawElbowPath(linkData, orientation);
@@ -180,7 +180,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   render() {
     const { linkData } = this.props;
     const gradientId = getId();
-    const linkColor = this.props.pathColorFunc?.(linkData, this.props.orientation)
+    const linkColor = this.props.pathColorFunc?.(linkData, this.props.orientation);
     const pathStyle = { ...this.state.initialStyle };
     const [gradientStartColor, gradientEndColor] = Array.isArray(linkColor)
       ? linkColor
