@@ -50,6 +50,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     leafNodeClassName: '',
     renderCustomNodeElement: undefined,
     enableLegacyTransitions: false,
+    interactiveNode: false,
   };
 
   state: TreeState = {
@@ -138,7 +139,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * specified in `props.scaleExtent`.
    */
   bindZoomListener(props: TreeProps) {
-    const { zoomable, scaleExtent, translate, zoom, onUpdate } = props;
+    const { zoomable, scaleExtent, translate, zoom, onUpdate, interactiveNode } = props;
     const svg = select(`.${this.svgInstanceRef}`);
     const g = select(`.${this.gInstanceRef}`);
 
@@ -149,6 +150,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
       d3zoom()
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
+        .filter(() => {
+          if (interactiveNode) return event.target.classList.contains(this.svgInstanceRef) || event.target.classList.contains(this.gInstanceRef);
+          return true;
+        })
         .on('zoom', () => {
           g.attr('transform', event.transform);
           if (typeof onUpdate === 'function') {

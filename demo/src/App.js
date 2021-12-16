@@ -16,6 +16,21 @@ import reactTree from './examples/reactRepoTree';
 console.log('Demo React version: ', React.version);
 
 const customNodeFnMapping = {
+  input: {
+    description: 'MixedNodeElement - With input elements',
+    fn: ({ nodeDatum, toggleNode }, appState) => (
+      <MixedNodeInputElement
+        nodeData={nodeDatum}
+        triggerNodeToggle={toggleNode}
+        foreignObjectProps={{
+          width: appState.nodeSize.x,
+          height: appState.nodeSize.y,
+          x: -50,
+          y: 50,
+        }}
+      />
+    ),
+  },
   svg: {
     description: 'Default - Pure SVG node & label (IE11 compatible)',
     fn: (rd3tProps, appState) => (
@@ -30,21 +45,6 @@ const customNodeFnMapping = {
     description: 'MixedNodeElement - SVG `circle` + `foreignObject` label',
     fn: ({ nodeDatum, toggleNode }, appState) => (
       <MixedNodeElement
-        nodeData={nodeDatum}
-        triggerNodeToggle={toggleNode}
-        foreignObjectProps={{
-          width: appState.nodeSize.x,
-          height: appState.nodeSize.y,
-          x: -50,
-          y: 50,
-        }}
-      />
-    ),
-  },
-  input: {
-    description: 'MixedNodeElement - With input elements',
-    fn: ({ nodeDatum, toggleNode }, appState) => (
-      <MixedNodeInputElement
         nodeData={nodeDatum}
         triggerNodeToggle={toggleNode}
         foreignObjectProps={{
@@ -94,7 +94,7 @@ class App extends Component {
       nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
-      renderCustomNodeElement: customNodeFnMapping['svg'].fn,
+      renderCustomNodeElement: customNodeFnMapping['input'].fn,
       styles: {
         nodes: {
           node: {
@@ -601,6 +601,7 @@ class App extends Component {
             </div>
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
+                interactiveNode
                 data={this.state.data}
                 renderCustomNodeElement={
                   this.state.renderCustomNodeElement
