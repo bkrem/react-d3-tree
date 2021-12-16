@@ -5,6 +5,7 @@ import { version } from 'react-d3-tree/package.json';
 import Switch from './components/Switch';
 import MixedNodeElement from './components/MixedNodeElement';
 import PureSvgNodeElement from './components/PureSvgNodeElement';
+import MixedNodeInputElement from './components/MixedNodeInputElement';
 import './App.css';
 
 // Data examples
@@ -40,6 +41,21 @@ const customNodeFnMapping = {
       />
     ),
   },
+  input: {
+    description: 'MixedNodeElement - With input elements',
+    fn: ({ nodeDatum, toggleNode }, appState) => (
+      <MixedNodeInputElement
+        nodeData={nodeDatum}
+        triggerNodeToggle={toggleNode}
+        foreignObjectProps={{
+          width: appState.nodeSize.x,
+          height: appState.nodeSize.y,
+          x: -50,
+          y: 50,
+        }}
+      />
+    ),
+  }
 };
 
 const countNodes = (count = 0, n) => {
