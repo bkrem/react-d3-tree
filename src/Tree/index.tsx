@@ -151,7 +151,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .filter(() => {
-          if (interactiveNode) return event.target.classList.contains(this.svgInstanceRef) || event.target.classList.contains(this.gInstanceRef);
+          if (interactiveNode) return event.target.classList.contains(this.svgInstanceRef) || event.target.classList.contains(this.gInstanceRef) || event.shiftKey;
           return true;
         })
         .on('zoom', () => {
