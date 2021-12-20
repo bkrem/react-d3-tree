@@ -275,4 +275,9 @@ export interface TreeProps {
    * {@link Tree.defaultProps.transitionDuration | Default value}
    */
   transitionDuration?: number;
+  
+  /**
+   * If node is interactive, drag and pan d3 events will only trigger on main tree element and not on nodes and links.
+  */
+  hasInteractiveNodes?: boolean;
 }
