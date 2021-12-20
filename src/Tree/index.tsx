@@ -139,7 +139,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * specified in `props.scaleExtent`.
    */
   bindZoomListener(props: TreeProps) {
-    const { zoomable, scaleExtent, translate, zoom, onUpdate, interactiveNode } = props;
+    const { zoomable, scaleExtent, translate, zoom, onUpdate, hasInteractiveNodes } = props;
     const svg = select(`.${this.svgInstanceRef}`);
     const g = select(`.${this.gInstanceRef}`);
 
