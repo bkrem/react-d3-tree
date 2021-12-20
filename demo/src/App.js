@@ -94,7 +94,7 @@ class App extends Component {
       nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
-      renderCustomNodeElement: customNodeFnMapping['input'].fn,
+      renderCustomNodeElement: customNodeFnMapping['svg'].fn,
       styles: {
         nodes: {
           node: {
