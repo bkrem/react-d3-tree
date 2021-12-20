@@ -601,7 +601,7 @@ class App extends Component {
             </div>
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
               <Tree
-                interactiveNode
+                hasInteractiveNodes
                 data={this.state.data}
                 renderCustomNodeElement={
                   this.state.renderCustomNodeElement
