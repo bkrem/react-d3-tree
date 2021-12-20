@@ -50,7 +50,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     leafNodeClassName: '',
     renderCustomNodeElement: undefined,
     enableLegacyTransitions: false,
-    interactiveNode: false,
+    hasInteractiveNodes: false,
   };
 
   state: TreeState = {
