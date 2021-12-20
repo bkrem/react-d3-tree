@@ -1,6 +1,4 @@
 import React from 'react';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
 
 const MixedNodeElement = ({ nodeData = {}, triggerNodeToggle, foreignObjectProps = {} }) => {
   return (
@@ -9,9 +7,11 @@ const MixedNodeElement = ({ nodeData = {}, triggerNodeToggle, foreignObjectProps
       <foreignObject {...foreignObjectProps}>
         <div
           style={{
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyContent: 'space-between',
             border: '1px solid black',
             paddingBottom: '1rem',
             backgroundColor: 'rgb(248, 248, 255)', // ghostwhite
@@ -26,12 +26,11 @@ const MixedNodeElement = ({ nodeData = {}, triggerNodeToggle, foreignObjectProps
                 </li>
               ))}
           </ul>
-          <input type="number" />
-          <TextField select fullWidth>
-            <MenuItem value="1">1</MenuItem>
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="3">3</MenuItem>
-          </TextField>
+          <select>
+            <option value="1">Option: 1</option>
+            <option value="2">Option: 2</option>
+            <option value="3">Option: 3</option>
+          </select>
           {nodeData.children && (
             <button style={{ textAlign: 'center' }} onClick={triggerNodeToggle}>
               {nodeData.__rd3t.collapsed ? '⬅️ ➡️ Expand' : '➡️ ⬅️ Collapse'}
