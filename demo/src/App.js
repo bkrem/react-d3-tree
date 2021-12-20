@@ -16,21 +16,6 @@ import reactTree from './examples/reactRepoTree';
 console.log('Demo React version: ', React.version);
 
 const customNodeFnMapping = {
-  input: {
-    description: 'MixedNodeElement - With input elements',
-    fn: ({ nodeDatum, toggleNode }, appState) => (
-      <MixedNodeInputElement
-        nodeData={nodeDatum}
-        triggerNodeToggle={toggleNode}
-        foreignObjectProps={{
-          width: appState.nodeSize.x,
-          height: appState.nodeSize.y,
-          x: -50,
-          y: 50,
-        }}
-      />
-    ),
-  },
   svg: {
     description: 'Default - Pure SVG node & label (IE11 compatible)',
     fn: (rd3tProps, appState) => (
@@ -55,7 +40,22 @@ const customNodeFnMapping = {
         }}
       />
     ),
-  }
+  },
+  input: {
+    description: 'MixedNodeElement - Interactive nodes with inputs',
+    fn: ({ nodeDatum, toggleNode }, appState) => (
+      <MixedNodeInputElement
+        nodeData={nodeDatum}
+        triggerNodeToggle={toggleNode}
+        foreignObjectProps={{
+          width: appState.nodeSize.x,
+          height: appState.nodeSize.y,
+          x: -50,
+          y: 50,
+        }}
+      />
+    ),
+  },
 };
 
 const countNodes = (count = 0, n) => {
