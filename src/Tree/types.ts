@@ -275,9 +275,14 @@ export interface TreeProps {
    * {@link Tree.defaultProps.transitionDuration | Default value}
    */
   transitionDuration?: number;
-  
+
   /**
-   * If node is interactive, drag and pan d3 events will only trigger on main tree element and not on nodes and links.
-  */
+   * Disables drag/pan/zoom D3 events when hovering over a node.
+   * Useful for cases where D3 events interfere when interacting with inputs or other interactive elements on a node.
+   *
+   * **Tip:** Holding the `Shift` key while hovering over a node re-enables the D3 events.
+   *
+   * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
+   */
   hasInteractiveNodes?: boolean;
 }
