@@ -29,6 +29,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     onLinkClick: undefined,
     onLinkMouseOver: undefined,
     onLinkMouseOut: undefined,
+    onRefAssignment: undefined,
     onUpdate: undefined,
     orientation: 'horizontal',
     translate: { x: 0, y: 0 },
@@ -151,7 +152,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .filter(() => {
-          if (hasInteractiveNodes) return event.target.classList.contains(this.svgInstanceRef) || event.target.classList.contains(this.gInstanceRef) || event.shiftKey;
+          if (hasInteractiveNodes)
+            return (
+              event.target.classList.contains(this.svgInstanceRef) ||
+              event.target.classList.contains(this.gInstanceRef) ||
+              event.shiftKey
+            );
           return true;
         })
         .on('zoom', () => {
@@ -519,6 +525,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   nodeSize={nodeSize}
                   orientation={orientation}
                   enableLegacyTransitions={enableLegacyTransitions}
+                  onRefAssignment={onRefAssignment}
                   transitionDuration={transitionDuration}
                   onNodeToggle={this.handleNodeToggle}
                   onNodeClick={this.handleOnNodeClickCb}

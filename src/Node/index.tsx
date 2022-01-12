@@ -28,6 +28,7 @@ type NodeProps = {
   onNodeClick: NodeEventHandler;
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
+  onRefAssignment: (element: SVGGElement) => void;
   subscriptions: object;
 };
 
@@ -163,6 +164,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
       <g
         id={data.__rd3t.id}
         ref={n => {
+          this.props.onRefAssignment(n);
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}

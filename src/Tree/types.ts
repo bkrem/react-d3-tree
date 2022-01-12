@@ -285,4 +285,9 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
+
+  /**
+   * A function that is called when the ref gets assigned for each node
+   */
+  onRefAssignment?: (element: SVGGElement) => void;
 }
