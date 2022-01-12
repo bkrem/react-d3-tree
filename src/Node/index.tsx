@@ -119,7 +119,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   // TODO: needs tests
   renderNodeElement = () => {
     const { data, hierarchyPointNode, renderCustomNodeElement } = this.props;
-    const callable = renderCustomNodeElement === 'function' ? renderCustomNodeElement : DefaultNodeElement;
+    const renderNode = typeof renderCustomNodeElement === 'function' ? renderCustomNodeElement : DefaultNodeElement;
     const nodeProps = {
         hierarchyPointNode: hierarchyPointNode,
         nodeDatum: data,
@@ -129,7 +129,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
         onNodeMouseOut: this.handleOnMouseOut,
     };
 
-    return callable(nodeProps)
+    return renderNode(nodeProps)
   };
 
   handleNodeToggle = () => this.props.onNodeToggle(this.props.data.__rd3t.id);
