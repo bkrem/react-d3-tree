@@ -525,7 +525,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   nodeSize={nodeSize}
                   orientation={orientation}
                   enableLegacyTransitions={enableLegacyTransitions}
-                  onRefAssignment={onRefAssignment}
+                  onRefAssignment={this.props.onRefAssignment}
                   transitionDuration={transitionDuration}
                   onNodeToggle={this.handleNodeToggle}
                   onNodeClick={this.handleOnNodeClickCb}
