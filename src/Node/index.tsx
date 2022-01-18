@@ -28,6 +28,7 @@ type NodeProps = {
   onNodeClick: NodeEventHandler;
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
+  callbackRefForNode: (context: TreeNodeDatum, element: SVGGElement) => void;
   subscriptions: object;
 };
 
@@ -158,11 +159,14 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data, nodeClassName } = this.props;
+    const { data, nodeClassName, callbackRefForNode } = this.props;
     return (
       <g
         id={data.__rd3t.id}
         ref={n => {
+          if (callbackRefForNode) {
+            callbackRefForNode(data, n);
+          }
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
