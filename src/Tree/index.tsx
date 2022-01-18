@@ -29,7 +29,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     onLinkClick: undefined,
     onLinkMouseOver: undefined,
     onLinkMouseOut: undefined,
-    onRefAssignment: undefined,
+    callbackRef: undefined,
     onUpdate: undefined,
     orientation: 'horizontal',
     translate: { x: 0, y: 0 },
@@ -525,7 +525,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   nodeSize={nodeSize}
                   orientation={orientation}
                   enableLegacyTransitions={enableLegacyTransitions}
-                  onRefAssignment={this.props.onRefAssignment}
+                  callbackRef={this.props.callbackRef}
                   transitionDuration={transitionDuration}
                   onNodeToggle={this.handleNodeToggle}
                   onNodeClick={this.handleOnNodeClickCb}
