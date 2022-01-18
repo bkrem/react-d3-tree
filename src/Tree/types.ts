@@ -289,5 +289,5 @@ export interface TreeProps {
   /**
    * A function that is called when the ref gets assigned for each node
    */
-  callbackRef?: (element: SVGGElement) => void;
+  callbackRefForNode?: (context: TreeNodeDatum, element: SVGGElement) => void;
 }
