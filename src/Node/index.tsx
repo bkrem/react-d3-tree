@@ -159,12 +159,14 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data, nodeClassName } = this.props;
+    const { data, nodeClassName, callbackRef } = this.props;
     return (
       <g
         id={data.__rd3t.id}
         ref={n => {
-          this.props.callbackRef(n);
+          if (callbackRef) {
+            callbackRef(n);
+          }
           this.nodeRef = n;
         }}
         style={this.state.initialStyle}
