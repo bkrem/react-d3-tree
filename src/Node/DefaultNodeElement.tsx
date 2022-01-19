@@ -14,11 +14,7 @@ const textLayout = {
   },
 };
 
-export interface DefaultNodeElementProps extends CustomNodeElementProps {
-  onNodeClick: SyntheticEventHandler;
-  onNodeMouseOver: SyntheticEventHandler;
-  onNodeMouseOut: SyntheticEventHandler;
-}
+export interface DefaultNodeElementProps extends CustomNodeElementProps {}
 
 const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({
   nodeDatum,
