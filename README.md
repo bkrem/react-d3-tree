@@ -161,7 +161,7 @@ To visually distinguish these three types of nodes from each other by color, we 
 }
 
 .node__leaf > circle {
-  fill: green
+  fill: green;
   /* Let's also make the radius of leaf nodes larger */
   r: 40;
 }
