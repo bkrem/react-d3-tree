@@ -51,6 +51,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     renderCustomNodeElement: undefined,
     enableLegacyTransitions: false,
     hasInteractiveNodes: false,
+    dimensions: undefined,
   };
 
   state: TreeState = {
@@ -151,7 +152,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .filter(() => {
-          if (hasInteractiveNodes) return event.target.classList.contains(this.svgInstanceRef) || event.target.classList.contains(this.gInstanceRef) || event.shiftKey;
+          if (hasInteractiveNodes)
+            return (
+              event.target.classList.contains(this.svgInstanceRef) ||
+              event.target.classList.contains(this.gInstanceRef) ||
+              event.shiftKey
+            );
           return true;
         })
         .on('zoom', () => {
@@ -378,6 +384,43 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   /**
+   * Takes a hierarchy point node and centers the node on the screen
+   * if the dimensions parameter is passed to the tree.
+   *
+   * This code is adapted from Rob Schmuecker's centerNode method.
+   * Link: http://www.robschmuecker.com/d3-js-drag-and-drop-zoomable-tree/
+   *
+   * @param hierarchyPointNode
+   */
+  centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+    const g = select(`.${this.gInstanceRef}`);
+    const svg = select(`.${this.svgInstanceRef}`);
+    const scale = this.state.d3.scale;
+    //if the dimensions are given
+    if (this.props.dimensions) {
+      let x, y;
+      //if the orientation is horizontal
+      if (this.props.orientation === 'horizontal') {
+        //calculate the variables inverted (x->y, y->x)
+        y = -hierarchyPointNode.x * scale + this.props.dimensions.width / 2;
+        x = -hierarchyPointNode.y * scale + this.props.dimensions.height / 2;
+      } else {
+        //else, calculate the variables normally (x->x, y->y)
+        x = -hierarchyPointNode.x * scale + this.props.dimensions.width / 2;
+        y = -hierarchyPointNode.y * scale + this.props.dimensions.height / 2;
+      }
+      //@ts-ignore
+      g.transition()
+        .duration(800)
+        .attr('transform', 'translate(' + x + ',' + y + ')scale(' + scale + ')');
+      //Sets the viewport to the new center so that it does not jump back to original
+      //coordinates when dragged/zoomed
+      //@ts-ignore
+      svg.call(d3zoom().transform, zoomIdentity.translate(x, y).scale(this.props.zoom));
+    }
+  };
+
+  /**
    * Generates tree elements (`nodes` and `links`) by
    * grabbing the rootNode from `this.state.data[0]`.
    * Restricts tree depth to `props.initialDepth` if defined and if this is
@@ -525,6 +568,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   onNodeMouseOver={this.handleOnNodeMouseOverCb}
                   onNodeMouseOut={this.handleOnNodeMouseOutCb}
                   subscriptions={subscriptions}
+                  centerNode={this.centerNode}
                 />
               );
             })}
