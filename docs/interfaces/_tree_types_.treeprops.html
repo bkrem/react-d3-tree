@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TreeProps | react-d3-tree - v3.2.1</title>
-	<meta name="description" content="Documentation for react-d3-tree - v3.2.1">
+	<title>TreeProps | react-d3-tree - v3.3.0</title>
+	<meta name="description" content="Documentation for react-d3-tree - v3.3.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">react-d3-tree - v3.2.1</a>
+					<a href="../index.html" class="title">react-d3-tree - v3.3.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -96,6 +96,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#collapsible" class="tsd-kind-icon">collapsible</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#data" class="tsd-kind-icon">data</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#depthfactor" class="tsd-kind-icon">depth<wbr>Factor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#dimensions" class="tsd-kind-icon">dimensions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#enablelegacytransitions" class="tsd-kind-icon">enable<wbr>Legacy<wbr>Transitions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#hasinteractivenodes" class="tsd-kind-icon">has<wbr>Interactive<wbr>Nodes</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_tree_types_.treeprops.html#initialdepth" class="tsd-kind-icon">initial<wbr>Depth</a></li>
@@ -134,7 +135,7 @@
 					<div class="tsd-signature tsd-kind-icon">branch<wbr>Node<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L249">src/Tree/types.ts:249</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L260">src/Tree/types.ts:260</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -150,7 +151,7 @@
 					<div class="tsd-signature tsd-kind-icon">collapsible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L167">src/Tree/types.ts:167</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L178">src/Tree/types.ts:178</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -166,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <a href="_types_common_.rawnodedatum.html" class="tsd-signature-type">RawNodeDatum</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="_types_common_.rawnodedatum.html" class="tsd-signature-type">RawNodeDatum</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L38">src/Tree/types.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L38">src/Tree/types.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -184,7 +185,7 @@
 					<div class="tsd-signature tsd-kind-icon">depth<wbr>Factor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L160">src/Tree/types.ts:160</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L171">src/Tree/types.ts:171</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -198,12 +199,40 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="dimensions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> dimensions</h3>
+					<div class="tsd-signature tsd-kind-icon">dimensions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L131">src/Tree/types.ts:131</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enables the centering of nodes on click by providing the dimensions of the tree container,
+							e.g. via <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect" class="external"><code>getBoundingClientRect()</code></a>.</p>
+						</div>
+						<p>If dimensions are given: node will center on click. If not, node will not center on click.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="enablelegacytransitions" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> enable<wbr>Legacy<wbr>Transitions</h3>
 					<div class="tsd-signature tsd-kind-icon">enable<wbr>Legacy<wbr>Transitions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L269">src/Tree/types.ts:269</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L280">src/Tree/types.ts:280</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -223,7 +252,7 @@
 					<div class="tsd-signature tsd-kind-icon">has<wbr>Interactive<wbr>Nodes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L287">src/Tree/types.ts:287</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L298">src/Tree/types.ts:298</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -241,7 +270,7 @@
 					<div class="tsd-signature tsd-kind-icon">initial<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L176">src/Tree/types.ts:176</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L187">src/Tree/types.ts:187</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -258,7 +287,7 @@
 					<div class="tsd-signature tsd-kind-icon">leaf<wbr>Node<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L256">src/Tree/types.ts:256</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L267">src/Tree/types.ts:267</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -274,7 +303,7 @@
 					<div class="tsd-signature tsd-kind-icon">node<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L207">src/Tree/types.ts:207</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L218">src/Tree/types.ts:218</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -301,7 +330,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Link<wbr>Click<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treelinkeventcallback" class="tsd-signature-type">TreeLinkEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L78">src/Tree/types.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L78">src/Tree/types.ts:78</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -317,7 +346,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Link<wbr>Mouse<wbr>Out<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treelinkeventcallback" class="tsd-signature-type">TreeLinkEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L92">src/Tree/types.ts:92</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L92">src/Tree/types.ts:92</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -333,7 +362,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Link<wbr>Mouse<wbr>Over<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treelinkeventcallback" class="tsd-signature-type">TreeLinkEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L85">src/Tree/types.ts:85</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L85">src/Tree/types.ts:85</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -349,7 +378,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Node<wbr>Click<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treenodeeventcallback" class="tsd-signature-type">TreeNodeEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L57">src/Tree/types.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L57">src/Tree/types.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -365,7 +394,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Node<wbr>Mouse<wbr>Out<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treenodeeventcallback" class="tsd-signature-type">TreeNodeEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L71">src/Tree/types.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L71">src/Tree/types.ts:71</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -381,7 +410,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Node<wbr>Mouse<wbr>Over<span class="tsd-signature-symbol">:</span> <a href="../modules/_tree_types_.html#treenodeeventcallback" class="tsd-signature-type">TreeNodeEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L64">src/Tree/types.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L64">src/Tree/types.ts:64</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -397,7 +426,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Update<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>node<span class="tsd-signature-symbol">: </span><a href="_types_common_.treenodedatum.html" class="tsd-signature-type">TreeNodeDatum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">; </span>translate<span class="tsd-signature-symbol">: </span><a href="_types_common_.point.html" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">; </span>zoom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L100">src/Tree/types.ts:100</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L100">src/Tree/types.ts:100</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -446,7 +475,7 @@
 					<div class="tsd-signature tsd-kind-icon">orientation<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_common_.html#orientation" class="tsd-signature-type">Orientation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L114">src/Tree/types.ts:114</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L114">src/Tree/types.ts:114</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -466,7 +495,7 @@
 					<div class="tsd-signature tsd-kind-icon">path<wbr>Class<wbr>Func<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_common_.html#pathclassfunction" class="tsd-signature-type">PathClassFunction</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L147">src/Tree/types.ts:147</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L158">src/Tree/types.ts:158</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -485,7 +514,7 @@
 					<div class="tsd-signature tsd-kind-icon">path<wbr>Func<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_common_.html#pathfunctionoption" class="tsd-signature-type">PathFunctionOption</a><span class="tsd-signature-symbol"> | </span><a href="../modules/_types_common_.html#pathfunction" class="tsd-signature-type">PathFunction</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L135">src/Tree/types.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L146">src/Tree/types.ts:146</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -504,7 +533,7 @@
 					<div class="tsd-signature tsd-kind-icon">render<wbr>Custom<wbr>Node<wbr>Element<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_common_.html#rendercustomnodeelementfn" class="tsd-signature-type">RenderCustomNodeElementFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L50">src/Tree/types.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L50">src/Tree/types.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -523,7 +552,7 @@
 					<div class="tsd-signature tsd-kind-icon">root<wbr>Node<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L242">src/Tree/types.ts:242</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L253">src/Tree/types.ts:253</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -539,7 +568,7 @@
 					<div class="tsd-signature tsd-kind-icon">scale<wbr>Extent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>max<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>min<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L197">src/Tree/types.ts:197</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L208">src/Tree/types.ts:208</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -566,7 +595,7 @@
 					<div class="tsd-signature tsd-kind-icon">separation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>nonSiblings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>siblings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L218">src/Tree/types.ts:218</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L229">src/Tree/types.ts:229</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -594,7 +623,7 @@
 					<div class="tsd-signature tsd-kind-icon">should<wbr>Collapse<wbr>Neighbor<wbr>Nodes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L228">src/Tree/types.ts:228</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L239">src/Tree/types.ts:239</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -610,7 +639,7 @@
 					<div class="tsd-signature tsd-kind-icon">svg<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L235">src/Tree/types.ts:235</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L246">src/Tree/types.ts:246</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -626,7 +655,7 @@
 					<div class="tsd-signature tsd-kind-icon">transition<wbr>Duration<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L277">src/Tree/types.ts:277</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L288">src/Tree/types.ts:288</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -643,7 +672,7 @@
 					<div class="tsd-signature tsd-kind-icon">translate<span class="tsd-signature-symbol">:</span> <a href="_types_common_.point.html" class="tsd-signature-type">Point</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L123">src/Tree/types.ts:123</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L123">src/Tree/types.ts:123</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -660,7 +689,7 @@
 					<div class="tsd-signature tsd-kind-icon">zoom<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L190">src/Tree/types.ts:190</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L201">src/Tree/types.ts:201</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -676,7 +705,7 @@
 					<div class="tsd-signature tsd-kind-icon">zoomable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/147b7c7/src/Tree/types.ts#L183">src/Tree/types.ts:183</a></li>
+							<li>Defined in <a href="https://github.com/bkrem/react-d3-tree/blob/f549b4f/src/Tree/types.ts#L194">src/Tree/types.ts:194</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -735,6 +764,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_tree_types_.treeprops.html#depthfactor" class="tsd-kind-icon">depth<wbr>Factor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_tree_types_.treeprops.html#dimensions" class="tsd-kind-icon">dimensions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_tree_types_.treeprops.html#enablelegacytransitions" class="tsd-kind-icon">enable<wbr>Legacy<wbr>Transitions</a>
