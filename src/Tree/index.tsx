@@ -385,30 +385,29 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   /**
    * Takes a hierarchy point node and centers the node on the screen
-   * if the dimensions parameter is passed to the tree.
+   * if the dimensions parameter is passed to `Tree`.
    *
    * This code is adapted from Rob Schmuecker's centerNode method.
-   * Link: http://www.robschmuecker.com/d3-js-drag-and-drop-zoomable-tree/
-   *
-   * @param hierarchyPointNode
+   * Link: http://bl.ocks.org/robschmuecker/7880033
    */
   centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
-    // if the dimensions are given
-    if (this.props.dimensions) {
+    const { dimensions, orientation, zoom } = this.props;
+    if (dimensions) {
       const g = select(`.${this.gInstanceRef}`);
       const svg = select(`.${this.svgInstanceRef}`);
       const scale = this.state.d3.scale;
 
-      let x, y;
+      let x: number;
+      let y: number;
       // if the orientation is horizontal, calculate the variables inverted (x->y, y->x)
       if (this.props.orientation === 'horizontal') {
         //The width and height must also be added inverted to the x and y as well.
-        y = -hierarchyPointNode.x * scale + this.props.dimensions.height / 2;
-        x = -hierarchyPointNode.y * scale + this.props.dimensions.width / 2;
+        y = -hierarchyPointNode.x * scale + dimensions.height / 2;
+        x = -hierarchyPointNode.y * scale + dimensions.width / 2;
       } else {
         // else, calculate the variables normally (x->x, y->y)
-        x = -hierarchyPointNode.x * scale + this.props.dimensions.width / 2;
-        y = -hierarchyPointNode.y * scale + this.props.dimensions.height / 2;
+        x = -hierarchyPointNode.x * scale + dimensions.width / 2;
+        y = -hierarchyPointNode.y * scale + dimensions.height / 2;
       }
       //@ts-ignore
       g.transition()
@@ -417,7 +416,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       // Sets the viewport to the new center so that it does not jump back to original
       // coordinates when dragged/zoomed
       //@ts-ignore
-      svg.call(d3zoom().transform, zoomIdentity.translate(x, y).scale(this.props.zoom));
+      svg.call(d3zoom().transform, zoomIdentity.translate(x, y).scale(zoom));
     }
   };
 
@@ -501,7 +500,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       orientation,
       pathFunc,
       transitionDuration,
-      zoomable,
       nodeSize,
       depthFactor,
       initialDepth,
