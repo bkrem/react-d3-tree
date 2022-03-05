@@ -36,17 +36,19 @@ export default `
   cursor: pointer;
   fill: transparent;
   stroke: #000;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 
 .rd3t-label__title {
-  stroke: #000;
-  stroke-width: 1;
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
 }
 
 .rd3t-label__attributes {
-  stroke: #777;
-  stroke-width: 1;
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
   font-size: smaller;
 }
 
