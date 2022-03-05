@@ -123,6 +123,17 @@ export interface TreeProps {
   translate?: Point;
 
   /**
+   * Enables the centering of nodes on click by providing the dimensions of the tree container,
+   * e.g. via {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect | `getBoundingClientRect()`}.
+   *
+   * If dimensions are given: node will center on click. If not, node will not center on click.
+   */
+  dimensions?: {
+    width: number;
+    height: number;
+  };
+
+  /**
    * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
    * `PathFunctionOption` or a user-defined `PathFunction`.
    *
@@ -285,14 +296,4 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
-
-  /**
-   * Gives the user the ability to pass dimensions of the tree container to center a node on click
-   *
-   * If dimensions are given: node will center on click. If not, node will not center on click.
-   */
-  dimensions?: {
-    height: number;
-    width: number;
-  };
 }
