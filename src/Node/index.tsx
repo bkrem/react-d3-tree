@@ -29,7 +29,7 @@ type NodeProps = {
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
-  centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void | undefined;
+  centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
 };
 
 type NodeState = {
@@ -60,7 +60,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   componentDidUpdate() {
     if (this.state.wasClicked) {
-      this.props.centerNode && this.props.centerNode(this.props.hierarchyPointNode);
+      this.props.centerNode(this.props.hierarchyPointNode);
       this.setState({ wasClicked: false });
     }
     this.commitTransform();
@@ -141,12 +141,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   };
 
   handleNodeToggle = () => {
-    this.setState({ ...this.state, wasClicked: true });
+    this.setState({ wasClicked: true });
     this.props.onNodeToggle(this.props.data.__rd3t.id);
   };
 
   handleOnClick = evt => {
-    this.setState({ ...this.state, wasClicked: true });
+    this.setState({ wasClicked: true });
     this.props.onNodeClick(this.props.hierarchyPointNode, evt);
   };
 

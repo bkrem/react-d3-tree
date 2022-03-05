@@ -393,19 +393,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * @param hierarchyPointNode
    */
   centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
-    const g = select(`.${this.gInstanceRef}`);
-    const svg = select(`.${this.svgInstanceRef}`);
-    const scale = this.state.d3.scale;
-    //if the dimensions are given
+    // if the dimensions are given
     if (this.props.dimensions) {
+      const g = select(`.${this.gInstanceRef}`);
+      const svg = select(`.${this.svgInstanceRef}`);
+      const scale = this.state.d3.scale;
+
       let x, y;
-      //if the orientation is horizontal
+      // if the orientation is horizontal, calculate the variables inverted (x->y, y->x)
       if (this.props.orientation === 'horizontal') {
-        //calculate the variables inverted (x->y, y->x)
         y = -hierarchyPointNode.x * scale + this.props.dimensions.width / 2;
         x = -hierarchyPointNode.y * scale + this.props.dimensions.height / 2;
       } else {
-        //else, calculate the variables normally (x->x, y->y)
+        // else, calculate the variables normally (x->x, y->y)
         x = -hierarchyPointNode.x * scale + this.props.dimensions.width / 2;
         y = -hierarchyPointNode.y * scale + this.props.dimensions.height / 2;
       }
@@ -413,8 +413,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       g.transition()
         .duration(800)
         .attr('transform', 'translate(' + x + ',' + y + ')scale(' + scale + ')');
-      //Sets the viewport to the new center so that it does not jump back to original
-      //coordinates when dragged/zoomed
+      // Sets the viewport to the new center so that it does not jump back to original
+      // coordinates when dragged/zoomed
       //@ts-ignore
       svg.call(d3zoom().transform, zoomIdentity.translate(x, y).scale(this.props.zoom));
     }
