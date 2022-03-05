@@ -29,11 +29,13 @@ type NodeProps = {
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
+  centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
 };
 
 type NodeState = {
   transform: string;
   initialStyle: { opacity: number };
+  wasClicked: boolean;
 };
 
 export default class Node extends React.Component<NodeProps, NodeState> {
@@ -49,6 +51,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     initialStyle: {
       opacity: 0,
     },
+    wasClicked: false,
   };
 
   componentDidMount() {
@@ -56,6 +59,10 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   }
 
   componentDidUpdate() {
+    if (this.state.wasClicked) {
+      this.props.centerNode(this.props.hierarchyPointNode);
+      this.setState({ wasClicked: false });
+    }
     this.commitTransform();
   }
 
@@ -119,22 +126,27 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   // TODO: needs tests
   renderNodeElement = () => {
     const { data, hierarchyPointNode, renderCustomNodeElement } = this.props;
-    const renderNode = typeof renderCustomNodeElement === 'function' ? renderCustomNodeElement : DefaultNodeElement;
+    const renderNode =
+      typeof renderCustomNodeElement === 'function' ? renderCustomNodeElement : DefaultNodeElement;
     const nodeProps = {
-        hierarchyPointNode: hierarchyPointNode,
-        nodeDatum: data,
-        toggleNode: this.handleNodeToggle,
-        onNodeClick: this.handleOnClick,
-        onNodeMouseOver: this.handleOnMouseOver,
-        onNodeMouseOut: this.handleOnMouseOut,
+      hierarchyPointNode: hierarchyPointNode,
+      nodeDatum: data,
+      toggleNode: this.handleNodeToggle,
+      onNodeClick: this.handleOnClick,
+      onNodeMouseOver: this.handleOnMouseOver,
+      onNodeMouseOut: this.handleOnMouseOut,
     };
 
-    return renderNode(nodeProps)
+    return renderNode(nodeProps);
   };
 
-  handleNodeToggle = () => this.props.onNodeToggle(this.props.data.__rd3t.id);
+  handleNodeToggle = () => {
+    this.setState({ wasClicked: true });
+    this.props.onNodeToggle(this.props.data.__rd3t.id);
+  };
 
   handleOnClick = evt => {
+    this.setState({ wasClicked: true });
     this.props.onNodeClick(this.props.hierarchyPointNode, evt);
   };
 

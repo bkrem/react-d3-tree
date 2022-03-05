@@ -285,4 +285,14 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
+
+  /**
+   * Gives the user the ability to pass dimensions of the tree container to center a node on click
+   *
+   * If dimensions are given: node will center on click. If not, node will not center on click.
+   */
+  dimensions?: {
+    height: number;
+    width: number;
+  };
 }
