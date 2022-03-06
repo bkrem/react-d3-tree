@@ -81,6 +81,7 @@ class App extends Component {
       data: orgChartJson,
       totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
+      dimensions: undefined,
       translateX: 200,
       translateY: 300,
       collapsible: true,
@@ -125,6 +126,7 @@ class App extends Component {
     this.handleFloatChange = this.handleFloatChange.bind(this);
     this.toggleCollapsible = this.toggleCollapsible.bind(this);
     this.toggleZoomable = this.toggleZoomable.bind(this);
+    this.toggleCenterNodes = this.toggleCenterNodes.bind(this);
     this.setScaleExtent = this.setScaleExtent.bind(this);
     this.setSeparation = this.setSeparation.bind(this);
     this.setNodeSize = this.setNodeSize.bind(this);
@@ -198,6 +200,24 @@ class App extends Component {
 
   toggleZoomable() {
     this.setState(prevState => ({ zoomable: !prevState.zoomable }));
+  }
+
+  toggleCenterNodes() {
+    if (this.state.dimensions !== undefined) {
+      this.setState({
+        dimensions: undefined,
+      });
+    } else {
+      if (this.treeContainer) {
+        const { width, height } = this.treeContainer.getBoundingClientRect();
+        this.setState({
+          dimensions: {
+            width,
+            height,
+          },
+        });
+      }
+    }
   }
 
   setScaleExtent(scaleExtent) {
@@ -390,6 +410,17 @@ class App extends Component {
                   name="zoomableBtn"
                   checked={this.state.zoomable}
                   onChange={this.toggleZoomable}
+                />
+              </div>
+
+              <div className="prop-container">
+                <h4 className="prop">
+                  Center Nodes on Click (via <code>dimensions</code> prop)
+                </h4>
+                <Switch
+                  name="centerNodesBtn"
+                  checked={this.state.dimensions !== undefined}
+                  onChange={this.toggleCenterNodes}
                 />
               </div>
 
@@ -611,6 +642,7 @@ class App extends Component {
                 rootNodeClassName="demo-node"
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
+                dimensions={this.state.dimensions}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
                 pathFunc={this.state.pathFunc}
                 collapsible={this.state.collapsible}

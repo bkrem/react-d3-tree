@@ -401,8 +401,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       let y: number;
       // if the orientation is horizontal, calculate the variables inverted (x->y, y->x)
       if (orientation === 'horizontal') {
-        y = -hierarchyPointNode.x * scale + dimensions.width / 2;
-        x = -hierarchyPointNode.y * scale + dimensions.height / 2;
+        y = -hierarchyPointNode.x * scale + dimensions.height / 2;
+        x = -hierarchyPointNode.y * scale + dimensions.width / 2;
       } else {
         // else, calculate the variables normally (x->x, y->y)
         x = -hierarchyPointNode.x * scale + dimensions.width / 2;
