@@ -94,6 +94,7 @@ class App extends Component {
       nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
+      dimensions: undefined,
       renderCustomNodeElement: customNodeFnMapping['svg'].fn,
       styles: {
         nodes: {
@@ -125,6 +126,7 @@ class App extends Component {
     this.handleFloatChange = this.handleFloatChange.bind(this);
     this.toggleCollapsible = this.toggleCollapsible.bind(this);
     this.toggleZoomable = this.toggleZoomable.bind(this);
+    this.toggleCenterNodes = this.toggleCenterNodes.bind(this);
     this.setScaleExtent = this.setScaleExtent.bind(this);
     this.setSeparation = this.setSeparation.bind(this);
     this.setNodeSize = this.setNodeSize.bind(this);
@@ -198,6 +200,24 @@ class App extends Component {
 
   toggleZoomable() {
     this.setState(prevState => ({ zoomable: !prevState.zoomable }));
+  }
+
+  toggleCenterNodes() {
+    if (this.state.dimensions !== undefined) {
+      this.setState({
+        dimensions: undefined,
+      });
+    } else {
+      if (this.treeContainer) {
+        const dimensions = this.treeContainer.getBoundingClientRect();
+        this.setState({
+          dimensions: {
+            width: dimensions.width,
+            height: dimensions.height,
+          },
+        });
+      }
+    }
   }
 
   setScaleExtent(scaleExtent) {
@@ -390,6 +410,15 @@ class App extends Component {
                   name="zoomableBtn"
                   checked={this.state.zoomable}
                   onChange={this.toggleZoomable}
+                />
+              </div>
+
+              <div className="prop-container">
+                <h4 className="prop">Center Nodes on Click</h4>
+                <Switch
+                  name="centerNodesBtn"
+                  checked={this.state.dimensions !== undefined}
+                  onChange={this.toggleCenterNodes}
                 />
               </div>
 
@@ -645,6 +674,7 @@ class App extends Component {
                 onLinkMouseOut={(...args) => {
                   console.log('onLinkMouseOut', args);
                 }}
+                dimensions={this.state.dimensions}
               />
             </div>
           </div>
