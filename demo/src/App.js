@@ -81,6 +81,7 @@ class App extends Component {
       data: orgChartJson,
       totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
+      dimensions: undefined,
       translateX: 200,
       translateY: 300,
       collapsible: true,
@@ -94,7 +95,6 @@ class App extends Component {
       nodeSize: { x: 200, y: 200 },
       enableLegacyTransitions: false,
       transitionDuration: 500,
-      dimensions: undefined,
       renderCustomNodeElement: customNodeFnMapping['svg'].fn,
       styles: {
         nodes: {
@@ -209,11 +209,11 @@ class App extends Component {
       });
     } else {
       if (this.treeContainer) {
-        const dimensions = this.treeContainer.getBoundingClientRect();
+        const { width, height } = this.treeContainer.getBoundingClientRect();
         this.setState({
           dimensions: {
-            width: dimensions.width,
-            height: dimensions.height,
+            width,
+            height,
           },
         });
       }
@@ -414,7 +414,9 @@ class App extends Component {
               </div>
 
               <div className="prop-container">
-                <h4 className="prop">Center Nodes on Click</h4>
+                <h4 className="prop">
+                  Center Nodes on Click (via <code>dimensions</code> prop)
+                </h4>
                 <Switch
                   name="centerNodesBtn"
                   checked={this.state.dimensions !== undefined}
@@ -640,6 +642,7 @@ class App extends Component {
                 rootNodeClassName="demo-node"
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
+                dimensions={this.state.dimensions}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
                 pathFunc={this.state.pathFunc}
                 collapsible={this.state.collapsible}
@@ -674,7 +677,6 @@ class App extends Component {
                 onLinkMouseOut={(...args) => {
                   console.log('onLinkMouseOut', args);
                 }}
-                dimensions={this.state.dimensions}
               />
             </div>
           </div>
