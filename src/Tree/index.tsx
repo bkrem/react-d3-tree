@@ -52,6 +52,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     enableLegacyTransitions: false,
     hasInteractiveNodes: false,
     dimensions: undefined,
+    centeringTransitionDuration: 800,
   };
 
   state: TreeState = {
@@ -391,7 +392,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * Link: http://bl.ocks.org/robschmuecker/7880033
    */
   centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
-    const { dimensions, orientation, zoom } = this.props;
+    const { dimensions, orientation, zoom, centeringTransitionDuration } = this.props;
     if (dimensions) {
       const g = select(`.${this.gInstanceRef}`);
       const svg = select(`.${this.svgInstanceRef}`);
@@ -410,7 +411,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       }
       //@ts-ignore
       g.transition()
-        .duration(800)
+        .duration(centeringTransitionDuration)
         .attr('transform', 'translate(' + x + ',' + y + ')scale(' + scale + ')');
       // Sets the viewport to the new center so that it does not jump back to original
       // coordinates when dragged/zoomed

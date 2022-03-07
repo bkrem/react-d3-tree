@@ -82,6 +82,7 @@ class App extends Component {
       totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
       dimensions: undefined,
+      centeringTransitionDuration: 800,
       translateX: 200,
       translateY: 300,
       collapsible: true,
@@ -623,6 +624,18 @@ class App extends Component {
                   onChange={this.handleChange}
                 />
               </div>
+              <div className="prop-container">
+                <label className="prop" htmlFor="centeringTransitionDuration">
+                  Centering Transition Duration
+                </label>
+                <input
+                  className="form-control"
+                  name="centeringTransitionDuration"
+                  type="number"
+                  value={this.state.centeringTransitionDuration}
+                  onChange={this.handleChange}
+                />
+              </div>
             </div>
           </div>
 
@@ -643,6 +656,7 @@ class App extends Component {
                 branchNodeClassName="demo-node"
                 orientation={this.state.orientation}
                 dimensions={this.state.dimensions}
+                centeringTransitionDuration={this.state.centeringTransitionDuration}
                 translate={{ x: this.state.translateX, y: this.state.translateY }}
                 pathFunc={this.state.pathFunc}
                 collapsible={this.state.collapsible}
