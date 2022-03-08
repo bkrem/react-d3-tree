@@ -134,6 +134,13 @@ export interface TreeProps {
   };
 
   /**
+   * Sets the time (in milliseconds) for the transition to center a node once clicked.
+   *
+   * {@link Tree.defaultProps.centeringTransitionDuration | Default value}
+   */
+  centeringTransitionDuration?: number;
+
+  /**
    * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
    * `PathFunctionOption` or a user-defined `PathFunction`.
    *
