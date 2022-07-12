@@ -74,7 +74,7 @@
   },
   "peerDependencies": {
     "react": "16.x || 17.x || 18.x",
-    "react-dom": "16.x || 17.x || ^18"
+    "react-dom": "16.x || 17.x || 18.x"
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
