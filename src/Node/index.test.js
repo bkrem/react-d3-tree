@@ -71,12 +71,23 @@ describe('<Node />', () => {
     ).toBe(data.__rd3t.id);
   });
 
-  it('applies correct base className if `data.children` is defined', () => {
+  it('applies correct base className if `data.children` is defined and not empty', () => {
     const leafNodeComponent = shallow(<Node {...mockProps} />);
-    const nodeComponent = shallow(<Node {...mockProps} data={{ ...data, children: [] }} />);
+    const leafNodeComponentWithEmptyChildren = shallow(
+      <Node {...mockProps} data={{ ...data, children: [] }} />
+    );
+    const nodeComponent = shallow(
+      <Node {...mockProps} data={{ ...data, children: [{ name: 'leaf' }] }} />
+    );
 
     expect(
       leafNodeComponent
+        .find('g')
+        .first()
+        .prop('className')
+    ).toBe('rd3t-leaf-node');
+    expect(
+      leafNodeComponentWithEmptyChildren
         .find('g')
         .first()
         .prop('className')
