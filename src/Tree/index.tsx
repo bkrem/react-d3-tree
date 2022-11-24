@@ -19,6 +19,7 @@ type TreeState = {
   d3: { translate: Point; scale: number };
   isTransitioning: boolean;
   isInitialRenderForDataset: boolean;
+  dataKey: string;
 };
 
 class Tree extends React.Component<TreeProps, TreeState> {
@@ -53,6 +54,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     hasInteractiveNodes: false,
     dimensions: undefined,
     centeringTransitionDuration: 800,
+    dataKey: undefined,
   };
 
   state: TreeState = {
@@ -61,6 +63,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     d3: Tree.calculateD3Geometry(this.props),
     isTransitioning: false,
     isInitialRenderForDataset: true,
+    dataKey: this.props.dataKey,
   };
 
   private internalState = {
@@ -74,11 +77,14 @@ class Tree extends React.Component<TreeProps, TreeState> {
   static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
     let derivedState: Partial<TreeState> = null;
     // Clone new data & assign internal properties if `data` object reference changed.
-    if (nextProps.data !== prevState.dataRef) {
+    // If the dataKey was present but didn't change, then we don't need to re-render the tree
+    const dataKeyChanged = !nextProps.dataKey || prevState.dataKey !== nextProps.dataKey;
+    if (nextProps.data !== prevState.dataRef && dataKeyChanged) {
       derivedState = {
         dataRef: nextProps.data,
         data: Tree.assignInternalProperties(clone(nextProps.data)),
         isInitialRenderForDataset: true,
+        dataKey: nextProps.dataKey,
       };
     }
     const d3 = Tree.calculateD3Geometry(nextProps);
@@ -309,6 +315,23 @@ class Tree extends React.Component<TreeProps, TreeState> {
       }
 
       this.internalState.targetNode = targetNodeDatum;
+    }
+  };
+
+  handleAddChildrenToNode = (nodeId: string, childrenData: RawNodeDatum[]) => {
+    const data = clone(this.state.data);
+    const matches = this.findNodesById(nodeId, data, []);
+
+    if (matches.length > 0) {
+      const targetNodeDatum = matches[0];
+
+      const depth = targetNodeDatum.__rd3t.depth;
+      const formattedChildrens = clone(childrenData).map((node: RawNodeDatum) =>
+        Tree.assignInternalProperties([node], depth + 1)
+      );
+      targetNodeDatum.children.push(...formattedChildrens.flat());
+
+      this.setState({ data });
     }
   };
 
@@ -566,6 +589,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   onNodeClick={this.handleOnNodeClickCb}
                   onNodeMouseOver={this.handleOnNodeMouseOverCb}
                   onNodeMouseOut={this.handleOnNodeMouseOutCb}
+                  handleAddChildrenToNode={this.handleAddChildrenToNode}
                   subscriptions={subscriptions}
                   centerNode={this.centerNode}
                 />

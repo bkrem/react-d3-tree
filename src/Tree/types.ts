@@ -303,4 +303,13 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
+
+  /**
+   * Indicates the tree being represented by the data. If the dataKey changes, then we should re-render the tree.
+   * If the data changes but the dataKey keeps being the same, then it's a change (like adding children to a node) for the same tree,
+   * so we shouldn't re-render the tree.
+   *
+   * {@link Tree.defaultProps.dataKey | Default value}
+   */
+  dataKey?: string;
 }

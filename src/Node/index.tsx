@@ -2,7 +2,13 @@ import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 
-import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
+import {
+  Orientation,
+  Point,
+  TreeNodeDatum,
+  RawNodeDatum,
+  RenderCustomNodeElementFn,
+} from '../types/common';
 import DefaultNodeElement from './DefaultNodeElement';
 
 type NodeEventHandler = (
@@ -30,6 +36,7 @@ type NodeProps = {
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
   centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
+  handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[]) => void;
 };
 
 type NodeState = {
@@ -135,6 +142,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
       onNodeClick: this.handleOnClick,
       onNodeMouseOver: this.handleOnMouseOver,
       onNodeMouseOut: this.handleOnMouseOut,
+      addChildren: this.handleAddChildren,
     };
 
     return renderNode(nodeProps);
@@ -156,6 +164,10 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   handleOnMouseOut = evt => {
     this.props.onNodeMouseOut(this.props.hierarchyPointNode, evt);
+  };
+
+  handleAddChildren = childrenData => {
+    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
   };
 
   componentWillLeave(done) {
