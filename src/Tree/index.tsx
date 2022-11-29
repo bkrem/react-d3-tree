@@ -1,6 +1,6 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
-import { select, event } from 'd3-selection';
+import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
@@ -152,16 +152,17 @@ class Tree extends React.Component<TreeProps, TreeState> {
       d3zoom()
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
-        .filter(() => {
-          if (hasInteractiveNodes)
+        .filter((event: any) => {
+          if (hasInteractiveNodes) {
             return (
               event.target.classList.contains(this.svgInstanceRef) ||
               event.target.classList.contains(this.gInstanceRef) ||
               event.shiftKey
             );
+          }
           return true;
         })
-        .on('zoom', () => {
+        .on('zoom', (event: any) => {
           g.attr('transform', event.transform);
           if (typeof onUpdate === 'function') {
             // This callback is magically called not only on "zoom", but on "drag", as well,
