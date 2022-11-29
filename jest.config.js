@@ -6,6 +6,11 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
     '\\.(ts|tsx)$': 'ts-jest',
   },
+  // Ensure we transform `d3-*` package sources to CommonJS too.
+  transformIgnorePatterns: ['node_modules/(?!(d3-.+))'],
+  moduleNameMapper: {
+    '.*\\.(css|less|styl|scss|sass)$': '<rootDir>/jest/mocks/cssModule.js',
+  },
   setupFilesAfterEnv: ['<rootDir>/jest/setup.ts'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
@@ -19,8 +24,5 @@ module.exports = {
       functions: 90,
       lines: 90,
     },
-  },
-  moduleNameMapper: {
-    '.*\\.(css|less|styl|scss|sass)$': '<rootDir>/jest/mocks/cssModule.js',
   },
 };
