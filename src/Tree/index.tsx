@@ -326,10 +326,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
       const targetNodeDatum = matches[0];
 
       const depth = targetNodeDatum.__rd3t.depth;
-      const formattedChildrens = clone(childrenData).map((node: RawNodeDatum) =>
+      const formattedChildren = clone(childrenData).map((node: RawNodeDatum) =>
         Tree.assignInternalProperties([node], depth + 1)
       );
-      targetNodeDatum.children.push(...formattedChildrens.flat());
+      targetNodeDatum.children.push(...formattedChildren.flat());
 
       this.setState({ data });
     }
