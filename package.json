@@ -11,11 +11,15 @@
   "files": [
     "lib"
   ],
-  "main": "lib/index.js",
+  "type": "module",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
-    "build": "rimraf lib && tsc",
-    "build:watch": "rimraf lib && tsc -w",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "rimraf lib && npm run build:cjs && npm run build:esm",
+    "build:watch": "rimraf lib && npm run build:cjs -- -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --coverage --verbose",
     "test:clean": "rimraf ./coverage",
