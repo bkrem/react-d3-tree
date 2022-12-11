@@ -2,8 +2,8 @@ import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 
-import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
-import DefaultNodeElement from './DefaultNodeElement';
+import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common.js';
+import DefaultNodeElement from './DefaultNodeElement.js';
 
 type NodeEventHandler = (
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>,

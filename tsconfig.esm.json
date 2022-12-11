@@ -6,9 +6,12 @@
     "allowJs": true,
     "jsx": "react",
     "outDir": "./lib/esm",
-    "baseUrl": "./src",
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "*.js": ["*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/tests/*", "**/*.spec.ts", "**/*.test.ts", "**/*.test.js"]

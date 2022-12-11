@@ -1,5 +1,5 @@
 import React from 'react';
-import { CustomNodeElementProps, SyntheticEventHandler } from '../types/common';
+import { CustomNodeElementProps, SyntheticEventHandler } from '../types/common.js';
 
 const DEFAULT_NODE_CIRCLE_RADIUS = 15;
 

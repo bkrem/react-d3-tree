@@ -9,7 +9,7 @@ import {
   PathFunction,
   TreeNodeDatum,
   PathClassFunction,
-} from '../types/common';
+} from '../types/common.js';
 
 type LinkEventHandler = (
   source: HierarchyPointNode<TreeNodeDatum>,
