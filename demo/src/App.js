@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import clone from 'clone';
-import Tree from 'react-d3-tree';
+import Tree from 'react-d3-tree/lib/cjs';
 import { version } from 'react-d3-tree/package.json';
 import Switch from './components/Switch';
 import MixedNodeElement from './components/MixedNodeElement';
