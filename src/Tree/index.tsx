@@ -7,8 +7,8 @@ import clone from 'clone';
 import { v4 as uuidv4 } from 'uuid';
 
 import TransitionGroupWrapper from './TransitionGroupWrapper';
-import Node from '../Node';
-import Link from '../Link';
+import Node from '@/Node';
+import Link from '@/Link';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common';
 import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types';
 import globalCss from '../globalCss';

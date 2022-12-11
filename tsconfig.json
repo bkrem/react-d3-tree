@@ -4,12 +4,15 @@
     "allowJs": true,
     "target": "es5",
     "jsx": "react",
-    "baseUrl": "./src",
     "outDir": "./lib/cjs",
     "declaration": true,
     "declarationDir": "./lib/types",
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*/index.tsx"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/tests/*", "**/*.spec.ts", "**/*.test.ts", "**/*.test.js"]
