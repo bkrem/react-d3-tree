@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "target": "es6",
     "allowJs": true,
-    "target": "es5",
     "jsx": "react",
+    "outDir": "./lib/esm",
     "baseUrl": "./src",
-    "outDir": "./lib/cjs",
-    "declaration": true,
-    "declarationDir": "./lib/types",
     "skipLibCheck": true,
     "esModuleInterop": true
   },
