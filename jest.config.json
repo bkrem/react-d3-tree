@@ -8,7 +8,8 @@
   },
   "transformIgnorePatterns": ["node_modules/(?!(d3-.+))"],
   "moduleNameMapper": {
-    ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js"
+    ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js",
+    "(.*)\\.js$": "$1"
   },
   "setupFilesAfterEnv": ["<rootDir>/jest/setup.ts"],
   "collectCoverageFrom": [
