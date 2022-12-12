@@ -9,7 +9,7 @@ import {
   RawNodeDatum,
   RenderCustomNodeElementFn,
   TreeNodeDatum,
-} from '../types/common';
+} from '../types/common.js';
 
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,

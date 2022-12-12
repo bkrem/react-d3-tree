@@ -1,0 +1,28 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "roots": ["<rootDir>/src/"],
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest",
+    "\\.(ts|tsx)$": "ts-jest"
+  },
+  "transformIgnorePatterns": ["node_modules/(?!(d3-.+))"],
+  "moduleNameMapper": {
+    ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js",
+    "(.*)\\.js$": "$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/jest/setup.ts"],
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/index.js",
+    "!src/**/*.test.{js,jsx,ts,tsx}"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "statements": 90,
+      "branches": 84,
+      "functions": 90,
+      "lines": 90
+    }
+  }
+}
