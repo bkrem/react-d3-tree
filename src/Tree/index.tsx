@@ -3,7 +3,7 @@ import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import { dequal as deepEqual } from 'dequal/lite';
-import clone from 'lodash.clonedeep';
+import clone from 'clone';
 import { v4 as uuidv4 } from 'uuid';
 
 import TransitionGroupWrapper from './TransitionGroupWrapper.js';
