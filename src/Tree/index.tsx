@@ -39,6 +39,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     collapsible: true,
     initialDepth: undefined,
     zoomable: true,
+    draggable: true,
     zoom: 1,
     scaleExtent: { min: 0.1, max: 1 },
     nodeSize: { x: 140, y: 140 },
@@ -104,6 +105,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       !deepEqual(this.props.translate, prevProps.translate) ||
       !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
       this.props.zoomable !== prevProps.zoomable ||
+      this.props.draggable !== prevProps.draggable ||
       this.props.zoom !== prevProps.zoom ||
       this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions
     ) {
@@ -163,6 +165,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
           return true;
         })
         .on('zoom', (event: any) => {
+          if (!this.props.draggable && (event.sourceEvent.type === 'mousemove')) {
+            return
+          }
+
           g.attr('transform', event.transform);
           if (typeof onUpdate === 'function') {
             // This callback is magically called not only on "zoom", but on "drag", as well,

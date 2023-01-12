@@ -200,6 +200,13 @@ export interface TreeProps {
    */
   zoomable?: boolean;
 
+   /**
+   * Toggles ability to drag the Tree.
+   *
+   * {@link Tree.defaultProps.draggable | Default value}
+   */
+   draggable?: boolean;
+
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
    *
