@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>react-d3-tree - v3.4.2</title>
-	<meta name="description" content="Documentation for react-d3-tree - v3.4.2">
+	<title>react-d3-tree - v3.5.0</title>
+	<meta name="description" content="Documentation for react-d3-tree - v3.5.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">react-d3-tree - v3.4.2</a>
+					<a href="index.html" class="title">react-d3-tree - v3.5.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>react-d3-tree - v3.4.2</h1>
+			<h1>react-d3-tree - v3.5.0</h1>
 		</div>
 	</div>
 </header>
@@ -187,8 +187,8 @@
 				<a href="#props" id="props" style="color: inherit; text-decoration: none;">
 					<h2>Props</h2>
 				</a>
-				<p>For details on all props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
-				<p>The only required prop is <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#data">data</a>, all other props on <code>Tree</code> are optional/pre-defined (see &quot;Default value&quot; on each prop definition).</p>
+				<p>For details on all props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+				<p>The only required prop is <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#data">data</a>, all other props on <code>Tree</code> are optional/pre-defined (see &quot;Default value&quot; on each prop definition).</p>
 				<a href="#working-with-the-default-tree" id="working-with-the-default-tree" style="color: inherit; text-decoration: none;">
 					<h2>Working with the default Tree</h2>
 				</a>
@@ -200,7 +200,7 @@
 				<a href="#providing-data" id="providing-data" style="color: inherit; text-decoration: none;">
 					<h3>Providing <code>data</code></h3>
 				</a>
-				<p>By default, <code>Tree</code> expects each node object in <code>data</code> to implement the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_types_common_.rawnodedatum.html"><code>RawNodeDatum</code> interface</a>:</p>
+				<p>By default, <code>Tree</code> expects each node object in <code>data</code> to implement the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_types_common_.rawnodedatum.html"><code>RawNodeDatum</code> interface</a>:</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">interface</span> RawNodeDatum {
   <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
   attributes?: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>&gt;;
@@ -256,7 +256,7 @@
   );
 }</code></pre>
 				<blockquote>
-					<p>For more details on the <code>className</code> props for nodes, see the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+					<p>For more details on the <code>className</code> props for nodes, see the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
 				</blockquote>
 				<a href="#styling-links" id="styling-links" style="color: inherit; text-decoration: none;">
 					<h3>Styling Links</h3>
@@ -287,22 +287,22 @@
   );
 }</code></pre>
 				<blockquote>
-					<p>For more details, see the <code>PathClassFunction</code> <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathclassfunction">reference docs</a>.</p>
+					<p>For more details, see the <code>PathClassFunction</code> <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathclassfunction">reference docs</a>.</p>
 				</blockquote>
 				<a href="#event-handlers" id="event-handlers" style="color: inherit; text-decoration: none;">
 					<h3>Event Handlers</h3>
 				</a>
 				<p><code>Tree</code> exposes the following event handler callbacks by default:</p>
 				<ul>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkclick">onLinkClick</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseout">onLinkMouseOut</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onlinkmouseover">onLinkMouseOver</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodeclick">onNodeClick</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseout">onNodeMouseOut</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#onnodemouseover">onNodeMouseOver</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkclick">onLinkClick</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkmouseout">onLinkMouseOut</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src__tree_types_.treeprops.html#onlinkmouseover">onLinkMouseOver</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodeclick">onNodeClick</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseout">onNodeMouseOut</a></li>
+					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseover">onNodeMouseOver</a></li>
 				</ul>
 				<blockquote>
-					<p><strong>Note:</strong> Nodes are expanded/collapsed whenever <code>onNodeClick</code> fires. To prevent this, set the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#collapsible"><code>collapsible</code> prop</a> to <code>false</code>.<br><code>onNodeClick</code> will still fire, but it will not change the target node&#39;s expanded/collapsed state.</p>
+					<p><strong>Note:</strong> Nodes are expanded/collapsed whenever <code>onNodeClick</code> fires. To prevent this, set the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#collapsible"><code>collapsible</code> prop</a> to <code>false</code>.<br><code>onNodeClick</code> will still fire, but it will not change the target node&#39;s expanded/collapsed state.</p>
 				</blockquote>
 				<a href="#customizing-the-tree" id="customizing-the-tree" style="color: inherit; text-decoration: none;">
 					<h2>Customizing the Tree</h2>
@@ -311,7 +311,7 @@
 				<a href="#rendercustomnodeelement" id="rendercustomnodeelement" style="color: inherit; text-decoration: none;">
 					<h3><code>renderCustomNodeElement</code></h3>
 				</a>
-				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#rendercustomnodeelement"><code>renderCustomNodeElement</code> prop</a> accepts a <strong>custom render function that will be used for every node in the tree.</strong></p>
+				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#rendercustomnodeelement"><code>renderCustomNodeElement</code> prop</a> accepts a <strong>custom render function that will be used for every node in the tree.</strong></p>
 				<p>Cases where you may find rendering your own <code>Node</code> element useful include:</p>
 				<ul>
 					<li>Using a <strong>different SVG tag for your nodes</strong> (instead of the default <code>&lt;circle&gt;</code>) - <a href="https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js">Example (codesandbox.io)</a></li>
@@ -321,9 +321,9 @@
 				<a href="#pathfunc" id="pathfunc" style="color: inherit; text-decoration: none;">
 					<h3><code>pathFunc</code></h3>
 				</a>
-				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_tree_types_.treeprops.html#pathfunc"><code>pathFunc</code> prop</a> accepts a predefined <code>PathFunctionOption</code> enum or a user-defined <code>PathFunction</code>.</p>
+				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#pathfunc"><code>pathFunc</code> prop</a> accepts a predefined <code>PathFunctionOption</code> enum or a user-defined <code>PathFunction</code>.</p>
 				<p>By changing or providing your own <code>pathFunc</code>, you are able to change how links between nodes of the tree (which are SVG <code>path</code> tags under the hood) are drawn.</p>
-				<p>The currently <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunctionoption">available enums</a> are:</p>
+				<p>The currently <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathfunctionoption">available enums</a> are:</p>
 				<ul>
 					<li><code>diagonal</code> (default)</li>
 					<li><code>elbow</code></li>
