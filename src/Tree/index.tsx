@@ -167,7 +167,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .on('zoom', (event: any) => {
           if (
             !this.props.draggable &&
-            (event.sourceEvent.type === 'mousemove' || event.sourceEvent.type === 'touchmove')
+            ['mousemove', 'touchmove', 'dblclick'].includes(event.sourceEvent.type)
           ) {
             return;
           }
