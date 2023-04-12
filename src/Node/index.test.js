@@ -51,6 +51,7 @@ describe('<Node />', () => {
     onClick: () => {},
     onMouseOver: () => {},
     onMouseOut: () => {},
+    centerNode: () => {},
     subscriptions: {},
     allowForeignObjects: false,
   };
