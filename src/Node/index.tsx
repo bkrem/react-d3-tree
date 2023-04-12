@@ -70,7 +70,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     return this.shouldNodeTransform(this.props, nextProps, this.state, nextState);
   }
 
-  shouldNodeTransform = (ownProps: NodeProps, nextProps: NodeProps, ownState: NodeState, nextState: NodeState) =>
+  shouldNodeTransform = (
+    ownProps: NodeProps,
+    nextProps: NodeProps,
+    ownState: NodeState,
+    nextState: NodeState
+  ) =>
     nextProps.subscriptions !== ownProps.subscriptions ||
     nextProps.position.x !== ownProps.position.x ||
     nextProps.position.y !== ownProps.position.y ||
