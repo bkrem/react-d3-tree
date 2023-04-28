@@ -9,7 +9,7 @@ import {
   RawNodeDatum,
   RenderCustomNodeElementFn,
   TreeNodeDatum,
-} from '../types/common';
+} from '../types/common.js';
 
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
@@ -199,6 +199,13 @@ export interface TreeProps {
    * {@link Tree.defaultProps.zoomable | Default value}
    */
   zoomable?: boolean;
+
+   /**
+   * Toggles ability to drag the Tree.
+   *
+   * {@link Tree.defaultProps.draggable | Default value}
+   */
+   draggable?: boolean;
 
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.

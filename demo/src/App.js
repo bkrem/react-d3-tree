@@ -90,6 +90,7 @@ class App extends Component {
       initialDepth: 1,
       depthFactor: undefined,
       zoomable: true,
+      draggable: true,
       zoom: 1,
       scaleExtent: { min: 0.1, max: 1 },
       separation: { siblings: 2, nonSiblings: 2 },
@@ -127,6 +128,7 @@ class App extends Component {
     this.handleFloatChange = this.handleFloatChange.bind(this);
     this.toggleCollapsible = this.toggleCollapsible.bind(this);
     this.toggleZoomable = this.toggleZoomable.bind(this);
+    this.toggleDraggable = this.toggleDraggable.bind(this);
     this.toggleCenterNodes = this.toggleCenterNodes.bind(this);
     this.setScaleExtent = this.setScaleExtent.bind(this);
     this.setSeparation = this.setSeparation.bind(this);
@@ -201,6 +203,10 @@ class App extends Component {
 
   toggleZoomable() {
     this.setState(prevState => ({ zoomable: !prevState.zoomable }));
+  }
+
+  toggleDraggable() {
+    this.setState(prevState => ({ draggable: !prevState.draggable }));
   }
 
   toggleCenterNodes() {
@@ -411,6 +417,15 @@ class App extends Component {
                   name="zoomableBtn"
                   checked={this.state.zoomable}
                   onChange={this.toggleZoomable}
+                />
+              </div>
+
+              <div className="prop-container">
+                <h4 className="prop">Draggable</h4>
+                <Switch
+                  name="draggableBtn"
+                  checked={this.state.draggable}
+                  onChange={this.toggleDraggable}
                 />
               </div>
 
@@ -662,6 +677,7 @@ class App extends Component {
                 collapsible={this.state.collapsible}
                 initialDepth={this.state.initialDepth}
                 zoomable={this.state.zoomable}
+                draggable={this.state.draggable}
                 zoom={this.state.zoom}
                 scaleExtent={this.state.scaleExtent}
                 nodeSize={this.state.nodeSize}

@@ -1,6 +1,6 @@
 {
   "name": "react-d3-tree",
-  "version": "3.3.5",
+  "version": "3.5.2",
   "description": "React component to create interactive D3 tree hierarchies",
   "author": "Ben Kremer",
   "license": "MIT",
@@ -11,13 +11,24 @@
   "files": [
     "lib"
   ],
-  "main": "lib/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
+  "module": "lib/esm/index.js",
+  "main": "lib/cjs/index.js",
+  "types": "lib/types/index.d.ts",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
-    "build": "rimraf lib && tsc",
-    "build:watch": "rimraf lib && tsc -w",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "rimraf lib && npm run build:cjs && npm run build:esm",
+    "build:watch": "rimraf lib && npm run build:esm -- -w",
     "lint": "eslint src/**/*.js",
-    "test": "jest --coverage --verbose",
+    "test": "jest --config jest.config.json --coverage --verbose",
     "test:clean": "rimraf ./coverage",
     "test:watch": "jest --watchAll",
     "test:cov": "jest --coverage --verbose",
@@ -66,9 +77,9 @@
     "@types/d3-hierarchy": "^1.1.8",
     "clone": "^2.1.1",
     "d3-hierarchy": "^1.1.9",
-    "d3-selection": "^1.4.2",
+    "d3-selection": "^3.0.0",
     "d3-shape": "^1.3.7",
-    "d3-zoom": "^1.8.3",
+    "d3-zoom": "^3.0.0",
     "dequal": "^2.0.2",
     "uuid": "^8.3.1"
   },
@@ -79,7 +90,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@types/d3-selection": "^1.4.3",
@@ -106,17 +117,10 @@
     "react-test-renderer": "^16.6.3",
     "regenerator-runtime": "^0.12.0",
     "rimraf": "^3.0.0",
-    "rollup": "^0.68.2",
-    "rollup-plugin-auto-external": "^2.0.0",
-    "rollup-plugin-babel": "3",
-    "rollup-plugin-cleanup": "^3.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-postcss": "^1.6.3",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "tsconfig-paths": "^3.8.0",
     "typedoc": "^0.19.2",
-    "typescript": "^3.9.7"
+    "typescript": "^4.9.4"
   }
 }

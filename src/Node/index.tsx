@@ -1,15 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
-
-import {
-  Orientation,
-  Point,
-  TreeNodeDatum,
-  RawNodeDatum,
-  RenderCustomNodeElementFn,
-} from '../types/common';
-import DefaultNodeElement from './DefaultNodeElement';
+import { Orientation, Point, TreeNodeDatum, RawNodeDatum, RenderCustomNodeElementFn } from '../types/common.js';
+import DefaultNodeElement from './DefaultNodeElement.js';
 
 type NodeEventHandler = (
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>,
@@ -73,15 +66,21 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.commitTransform();
   }
 
-  shouldComponentUpdate(nextProps: NodeProps) {
-    return this.shouldNodeTransform(this.props, nextProps);
+  shouldComponentUpdate(nextProps: NodeProps, nextState: NodeState) {
+    return this.shouldNodeTransform(this.props, nextProps, this.state, nextState);
   }
 
-  shouldNodeTransform = (ownProps: NodeProps, nextProps: NodeProps) =>
+  shouldNodeTransform = (
+    ownProps: NodeProps,
+    nextProps: NodeProps,
+    ownState: NodeState,
+    nextState: NodeState
+  ) =>
     nextProps.subscriptions !== ownProps.subscriptions ||
     nextProps.position.x !== ownProps.position.x ||
     nextProps.position.y !== ownProps.position.y ||
-    nextProps.orientation !== ownProps.orientation;
+    nextProps.orientation !== ownProps.orientation ||
+    nextState.wasClicked !== ownState.wasClicked;
 
   setTransform(
     position: NodeProps['position'],
