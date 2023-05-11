@@ -33,6 +33,7 @@ export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => st
 export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
+export type AddChildren = (children: RawNodeDatum[]) => void;
 
 /**
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
@@ -66,6 +67,10 @@ export interface CustomNodeElementProps {
    * The `onNodeMouseOut` handler defined for `Tree` (if any).
    */
   onNodeMouseOut: SyntheticEventHandler;
+  /**
+   * The addChildren handler defined for `Tree` (if any).
+   */
+  addChildren: AddChildren;
 }
 
 export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => JSX.Element;
