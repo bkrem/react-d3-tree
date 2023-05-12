@@ -68,7 +68,7 @@ export interface CustomNodeElementProps {
    */
   onNodeMouseOut: SyntheticEventHandler;
   /**
-   * The addChildren handler defined for `Tree` (if any).
+   * The `Node` class's internal `addChildren` handler.
    */
   addChildren: AddChildren;
 }
