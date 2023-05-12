@@ -33,7 +33,8 @@ export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => st
 export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
-export type AddChildren = (children: RawNodeDatum[]) => void;
+export type UpdateChildren = (children: RawNodeDatum[]) => void;
+export type UpdateNodeAttributes = (attributes: Omit<RawNodeDatum, 'children'>) => void;
 
 /**
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
@@ -70,7 +71,15 @@ export interface CustomNodeElementProps {
   /**
    * The `Node` class's internal `addChildren` handler.
    */
-  addChildren: AddChildren;
+  addChildren: UpdateChildren;
+  /**
+   * The `Node` class's internal `replaceChildren` handler.
+   */
+  replaceChildren: UpdateChildren;
+  /**
+   * The `Node` class's internal `updateNodeAttributes` handler.
+   */
+  updateNodeAttributes: UpdateNodeAttributes;
 }
 
 export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => JSX.Element;

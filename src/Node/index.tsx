@@ -1,7 +1,13 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
-import { Orientation, Point, TreeNodeDatum, RawNodeDatum, RenderCustomNodeElementFn } from '../types/common.js';
+import {
+  Orientation,
+  Point,
+  TreeNodeDatum,
+  RawNodeDatum,
+  RenderCustomNodeElementFn,
+} from '../types/common.js';
 import DefaultNodeElement from './DefaultNodeElement.js';
 
 type NodeEventHandler = (
@@ -29,7 +35,9 @@ type NodeProps = {
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
   centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
-  handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[]) => void;
+  handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[], replace?: boolean) => void;
+  handleRemoveNode: (nodeId: string, parentNodeId: string) => void;
+  handleUpdateNodeAttributes: (nodeId: string, attributes: Omit<RawNodeDatum, 'children'>) => void;
 };
 
 type NodeState = {
@@ -142,6 +150,9 @@ export default class Node extends React.Component<NodeProps, NodeState> {
       onNodeMouseOver: this.handleOnMouseOver,
       onNodeMouseOut: this.handleOnMouseOut,
       addChildren: this.handleAddChildren,
+      removeNode: this.handleRemoveNode,
+      replaceChildren: this.handleReplaceChildren,
+      updateNodeAttributes: this.handleUpdateNodeAttributes,
     };
 
     return renderNode(nodeProps);
@@ -167,6 +178,18 @@ export default class Node extends React.Component<NodeProps, NodeState> {
 
   handleAddChildren = childrenData => {
     this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
+  };
+
+  handleReplaceChildren = childrenData => {
+    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData, true);
+  };
+
+  handleUpdateNodeAttributes = attributes => {
+    this.props.handleUpdateNodeAttributes(this.props.data.__rd3t.id, attributes);
+  };
+
+  handleRemoveNode = () => {
+    this.props.handleRemoveNode(this.props.data.__rd3t.id, this.props.parent.data.__rd3t.id);
   };
 
   componentWillLeave(done) {
