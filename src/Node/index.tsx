@@ -7,6 +7,8 @@ import {
   TreeNodeDatum,
   RawNodeDatum,
   RenderCustomNodeElementFn,
+  UpdateChildrenFunction,
+  UpdateNodeAttributesFunction,
 } from '../types/common.js';
 import DefaultNodeElement from './DefaultNodeElement.js';
 
@@ -176,15 +178,15 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.props.onNodeMouseOut(this.props.hierarchyPointNode, evt);
   };
 
-  handleAddChildren = childrenData => {
+  handleAddChildren: UpdateChildrenFunction = childrenData => {
     this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
   };
 
-  handleReplaceChildren = childrenData => {
+  handleReplaceChildren: UpdateChildrenFunction = childrenData => {
     this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData, true);
   };
 
-  handleUpdateNodeAttributes = attributes => {
+  handleUpdateNodeAttributes: UpdateNodeAttributesFunction = attributes => {
     this.props.handleUpdateNodeAttributes(this.props.data.__rd3t.id, attributes);
   };
 
