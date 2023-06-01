@@ -328,7 +328,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     }
   };
 
-  handleRemoveNode = (nodeId: string, parentNodeId: string) => {
+  handleRemoveNode = (nodeId: string, parentNodeId: string, callback?: () => void) => {
     const data = clone(this.state.data);
     const parentMatches = this.findNodesById(parentNodeId, data, []);
     if (parentMatches.length > 0) {
@@ -337,24 +337,33 @@ class Tree extends React.Component<TreeProps, TreeState> {
         const removeNodeIndex = targetNodeDatum.children.findIndex(c => c.__rd3t.id === nodeId);
         if (removeNodeIndex > -1) {
           targetNodeDatum.children.splice(removeNodeIndex, 1);
-          this.setState({ data });
+          this.setState({ data }, callback);
         }
       }
     }
   };
 
-  handleUpdateNodeAttributes = (nodeId: string, node: Omit<RawNodeDatum, 'children'>) => {
+  handleUpdateNodeAttributes = (
+    nodeId: string,
+    node: Omit<RawNodeDatum, 'children'>,
+    callback?: () => void
+  ) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
     if (matches.length > 0) {
       const targetNodeDatum = matches[0];
       targetNodeDatum.name = node.name;
       targetNodeDatum.attributes = node.attributes;
-      this.setState({ data });
+      this.setState({ data }, callback);
     }
   };
 
-  handleAddChildrenToNode = (nodeId: string, childrenData: RawNodeDatum[], replace?: boolean) => {
+  handleAddChildrenToNode = (
+    nodeId: string,
+    childrenData: RawNodeDatum[],
+    replace?: boolean,
+    callback?: () => void
+  ) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
 
@@ -371,7 +380,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       } else {
         targetNodeDatum.children.push(...formattedChildren.flat());
       }
-      this.setState({ data });
+      this.setState({ data }, callback);
     }
   };
 

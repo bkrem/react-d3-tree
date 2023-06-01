@@ -33,8 +33,11 @@ export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => st
 export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
-export type UpdateChildren = (children: RawNodeDatum[]) => void;
-export type UpdateNodeAttributes = (attributes: Omit<RawNodeDatum, 'children'>) => void;
+export type UpdateChildren = (children: RawNodeDatum[], callback?: () => void) => void;
+export type UpdateNodeAttributes = (
+  attributes: Omit<RawNodeDatum, 'children'>,
+  callback?: () => void
+) => void;
 
 /**
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
