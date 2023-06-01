@@ -7,8 +7,6 @@ import {
   TreeNodeDatum,
   RawNodeDatum,
   RenderCustomNodeElementFn,
-  UpdateChildrenFunction,
-  UpdateNodeAttributesFunction,
 } from '../types/common.js';
 import DefaultNodeElement from './DefaultNodeElement.js';
 
@@ -37,9 +35,18 @@ type NodeProps = {
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
   centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
-  handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[], replace?: boolean) => void;
-  handleRemoveNode: (nodeId: string, parentNodeId: string) => void;
-  handleUpdateNodeAttributes: (nodeId: string, attributes: Omit<RawNodeDatum, 'children'>) => void;
+  handleAddChildrenToNode: (
+    nodeId: string,
+    children: RawNodeDatum[],
+    replace?: boolean,
+    callback?: () => void
+  ) => void;
+  handleRemoveNode: (nodeId: string, parentNodeId: string, callback?: () => void) => void;
+  handleUpdateNodeAttributes: (
+    nodeId: string,
+    attributes: Omit<RawNodeDatum, 'children'>,
+    callback?: () => void
+  ) => void;
 };
 
 type NodeState = {
@@ -178,20 +185,24 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.props.onNodeMouseOut(this.props.hierarchyPointNode, evt);
   };
 
-  handleAddChildren: UpdateChildrenFunction = childrenData => {
-    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
+  handleAddChildren = (childrenData, callback?: () => void) => {
+    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData, false, callback);
   };
 
-  handleReplaceChildren: UpdateChildrenFunction = childrenData => {
-    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData, true);
+  handleReplaceChildren = (childrenData, callback?: () => void) => {
+    this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData, true, callback);
   };
 
-  handleUpdateNodeAttributes: UpdateNodeAttributesFunction = attributes => {
-    this.props.handleUpdateNodeAttributes(this.props.data.__rd3t.id, attributes);
+  handleUpdateNodeAttributes = (attributes, callback?: () => void) => {
+    this.props.handleUpdateNodeAttributes(this.props.data.__rd3t.id, attributes, callback);
   };
 
-  handleRemoveNode = () => {
-    this.props.handleRemoveNode(this.props.data.__rd3t.id, this.props.parent.data.__rd3t.id);
+  handleRemoveNode = (callback?: () => void) => {
+    this.props.handleRemoveNode(
+      this.props.data.__rd3t.id,
+      this.props.parent.data.__rd3t.id,
+      callback
+    );
   };
 
   componentWillLeave(done) {
