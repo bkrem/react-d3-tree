@@ -176,7 +176,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     this.props.onNodeMouseOut(this.props.hierarchyPointNode, evt);
   };
 
-  handleAddChildren: AddChildrenFunction = childrenData => {
+  handleAddChildren = childrenData => {
     this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
   };
 
