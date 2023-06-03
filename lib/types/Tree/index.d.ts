@@ -80,9 +80,9 @@ declare class Tree extends React.Component<TreeProps, TreeState> {
      * `props.onClick` if defined.
      */
     handleNodeToggle: (nodeId: string) => void;
-    handleRemoveNode: (nodeId: string, parentNodeId: string) => void;
-    handleUpdateNodeAttributes: (nodeId: string, node: Omit<RawNodeDatum, 'children'>) => void;
-    handleAddChildrenToNode: (nodeId: string, childrenData: RawNodeDatum[], replace?: boolean) => void;
+    handleRemoveNode: (nodeId: string, parentNodeId: string, callback?: () => void) => void;
+    handleUpdateNodeAttributes: (nodeId: string, node: Omit<RawNodeDatum, 'children'>, callback?: () => void) => void;
+    handleAddChildrenToNode: (nodeId: string, childrenData: RawNodeDatum[], replace?: boolean, callback?: () => void) => void;
     /**
      * Handles the user-defined `onNodeClick` function.
      */

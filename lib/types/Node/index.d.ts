@@ -22,9 +22,9 @@ type NodeProps = {
     onNodeMouseOut: NodeEventHandler;
     subscriptions: object;
     centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
-    handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[], replace?: boolean) => void;
-    handleRemoveNode: (nodeId: string, parentNodeId: string) => void;
-    handleUpdateNodeAttributes: (nodeId: string, attributes: Omit<RawNodeDatum, 'children'>) => void;
+    handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[], replace?: boolean, callback?: () => void) => void;
+    handleRemoveNode: (nodeId: string, parentNodeId: string, callback?: () => void) => void;
+    handleUpdateNodeAttributes: (nodeId: string, attributes: Omit<RawNodeDatum, 'children'>, callback?: () => void) => void;
 };
 type NodeState = {
     transform: string;
@@ -54,10 +54,10 @@ export default class Node extends React.Component<NodeProps, NodeState> {
     handleOnClick: (evt: any) => void;
     handleOnMouseOver: (evt: any) => void;
     handleOnMouseOut: (evt: any) => void;
-    handleAddChildren: (childrenData: any) => void;
-    handleReplaceChildren: (childrenData: any) => void;
-    handleUpdateNodeAttributes: (attributes: any) => void;
-    handleRemoveNode: () => void;
+    handleAddChildren: (childrenData: any, callback?: () => void) => void;
+    handleReplaceChildren: (childrenData: any, callback?: () => void) => void;
+    handleUpdateNodeAttributes: (attributes: any, callback?: () => void) => void;
+    handleRemoveNode: (callback?: () => void) => void;
     componentWillLeave(done: any): void;
     render(): JSX.Element;
 }
