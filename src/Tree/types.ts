@@ -200,12 +200,12 @@ export interface TreeProps {
    */
   zoomable?: boolean;
 
-   /**
+  /**
    * Toggles ability to drag the Tree.
    *
    * {@link Tree.defaultProps.draggable | Default value}
    */
-   draggable?: boolean;
+  draggable?: boolean;
 
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
@@ -223,6 +223,15 @@ export interface TreeProps {
     min?: number;
     max?: number;
   };
+
+  /**
+   * Set the maximum distance that the mouse can move between mousedown and mouseup that will trigger
+   * a subsequent click event. If at any point between mousedown and mouseup the mouse is greater than or equal to
+   * distance from its position on mousedown, the click event following mouseup will be suppressed.
+   *
+   * {@link Tree.defaultProps.clickDistance | Default value}
+   */
+  clickDistance?: number;
 
   /**
    * The amount of space each node element occupies.
