@@ -210,7 +210,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const d = Array.isArray(data) ? data : [data];
     return d.map(n => {
       const nodeDatum = n as TreeNodeDatum;
-      nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
+      nodeDatum.__rd3t = nodeDatum.__rd3t ?? { id: null, depth: null, collapsed: false };
       nodeDatum.__rd3t.id = uuidv4();
       // D3@v5 compat: manually assign `depth` to node.data so we don't have
       // to hold full node+link sets in state.
