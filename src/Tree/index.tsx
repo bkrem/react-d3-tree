@@ -328,7 +328,42 @@ class Tree extends React.Component<TreeProps, TreeState> {
     }
   };
 
-  handleAddChildrenToNode = (nodeId: string, childrenData: RawNodeDatum[]) => {
+  handleRemoveNode = (nodeId: string, parentNodeId: string, callback?: () => void) => {
+    const data = clone(this.state.data);
+    const parentMatches = this.findNodesById(parentNodeId, data, []);
+    if (parentMatches.length > 0) {
+      const targetNodeDatum = parentMatches[0];
+      if (targetNodeDatum.children && targetNodeDatum.children.length > 0) {
+        const removeNodeIndex = targetNodeDatum.children.findIndex(c => c.__rd3t.id === nodeId);
+        if (removeNodeIndex > -1) {
+          targetNodeDatum.children.splice(removeNodeIndex, 1);
+          this.setState({ data }, callback);
+        }
+      }
+    }
+  };
+
+  handleUpdateNodeAttributes = (
+    nodeId: string,
+    node: Omit<RawNodeDatum, 'children'>,
+    callback?: () => void
+  ) => {
+    const data = clone(this.state.data);
+    const matches = this.findNodesById(nodeId, data, []);
+    if (matches.length > 0) {
+      const targetNodeDatum = matches[0];
+      targetNodeDatum.name = node.name;
+      targetNodeDatum.attributes = node.attributes;
+      this.setState({ data }, callback);
+    }
+  };
+
+  handleAddChildrenToNode = (
+    nodeId: string,
+    childrenData: RawNodeDatum[],
+    replace?: boolean,
+    callback?: () => void
+  ) => {
     const data = clone(this.state.data);
     const matches = this.findNodesById(nodeId, data, []);
 
@@ -339,9 +374,13 @@ class Tree extends React.Component<TreeProps, TreeState> {
       const formattedChildren = clone(childrenData).map((node: RawNodeDatum) =>
         Tree.assignInternalProperties([node], depth + 1)
       );
-      targetNodeDatum.children.push(...formattedChildren.flat());
 
-      this.setState({ data });
+      if (replace) {
+        targetNodeDatum.children = formattedChildren.flat();
+      } else {
+        targetNodeDatum.children.push(...formattedChildren.flat());
+      }
+      this.setState({ data }, callback);
     }
   };
 
@@ -584,7 +623,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
               const { data, x, y, parent } = hierarchyPointNode;
               return (
                 <Node
-                  key={'node-' + i}
+                  key={'node-' + hierarchyPointNode.data.__rd3t.id}
                   data={data}
                   position={{ x, y }}
                   hierarchyPointNode={hierarchyPointNode}
@@ -602,6 +641,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   handleAddChildrenToNode={this.handleAddChildrenToNode}
                   subscriptions={subscriptions}
                   centerNode={this.centerNode}
+                  handleRemoveNode={this.handleRemoveNode}
+                  handleUpdateNodeAttributes={this.handleUpdateNodeAttributes}
                 />
               );
             })}
