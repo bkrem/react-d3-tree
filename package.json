@@ -16,7 +16,7 @@
     ".": {
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js",
-      "types": "./lib/types/index.t.ts",
+      "types": "./lib/types/index.d.ts"
     }
   },
   "module": "lib/esm/index.js",
