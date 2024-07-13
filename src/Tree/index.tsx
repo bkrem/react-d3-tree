@@ -103,8 +103,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   componentDidUpdate(prevProps: TreeProps) {
     if (this.props.data !== prevProps.data) {
-      // If last `render` was due to change in dataset -> mark the initial render as done.
-      this.setState({ isInitialRenderForDataset: false });
+      if (this.state.isInitialRenderForDataset) {
+        // If last `render` was due to change in dataset -> mark the initial render as done.
+        this.setState({ isInitialRenderForDataset: false });
+      } else {
+        // update tree, but keep existing internal properties
+        this.setState({
+          data: Tree.assignInternalProperties(
+            clone(this.props.data),
+            undefined,
+            this.state.data[0]
+          ),
+        });
+      }
     }
 
     if (
@@ -205,12 +216,23 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @static
    */
-  static assignInternalProperties(data: RawNodeDatum[], currentDepth: number = 0): TreeNodeDatum[] {
+  static assignInternalProperties(
+    data: RawNodeDatum[],
+    currentDepth: number = 0,
+    prevDataState?: TreeNodeDatum
+  ): TreeNodeDatum[] {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
     const d = Array.isArray(data) ? data : [data];
     return d.map(n => {
       const nodeDatum = n as TreeNodeDatum;
-      nodeDatum.__rd3t = nodeDatum.__rd3t ?? { id: null, depth: null, collapsed: false };
+      let prevNodeDatum = null;
+
+      if (prevDataState && n.key) {
+        prevNodeDatum = Tree.getNodeProps(prevDataState, n.key);
+      }
+
+      nodeDatum.__rd3t = prevNodeDatum?.__rd3t ??
+        nodeDatum.__rd3t ?? { id: null, depth: null, collapsed: false };
       nodeDatum.__rd3t.id = uuidv4();
       // D3@v5 compat: manually assign `depth` to node.data so we don't have
       // to hold full node+link sets in state.
@@ -218,7 +240,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
       nodeDatum.__rd3t.depth = currentDepth;
       // If there are children, recursively assign properties to them too.
       if (nodeDatum.children && nodeDatum.children.length > 0) {
-        nodeDatum.children = Tree.assignInternalProperties(nodeDatum.children, currentDepth + 1);
+        nodeDatum.children = Tree.assignInternalProperties(
+          nodeDatum.children,
+          currentDepth + 1,
+          prevDataState
+        );
       }
       return nodeDatum;
     });
@@ -551,6 +577,22 @@ class Tree extends React.Component<TreeProps, TreeState> {
       scale,
     };
   }
+
+  static getNodeProps = (node: RawNodeDatum, nodeKey: string) => {
+    if (node.key === nodeKey) {
+      return node;
+    } else {
+      if (node.children) {
+        for (const child of node.children) {
+          const result = Tree.getNodeProps(child, nodeKey);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    }
+    return;
+  };
 
   /**
    * Determines which additional `className` prop should be passed to the node & returns it.
