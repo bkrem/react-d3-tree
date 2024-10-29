@@ -10,6 +10,7 @@ import {
   RenderCustomNodeElementFn,
   TreeNodeDatum,
 } from '../types/common.js';
+import { BackgroundGrid } from './backgroundGrid';
 
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
@@ -200,12 +201,12 @@ export interface TreeProps {
    */
   zoomable?: boolean;
 
-   /**
+  /**
    * Toggles ability to drag the Tree.
    *
    * {@link Tree.defaultProps.draggable | Default value}
    */
-   draggable?: boolean;
+  draggable?: boolean;
 
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
@@ -319,4 +320,6 @@ export interface TreeProps {
    * {@link Tree.defaultProps.dataKey | Default value}
    */
   dataKey?: string;
+
+  backgroundGrid?: BackgroundGrid;
 }

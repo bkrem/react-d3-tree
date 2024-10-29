@@ -81,7 +81,7 @@ class App extends Component {
       data: orgChartJson,
       totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
-      dimensions: undefined,
+      dimensions: {width: 500, height: 500},
       centeringTransitionDuration: 800,
       translateX: 200,
       translateY: 300,
@@ -124,6 +124,7 @@ class App extends Component {
     this.setLargeTree = this.setLargeTree.bind(this);
     this.setOrientation = this.setOrientation.bind(this);
     this.setPathFunc = this.setPathFunc.bind(this);
+    this.setBackgroundGrid = this.setBackgroundGrid.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFloatChange = this.handleFloatChange.bind(this);
     this.toggleCollapsible = this.toggleCollapsible.bind(this);
@@ -155,6 +156,10 @@ class App extends Component {
 
   setPathFunc(pathFunc) {
     this.setState({ pathFunc });
+  }
+
+  setBackgroundGrid(backgroundGrid) {
+    this.setState({ backgroundGrid });
   }
 
   handleChange(evt) {
@@ -386,6 +391,31 @@ class App extends Component {
                   onClick={() => this.setPathFunc('step')}
                 >
                   {'Step'}
+                </button>
+              </div>
+
+              <div className="prop-container">
+                <h4 className="prop">Background Grid</h4>
+                <button
+                  type="button"
+                  className="btn btn-controls btn-block"
+                  onClick={() => this.setBackgroundGrid(undefined)}
+                >
+                  {'None'}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-controls btn-block"
+                  onClick={() => this.setBackgroundGrid({type: 'dot'})}
+                >
+                  {'Dot'}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-controls btn-block"
+                  onClick={() => this.setBackgroundGrid({type: 'line'})}
+                >
+                  {'Line'}
                 </button>
               </div>
 
@@ -707,6 +737,7 @@ class App extends Component {
                 onLinkMouseOut={(...args) => {
                   console.log('onLinkMouseOut', args);
                 }}
+                backgroundGrid={this.state.backgroundGrid}
               />
             </div>
           </div>
