@@ -210,12 +210,14 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const d = Array.isArray(data) ? data : [data];
     return d.map(n => {
       const nodeDatum = n as TreeNodeDatum;
-      nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
-      nodeDatum.__rd3t.id = uuidv4();
-      // D3@v5 compat: manually assign `depth` to node.data so we don't have
-      // to hold full node+link sets in state.
-      // TODO: avoid this extra step by checking D3's node.depth directly.
-      nodeDatum.__rd3t.depth = currentDepth;
+      nodeDatum.__rd3t = {
+        id: uuidv4(),
+        depth: currentDepth || null,
+        collapsed: nodeDatum.__rd3t && typeof nodeDatum.__rd3t.collapsed === 'boolean'
+          ? nodeDatum.__rd3t.collapsed
+          : false,
+      };
+
       // If there are children, recursively assign properties to them too.
       if (nodeDatum.children && nodeDatum.children.length > 0) {
         nodeDatum.children = Tree.assignInternalProperties(nodeDatum.children, currentDepth + 1);
