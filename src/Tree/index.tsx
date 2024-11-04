@@ -186,9 +186,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
           g.attr('transform', event.transform);
 
+          // gridCellSize is required by zooming
           const bgGrid = getDefaultBackgroundGridParam(this.props.backgroundGrid);
+          // apply zoom effect onto bgGrid only if specified
           if (bgGrid) {
-            console.log(g)
             pattern
               .attr('x', event.transform.x)
               .attr('y', event.transform.y)

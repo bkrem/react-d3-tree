@@ -321,5 +321,17 @@ export interface TreeProps {
    */
   dataKey?: string;
 
+  /**
+   * Sets a background grid using svg <pattern> and and a background <rect fill="url(#grid-pattern)"/>
+   * there's 2 default type of grid: `dot` and `line`
+   * - `color`: color of each line / dot
+   * - `thickness`: thickness of each line / radius of the each dot
+   * - `gridCellSize`: the space take place by each dot / cross / customRenderFunction
+   * 
+   * `type: custom` allows customizing content inside <pattern><pattern/> by 
+   * passing `gridCellFunc` a function that return a ReactElement(svg elements)
+   * 
+   * {@link Tree.defaultProps.backgroundGrid | Default value}
+   */
   backgroundGrid?: BackgroundGrid;
 }

@@ -5,13 +5,16 @@ export type BackgroundGrid = {
     thickness?: number,
     color?: string,
     gridCellSize?: {width: number, height: number},
-    gridCellFunc?: () => ReactElement
+    gridCellFunc?: (options?: BackgroundGrid) => ReactElement
 }
 
 interface BackgroundGridProps extends BackgroundGrid{
-    patternInstanceRef: string
+    patternInstanceRef: string //a unique className for d3zoom to specify
 }
 
+/**
+ * helper function to assign default values to `thickness`, `color` and `gridCellSize`, which are required by rendering/zooming bgGrid
+ */
 export const getDefaultBackgroundGridParam = (param: BackgroundGrid | BackgroundGridProps) => {
     if (param === undefined) return undefined;
     const {
@@ -25,18 +28,19 @@ export const getDefaultBackgroundGridParam = (param: BackgroundGrid | Background
         color,
         gridCellSize,
         ...param
-    }
+    };
 }
 
 const BackgroundGrid = (props: BackgroundGridProps) => {
 
+    const param = getDefaultBackgroundGridParam(props);
     const {
         type,
         thickness,
         color,
         gridCellSize,
         gridCellFunc
-    } = getDefaultBackgroundGridParam(props);
+    } = param;
 
     return <>
         <pattern
@@ -65,8 +69,8 @@ const BackgroundGrid = (props: BackgroundGridProps) => {
                     : null
             }
             {
-                type === "custom"
-                    ? gridCellFunc?.()
+                type === "custom" && gridCellFunc
+                    ? gridCellFunc(param)
                     : null
             }
         </pattern>

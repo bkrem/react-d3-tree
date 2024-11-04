@@ -81,7 +81,7 @@ class App extends Component {
       data: orgChartJson,
       totalNodeCount: countNodes(0, Array.isArray(orgChartJson) ? orgChartJson[0] : orgChartJson),
       orientation: 'horizontal',
-      dimensions: {width: 500, height: 500},
+      dimensions: undefined,
       centeringTransitionDuration: 800,
       translateX: 200,
       translateY: 300,
