@@ -1,173 +1,104 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>react-d3-tree - v3.6.2</title>
-	<meta name="description" content="Documentation for react-d3-tree - v3.6.2">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">react-d3-tree - v3.6.2</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
-			<h1>react-d3-tree - v3.6.2</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<h1 align="center">React D3 Tree</h1>
-				<p align="center">
-					<a href="#buildstatus">
-						<img alt="build status" src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg">
-					</a>
-					<a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master">
-						<img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
-					</a>
-					<a href="https://www.npmjs.com/package/react-d3-tree">
-						<img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
-					</a>
-					<a href="https://www.npmjs.com/package/react-d3-tree">
-						<img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
-					</a>
-					<a href="https://bundlephobia.com/result?p=react-d3-tree">
-						<img alt="npm package: minzipped size" src="https://img.shields.io/bundlephobia/minzip/react-d3-tree">
-					</a>
-					<a href="https://www.npmjs.com/package/react-d3-tree">
-						<img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
-					</a>
-					<a href="https://github.com/prettier/prettier">
-						<img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
-					</a>
-				</p>
-				<p align="center">
-					<h3 align="center"><a href="https://bkrem.github.io/react-d3-tree">👾 Playground</a></h3>
-					<h3 align="center"><a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Documentation (v3)</a></h3>
-				</p>
-				<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging <a href="https://d3js.org/">D3</a>&#39;s <code>tree</code> layout.</p>
-				<blockquote>
-					<p><strong>Upgrading from v1? Check out the <a href="https://github.com/bkrem/react-d3-tree/releases/tag/v2.0.0">v2 release notes</a>.</strong></p>
-				</blockquote>
-				<blockquote>
-					<p><strong><a href="https://github.com/bkrem/react-d3-tree/tree/v1">Legacy v1 docs</a></strong></p>
-				</blockquote>
-				<a href="#contents-" id="contents-" style="color: inherit; text-decoration: none;">
-					<h2>Contents <!-- omit in toc --></h2>
-				</a>
-				<ul>
-					<li><a href="#installation">Installation</a></li>
-					<li><a href="#usage">Usage</a></li>
-					<li><a href="#props">Props</a></li>
-					<li><a href="#working-with-the-default-tree">Working with the default Tree</a><ul>
-							<li><a href="#providing-data">Providing <code>data</code></a></li>
-							<li><a href="#styling-nodes">Styling Nodes</a></li>
-							<li><a href="#styling-links">Styling Links</a></li>
-							<li><a href="#event-handlers">Event Handlers</a></li>
-						</ul>
-					</li>
-					<li><a href="#customizing-the-tree">Customizing the Tree</a><ul>
-							<li><a href="#rendercustomnodeelement"><code>renderCustomNodeElement</code></a></li>
-							<li><a href="#pathfunc"><code>pathFunc</code></a><ul>
-									<li><a href="#providing-your-own-pathfunc">Providing your own <code>pathFunc</code></a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<li><a href="#development">Development</a><ul>
-							<li><a href="#setup">Setup</a></li>
-							<li><a href="#hot-reloading">Hot reloading</a></li>
-						</ul>
-					</li>
-					<li><a href="#contributors">Contributors</a></li>
-				</ul>
-				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
-					<h2>Installation</h2>
-				</a>
-				<pre><code class="language-bash">npm i --save react-d3-tree</code></pre>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
-				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-<span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
+<!DOCTYPE html><html class="default" lang="en" data-base="."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>react-d3-tree - v3.6.3</title><meta name="description" content="Documentation for react-d3-tree"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script><script async src="assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">react-d3-tree - v3.6.3</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>react-d3-tree - v3.6.3</h1></div><div class="tsd-panel tsd-typography"><h1 align="center">React D3 Tree</h1>
+<p align="center">
+  <a href="#buildstatus">
+    <img alt="build status" src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg">
+  </a>
+  <a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master">
+    <img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
+  </a>
+  <a href="https://www.npmjs.com/package/react-d3-tree">
+    <img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
+  </a>
+  <a href="https://www.npmjs.com/package/react-d3-tree">
+    <img alt="npm package: downloads monthly" src="https://img.shields.io/npm/dm/react-d3-tree.svg">
+  </a>
+  <a href="https://bundlephobia.com/result?p=react-d3-tree">
+    <img alt="npm package: minzipped size" src="https://img.shields.io/bundlephobia/minzip/react-d3-tree">
+  </a>
+  <a href="https://www.npmjs.com/package/react-d3-tree">
+    <img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
+  </a>
+</p>
+<p align="center">
+  <h3 align="center"><a href="https://bkrem.github.io/react-d3-tree">👾 Playground</a></h3>
+  <h3 align="center"><a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Documentation (v3)</a></h3>
+</p>
+<p>React D3 Tree is a <a href="http://facebook.github.io/react/">React</a> component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging <a href="https://d3js.org/">D3</a>'s <code>tree</code> layout.</p>
+<blockquote>
+<p><strong>Upgrading from v1? Check out the <a href="https://github.com/bkrem/react-d3-tree/releases/tag/v2.0.0">v2 release notes</a>.</strong></p>
+</blockquote>
+<blockquote>
+<p><strong><a href="https://github.com/bkrem/react-d3-tree/tree/v1">Legacy v1 docs</a></strong></p>
+</blockquote>
+<a id="contents-" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Contents <!-- omit in toc --><a href="#contents-" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#props">Props</a></li>
+<li><a href="#working-with-the-default-tree">Working with the default Tree</a>
+<ul>
+<li><a href="#providing-data">Providing <code>data</code></a></li>
+<li><a href="#styling-nodes">Styling Nodes</a></li>
+<li><a href="#styling-links">Styling Links</a></li>
+<li><a href="#event-handlers">Event Handlers</a></li>
+</ul>
+</li>
+<li><a href="#customizing-the-tree">Customizing the Tree</a>
+<ul>
+<li><a href="#rendercustomnodeelement"><code>renderCustomNodeElement</code></a></li>
+<li><a href="#pathfunc"><code>pathFunc</code></a>
+<ul>
+<li><a href="#providing-your-own-pathfunc">Providing your own <code>pathFunc</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#development">Development</a>
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#hot-reloading">Hot reloading</a></li>
+</ul>
+</li>
+<li><a href="#contributors">Contributors</a></li>
+</ul>
+<a id="installation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><span class="hl-1"> </span><span class="hl-3">--save</span><span class="hl-1"> </span><span class="hl-2">react-d3-tree</span>
+</code><button type="button">Copy</button></pre>
 
-<span class="hljs-comment">// This is a simplified example of an org chart with a depth of 2.</span>
-<span class="hljs-comment">// Note how deeper levels are defined recursively via the `children` property.</span>
-<span class="hljs-keyword">const</span> orgChart = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;CEO&#x27;</span>,
-  <span class="hljs-attr">children</span>: [
+<a id="usage" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Usage<a href="#usage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="jsx">import React from 'react';
+import Tree from 'react-d3-tree';
+
+// This is a simplified example of an org chart with a depth of 2.
+// Note how deeper levels are defined recursively via the `children` property.
+const orgChart = {
+  name: 'CEO',
+  children: [
     {
-      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Manager&#x27;</span>,
-      <span class="hljs-attr">attributes</span>: {
-        <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Production&#x27;</span>,
+      name: 'Manager',
+      attributes: {
+        department: 'Production',
       },
-      <span class="hljs-attr">children</span>: [
+      children: [
         {
-          <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Foreman&#x27;</span>,
-          <span class="hljs-attr">attributes</span>: {
-            <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Fabrication&#x27;</span>,
+          name: 'Foreman',
+          attributes: {
+            department: 'Fabrication',
           },
-          <span class="hljs-attr">children</span>: [
+          children: [
             {
-              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Worker&#x27;</span>,
+              name: 'Worker',
             },
           ],
         },
         {
-          <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Foreman&#x27;</span>,
-          <span class="hljs-attr">attributes</span>: {
-            <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Assembly&#x27;</span>,
+          name: 'Foreman',
+          attributes: {
+            department: 'Assembly',
           },
-          <span class="hljs-attr">children</span>: [
+          children: [
             {
-              <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Worker&#x27;</span>,
+              name: 'Worker',
             },
           ],
         },
@@ -176,279 +107,164 @@
   ],
 };
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">OrgChartTree</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">return</span> (
-    <span class="hljs-comment">// `&lt;Tree /&gt;` will fill width/height of its container; in this case `#treeWrapper`.</span>
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;treeWrapper&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">50em</span>&#x27;, <span class="hljs-attr">height:</span> &#x27;<span class="hljs-attr">20em</span>&#x27; }}&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">Tree</span> <span class="hljs-attr">data</span>=<span class="hljs-string">{orgChart}</span> /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+export default function OrgChartTree() {
+  return (
+    // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
+    <div id="treeWrapper" style={{ width: '50em', height: '20em' }}>
+      <Tree data={orgChart} />
+    </div>
   );
-}</code></pre>
-				<a href="#props" id="props" style="color: inherit; text-decoration: none;">
-					<h2>Props</h2>
-				</a>
-				<p>For details on all props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
-				<p>The only required prop is <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#data">data</a>, all other props on <code>Tree</code> are optional/pre-defined (see &quot;Default value&quot; on each prop definition).</p>
-				<a href="#working-with-the-default-tree" id="working-with-the-default-tree" style="color: inherit; text-decoration: none;">
-					<h2>Working with the default Tree</h2>
-				</a>
-				<p><code>react-d3-tree</code> provides default implementations for <code>Tree</code>&#39;s nodes &amp; links, which are intended to get you up &amp; running with a working tree quickly. </p>
-				<p>This section is focused on explaining <strong>how to provide data, styles and event handlers for the default <code>Tree</code> implementation</strong>. </p>
-				<blockquote>
-					<p>Need more fine-grained control over how nodes &amp; links appear/behave? Check out the <a href="#customizing-the-tree">Customizing the Tree</a> section below.</p>
-				</blockquote>
-				<a href="#providing-data" id="providing-data" style="color: inherit; text-decoration: none;">
-					<h3>Providing <code>data</code></h3>
-				</a>
-				<p>By default, <code>Tree</code> expects each node object in <code>data</code> to implement the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_types_common_.rawnodedatum.html"><code>RawNodeDatum</code> interface</a>:</p>
-				<pre><code class="language-ts"><span class="hljs-keyword">interface</span> RawNodeDatum {
-  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
-  attributes?: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>&gt;;
-  children?: RawNodeDatum[];
-}</code></pre>
-				<p>The <code>orgChart</code> example in the <a href="#usage">Usage</a> section above is an example of this:</p>
-				<ul>
-					<li>Every node has at least a <code>name</code>. This is rendered as the <strong>node&#39;s primary label</strong>.</li>
-					<li>Some nodes have <code>attributes</code> defined (the <code>CEO</code> node does not). <strong>The key-value pairs in <code>attributes</code> are rendered as a list of secondary labels</strong>.</li>
-					<li>Nodes can have further <code>RawNodeDatum</code> objects nested inside them via the <code>children</code> key, creating a hierarchy from which the tree graph can be generated.</li>
-				</ul>
-				<a href="#styling-nodes" id="styling-nodes" style="color: inherit; text-decoration: none;">
-					<h3>Styling Nodes</h3>
-				</a>
-				<p><code>Tree</code> provides the following props to style different types of nodes, all of which use an SVG <code>circle</code> by default:</p>
-				<ul>
-					<li><code>rootNodeClassName</code> - applied to the root node.</li>
-					<li><code>branchNodeClassName</code> - applied to any node with 1+ children.</li>
-					<li><code>leafNodeClassName</code> - applied to any node without children.</li>
-				</ul>
-				<p>To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:</p>
-				<pre><code class="language-css"><span class="hljs-comment">/* custom-tree.css */</span>
-
-<span class="hljs-selector-class">.node__root</span> &gt; <span class="hljs-selector-tag">circle</span> {
-  <span class="hljs-attribute">fill</span>: red;
 }
+</code><button type="button">Copy</button></pre>
 
-<span class="hljs-selector-class">.node__branch</span> &gt; <span class="hljs-selector-tag">circle</span> {
-  <span class="hljs-attribute">fill</span>: yellow;
-}
+<a id="props" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Props<a href="#props" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>For details on all props accepted by  <code>Tree</code>, check out the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+<p>The only required prop is <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#data">data</a>, all other props on <code>Tree</code> are optional/pre-defined (see &quot;Default value&quot; on each prop definition).</p>
+<a id="working-with-the-default-tree" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Working with the default Tree<a href="#working-with-the-default-tree" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p><code>react-d3-tree</code> provides default implementations for <code>Tree</code>'s nodes &amp; links, which are intended to get you up &amp; running with a working tree quickly.</p>
+<p>This section is focused on explaining <strong>how to provide data, styles and event handlers for the default <code>Tree</code> implementation</strong>.</p>
+<blockquote>
+<p>Need more fine-grained control over how nodes &amp; links appear/behave? Check out the <a href="#customizing-the-tree">Customizing the Tree</a> section below.</p>
+</blockquote>
+<a id="providing-data" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Providing <code>data</code><a href="#providing-data" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>By default, <code>Tree</code> expects each node object in <code>data</code> to implement the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_types_common_.rawnodedatum.html"><code>RawNodeDatum</code> interface</a>:</p>
+<pre><code class="ts"><span class="hl-3">interface</span><span class="hl-1"> </span><span class="hl-4">RawNodeDatum</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-5">name</span><span class="hl-1">: </span><span class="hl-4">string</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-5">attributes</span><span class="hl-1">?: </span><span class="hl-4">Record</span><span class="hl-1">&lt;</span><span class="hl-4">string</span><span class="hl-1">, </span><span class="hl-4">string</span><span class="hl-1"> | </span><span class="hl-4">number</span><span class="hl-1"> | </span><span class="hl-4">boolean</span><span class="hl-1">&gt;;</span><br/><span class="hl-1">  </span><span class="hl-5">children</span><span class="hl-1">?: </span><span class="hl-4">RawNodeDatum</span><span class="hl-1">[];</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
 
-<span class="hljs-selector-class">.node__leaf</span> &gt; <span class="hljs-selector-tag">circle</span> {
-  <span class="hljs-attribute">fill</span>: green;
-  <span class="hljs-comment">/* Let&#x27;s also make the radius of leaf nodes larger */</span>
-  <span class="hljs-attribute">r</span>: <span class="hljs-number">40</span>;
-}</code></pre>
-				<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-<span class="hljs-keyword">import</span> Tree <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-d3-tree&#x27;</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;./custom-tree.css&#x27;</span>;
+<p>The <code>orgChart</code> example in the <a href="#usage">Usage</a> section above is an example of this:</p>
+<ul>
+<li>Every node has at least a <code>name</code>. This is rendered as the <strong>node's primary label</strong>.</li>
+<li>Some nodes have <code>attributes</code> defined (the <code>CEO</code> node does not). <strong>The key-value pairs in <code>attributes</code> are rendered as a list of secondary labels</strong>.</li>
+<li>Nodes can have further <code>RawNodeDatum</code> objects nested inside them via the <code>children</code> key, creating a hierarchy from which the tree graph can be generated.</li>
+</ul>
+<a id="styling-nodes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Styling Nodes<a href="#styling-nodes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p><code>Tree</code> provides the following props to style different types of nodes, all of which use an SVG <code>circle</code> by default:</p>
+<ul>
+<li><code>rootNodeClassName</code> - applied to the root node.</li>
+<li><code>branchNodeClassName</code> - applied to any node with 1+ children.</li>
+<li><code>leafNodeClassName</code> - applied to any node without children.</li>
+</ul>
+<p>To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:</p>
+<pre><code class="css"><span class="hl-6">/* custom-tree.css */</span><br/><br/><span class="hl-7">.node__root</span><span class="hl-1"> &gt; </span><span class="hl-7">circle</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-8">fill</span><span class="hl-1">: </span><span class="hl-9">red</span><span class="hl-1">;</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-7">.node__branch</span><span class="hl-1"> &gt; </span><span class="hl-7">circle</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-8">fill</span><span class="hl-1">: </span><span class="hl-9">yellow</span><span class="hl-1">;</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-7">.node__leaf</span><span class="hl-1"> &gt; </span><span class="hl-7">circle</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-8">fill</span><span class="hl-1">: </span><span class="hl-9">green</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-6">/* Let&#39;s also make the radius of leaf nodes larger */</span><br/><span class="hl-1">  </span><span class="hl-8">r</span><span class="hl-1">: </span><span class="hl-10">40</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
 
-<span class="hljs-comment">// ...</span>
+<pre><code class="jsx">import React from 'react';
+import Tree from 'react-d3-tree';
+import './custom-tree.css';
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">StyledNodesTree</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;treeWrapper&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">50em</span>&#x27;, <span class="hljs-attr">height:</span> &#x27;<span class="hljs-attr">20em</span>&#x27; }}&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">Tree</span>
-        <span class="hljs-attr">data</span>=<span class="hljs-string">{data}</span>
-        <span class="hljs-attr">rootNodeClassName</span>=<span class="hljs-string">&quot;node__root&quot;</span>
-        <span class="hljs-attr">branchNodeClassName</span>=<span class="hljs-string">&quot;node__branch&quot;</span>
-        <span class="hljs-attr">leafNodeClassName</span>=<span class="hljs-string">&quot;node__leaf&quot;</span>
-      /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+// ...
+
+export default function StyledNodesTree() {
+  return (
+    <div id="treeWrapper" style={{ width: '50em', height: '20em' }}>
+      <Tree
+        data={data}
+        rootNodeClassName="node__root"
+        branchNodeClassName="node__branch"
+        leafNodeClassName="node__leaf"
+      />
+    </div>
   );
-}</code></pre>
-				<blockquote>
-					<p>For more details on the <code>className</code> props for nodes, see the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
-				</blockquote>
-				<a href="#styling-links" id="styling-links" style="color: inherit; text-decoration: none;">
-					<h3>Styling Links</h3>
-				</a>
-				<p><code>Tree</code> provides the <code>pathClassFunc</code> property to pass additional classNames to every link to be rendered.</p>
-				<p>Each link calls <code>pathClassFunc</code> with its own <code>TreeLinkDatum</code> and the tree&#39;s current <code>orientation</code>. <code>Tree</code> expects <code>pathClassFunc</code> to return a <code>className</code> string.</p>
-				<pre><code class="language-jsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">StyledLinksTree</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> getDynamicPathClass = <span class="hljs-function">(<span class="hljs-params">{ source, target }, orientation</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (!target.children) {
-      <span class="hljs-comment">// Target node has no children -&gt; this link leads to a leaf node.</span>
-      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;link__to-leaf&#x27;</span>;
+}
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p>For more details on the <code>className</code> props for nodes, see the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html">TreeProps reference docs</a>.</p>
+</blockquote>
+<a id="styling-links" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Styling Links<a href="#styling-links" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p><code>Tree</code> provides the <code>pathClassFunc</code> property to pass additional classNames to every link to be rendered.</p>
+<p>Each link calls <code>pathClassFunc</code> with its own <code>TreeLinkDatum</code> and the tree's current <code>orientation</code>. <code>Tree</code> expects <code>pathClassFunc</code> to return a <code>className</code> string.</p>
+<pre><code class="jsx">function StyledLinksTree() {
+  const getDynamicPathClass = ({ source, target }, orientation) => {
+    if (!target.children) {
+      // Target node has no children -> this link leads to a leaf node.
+      return 'link__to-leaf';
     }
 
-    <span class="hljs-comment">// Style it as a link connecting two branch nodes by default.</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;link__to-branch&#x27;</span>;
+    // Style it as a link connecting two branch nodes by default.
+    return 'link__to-branch';
   };
 
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span>
-      <span class="hljs-attr">data</span>=<span class="hljs-string">{data}</span>
-      // <span class="hljs-attr">Statically</span> <span class="hljs-attr">apply</span> <span class="hljs-attr">same</span> <span class="hljs-attr">className</span>(<span class="hljs-attr">s</span>) <span class="hljs-attr">to</span> <span class="hljs-attr">all</span> <span class="hljs-attr">links</span>
-      <span class="hljs-attr">pathClassFunc</span>=<span class="hljs-string">{()</span> =&gt;</span> &#x27;custom-link&#x27;}
+  return (
+    <Tree
+      data={data}
+      // Statically apply same className(s) to all links
+      pathClassFunc={() => 'custom-link'}
       // Want to apply multiple static classes? `Array.join` is your friend :)
-      pathClassFunc={() =&gt; [&#x27;custom-link&#x27;, &#x27;extra-custom-link&#x27;].join(&#x27; &#x27;)}
-      // Dynamically determine which `className` to pass based on the link&#x27;s properties.
+      pathClassFunc={() => ['custom-link', 'extra-custom-link'].join(' ')}
+      // Dynamically determine which `className` to pass based on the link's properties.
       pathClassFunc={getDynamicPathClass}
-    /&gt;</span>
+    />
   );
-}</code></pre>
-				<blockquote>
-					<p>For more details, see the <code>PathClassFunction</code> <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathclassfunction">reference docs</a>.</p>
-				</blockquote>
-				<a href="#event-handlers" id="event-handlers" style="color: inherit; text-decoration: none;">
-					<h3>Event Handlers</h3>
-				</a>
-				<p><code>Tree</code> exposes the following event handler callbacks by default:</p>
-				<ul>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkclick">onLinkClick</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkmouseout">onLinkMouseOut</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src__tree_types_.treeprops.html#onlinkmouseover">onLinkMouseOver</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodeclick">onNodeClick</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseout">onNodeMouseOut</a></li>
-					<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseover">onNodeMouseOver</a></li>
-				</ul>
-				<blockquote>
-					<p><strong>Note:</strong> Nodes are expanded/collapsed whenever <code>onNodeClick</code> fires. To prevent this, set the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#collapsible"><code>collapsible</code> prop</a> to <code>false</code>.<br><code>onNodeClick</code> will still fire, but it will not change the target node&#39;s expanded/collapsed state.</p>
-				</blockquote>
-				<a href="#customizing-the-tree" id="customizing-the-tree" style="color: inherit; text-decoration: none;">
-					<h2>Customizing the Tree</h2>
-				</a>
-				<!-- Using the `<nodeType>NodeClassName` and `pathClassFunc` approaches above should give  -->
-				<a href="#rendercustomnodeelement" id="rendercustomnodeelement" style="color: inherit; text-decoration: none;">
-					<h3><code>renderCustomNodeElement</code></h3>
-				</a>
-				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#rendercustomnodeelement"><code>renderCustomNodeElement</code> prop</a> accepts a <strong>custom render function that will be used for every node in the tree.</strong></p>
-				<p>Cases where you may find rendering your own <code>Node</code> element useful include:</p>
-				<ul>
-					<li>Using a <strong>different SVG tag for your nodes</strong> (instead of the default <code>&lt;circle&gt;</code>) - <a href="https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js">Example (codesandbox.io)</a></li>
-					<li>Gaining <strong>fine-grained control over event handling</strong> (e.g. to implement events not covered by the default API) - <a href="https://codesandbox.io/s/rd3t-v2-custom-event-handlers-5pwxw?file=/src/App.js">Example (codesandbox.io)</a></li>
-					<li>Building <strong>richer &amp; more complex nodes/labels</strong> by leveraging the <code>foreignObject</code> tag to render HTML inside the SVG namespace - <a href="https://codesandbox.io/s/rd3t-v2-custom-with-foreignobject-0mfj8?file=/src/App.js">Example (codesandbox.io)</a></li>
-				</ul>
-				<a href="#pathfunc" id="pathfunc" style="color: inherit; text-decoration: none;">
-					<h3><code>pathFunc</code></h3>
-				</a>
-				<p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#pathfunc"><code>pathFunc</code> prop</a> accepts a predefined <code>PathFunctionOption</code> enum or a user-defined <code>PathFunction</code>.</p>
-				<p>By changing or providing your own <code>pathFunc</code>, you are able to change how links between nodes of the tree (which are SVG <code>path</code> tags under the hood) are drawn.</p>
-				<p>The currently <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathfunctionoption">available enums</a> are:</p>
-				<ul>
-					<li><code>diagonal</code> (default)</li>
-					<li><code>elbow</code></li>
-					<li><code>straight</code></li>
-					<li><code>step</code></li>
-				</ul>
-				<blockquote>
-					<p>Want to see how each option looks? <a href="https://bkrem.github.io/react-d3-tree">Try them out on the playground</a>.</p>
-				</blockquote>
-				<a href="#providing-your-own-pathfunc" id="providing-your-own-pathfunc" style="color: inherit; text-decoration: none;">
-					<h4>Providing your own <code>pathFunc</code></h4>
-				</a>
-				<p>If none of the available path functions suit your needs, you&#39;re also able to provide a custom <code>PathFunction</code>:</p>
-				<pre><code class="language-jsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CustomPathFuncTree</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> straightPathFunc = <span class="hljs-function">(<span class="hljs-params">linkDatum, orientation</span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> { source, target } = linkDatum;
-    <span class="hljs-keyword">return</span> orientation === <span class="hljs-string">&#x27;horizontal&#x27;</span>
-      ? <span class="hljs-string">`M<span class="hljs-subst">${source.y}</span>,<span class="hljs-subst">${source.x}</span>L<span class="hljs-subst">${target.y}</span>,<span class="hljs-subst">${target.x}</span>`</span>
-      : <span class="hljs-string">`M<span class="hljs-subst">${source.x}</span>,<span class="hljs-subst">${source.y}</span>L<span class="hljs-subst">${target.x}</span>,<span class="hljs-subst">${target.y}</span>`</span>;
+}
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p>For more details, see the <code>PathClassFunction</code> <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathclassfunction">reference docs</a>.</p>
+</blockquote>
+<a id="event-handlers" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Event Handlers<a href="#event-handlers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p><code>Tree</code> exposes the following event handler callbacks by default:</p>
+<ul>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkclick">onLinkClick</a></li>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkmouseout">onLinkMouseOut</a></li>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src__tree_types_.treeprops.html#onlinkmouseover">onLinkMouseOver</a></li>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodeclick">onNodeClick</a></li>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseout">onNodeMouseOut</a></li>
+<li><a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseover">onNodeMouseOver</a></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Nodes are expanded/collapsed whenever <code>onNodeClick</code> fires. To prevent this, set the <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#collapsible"><code>collapsible</code> prop</a> to <code>false</code>.<br>
+<code>onNodeClick</code> will still fire, but it will not change the target node's expanded/collapsed state.</p>
+</blockquote>
+<a id="customizing-the-tree" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Customizing the Tree<a href="#customizing-the-tree" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><!-- Using the `<nodeType>NodeClassName` and `pathClassFunc` approaches above should give  -->
+<a id="rendercustomnodeelement" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code>renderCustomNodeElement</code><a href="#rendercustomnodeelement" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#rendercustomnodeelement"><code>renderCustomNodeElement</code> prop</a> accepts a <strong>custom render function that will be used for every node in the tree.</strong></p>
+<p>Cases where you may find rendering your own <code>Node</code> element useful include:</p>
+<ul>
+<li>Using a <strong>different SVG tag for your nodes</strong> (instead of the default <code>&lt;circle&gt;</code>) - <a href="https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js">Example (codesandbox.io)</a></li>
+<li>Gaining <strong>fine-grained control over event handling</strong> (e.g. to implement events not covered by the default API) - <a href="https://codesandbox.io/s/rd3t-v2-custom-event-handlers-5pwxw?file=/src/App.js">Example (codesandbox.io)</a></li>
+<li>Building <strong>richer &amp; more complex nodes/labels</strong> by leveraging the <code>foreignObject</code> tag to render HTML inside the SVG namespace - <a href="https://codesandbox.io/s/rd3t-v2-custom-with-foreignobject-0mfj8?file=/src/App.js">Example (codesandbox.io)</a></li>
+</ul>
+<a id="pathfunc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code>pathFunc</code><a href="#pathfunc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <a href="https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#pathfunc"><code>pathFunc</code> prop</a> accepts a predefined <code>PathFunctionOption</code> enum or a user-defined <code>PathFunction</code>.</p>
+<p>By changing or providing your own <code>pathFunc</code>, you are able to change how links between nodes of the tree (which are SVG <code>path</code> tags under the hood) are drawn.</p>
+<p>The currently <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathfunctionoption">available enums</a> are:</p>
+<ul>
+<li><code>diagonal</code> (default)</li>
+<li><code>elbow</code></li>
+<li><code>straight</code></li>
+<li><code>step</code></li>
+</ul>
+<blockquote>
+<p>Want to see how each option looks? <a href="https://bkrem.github.io/react-d3-tree">Try them out on the playground</a>.</p>
+</blockquote>
+<a id="providing-your-own-pathfunc" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Providing your own <code>pathFunc</code><a href="#providing-your-own-pathfunc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4><p>If none of the available path functions suit your needs, you're also able to provide a custom <code>PathFunction</code>:</p>
+<pre><code class="jsx">function CustomPathFuncTree() {
+  const straightPathFunc = (linkDatum, orientation) => {
+    const { source, target } = linkDatum;
+    return orientation === 'horizontal'
+      ? `M${source.y},${source.x}L${target.y},${target.x}`
+      : `M${source.x},${source.y}L${target.x},${target.y}`;
   };
 
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Tree</span>
-      <span class="hljs-attr">data</span>=<span class="hljs-string">{data}</span>
-      // <span class="hljs-attr">Passing</span> `<span class="hljs-attr">straight</span>` <span class="hljs-attr">function</span> <span class="hljs-attr">as</span> <span class="hljs-attr">a</span> <span class="hljs-attr">custom</span> `<span class="hljs-attr">PathFunction</span>`<span class="hljs-attr">.</span>
-      <span class="hljs-attr">pathFunc</span>=<span class="hljs-string">{straightPathFunc}</span>
-    /&gt;</span></span>
+  return (
+    <Tree
+      data={data}
+      // Passing `straight` function as a custom `PathFunction`.
+      pathFunc={straightPathFunc}
+    />
   );
-}</code></pre>
-				<blockquote>
-					<p>For more details, see the <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunction"><code>PathFunction</code> reference docs</a>.</p>
-				</blockquote>
-				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
-					<h2>Development</h2>
-				</a>
-				<a href="#setup" id="setup" style="color: inherit; text-decoration: none;">
-					<h3>Setup</h3>
-				</a>
-				<p>To set up <code>react-d3-tree</code> for local development, clone the repo and follow the steps below:</p>
-				<pre><code class="language-bash"><span class="hljs-comment"># 1. Set up the library, create a reference to it for symlinking.</span>
-<span class="hljs-built_in">cd</span> react-d3-tree
-npm i
-npm link
+}
+</code><button type="button">Copy</button></pre>
 
-<span class="hljs-comment"># 2. Set up the demo/playground, symlink to the local copy of `react-d3-tree`.</span>
-<span class="hljs-built_in">cd</span> demo
-npm i
-npm link react-d3-tree</code></pre>
-				<blockquote>
-					<p><strong>Tip:</strong> If you&#39;d prefer to use your own app for development instead of the demo, simply run <code>npm link react-d3-tree</code> in your app&#39;s root folder instead of the demo&#39;s :)</p>
-				</blockquote>
-				<a href="#hot-reloading" id="hot-reloading" style="color: inherit; text-decoration: none;">
-					<h3>Hot reloading</h3>
-				</a>
-				<pre><code class="language-bash">npm run build:watch</code></pre>
-				<p>If you&#39;re using <code>react-d3-tree/demo</code> for development, open up another terminal window in the <code>demo</code> directory and call:</p>
-				<pre><code class="language-bash">npm start</code></pre>
-				<a href="#contributors" id="contributors" style="color: inherit; text-decoration: none;">
-					<h2>Contributors</h2>
-				</a>
-				<p>A huge thank you to all the <a href="https://github.com/bkrem/react-d3-tree/graphs/contributors">contributors</a>, as well as users who have opened issues with thoughtful suggestions and feedback.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_link_index_.html">&quot;src/<wbr>Link/index&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_node_defaultnodeelement_.html">&quot;src/<wbr>Node/<wbr>Default<wbr>Node<wbr>Element&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_node_index_.html">&quot;src/<wbr>Node/index&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_tree_transitiongroupwrapper_.html">&quot;src/<wbr>Tree/<wbr>Transition<wbr>Group<wbr>Wrapper&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_tree_index_.html">&quot;src/<wbr>Tree/index&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_tree_types_.html">&quot;src/<wbr>Tree/types&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_index_.html">&quot;src/index&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_types_common_.html">&quot;src/types/common&quot;</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+<blockquote>
+<p>For more details, see the <a href="https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunction"><code>PathFunction</code> reference docs</a>.</p>
+</blockquote>
+<a id="development" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development<a href="#development" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="setup" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Setup<a href="#setup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>To set up <code>react-d3-tree</code> for local development, clone the repo and follow the steps below:</p>
+<pre><code class="bash"><span class="hl-6"># 1. Set up the library, create a reference to it for symlinking.</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">react-d3-tree</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">link</span><br/><br/><span class="hl-6"># 2. Set up the demo/playground, symlink to the local copy of `react-d3-tree`.</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">demo</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">link</span><span class="hl-1"> </span><span class="hl-2">react-d3-tree</span>
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p><strong>Tip:</strong> If you'd prefer to use your own app for development instead of the demo, simply run <code>npm link react-d3-tree</code> in your app's root folder instead of the demo's :)</p>
+</blockquote>
+<a id="hot-reloading" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Hot reloading<a href="#hot-reloading" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build:watch</span>
+</code><button type="button">Copy</button></pre>
+
+<p>If you're using <code>react-d3-tree/demo</code> for development, open up another terminal window in the <code>demo</code> directory and call:</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">start</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="contributors" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Contributors<a href="#contributors" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>A huge thank you to all the <a href="https://github.com/bkrem/react-d3-tree/graphs/contributors">contributors</a>, as well as users who have opened issues with thoughtful suggestions and feedback.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#contents-"><span>Contents &lt;!-- omit in toc --&gt;</span></a><a href="#installation"><span>Installation</span></a><a href="#usage"><span>Usage</span></a><a href="#props"><span>Props</span></a><a href="#working-with-the-default-tree"><span>Working with the default <wbr/>Tree</span></a><ul><li><a href="#providing-data"><span>Providing data</span></a></li><li><a href="#styling-nodes"><span>Styling <wbr/>Nodes</span></a></li><li><a href="#styling-links"><span>Styling <wbr/>Links</span></a></li><li><a href="#event-handlers"><span>Event <wbr/>Handlers</span></a></li></ul><a href="#customizing-the-tree"><span>Customizing the <wbr/>Tree</span></a><ul><li><a href="#rendercustomnodeelement"><span>render<wbr/>Custom<wbr/>Node<wbr/>Element</span></a></li><li><a href="#pathfunc"><span>path<wbr/>Func</span></a></li><li><ul><li><a href="#providing-your-own-pathfunc"><span>Providing your own path<wbr/>Func</span></a></li></ul></li></ul><a href="#development"><span>Development</span></a><ul><li><a href="#setup"><span>Setup</span></a></li><li><a href="#hot-reloading"><span>Hot reloading</span></a></li></ul><a href="#contributors"><span>Contributors</span></a></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">react-d3-tree - v3.6.3</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
