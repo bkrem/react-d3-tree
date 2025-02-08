@@ -12,6 +12,7 @@ import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
 import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types.js';
 import globalCss from '../globalCss.js';
+import BackgroundGrid, { getDefaultBackgroundGridParam } from './backgroundGrid.js';
 
 type TreeState = {
   dataRef: TreeProps['data'];
@@ -56,6 +57,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     dimensions: undefined,
     centeringTransitionDuration: 800,
     dataKey: undefined,
+    backgroundGrid: undefined,
   };
 
   state: TreeState = {
@@ -74,6 +76,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   svgInstanceRef = `rd3t-svg-${uuidv4()}`;
   gInstanceRef = `rd3t-g-${uuidv4()}`;
+  patternInstanceRef = `rd3t-pattern-${uuidv4()}`;
 
   static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
     let derivedState: Partial<TreeState> = null;
@@ -113,7 +116,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       this.props.zoomable !== prevProps.zoomable ||
       this.props.draggable !== prevProps.draggable ||
       this.props.zoom !== prevProps.zoom ||
-      this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions
+      this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions ||
+      this.props.backgroundGrid !== prevProps.backgroundGrid
     ) {
       // If zoom-specific props change -> rebind listener with new values.
       // Or: rebind zoom listeners to new DOM nodes in case legacy transitions were enabled/disabled.
@@ -152,6 +156,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { zoomable, scaleExtent, translate, zoom, onUpdate, hasInteractiveNodes } = props;
     const svg = select(`.${this.svgInstanceRef}`);
     const g = select(`.${this.gInstanceRef}`);
+    const pattern = select(`.${this.patternInstanceRef}`);
 
     // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
     // @ts-ignore
@@ -165,6 +170,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
             return (
               event.target.classList.contains(this.svgInstanceRef) ||
               event.target.classList.contains(this.gInstanceRef) ||
+              event.target.id === 'bgPatternContainer' ||
               event.shiftKey
             );
           }
@@ -179,6 +185,22 @@ class Tree extends React.Component<TreeProps, TreeState> {
           }
 
           g.attr('transform', event.transform);
+
+          // gridCellSize is required by zooming
+          const bgGrid = getDefaultBackgroundGridParam(this.props.backgroundGrid);
+          // apply zoom effect onto bgGrid only if specified
+          if (bgGrid) {
+            pattern
+              .attr('x', event.transform.x)
+              .attr('y', event.transform.y)
+              .attr('width', bgGrid.gridCellSize.width * event.transform.k)
+              .attr('height', bgGrid.gridCellSize.height * event.transform.k)
+
+            pattern
+              .selectAll('*')
+              .attr('transform',`scale(${event.transform.k})`)
+          }
+
           if (typeof onUpdate === 'function') {
             // This callback is magically called not only on "zoom", but on "drag", as well,
             // even though event.type == "zoom".
@@ -557,6 +579,14 @@ class Tree extends React.Component<TreeProps, TreeState> {
           width="100%"
           height="100%"
         >
+          {
+            this.props.backgroundGrid 
+              ? <BackgroundGrid 
+                  {...this.props.backgroundGrid}
+                  patternInstanceRef={this.patternInstanceRef}
+                /> 
+              : null
+          }
           <TransitionGroupWrapper
             enableLegacyTransitions={enableLegacyTransitions}
             component="g"
