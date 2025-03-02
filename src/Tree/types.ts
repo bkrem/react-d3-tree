@@ -10,6 +10,7 @@ import {
   RenderCustomNodeElementFn,
   TreeNodeDatum,
 } from '../types/common.js';
+import { BackgroundGrid } from './backgroundGrid';
 
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
@@ -200,12 +201,12 @@ export interface TreeProps {
    */
   zoomable?: boolean;
 
-   /**
+  /**
    * Toggles ability to drag the Tree.
    *
    * {@link Tree.defaultProps.draggable | Default value}
    */
-   draggable?: boolean;
+  draggable?: boolean;
 
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
@@ -319,4 +320,18 @@ export interface TreeProps {
    * {@link Tree.defaultProps.dataKey | Default value}
    */
   dataKey?: string;
+
+  /**
+   * Sets a background grid using svg <pattern> and and a background <rect fill="url(#grid-pattern)"/>
+   * there's 2 default type of grid: `dot` and `line`
+   * - `color`: color of each line / dot
+   * - `thickness`: thickness of each line / radius of the each dot
+   * - `gridCellSize`: the space take place by each dot / cross / customRenderFunction
+   * 
+   * `type: custom` allows customizing content inside <pattern><pattern/> by 
+   * passing `gridCellFunc` a function that return a ReactElement(svg elements)
+   * 
+   * {@link Tree.defaultProps.backgroundGrid | Default value}
+   */
+  backgroundGrid?: BackgroundGrid;
 }
