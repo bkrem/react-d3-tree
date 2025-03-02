@@ -43,6 +43,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     draggable: true,
     zoom: 1,
     scaleExtent: { min: 0.1, max: 1 },
+    clickDistance: 0,
     nodeSize: { x: 140, y: 140 },
     separation: { siblings: 1, nonSiblings: 2 },
     shouldCollapseNeighborNodes: false,
@@ -149,7 +150,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * specified in `props.scaleExtent`.
    */
   bindZoomListener(props: TreeProps) {
-    const { zoomable, scaleExtent, translate, zoom, onUpdate, hasInteractiveNodes } = props;
+    const {
+      zoomable,
+      scaleExtent,
+      translate,
+      zoom,
+      clickDistance,
+      onUpdate,
+      hasInteractiveNodes,
+    } = props;
     const svg = select(`.${this.svgInstanceRef}`);
     const g = select(`.${this.gInstanceRef}`);
 
@@ -158,6 +167,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
     svg.call(
       d3zoom()
+        .clickDistance(clickDistance)
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .filter((event: any) => {
