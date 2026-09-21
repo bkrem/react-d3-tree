@@ -24,7 +24,7 @@
   "types": "lib/types/index.d.ts",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
-    "build:cjs": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.json && node -e \"require('fs').writeFileSync('lib/cjs/package.json', JSON.stringify({ type: 'commonjs' }))\"",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build": "rimraf lib && npm run build:cjs && npm run build:esm",
     "build:watch": "rimraf lib && npm run build:esm -- -w",
