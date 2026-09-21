@@ -30,6 +30,7 @@
     "build:watch": "rimraf lib && npm run build:esm -- -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --config jest.config.json --coverage --verbose",
+    "test:smoke": "node scripts/smoke-test.js",
     "test:clean": "rimraf ./coverage",
     "test:watch": "jest --config jest.config.json --watchAll",
     "test:cov": "jest --config jest.config.json --coverage --verbose",
