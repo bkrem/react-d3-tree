@@ -38,3 +38,9 @@ dist
 lib
 demo/build
 demo/public/docs
+
+# macOS metadata
+.DS_Store
+
+# Claude Code agent worktrees
+.claude/worktrees/
