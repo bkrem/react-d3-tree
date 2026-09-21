@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rebuilds the checked-out release tag and prints the tarball shasum, to compare with the Publish run log.
 # Usage: reproduce-shasum.sh [expected-shasum]
-# Run from the repo root, on a clean checkout of the release tag, after `npm ci`.
+# Run from the repo root, on a clean checkout of the release tag, after `pnpm install --frozen-lockfile`.
 set -euo pipefail
 
 expected="${1:-}"
@@ -19,14 +19,15 @@ if [ "$tag" != "v$version" ]; then
 fi
 
 if [ ! -d node_modules ]; then
-  echo "error: node_modules is missing; run npm ci first" >&2
+  echo "error: node_modules is missing; run pnpm install --frozen-lockfile first" >&2
   exit 1
 fi
 
 out="$(mktemp -d)"
-echo "node $(node --version), npm $(npm --version), commit $(git rev-parse --short HEAD) ($tag)"
-npm run build > "$out/build.log" 2>&1 || { echo "error: build failed, see $out/build.log" >&2; exit 1; }
-npm pack --ignore-scripts --pack-destination "$out" > /dev/null 2>&1
+echo "node $(node --version), npm $(npm --version), pnpm $(pnpm --version), commit $(git rev-parse --short HEAD) ($tag)"
+pnpm run build > "$out/build.log" 2>&1 || { echo "error: build failed, see $out/build.log" >&2; exit 1; }
+# `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
+HUSKY=0 npm pack --ignore-scripts --pack-destination "$out" > /dev/null 2>&1
 
 tarball="$(ls "$out"/*.tgz)"
 actual="$(shasum -a 1 "$tarball" | cut -d' ' -f1)"

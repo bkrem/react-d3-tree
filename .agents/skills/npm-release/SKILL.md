@@ -46,14 +46,14 @@ Three parts of the setup live outside this repo, on npmjs.com:
 
 Full commands and expected output are in [WORKFLOWS.md](./WORKFLOWS.md). Run everything from the repo root.
 
-1. **Preflight.** Start from an up-to-date `master` with a clean tree and green CI. Run `npm ci`, `npm test`, `npm run build`, and `npm run test:smoke`.
-2. **Bump.** Run `npm version <version> --no-git-tag-version`. Commit `package.json` and `package-lock.json` as `chore(release): <version>`. Create the annotated tag `v<version>` with the bare version as its message.
+1. **Preflight.** Start from an up-to-date `master` with a clean tree and green CI. Run `pnpm install --frozen-lockfile`, `pnpm test`, `pnpm build`, and `pnpm test:smoke`.
+2. **Bump.** Run `npm version <version> --no-git-tag-version`. Commit `package.json` as `chore(release): <version>`. Create the annotated tag `v<version>` with the bare version as its message.
 3. **Push.** After the maintainer confirms, push the commit and the tag in one atomic push. The tag must equal `v` plus the `package.json` version, or the workflow fails.
 4. **Release.** After the maintainer confirms, create the GitHub release for the tag. Mark prereleases with `--prerelease`. Notes are short bullets that link the PRs, then a full changelog compare link.
 5. **Watch.** Find the `Publish` run, wait for it, and read the stage id and shasum from its log.
 6. **Verify the staged tarball.** Run `.agents/skills/npm-release/scripts/reproduce-shasum.sh` on the tag. The shasum must equal the one in the run log. Run `.agents/skills/npm-release/scripts/compare-tarballs.sh` against the previous version and explain every difference from the merged changes.
 7. **Hand over for approval.** Give the maintainer the stage id, the shasum to match on the **Staged Packages** tab, and the approve command. Stop until they confirm.
-8. **Verify the published version.** Run `.agents/skills/npm-release/scripts/verify-published.sh <version> <dist-tag>`. On a Node version that can't `require()` ES modules, the script skips the `require()` check, as `npm run test:smoke` does.
+8. **Verify the published version.** Run `.agents/skills/npm-release/scripts/verify-published.sh <version> <dist-tag>`. On a Node version that can't `require()` ES modules, the script skips the `require()` check, as `pnpm test:smoke` does.
 9. **Optional: deploy the demo.** Pin the demo to the exact version, build the docs and the demo, verify the build, commit, deploy, and check the live site.
 
 ## Validation checklist
@@ -71,7 +71,7 @@ Full commands and expected output are in [WORKFLOWS.md](./WORKFLOWS.md). Run eve
 
 - **Workflow fails at "Resolve version and dist-tag".** The tag and `package.json` disagree, or the prerelease identifier is invalid. Fix the version, delete the release and tag after the maintainer agrees, and start again.
 - **Wrong dist-tag staged.** A staged tag is immutable. The maintainer rejects the staged version with `npm stage reject <id>`, then you re-run the release.
-- **Shasum mismatch.** Do not hand over for approval. Rebuild from a clean checkout of the tag with `npm ci`. If it still differs, compare the run log's file list with `npm pack --dry-run` and report the difference. Local rebuilds under Node 22 with npm 10 and under Node 24 with npm 11 both reproduce the CI tarball (Node 24); other Node majors are untested.
+- **Shasum mismatch.** Do not hand over for approval. Rebuild from a clean checkout of the tag with `pnpm install --frozen-lockfile`. If it still differs, compare the run log's file list with `npm pack --dry-run` and report the difference. Local rebuilds under Node 22 with npm 10 and under Node 24 with npm 11 both reproduce the CI tarball (Node 24); other Node majors are untested.
 - **`npm stage` or `npm trust` fails locally.** They need npm 11.15.0 or later and an `npm login` session. Use `npx -y npm@^11.15.0 <command>`.
 - **`401` from `npm stage download`.** No npm session on this machine. Use the local rebuild for inspection; the matching shasum proves it is byte-identical.
 

@@ -8,7 +8,7 @@ Command sequences for each step in [SKILL.md](./SKILL.md). Run everything from t
 git fetch origin --tags
 git switch -c chore/release-<version> origin/master --no-track
 gh run list --branch master --limit 1      # expect: completed, success
-npm ci && npm test && npm run build && npm run test:smoke
+pnpm install --frozen-lockfile && pnpm test && pnpm build && pnpm test:smoke
 ```
 
 The smoke test prints `import "react-d3-tree": ok` and `require("react-d3-tree"): ok`.
@@ -18,12 +18,12 @@ The smoke test prints `import "react-d3-tree": ok` and `require("react-d3-tree")
 ```bash
 npm version <version> --no-git-tag-version            # stable, or an explicit prerelease
 npm version prerelease --preid=rc --no-git-tag-version # next release candidate
-git add package.json package-lock.json
+git add package.json
 git commit -m "chore(release): <version>"
 git tag -a v<version> -m "<version>"
 ```
 
-The diff must contain only the version fields: one line in `package.json` and two in `package-lock.json`.
+The diff must contain only the version field: one line in `package.json`. `pnpm-lock.yaml` doesn't record the package's own version, so it stays unchanged.
 
 ## 3. Push
 
@@ -77,7 +77,7 @@ The registry must not show the version yet: `npm view react-d3-tree@<version> ve
 
 ```bash
 git checkout --detach v<version>
-npm ci
+pnpm install --frozen-lockfile
 .agents/skills/npm-release/scripts/reproduce-shasum.sh <shasum-from-run-log>
 .agents/skills/npm-release/scripts/compare-tarballs.sh <prev> <tarball-path-printed-above>
 ```
@@ -111,7 +111,7 @@ The demo is a Create React App 3 project (webpack 4) that installs the published
 ```bash
 git switch -c chore/demo-use-<version> origin/master --no-track
 npm --prefix demo install react-d3-tree@<version> --save-exact --no-audit --no-fund
-npm run build:docs              # typedoc writes to demo/public/docs, which is gitignored
+pnpm build:docs                 # typedoc writes to demo/public/docs, which is gitignored
 npm --prefix demo run build
 ```
 
@@ -135,4 +135,4 @@ gh api repos/bkrem/react-d3-tree/pages/builds/latest --jq '{status, commit: .com
 
 The Pages deployment can take several minutes after the push. The site is live when the status is `built` and `https://bkrem.github.io/react-d3-tree/` references the new `static/js/2.*.chunk.js`. Returning visitors might see the old version until a hard refresh, because the demo registers a service worker.
 
-The root script `npm run deploy:demo` runs the same build and deploy, and also rebuilds `lib/` first. The demo doesn't consume `lib/`, so that rebuild is harmless and unnecessary. The script has no verification step, so prefer the sequence above.
+The root script `pnpm run deploy:demo` runs the same build and deploy, and also rebuilds `lib/` first. The demo doesn't consume `lib/`, so that rebuild is harmless and unnecessary. The script has no verification step, so prefer the sequence above.
