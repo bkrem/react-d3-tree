@@ -4,7 +4,6 @@ import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
-import { v4 as uuidv4 } from 'uuid';
 
 import TransitionGroupWrapper from './TransitionGroupWrapper.js';
 import Node from '../Node/index.js';
@@ -12,6 +11,7 @@ import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
 import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types.js';
 import globalCss from '../globalCss.js';
+import generateId from '../generateId.js';
 
 type TreeState = {
   dataRef: TreeProps['data'];
@@ -72,8 +72,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
     isTransitioning: false,
   };
 
-  svgInstanceRef = `rd3t-svg-${uuidv4()}`;
-  gInstanceRef = `rd3t-g-${uuidv4()}`;
+  svgInstanceRef = `rd3t-svg-${generateId()}`;
+  gInstanceRef = `rd3t-g-${generateId()}`;
 
   static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
     let derivedState: Partial<TreeState> = null;
@@ -211,7 +211,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     return d.map(n => {
       const nodeDatum = n as TreeNodeDatum;
       nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
-      nodeDatum.__rd3t.id = uuidv4();
+      nodeDatum.__rd3t.id = generateId();
       // D3@v5 compat: manually assign `depth` to node.data so we don't have
       // to hold full node+link sets in state.
       // TODO: avoid this extra step by checking D3's node.depth directly.
