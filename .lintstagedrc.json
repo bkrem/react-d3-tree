@@ -1,0 +1,8 @@
+{
+  "src/**/*.{js,jsx}": [
+    "eslint",
+    "prettier --write",
+    "jest --config jest.config.json --findRelatedTests"
+  ],
+  "src/**/*.{ts,tsx}": ["prettier --write", "jest --config jest.config.json --findRelatedTests"]
+}

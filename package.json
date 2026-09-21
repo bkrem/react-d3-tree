@@ -26,8 +26,8 @@
     "build:docs": "rimraf ./docs && typedoc",
     "build:cjs": "tsc -p tsconfig.json && node scripts/mark-cjs.js",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build": "rimraf lib && npm run build:cjs && npm run build:esm",
-    "build:watch": "rimraf lib && npm run build:esm -- -w",
+    "build": "rimraf lib && pnpm run build:cjs && pnpm run build:esm",
+    "build:watch": "rimraf lib && tsc -p tsconfig.esm.json -w",
     "lint": "eslint src/**/*.js",
     "test": "jest --config jest.config.json --coverage --verbose",
     "test:smoke": "node scripts/smoke-test.js",
@@ -37,9 +37,11 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "show:docs": "open demo/public/docs/index.html",
-    "prepublishOnly": "npm run test && npm run build",
-    "deploy:demo": "npm run build && npm run build:docs && cd demo && npm run build && npm run deploy"
+    "prepare": "husky || true",
+    "prepublishOnly": "pnpm run test && pnpm run build",
+    "deploy:demo": "pnpm run build && pnpm run build:docs && cd demo && npm run build && npm run deploy"
   },
+  "packageManager": "pnpm@12.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/bkrem/react-d3-tree.git"
@@ -56,27 +58,6 @@
     "d3-visualization",
     "chart"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.js": [
-      "eslint",
-      "prettier --write",
-      "jest --config jest.config.json --findRelatedTests",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "jest --config jest.config.json --findRelatedTests",
-      "git add"
-    ]
-  },
-  "overrides": {
-    "cheerio": "1.0.0-rc.12"
-  },
   "dependencies": {
     "@bkrem/react-transition-group": "^1.3.5",
     "@types/d3-hierarchy": "^1.1.8",
@@ -112,9 +93,9 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
-    "husky": "^3.0.4",
+    "husky": "^9.1.7",
     "jest": "^24.9.0",
-    "lint-staged": "^9.4.2",
+    "lint-staged": "^17.5.1",
     "prettier": "^1.19.1",
     "react": "^16.14.0",
     "react-dom": "^16.6.3",
