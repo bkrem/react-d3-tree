@@ -6,6 +6,19 @@ This file provides guidance to AI coding agents working with this repository.
 
 `react-d3-tree` is a React component that renders hierarchical data (org charts, family trees, file directories) as an interactive SVG tree graph, built on D3's `tree` layout from `d3-hierarchy`. It ships to npm as a library consumed by other React apps. The `demo/` directory holds a Create React App playground deployed to GitHub Pages.
 
+## Backwards compatibility
+
+This library is published to npm, so anything a consuming app relies on is a contract. Keep minor and patch releases backwards compatible — a developer bumping within the same major version must not have their build, types, or app break. Introduce a breaking change only when the task is explicitly about one, and land it in a major version.
+
+Beyond obvious source-level API changes, a change is breaking if it affects any of these:
+
+- Public API: renaming, removing, or changing the behavior of the `src/index.ts` exports (`Tree`, its props, its defaults, or the exported types).
+- Peer dependencies: narrowing the supported `react`/`react-dom` range (16.x–19.x) or adding a new required peer dependency.
+- Build output: changing the `exports` map or the CJS, ESM, or types entry points, dropping a module format, or raising the compile target (CJS `es5`, ESM `es6`) so runtimes or bundlers that work today stop working.
+- Shipped types: raising the minimum TypeScript version the `.d.ts` files need, or changing emitted types so existing consumer code stops type-checking.
+
+When unsure whether a change breaks consumers, treat it as breaking.
+
 ## Architecture
 
 The library source lives in `src/`. Everything else supports building, testing, docs, or the demo.
