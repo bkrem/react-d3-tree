@@ -30,6 +30,7 @@ The library source lives in `src/`. Everything else supports building, testing, 
 - `src/Node/index.tsx` — renders a single node; `src/Node/DefaultNodeElement.tsx` is the default node renderer used when no custom renderer is supplied.
 - `src/Link/index.tsx` — renders the path between two nodes; supports the built-in `pathFunc` variants and a caller-supplied function.
 - `src/types/common.ts` — shared data types (`RawNodeDatum`, `TreeNodeDatum`, `Point`, event handler types).
+- `src/generateId.ts` — generates the v4 UUIDs that `Tree` uses for its SVG and group class references and for node IDs. Not part of the public API.
 - `src/globalCss.ts` — injected base styles.
 
 The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), and type declarations (`lib/types`). Because the root `package.json` sets `"type": "module"`, `scripts/mark-cjs.js` writes a `lib/cjs/package.json` that marks that directory as CommonJS. The `package.json` `exports` map points consumers at the matching entry.
@@ -39,7 +40,7 @@ The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (
 - TypeScript (source), compiled with `tsc`.
 - React 16–19 (peer dependency). Dev and test dependencies pin React 16 for the enzyme adapter.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
-- Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`, `uuid`.
+- Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
 - Jest with `ts-jest` and `babel-jest`, enzyme with `enzyme-adapter-react-16`.
 - ESLint (airbnb config) and Prettier.
 - TypeDoc for API documentation.
