@@ -1,0 +1,66 @@
+# Stages the released version on npm via trusted publishing (OIDC). No npm token is involved.
+# A maintainer approves the staged version with 2FA before it goes live.
+# The filename is part of the trusted publisher config on npmjs.com: renaming this file breaks publishing.
+
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write # OIDC token for npm trusted publishing
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      # `npm stage publish` requires npm 11.15.0 or later.
+      - run: npm install -g npm@^11.15.0
+
+      - name: Resolve version and dist-tag
+        id: meta
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "v$version" != "$RELEASE_TAG" ]; then
+            echo "::error::Release tag $RELEASE_TAG doesn't match package.json version $version"
+            exit 1
+          fi
+
+          # 3.7.0 -> latest, 3.7.0-rc.0 -> rc, 3.7.0-next.1 -> next
+          case "$version" in
+            *-*)
+              prerelease="${version#*-}"
+              dist_tag="${prerelease%%.*}"
+              ;;
+            *)
+              dist_tag=latest
+              ;;
+          esac
+          if ! printf '%s' "$dist_tag" | grep -Eq '^[a-z][a-z0-9-]*$'; then
+            echo "::error::Can't derive a dist-tag from version $version"
+            exit 1
+          fi
+
+          echo "dist_tag=$dist_tag" >> "$GITHUB_OUTPUT"
+
+      - run: npm ci
+
+      # `prepublishOnly` runs the tests and the build.
+      - run: npm stage publish --tag "$DIST_TAG"
+        env:
+          DIST_TAG: ${{ steps.meta.outputs.dist_tag }}
