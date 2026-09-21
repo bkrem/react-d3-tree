@@ -37,7 +37,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "show:cov": "open coverage/lcov-report/index.html",
     "show:docs": "open demo/public/docs/index.html",
-    "prepare": "husky || true",
+    "prepare": "husky 1>&2 || true",
     "prepublishOnly": "pnpm run test && pnpm run build",
     "deploy:demo": "pnpm run build && pnpm run build:docs && cd demo && npm run build && npm run deploy"
   },
