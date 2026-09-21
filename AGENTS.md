@@ -118,3 +118,11 @@ For hot reloading, run `npm run build:watch` in the repo root and `npm start` in
 CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 20.x with `npm ci`, `npm run build`, `npm test`, and `npm run test:smoke`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
+
+## Releases
+
+Publishing a GitHub release runs `.github/workflows/publish.yml`, which stages the version on npm through trusted publishing (OIDC, no token). The maintainer approves the staged version with 2FA before it goes live. To cut, verify, or follow up on a release, follow `.agents/skills/npm-release/SKILL.md`.
+
+## Agent skills
+
+Repo-local skills live in `.agents/skills/`, one directory per skill with a `SKILL.md`. `.claude/skills` is a symlink to that directory, so add and edit skills under `.agents/skills/` only.
