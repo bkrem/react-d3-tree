@@ -32,7 +32,7 @@ The library source lives in `src/`. Everything else supports building, testing, 
 - `src/types/common.ts` — shared data types (`RawNodeDatum`, `TreeNodeDatum`, `Point`, event handler types).
 - `src/globalCss.ts` — injected base styles.
 
-The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), and type declarations (`lib/types`). The `package.json` `exports` map points consumers at the matching entry.
+The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), and type declarations (`lib/types`). Because the root `package.json` sets `"type": "module"`, `scripts/mark-cjs.js` writes a `lib/cjs/package.json` that marks that directory as CommonJS. The `package.json` `exports` map points consumers at the matching entry.
 
 ## Tech stack
 
@@ -68,6 +68,9 @@ npm test
 # Watch tests
 npm run test:watch
 
+# Load the packed tarball as a consumer through `require()` and `import` (needs a prior build)
+npm run test:smoke
+
 # Lint (see the note under Code style — this covers .js files only)
 npm run lint
 
@@ -84,12 +87,13 @@ There's no separate format script. Prettier runs through the pre-commit hook and
 - Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.js`) and colocated tests (`src/Node/index.test.js`). Shared fixtures live in `src/Tree/tests/mockData.js`.
 - CSS imports are mapped to `jest/mocks/cssModule.js`. The `moduleNameMapper` also strips the `.js` suffix from relative imports so they resolve against the `.ts`/`.tsx` source (see Code style).
 - `npm test` runs with `--coverage` and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Additions that drop coverage below these thresholds fail the run, so add tests alongside new code.
+- Jest tests import `src/` and never load `lib/`. `npm run test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build, installs the tarball plus React into a temporary project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only.
 
 ## Code style and conventions
 
 - In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. The `tsconfig` `paths` mapping (`"*.js": ["*"]`) and the Jest `moduleNameMapper` exist to resolve these during type-checking and testing. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
 - Prettier settings (`.prettierrc`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`.
-- ESLint (`.eslintrc.js`) extends `airbnb` plus `prettier`. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `npm run lint`. Prettier formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
+- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `npm run lint`. Prettier formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
 - Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js`.
 - The pre-commit hook (`husky` + `lint-staged`) runs Prettier and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, and additionally ESLint on staged `.js` files.
 
@@ -110,6 +114,6 @@ npm link react-d3-tree
 
 For hot reloading, run `npm run build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 20.x with `npm ci`, `npm run build`, and `npm test`. Match that sequence locally before pushing.
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 20.x with `npm ci`, `npm run build`, `npm test`, and `npm run test:smoke`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
