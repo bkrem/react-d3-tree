@@ -1,4 +1,4 @@
-// Installs the packed tarball into a throwaway project and loads it through both entry points
+// Installs the packed tarball into a throwaway project and loads it through both entry styles
 // of the `exports` map, the way a consuming app does. Requires a prior `pnpm build`.
 import assert from 'node:assert';
 import { execSync } from 'node:child_process';
@@ -6,6 +6,8 @@ import { copyFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+type PackResult = [{ filename: string; files: { path: string }[] }];
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtures = path.join(repoRoot, 'scripts', 'smoke');
@@ -21,12 +23,13 @@ const project = mkdtempSync(path.join(tmpdir(), 'rd3t-smoke-'));
 // project whose `packageManager` is pnpm unless strict mode is off.
 // `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
 const env = { ...process.env, COREPACK_ENABLE_STRICT: '0', HUSKY: '0' };
-const run = (command, cwd) => execSync(command, { cwd, env, stdio: ['ignore', 'pipe', 'inherit'] });
+const run = (command: string, cwd: string) =>
+  execSync(command, { cwd, env, stdio: ['ignore', 'pipe', 'inherit'] });
 
 try {
   const [{ filename, files }] = JSON.parse(
-    run(`npm pack --json --ignore-scripts --pack-destination "${project}"`, repoRoot)
-  );
+    run(`npm pack --json --ignore-scripts --pack-destination "${project}"`, repoRoot).toString()
+  ) as PackResult;
 
   // Only the build output and the package metadata belong in the tarball.
   const allowed = /^(lib\/.+|package\.json|README\.md|LICENSE)$/;

@@ -266,7 +266,11 @@ the Phase 1 baseline, the JavaScript differs only by native object spread (the E
 the declarations are unchanged. 2.4 landed next (`build: compile JSX through the automatic
 runtime`): `jsx: react-jsx` in the build, Vite's default runtime in tests, `build:docs` runs
 `typedoc` alone (TypeDoc cleans its output directory itself), and the `.oxlintrc.json`
-class-component rule downgrades wait for Phase 4. 2.5, 2.3, and 2.2 follow in that order.
+class-component rule downgrades wait for Phase 4. 2.5 landed after it (`build: run the repo
+scripts as TypeScript`): `check-package.ts`, `smoke-test.ts`, and a `clean.ts` that replaces
+`rimraf`; `tsconfig.scripts.json` under `erasableSyntaxOnly` joins `pnpm typecheck`;
+`@types/node` is a dev dependency; `.nvmrc` and `engines.node` state the Node floor. The only
+JavaScript left in the repo is the pair of smoke consumers. 2.3 and 2.2 follow.
 
 Goal: one build, one tsconfig, no CJS scaffolding.
 

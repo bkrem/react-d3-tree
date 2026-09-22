@@ -11,12 +11,20 @@ import { closeSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { publint } from 'publint';
+import type { Message } from 'publint';
 import { formatMessage, formatMessagePath } from 'publint/utils';
 
+type AttwProblem = {
+  kind: string;
+  entrypoint?: string;
+  resolutionKind?: string;
+  typesFileName?: string;
+};
+
 // Entries look like 'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types'.
-const knownPublint = new Set([]);
+const knownPublint = new Set<string>([]);
 // Entries look like 'FallbackCondition at . (node16-cjs)' or 'FalseESM at <types file>'.
-const knownAttw = new Set([
+const knownAttw = new Set<string>([
   // The package is ESM-only, so a CommonJS `require()` resolves to an ES module. Node 22.12 and
   // later load it through `require(esm)`, which the smoke test's CommonJS consumer proves. attw's
   // `esm-only` profile ignores this finding in its table but still lists it in the JSON.
@@ -26,14 +34,20 @@ const knownAttw = new Set([
 // `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
 const env = { ...process.env, HUSKY: '0' };
 
-const describePublint = message => `${message.code} at ${formatMessagePath(message.path)}`;
-const describeAttw = problem =>
+const describePublint = (message: Message) =>
+  `${message.code} at ${formatMessagePath(message.path)}`;
+const describeAttw = (problem: AttwProblem) =>
   problem.entrypoint !== undefined
     ? `${problem.kind} at ${problem.entrypoint} (${problem.resolutionKind})`
     : `${problem.kind} at ${problem.typesFileName}`;
 
 let failed = false;
-const report = (tool, findings, describe, format) => {
+const report = <T>(
+  tool: 'publint' | 'attw',
+  findings: T[],
+  describe: (finding: T) => string,
+  format: (finding: T) => string
+) => {
   let unexpected = 0;
   for (const finding of findings) {
     const known = tool === 'publint' ? knownPublint : knownAttw;
@@ -63,7 +77,9 @@ if (attwRun.error) {
   console.error('attw did not run', attwRun.error);
   process.exit(1);
 }
-const attw = JSON.parse(readFileSync(attwOut, 'utf8'));
+const attw = JSON.parse(readFileSync(attwOut, 'utf8')) as {
+  problems?: Record<string, AttwProblem[]>;
+};
 rmSync(path.dirname(attwOut), { recursive: true, force: true });
 report('attw', Object.values(attw.problems ?? {}).flat(), describeAttw, describeAttw);
 // The table gives the per-resolution view for humans; the JSON above decides the exit code.
