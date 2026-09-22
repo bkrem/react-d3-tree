@@ -1,0 +1,25 @@
+/* Design tokens. Colours resolve per theme through light-dark(); components use tokens only. */
+:root {
+  color-scheme: light dark;
+
+  --canvas: light-dark(#ffffff, #14181d);
+  --panel: light-dark(#f3f5f7, #1b2027);
+  --field: light-dark(#ffffff, #10141a);
+  --ink: light-dark(#1c2430, #e6eaf0);
+  --muted: light-dark(#667284, #93a0b0);
+  --line: light-dark(#d8dee5, #2c343e);
+  --accent: light-dark(#0e9f87, #2fd0b3);
+  --accent-ink: light-dark(#0b7d6a, #5fe0c8);
+  --danger: light-dark(#b42318, #ff8a80);
+  --link: light-dark(#a9b3be, #4b5663);
+  --node: light-dark(#1c2430, #e6eaf0);
+  --node-leaf: light-dark(#ffffff, #14181d);
+  --on-accent: #ffffff;
+
+  --font-ui: 'Public Sans Variable', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Spline Sans Mono Variable', ui-monospace, Menlo, Consolas, monospace;
+
+  --inspector-width: 320px;
+  --topbar-height: 48px;
+  --radius: 4px;
+}

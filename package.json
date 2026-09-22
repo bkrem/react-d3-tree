@@ -35,7 +35,7 @@
     "build:watch": "rimraf lib && tsc -p tsconfig.esm.json -w",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "lint": "oxlint src scripts test",
+    "lint": "oxlint src scripts test demo/src demo/vite.config.ts",
     "test": "vitest run --coverage",
     "test:smoke": "node scripts/smoke-test.js",
     "test:clean": "rimraf ./coverage",
@@ -45,7 +45,7 @@
     "show:docs": "open demo/public/docs/index.html",
     "prepare": "husky 1>&2 || true",
     "prepublishOnly": "pnpm run test && pnpm run build",
-    "deploy:demo": "pnpm run build && pnpm run build:docs && cd demo && npm run build && npm run deploy"
+    "build:demo": "pnpm run build && pnpm run build:docs && pnpm --filter rd3t-demo build"
   },
   "packageManager": "pnpm@12.4.2",
   "repository": {
