@@ -68,9 +68,7 @@ export interface TreeHandle {
 }
 
 /**
- * Props accepted by the `Tree` component.
- *
- * {@link Tree.defaultProps | Default Props}
+ * Props accepted by the `Tree` component. Only `data` is required.
  */
 export interface TreeProps {
   /**
@@ -89,51 +87,38 @@ export interface TreeProps {
    * The function is passed `CustomNodeElementProps` as its first argument.
    * `react-d3-tree` expects the function to return a `ReactElement`.
    *
-   * See the `RenderCustomNodeElementFn` type for more details.
-   *
-   * {@link Tree.defaultProps.renderCustomNodeElement | Default value}
+   * See the `RenderCustomNodeElementFn` type for more details. Without it, every node renders
+   * as a circle with the node's name and attributes as labels.
    */
   renderCustomNodeElement?: RenderCustomNodeElementFn;
 
   /**
    * Called when a node is clicked.
-   *
-   * {@link Tree.defaultProps.onNodeClick | Default value}
    */
   onNodeClick?: TreeNodeEventCallback;
 
   /**
    * Called when mouse enters the space belonging to a node.
-   *
-   * {@link Tree.defaultProps.onNodeMouseOver | Default value}
    */
   onNodeMouseOver?: TreeNodeEventCallback;
 
   /**
    * Called when mouse leaves the space belonging to a node.
-   *
-   * {@link Tree.defaultProps.onNodeMouseOut | Default value}
    */
   onNodeMouseOut?: TreeNodeEventCallback;
 
   /**
    * Called when a link is clicked.
-   *
-   * {@link Tree.defaultProps.onLinkClick | Default value}
    */
   onLinkClick?: TreeLinkEventCallback;
 
   /**
    * Called when mouse enters the space belonging to a link.
-   *
-   * {@link Tree.defaultProps.onLinkMouseOver | Default value}
    */
   onLinkMouseOver?: TreeLinkEventCallback;
 
   /**
    * Called when mouse leaves the space belonging to a link.
-   *
-   * {@link Tree.defaultProps.onLinkMouseOut | Default value}
    */
   onLinkMouseOut?: TreeLinkEventCallback;
 
@@ -154,7 +139,7 @@ export interface TreeProps {
    * Additionally, passing a negative value to {@link TreeProps.depthFactor | depthFactor} will
    * invert the tree's direction (i.e. right-to-left, bottom-to-top).
    *
-   * {@link Tree.defaultProps.orientation | Default value}
+   * @default 'horizontal'
    */
   orientation?: Orientation;
 
@@ -163,7 +148,7 @@ export interface TreeProps {
    *
    * By default, the graph will render in the top-left corner of the SVG canvas.
    *
-   * {@link Tree.defaultProps.translate | Default value}
+   * @default { x: 0, y: 0 }
    */
   translate?: Point;
 
@@ -171,6 +156,8 @@ export interface TreeProps {
    * Centers a node in the container when it is clicked. The tree measures its container
    * itself, so nothing else is needed. Off by default. `centerNode` on the ref handle centers a
    * node at any other time.
+   *
+   * @default false
    */
   centerOnClick?: boolean;
 
@@ -190,7 +177,7 @@ export interface TreeProps {
    *
    * For details on draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
    *
-   * {@link Tree.defaultProps.pathFunc | Default value}
+   * @default 'diagonal'
    */
   pathFunc?: PathFunctionOption | PathFunction;
 
@@ -201,8 +188,6 @@ export interface TreeProps {
    * Expects a `className` string to be returned.
    *
    * See the `PathClassFunction` type for more information.
-   *
-   * {@link Tree.defaultProps.pathClassFunc | Default value}
    */
   pathClassFunc?: PathClassFunction;
 
@@ -215,14 +200,15 @@ export interface TreeProps {
    *
    * Example: `depthFactor: 0` renders all nodes on the same height (since node.y === 0 for all).
    *
-   * {@link Tree.defaultProps.depthFactor | Default value}
+   * Without it, the depth spacing comes from `nodeSize`.
    */
   depthFactor?: number;
 
   /**
-   * Determines whether the tree's nodes can collapse/expand.
+   * Determines whether a click on a node collapses or expands it. `toggleNode` on the ref
+   * handle works regardless.
    *
-   * {@link Tree.defaultProps.collapsible | Default value}
+   * @default true
    */
   collapsible?: boolean;
 
@@ -256,28 +242,29 @@ export interface TreeProps {
   /**
    * Toggles ability to zoom in/out on the Tree by scaling it according to `scaleExtent`.
    *
-   * {@link Tree.defaultProps.zoomable | Default value}
+   * @default true
    */
   zoomable?: boolean;
 
   /**
    * Toggles ability to drag the Tree.
    *
-   * {@link Tree.defaultProps.draggable | Default value}
+   * @default true
    */
   draggable?: boolean;
 
   /**
    * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
    *
-   * {@link Tree.defaultProps.zoom | Default value}
+   * @default 1
    */
   zoom?: number;
 
   /**
-   * Sets the minimum/maximum extent to which the tree can be scaled if `zoomable` is true.
+   * Sets the minimum/maximum extent to which the tree can be scaled if `zoomable` is true. A
+   * missing key takes its default.
    *
-   * {@link Tree.defaultProps.scaleExtent | Default value}
+   * @default { min: 0.1, max: 1 }
    */
   scaleExtent?: {
     min?: number;
@@ -287,7 +274,7 @@ export interface TreeProps {
   /**
    * The amount of space each node element occupies.
    *
-   * {@link Tree.defaultProps.nodeSize | Default value}
+   * @default { x: 140, y: 140 }
    */
   nodeSize?: {
     x: number;
@@ -296,9 +283,9 @@ export interface TreeProps {
 
   /**
    * Sets separation between neighboring nodes, differentiating between siblings (same parent node)
-   * and non-siblings.
+   * and non-siblings. A missing key takes its default.
    *
-   * {@link Tree.defaultProps.separation | Default value}
+   * @default { siblings: 1, nonSiblings: 2 }
    */
   separation?: {
     siblings?: number;
@@ -308,35 +295,36 @@ export interface TreeProps {
   /**
    * If a node is currently being expanded, all other nodes at the same depth will be collapsed.
    *
-   * {@link Tree.defaultProps.shouldCollapseNeighborNodes | Default value}
+   * @default false
    */
   shouldCollapseNeighborNodes?: boolean;
 
   /**
    * Allows for additional className(s) to be passed to the `svg` element wrapping the tree.
    *
-   * {@link Tree.defaultProps.svgClassName | Default value}
+   * @default ''
    */
   svgClassName?: string;
 
   /**
    * Allows for additional className(s) to be passed to the root node.
    *
-   * {@link Tree.defaultProps.rootNodeClassName | Default value}
+   * @default ''
    */
   rootNodeClassName?: string;
 
   /**
    * Allows for additional className(s) to be passed to all branch nodes (nodes with children).
    *
-   * {@link Tree.defaultProps.branchNodeClassName | Default value}
+   * @default ''
    */
   branchNodeClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to all leaf nodes (nodes without children).
+   * Allows for additional className(s) to be passed to all leaf nodes (nodes without children,
+   * including an empty `children` array).
    *
-   * {@link Tree.defaultProps.leafNodeClassName | Default value}
+   * @default ''
    */
   leafNodeClassName?: string;
 
@@ -346,7 +334,7 @@ export interface TreeProps {
    *
    * **Tip:** Holding the `Shift` key while hovering over a node re-enables the D3 events.
    *
-   * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
+   * @default false
    */
   hasInteractiveNodes?: boolean;
 }

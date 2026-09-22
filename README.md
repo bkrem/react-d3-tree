@@ -23,12 +23,12 @@
 
 <p align="center">
   <h3 align="center"><a href="https://bkrem.github.io/react-d3-tree">👾 Playground</a></h3>
-  <h3 align="center"><a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Documentation (v3)</a></h3>
+  <h3 align="center"><a href="https://bkrem.github.io/react-d3-tree/docs">📖 API Documentation</a></h3>
 </p>
 
-React D3 Tree is a [React](http://facebook.github.io/react/) component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging [D3](https://d3js.org/)'s `tree` layout.
+React D3 Tree is a [React](https://react.dev/) component that lets you represent hierarchical data (e.g. family trees, org charts, file directories) as an interactive tree graph with minimal setup, by leveraging [D3](https://d3js.org/)'s `tree` layout.
 
-> **Upgrading from v1? Check out the [v2 release notes](https://github.com/bkrem/react-d3-tree/releases/tag/v2.0.0).**
+> **Upgrading from v3? See the [migration guide](https://github.com/bkrem/react-d3-tree/blob/master/MIGRATION.md).** The hosted API documentation describes v3 until 4.0.0 is released.
 
 > **[Legacy v1 docs](https://github.com/bkrem/react-d3-tree/tree/v1)**
 
@@ -38,9 +38,12 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 - [Props](#props)
 - [Working with the default Tree](#working-with-the-default-tree)
   - [Providing `data`](#providing-data)
+  - [Node ids](#node-ids)
   - [Styling Nodes](#styling-nodes)
   - [Styling Links](#styling-links)
   - [Event Handlers](#event-handlers)
+- [Collapse state](#collapse-state)
+- [Centering and the ref handle](#centering-and-the-ref-handle)
 - [Customizing the Tree](#customizing-the-tree)
   - [`renderCustomNodeElement`](#rendercustomnodeelement)
   - [`pathFunc`](#pathfunc)
@@ -55,9 +58,12 @@ React D3 Tree is a [React](http://facebook.github.io/react/) component that lets
 npm i --save react-d3-tree
 ```
 
+The package needs React 18 or 19 and ships as ES modules only. `import` works everywhere;
+`require()` works on Node 22.12 or later. For Jest and TypeScript CommonJS setups, see the
+[migration guide](https://github.com/bkrem/react-d3-tree/blob/master/MIGRATION.md#requirements).
+
 ## Usage
 ```jsx
-import React from 'react';
 import Tree from 'react-d3-tree';
 
 // This is a simplified example of an org chart with a depth of 2.
@@ -109,22 +115,23 @@ export default function OrgChartTree() {
 ```
 
 ## Props
-For details on all props accepted by  `Tree`, check out the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html).
+For details on all props accepted by `Tree`, check out the [`TreeProps` reference docs](https://bkrem.github.io/react-d3-tree/docs).
 
-The only required prop is [data](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#data), all other props on `Tree` are optional/pre-defined (see "Default value" on each prop definition).
+The only required prop is `data`, all other props on `Tree` are optional with a documented default.
 
 ## Working with the default Tree
-`react-d3-tree` provides default implementations for `Tree`'s nodes & links, which are intended to get you up & running with a working tree quickly. 
+`react-d3-tree` provides default implementations for `Tree`'s nodes & links, which are intended to get you up & running with a working tree quickly.
 
-This section is focused on explaining **how to provide data, styles and event handlers for the default `Tree` implementation**. 
+This section is focused on explaining **how to provide data, styles and event handlers for the default `Tree` implementation**.
 
 > Need more fine-grained control over how nodes & links appear/behave? Check out the [Customizing the Tree](#customizing-the-tree) section below.
 
 ### Providing `data`
-By default, `Tree` expects each node object in `data` to implement the [`RawNodeDatum` interface](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_types_common_.rawnodedatum.html):
+`Tree` expects the root node in `data` and every node below it to implement the `RawNodeDatum` interface:
 
 ```ts
 interface RawNodeDatum {
+  id?: string;
   name: string;
   attributes?: Record<string, string | number | boolean>;
   children?: RawNodeDatum[];
@@ -137,12 +144,19 @@ The `orgChart` example in the [Usage](#usage) section above is an example of thi
 - Some nodes have `attributes` defined (the `CEO` node does not). **The key-value pairs in `attributes` are rendered as a list of secondary labels**.
 - Nodes can have further `RawNodeDatum` objects nested inside them via the `children` key, creating a hierarchy from which the tree graph can be generated.
 
+The tree never changes your `data`. It works on its own copy, so you can keep `data` in React state and replace it whenever your source changes.
+
+### Node ids
+Every node has an id. Use the `id` field to supply your own; a node without one gets its path in the tree: `"0"` for the root, `"0.0"` and `"0.1"` for its children, and so on. Ids drive collapse state, React keys, and the DOM: each node's `<g>` carries `data-id`, and each link's `<path>` carries `data-source-id` and `data-target-id`.
+
+Path ids stay stable as long as the structure does. Supply ids when nodes move between updates.
+
 ### Styling Nodes
 `Tree` provides the following props to style different types of nodes, all of which use an SVG `circle` by default:
 
 - `rootNodeClassName` - applied to the root node.
 - `branchNodeClassName` - applied to any node with 1+ children.
-- `leafNodeClassName` - applied to any node without children.
+- `leafNodeClassName` - applied to any node without children (an empty `children` array counts as no children).
 
 To visually distinguish these three types of nodes from each other by color, we could provide each with their own class:
 
@@ -165,7 +179,6 @@ To visually distinguish these three types of nodes from each other by color, we 
 ```
 
 ```jsx
-import React from 'react';
 import Tree from 'react-d3-tree';
 import './custom-tree.css';
 
@@ -185,7 +198,7 @@ export default function StyledNodesTree() {
 }
 ```
 
- > For more details on the `className` props for nodes, see the [TreeProps reference docs](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html).
+The `svg` element carries the `rd3t-svg` class plus anything you pass in `svgClassName`; the group that zooms and pans carries `rd3t-g`.
 
 ### Styling Links
 `Tree` provides the `pathClassFunc` property to pass additional classNames to every link to be rendered.
@@ -218,39 +231,96 @@ function StyledLinksTree() {
 }
 ```
 
-> For more details, see the `PathClassFunction` [reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathclassfunction).
-
 ### Event Handlers
 `Tree` exposes the following event handler callbacks by default:
 
-- [onLinkClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkclick)
-- [onLinkMouseOut](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onlinkmouseout)
-- [onLinkMouseOver](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src__tree_types_.treeprops.html#onlinkmouseover)
-- [onNodeClick](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodeclick)
-- [onNodeMouseOut](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseout)
-- [onNodeMouseOver](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#onnodemouseover)
+- `onLinkClick`
+- `onLinkMouseOut`
+- `onLinkMouseOver`
+- `onNodeClick`
+- `onNodeMouseOut`
+- `onNodeMouseOver`
 
-> **Note:** Nodes are expanded/collapsed whenever `onNodeClick` fires. To prevent this, set the [`collapsible` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#collapsible) to `false`.  
+Each receives the tree's own layout node (`HierarchyPointNode<TreeNodeDatum>`) and the React event. Read the node; copy what you keep, because its coordinates are stale after the next layout.
+
+Two more callbacks report state:
+
+- `onTransformChange` fires with `{ x, y, k }` on every zoom, pan, and programmatic transform.
+- `onCollapsedChange` fires with the new set of collapsed ids and the change that caused it on every toggle.
+
+> **Note:** Nodes are expanded/collapsed whenever `onNodeClick` fires. To prevent this, set the `collapsible` prop to `false`.
 > `onNodeClick` will still fire, but it will not change the target node's expanded/collapsed state.
 
+## Collapse state
+By default the tree owns the collapse state. `initialDepth` sets which nodes start collapsed, a click toggles a node, and the state survives `data` updates for the nodes that are still there; nodes that a `data` update introduces follow the `initialDepth` rule. To start fresh for a new dataset, remount the tree with a `key`:
+
+```jsx
+<Tree key={datasetId} data={data} initialDepth={1} />
+```
+
+To drive the state from outside, pass `collapsed` and handle `onCollapsedChange`. The tree then renders exactly that set and reports every requested change without changing anything itself:
+
+```jsx
+function ControlledTree() {
+  const [collapsed, setCollapsed] = useState(() => new Set());
+  return <Tree data={data} collapsed={collapsed} onCollapsedChange={setCollapsed} />;
+}
+```
+
+Only nodes with children collapse; a click on a leaf changes nothing.
+
+## Centering and the ref handle
+The tree measures its own container. Pass `centerOnClick` to center a node when it is clicked, and `centeringTransitionDuration` to set the animation length (0 applies the change at once).
+
+For everything else, hold a ref. `TreeHandle` exposes `centerNode`, `toggleNode`, `expandAll`, `collapseAll`, `expandToDepth`, `setTransform`, and `getTransform`:
+
+```jsx
+function TreeWithControls() {
+  const tree = useRef(null);
+  return (
+    <>
+      <button onClick={() => tree.current.collapseAll()}>Collapse all</button>
+      <button onClick={() => tree.current.centerNode('0', { duration: 300 })}>Go to root</button>
+      <Tree ref={tree} data={data} />
+    </>
+  );
+}
+```
+
+Programmatic transforms report through `onTransformChange` like a user zoom, and `toggleNode` on the handle works even when `collapsible` is false.
+
 ## Customizing the Tree
-<!-- Using the `<nodeType>NodeClassName` and `pathClassFunc` approaches above should give  -->
 
 ### `renderCustomNodeElement`
-The [`renderCustomNodeElement` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#rendercustomnodeelement) accepts a **custom render function that will be used for every node in the tree.**
+The `renderCustomNodeElement` prop accepts a **custom render function that will be used for every node in the tree.**
+
+The function receives `CustomNodeElementProps`: the node's `id`, `depth`, `isRoot`, `isLeaf`, and `isCollapsed`, its `nodeDatum` and `hierarchyPointNode`, a `toggleNode` function, and the `onNodeClick`, `onNodeMouseOver`, and `onNodeMouseOut` handlers to wire onto your own elements.
 
 Cases where you may find rendering your own `Node` element useful include:
 
-- Using a **different SVG tag for your nodes** (instead of the default `<circle>`) - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js)
-- Gaining **fine-grained control over event handling** (e.g. to implement events not covered by the default API) - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-event-handlers-5pwxw?file=/src/App.js)
-- Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace - [Example (codesandbox.io)](https://codesandbox.io/s/rd3t-v2-custom-with-foreignobject-0mfj8?file=/src/App.js)
+- Using a **different SVG tag for your nodes** (instead of the default `<circle>`).
+- Gaining **fine-grained control over event handling** (e.g. to implement events not covered by the default API).
+- Building **richer & more complex nodes/labels** by leveraging the `foreignObject` tag to render HTML inside the SVG namespace. Pass `hasInteractiveNodes` so that inputs inside a node don't start a drag or zoom.
+
+```jsx
+const renderNode = ({ nodeDatum, isCollapsed, isLeaf, toggleNode }) => (
+  <g onClick={toggleNode}>
+    <rect width={40} height={20} x={-20} y={-10} fill={isLeaf ? 'white' : 'lightgrey'} />
+    <text dy="0.3em" textAnchor="middle">
+      {nodeDatum.name}{isCollapsed ? ' +' : ''}
+    </text>
+  </g>
+);
+
+<Tree data={data} renderCustomNodeElement={renderNode} />;
+```
 
 ### `pathFunc`
-The [`pathFunc` prop](https://bkrem.github.io/react-d3-tree/docs/interfaces/_src_tree_types_.treeprops.html#pathfunc) accepts a predefined `PathFunctionOption` enum or a user-defined `PathFunction`.
+The `pathFunc` prop accepts a predefined `PathFunctionOption` enum or a user-defined `PathFunction`.
 
 By changing or providing your own `pathFunc`, you are able to change how links between nodes of the tree (which are SVG `path` tags under the hood) are drawn.
 
-The currently [available enums](https://bkrem.github.io/react-d3-tree/docs/modules/_src_types_common_.html#pathfunctionoption) are:
+The currently available enums are:
 - `diagonal` (default)
 - `elbow`
 - `straight`
@@ -280,11 +350,9 @@ function CustomPathFuncTree() {
 }
 ```
 
-> For more details, see the [`PathFunction` reference docs](https://bkrem.github.io/react-d3-tree/docs/modules/_types_common_.html#pathfunction).
-
 ## Development
 ### Setup
-The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
+The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later; `.nvmrc` names the major that CI uses. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
 
 To set up `react-d3-tree` for local development, clone the repo and follow the steps below:
 
@@ -301,6 +369,8 @@ npm link react-d3-tree
 ```
 
 > **Tip:** If you'd prefer to use your own app for development instead of the demo, simply run `npm link react-d3-tree` in your app's root folder instead of the demo's :)
+
+The demo in this branch still targets the v3 API; a rebuilt demo lands separately and follows v4 in a later change.
 
 ### Hot reloading
 ```bash

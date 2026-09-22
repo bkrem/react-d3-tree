@@ -1,14 +1,18 @@
 # react-d3-tree v4 roadmap
 
-Status: draft for maintainer review, written 2026-09-22 against `master` at `905437b` (3.7.0-rc.0).
-"Decided" items were settled by the maintainer on 2026-09-22. "Proposed" items are defaults that
-the phase which implements them confirms or changes.
+Status (2026-09-23): implemented on `feat/v4` through Phase 6.1, in one commit per row of the
+phase tables; 6.2 (prereleases and the release) and 6.3 (the `v3` branch and 4.0.0) wait for
+the maintainer, as do the Phase 0 pull requests. Each phase carries a status line with what
+landed. "Decided" items were settled by the maintainer or while implementing; the remaining
+"Proposed" items are defaults for the steps not yet taken. The section
+[Where the code stood at the start](#where-the-code-stood-at-the-start) describes `master` at
+`905437b` (3.7.0-rc.0), the baseline this work started from, not the current branch.
 
 ## Contents
 
 - [Goals](#goals)
 - [Decisions](#decisions)
-- [Where the code stands today](#where-the-code-stands-today)
+- [Where the code stood at the start](#where-the-code-stood-at-the-start)
 - [Phases](#phases)
 - [The v4 API](#the-v4-api)
 - [v3 to v4 parity table](#v3-to-v4-parity-table)
@@ -51,18 +55,19 @@ v4 is the next major line of the library. It has five goals:
 | `addChildren` | Removed from the custom-node renderer props. Consumers update `data`; collapse state keyed by id survives the update. | Decided |
 | `onUpdate` | Replaced by `onTransformChange` (per zoom or pan tick) and `onCollapsedChange` (per toggle). | Decided |
 | TypeScript everywhere | Tests, fixtures, and repo scripts move to TypeScript; `allowJs` is removed. The smoke-test consumers (`consumer-import.mjs`, `consumer-require.cjs`, `consumer-jest.test.mjs`) stay JavaScript because their job is to load the package the way a plain JavaScript app does. | Decided |
-| Test type-checking | `tsconfig.test.json` extends the build config with `noEmit` and covers `src/**/*.test.ts(x)`, fixtures, and `test/`. A `pnpm typecheck` script runs it and CI runs the script. Tests import `describe`, `it`, `expect`, and `vi` from `vitest` instead of relying on `globals: true`. | Proposed |
-| Script runtime | Repo scripts run as `.ts` through Node's built-in type stripping (on by default since Node 22.18.0 and 23.6.0, warning-free since 22.18.0 and 24.3.0). `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle. | Proposed |
-| Module output | `lib/` holds one ESM build plus declarations. `exports` lists `types` then `default`; `main` and `types` point at the same files for resolvers that ignore `exports`; `sideEffects: false`. | Proposed |
-| Compile settings | `target: ES2020`, `module: NodeNext`, `jsx: react-jsx`. One `tsconfig.json` for the library build; `tsconfig.test.json` and `tsconfig.scripts.json` extend it with `noEmit`. `strict: true` lands in Phase 4, after the hooks rewrite, so the Phase 2 `lib/` diff shows only the module-format change. | Proposed |
+| Test type-checking | `tsconfig.test.json` extends the build config with `noEmit` and covers `src/**/*.test.ts(x)`, fixtures, and `test/`. A `pnpm typecheck` script runs it and CI runs the script. Tests import `describe`, `it`, `expect`, and `vi` from `vitest` instead of relying on `globals: true`. | Decided (Phase 1.1) |
+| Script runtime | Repo scripts run as `.ts` through Node's built-in type stripping (on by default since Node 22.18.0 and 23.6.0, warning-free since 22.18.0 and 24.3.0). `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle. | Decided (Phase 2.5) |
+| Module output | `lib/` holds one ESM build plus declarations. `exports` lists `types` then `default`; `main` and `types` point at the same files for resolvers that ignore `exports`; `sideEffects: false`. | Decided (Phase 2.1) |
+| Compile settings | `target: ES2020`, `module: NodeNext`, `jsx: react-jsx`, `strict: true`. One `tsconfig.json` for the library build; `tsconfig.test.json` and `tsconfig.scripts.json` extend it with `noEmit`. | Decided (Phases 2.1, 2.4, 4.3) |
 | TypeScript version | `~6.0` from Phase 2.3 on, pinned by TypeDoc 0.28's peer range; TypeScript 7 when TypeDoc supports it. | Decided |
-| Entry points | Keep both `export default Tree` and `export { Tree }`. | Proposed |
+| Entry points | Keep both `export default Tree` and `export { Tree }`. | Decided (unchanged through Phase 5) |
 | Prereleases | `4.0.0-next.N` on the `next` dist-tag. `publish.yml` already derives the tag from the version. | Proposed |
 | Branching | Integration branch `feat/v4`, cut from `master` at `905437b` on 2026-09-23. Work lands on it in PR-sized commits, one per row of the phase tables, so any row can be split into its own PR on request. One final PR takes it to `master` at 4.0.0, after the `v3` branch is cut. | Decided |
 
-## Where the code stands today
+## Where the code stood at the start
 
-Everything in this section was checked in the worktree on 2026-09-22 unless marked unverified.
+Everything in this section describes `master` at `905437b` as checked on 2026-09-22, unless
+marked unverified. The phase status lines record what changed since.
 
 ### Build and packaging
 
@@ -230,6 +235,7 @@ Goal: a place to land v4 work, a test bed, and a support story for v3.
 | 0.3 | `chore/release-v4-branch` | Cut `feat/v4` from `master`. Add a README line that v4 work is in progress and where to follow it. |
 | 0.4 | `docs/v3-support-policy` | README and release-notes text: v3 takes security and critical fixes for 6 months from the 4.0.0 release date. The `v3` branch itself is cut at the last 3.x release before 4.0.0 merges. |
 | 0.5 | `test/v4-behavior-contracts` (exists) | Open and land on `master` as part of a 3.7.x release: 36 behaviour contracts plus the four bug fixes listed under Tests. `feat/v4` already carries the branch through merge commit `e82c474`, so the later merge of `master` into `feat/v4` changes nothing for these files. |
+| 0.6 | `feat/demo-v4` (after 0.1 lands) | Adapt the rebuilt demo to the v4 API: its examples use `dimensions`, `addChildren`, and `onUpdate`, and `data` arrays. Then merge `master` into `feat/v4` so the workspace demo builds against the v4 library. |
 
 Exit: `master` has the Vite demo and the contracts, `feat/v4` holds this roadmap and the
 contracts, and the demo builds against the local library through the workspace.
@@ -429,6 +435,12 @@ and `src/index.ts` exports every public type named in the API section.
 
 ### Phase 6: docs and 4.0.0
 
+Status (2026-09-23): 6.1 landed (`docs: add the v3 to v4 migration guide and rewrite the
+README for v4`): `MIGRATION.md` at the repo root (not in the tarball; the README links to it on
+GitHub), the README rewritten for the v4 API, the prop docs on `@default` tags instead of links
+to `Tree.defaultProps`, and TypeDoc running without warnings. 6.2 and 6.3 wait for the
+maintainer; the README's docs link keeps pointing at the hosted v3 reference until 4.0.0.
+
 | PR | Branch | Work |
 | --- | --- | --- |
 | 6.1 | `docs/v4-migration` | `MIGRATION.md` (v3 to v4) with one entry per row of the parity table, each with a before and after snippet. README rewritten for the v4 API and the React 18 floor. TypeDoc comments stop linking to `Tree.defaultProps.*` (a function component has no `defaultProps`) and use `@default` tags instead. `AGENTS.md` updated for the new build, tests, and the v3 branch. |
@@ -568,9 +580,9 @@ interface CustomNodeElementProps {
   nodeDatum: TreeNodeDatum;
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
   toggleNode: () => void;
-  onNodeClick: (event: React.MouseEvent) => void;
-  onNodeMouseOver: (event: React.MouseEvent) => void;
-  onNodeMouseOut: (event: React.MouseEvent) => void;
+  onNodeClick: (event: React.SyntheticEvent) => void;
+  onNodeMouseOver: (event: React.SyntheticEvent) => void;
+  onNodeMouseOut: (event: React.SyntheticEvent) => void;
 }
 
 type RenderCustomNodeElementFn = (props: CustomNodeElementProps) => React.ReactElement;
@@ -587,10 +599,12 @@ type RenderCustomNodeElementFn = (props: CustomNodeElementProps) => React.ReactE
 
 ### Exports
 
-`Tree` (default and named), `TreeProps`, `TreeHandle`, `RawNodeDatum`, `TreeNodeDatum`,
+As implemented (`src/index.ts` re-exports `src/Tree/types.ts` and `src/types/common.ts`):
+`Tree` (default and named), `TreeProps`, `TreeHandle`, `TreeTransform`, `CollapsedChange`,
+`TreeNodeEventCallback`, `TreeLinkEventCallback`, `RawNodeDatum`, `TreeNodeDatum`,
 `TreeLinkDatum`, `Point`, `Orientation`, `PathFunction`, `PathFunctionOption`,
-`PathClassFunction`, `CustomNodeElementProps`, `RenderCustomNodeElementFn`,
-`TreeNodeEventCallback`, `TreeLinkEventCallback`.
+`PathClassFunction`, `SyntheticEventHandler`, `CustomNodeElementProps`,
+`RenderCustomNodeElementFn`. `AddChildrenFunction` is gone with `addChildren`.
 
 ## v3 to v4 parity table
 

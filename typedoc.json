@@ -2,5 +2,6 @@
   "entryPoints": ["./src"],
   "exclude": ["**/tests/*", "**/*.test.ts", "**/*.test.tsx"],
   "out": "demo/public/docs",
-  "includeVersion": true
+  "includeVersion": true,
+  "highlightLanguages": ["bash", "css", "js", "json", "jsx", "ts", "tsx"]
 }
