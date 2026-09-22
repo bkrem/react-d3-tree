@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactElement } from 'react';
 import { CustomNodeElementProps } from '../types/common.js';
 
 const DEFAULT_NODE_CIRCLE_RADIUS = 15;
@@ -16,13 +16,13 @@ const textLayout = {
 
 export interface DefaultNodeElementProps extends CustomNodeElementProps {}
 
-const DefaultNodeElement: React.FunctionComponent<DefaultNodeElementProps> = ({
+const DefaultNodeElement = ({
   nodeDatum,
   toggleNode,
   onNodeClick,
   onNodeMouseOver,
   onNodeMouseOut,
-}) => (
+}: DefaultNodeElementProps): ReactElement => (
   <>
     <circle
       r={DEFAULT_NODE_CIRCLE_RADIUS}

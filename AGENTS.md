@@ -13,7 +13,7 @@ This library is published to npm, so anything a consuming app relies on is a con
 Beyond obvious source-level API changes, a change is breaking if it affects any of these:
 
 - Public API: renaming, removing, or changing the behavior of the `src/index.ts` exports (`Tree`, its props, its defaults, or the exported types).
-- Peer dependencies: narrowing the supported `react`/`react-dom` range (16.x–19.x) or adding a new required peer dependency.
+- Peer dependencies: narrowing the supported `react`/`react-dom` range (18.x–19.x) or adding a new required peer dependency.
 - Build output: changing which files the `exports` map or the `main` and `types` fields resolve to for a consumer that works today, adding or dropping a module format, or raising the compile target (`ES2020`) so runtimes or bundlers that work today stop working. Restructuring `exports` is fine when every existing consumer keeps resolving the same runtime file and equivalent types; `pnpm check:package` and the consumer type-checks in `pnpm test:smoke` are the evidence.
 - Shipped types: raising the minimum TypeScript version the `.d.ts` files need, or changing emitted types so existing consumer code stops type-checking.
 
@@ -39,7 +39,7 @@ The build is ESM only: one `tsc` pass (`module: NodeNext`, `target: ES2020`) emi
 - pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.2 or later, or 24.15 or later: the highest `engines.node` floor among the dev dependencies (`jsdom`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line, `engines.node` in `package.json`, and the README. The `demo/` app is a separate npm project.
 - The scripts under `scripts/` are TypeScript that Node runs directly through type stripping, on by default since Node 22.18.0 and 23.6.0. On an older Node, `pnpm build`, `pnpm check:package`, and `pnpm test:smoke` fail with a syntax error; `.nvmrc` names the CI major. `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle (enums, namespaces, parameter properties). The smoke-test consumers in `scripts/smoke/` stay JavaScript on purpose: they load the package the way a plain JavaScript app does.
 - TypeScript 6.0 (source), compiled with `tsc`, pinned to `~6.0` because TypeDoc 0.28 supports 6.0.x only; TypeScript 7 waits for TypeDoc. TypeScript 6 makes `strict` the default and no longer infers `rootDir`, so `tsconfig.json` sets both explicitly (`strict: true`, `rootDir: ./src`); the source, tests, and scripts all type-check under `strict`. The extending configs set `rootDir: .` because they include files outside `src/`.
-- React 16–19 (peer dependency). Dev and test dependencies use React 18.
+- React 18–19 (peer dependency). Dev and test dependencies use React 19; CI also runs the whole sequence against React 18.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-transition`, `d3-zoom`, all 3.x with matching `@types/d3-*` packages. `d3-transition` is imported for its side effect (it adds `transition()` to selections); the diagonal link path is a local Bézier, not `d3-shape`.
 - Other runtime dependencies: `clone`.
 - Vitest with jsdom and `@testing-library/react`.
@@ -132,7 +132,7 @@ npm link react-d3-tree
 
 For hot reloading, run `pnpm build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24, each with React 18 and React 19, with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. The React 18 legs swap the dev copy of React and its types after the frozen install, and the smoke test's consumer follows the `REACT_MAJOR` environment variable. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
 

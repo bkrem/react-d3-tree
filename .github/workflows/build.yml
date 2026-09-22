@@ -12,6 +12,9 @@ jobs:
     strategy:
       matrix:
         node-version: [22, 24]
+        react-version: [18, 19]
+
+    name: node ${{ matrix.node-version }}, react ${{ matrix.react-version }}
 
     steps:
       - uses: actions/checkout@v7
@@ -25,6 +28,13 @@ jobs:
           install: false
 
       - run: pnpm install --frozen-lockfile
+
+      # The lockfile holds React 19. The React 18 leg swaps the dev copy and its types after the
+      # frozen install; the smoke test's consumer follows through REACT_MAJOR.
+      - name: Use React 18
+        if: matrix.react-version == 18
+        run: pnpm add -D react@18.3.1 react-dom@18.3.1 @types/react@18 @types/react-dom@18
+
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm fmt:check
@@ -32,3 +42,5 @@ jobs:
       - run: pnpm check:package
       - run: pnpm test
       - run: pnpm test:smoke
+        env:
+          REACT_MAJOR: ${{ matrix.react-version }}

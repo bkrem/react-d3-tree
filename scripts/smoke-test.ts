@@ -41,10 +41,13 @@ try {
     path.join(project, 'package.json'),
     JSON.stringify({ name: 'rd3t-smoke', private: true })
   );
+  // The consumer's React major: 19 by default, or whatever CI's matrix asks for.
+  const reactMajor = process.env.REACT_MAJOR ?? '19';
   run(
-    `npm install --no-audit --no-fund --no-package-lock "./${filename}" react@18 react-dom@18`,
+    `npm install --no-audit --no-fund --no-package-lock "./${filename}" react@${reactMajor} react-dom@${reactMajor}`,
     project
   );
+  console.log(`consumer React: ${reactMajor}`);
 
   const consumers = ['consumer-import.mjs'];
   // The package is ESM-only, so `require()` needs a Node version that can load ES modules.
