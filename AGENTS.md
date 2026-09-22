@@ -14,7 +14,7 @@ Beyond obvious source-level API changes, a change is breaking if it affects any 
 
 - Public API: renaming, removing, or changing the behavior of the `src/index.ts` exports (`Tree`, its props, its defaults, or the exported types).
 - Peer dependencies: narrowing the supported `react`/`react-dom` range (16.x–19.x) or adding a new required peer dependency.
-- Build output: changing the `exports` map or the CJS, ESM, or types entry points, dropping a module format, or raising the compile target (CJS `es5`, ESM `es6`) so runtimes or bundlers that work today stop working.
+- Build output: changing which files the `exports` map or the `main`, `module`, and `types` fields resolve to for a consumer that works today, dropping a module format, or raising the compile target (CJS `es5`, ESM `es6`) so runtimes or bundlers that work today stop working. Restructuring `exports` is fine when every existing consumer keeps resolving the same runtime file and equivalent types; `pnpm check:package` and the consumer type-checks in `pnpm test:smoke` are the evidence.
 - Shipped types: raising the minimum TypeScript version the `.d.ts` files need, or changing emitted types so existing consumer code stops type-checking.
 
 When unsure whether a change breaks consumers, treat it as breaking.
@@ -33,7 +33,7 @@ The library source lives in `src/`. Everything else supports building, testing, 
 - `src/generateId.ts` — generates the v4 UUIDs that `Tree` uses for its SVG and group class references and for node IDs. Not part of the public API.
 - `src/globalCss.ts` — injected base styles.
 
-The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), and type declarations (`lib/types`). Because the root `package.json` sets `"type": "module"`, `scripts/mark-cjs.js` writes a `lib/cjs/package.json` that marks that directory as CommonJS. The `package.json` `exports` map points consumers at the matching entry.
+The build emits four artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), type declarations (`lib/types`), and a copy of the declarations for CommonJS consumers (`lib/types-cjs`). Because the root `package.json` sets `"type": "module"`, `scripts/mark-cjs.js` writes a `package.json` with `"type": "commonjs"` into `lib/cjs` and `lib/types-cjs`; without the second marker TypeScript reads the declarations as ESM and rejects them from a CommonJS file under `node16` resolution. The `package.json` `exports` map lists `types` before `default` under both the `import` and the `require` condition.
 
 ## Tech stack
 
@@ -102,7 +102,7 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 - Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.jsx`) and colocated tests (`src/Node/index.test.jsx`). Shared fixtures live in `src/Tree/tests/mockData.js`.
 - `pnpm test` runs with `--coverage` (v8) and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Coverage counts library source only (`src/**/*.{ts,tsx}` minus tests and fixtures). Additions that drop coverage below these thresholds fail the run, so add tests alongside new code. Vitest fails the run on an uncaught exception during a test, so a jsdom gap shows up as an error, not as a silently passing test.
 - Tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only. It also asserts that the tarball holds only `lib/`, `package.json`, `README.md`, and `LICENSE`.
-- `pnpm check:package` (`scripts/check-package.js`) runs publint and attw (Are the types wrong?) against the build. Three findings predate the check and are allowed by name in the script: the `types` condition is listed after `import` and `require` in `exports`, and one ESM `.d.ts` set serves the CommonJS entry. Fixing them changes the `exports` map, which is a compatibility contract, so they wait for a major version. Any other finding fails CI.
+- `pnpm check:package` (`scripts/check-package.js`) runs publint and attw (Are the types wrong?) against the build. Every finding fails CI. To accept one deliberately, add it to the script's allowlist pinned to its location, with the reason; the same finding at another location still fails.
 
 ## Code style and conventions
 

@@ -4,9 +4,8 @@
 // publint validates `package.json` against the files in `lib/`. attw (Are the types wrong?)
 // packs the package and resolves its types under every TypeScript module resolution mode.
 //
-// Findings that predate these checks are allowed one by one, each pinned to its location.
-// Fixing them means changing the `exports` map, which is a compatibility contract; see
-// AGENTS.md. Everything else, including a known finding at a new location, fails.
+// Every finding fails. To accept one deliberately, add it to the matching set below, pinned to
+// its location, with a comment that says why; the same finding at another location still fails.
 import { spawnSync } from 'node:child_process';
 import { closeSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -14,19 +13,10 @@ import path from 'node:path';
 import { publint } from 'publint';
 import { formatMessage, formatMessagePath } from 'publint/utils';
 
-// The `types` condition is listed after `import` and `require`, and one ESM `.d.ts` set serves
-// both entry points. Both are visible to consumers today and stay as they are within v3.
-const knownPublint = new Set([
-  'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types',
-  'TYPES_NOT_EXPORTED at pkg.exports["."].import',
-  'TYPES_NOT_EXPORTED at pkg.exports["."].require',
-]);
-const knownAttw = new Set([
-  'FallbackCondition at . (node16-cjs)',
-  'FallbackCondition at . (node16-esm)',
-  'FallbackCondition at . (bundler)',
-  'FalseESM at /node_modules/react-d3-tree/lib/types/index.d.ts',
-]);
+// Entries look like 'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types'.
+const knownPublint = new Set([]);
+// Entries look like 'FallbackCondition at . (node16-cjs)' or 'FalseESM at <types file>'.
+const knownAttw = new Set([]);
 
 // `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
 const env = { ...process.env, HUSKY: '0' };
