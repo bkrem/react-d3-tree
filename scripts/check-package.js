@@ -8,17 +8,25 @@
 // `exports` map, which is a compatibility contract; see AGENTS.md. Everything else fails.
 import { execFileSync } from 'node:child_process';
 import { publint } from 'publint';
-import { formatMessage } from 'publint/utils';
+import { formatMessage, formatMessagePath } from 'publint/utils';
 
 // The `types` condition is listed after `import` and `require`, and one ESM `.d.ts` set serves
 // both entry points. Both are visible to consumers today and stay as they are within v3.
-const knownPublintCodes = new Set(['EXPORTS_TYPES_SHOULD_BE_FIRST', 'TYPES_NOT_EXPORTED']);
+// Each entry names one diagnostic at one manifest location, so the same code at another
+// location (for example a new export subpath) still fails.
+const knownPublint = new Set([
+  'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types',
+  'TYPES_NOT_EXPORTED at pkg.exports["."].import',
+  'TYPES_NOT_EXPORTED at pkg.exports["."].require',
+]);
 const knownAttwRules = ['fallback-condition', 'false-esm'];
 
+const describe = message => `${message.code} at ${formatMessagePath(message.path)}`;
+
 const { messages, pkg } = await publint({ pack: false, level: 'warning' });
-const unexpected = messages.filter(message => !knownPublintCodes.has(message.code));
+const unexpected = messages.filter(message => !knownPublint.has(describe(message)));
 for (const message of messages) {
-  const marker = knownPublintCodes.has(message.code) ? 'known' : 'NEW';
+  const marker = knownPublint.has(describe(message)) ? 'known' : 'NEW';
   console.log(`publint ${message.type} (${marker}): ${formatMessage(message, pkg)}`);
 }
 if (unexpected.length > 0) {
