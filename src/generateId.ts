@@ -5,6 +5,11 @@
 // - `crypto.getRandomValues` covers insecure (plain HTTP) browser contexts.
 // - `Math.random` covers runtimes without a global `crypto` (e.g. Node 18, jsdom 11).
 //   The IDs are not secrets, so non-cryptographic randomness is sufficient.
+
+// Mixed into the `Math.random` bytes so IDs stay unique when a test suite stubs `Math.random`
+// to a constant. XOR with a uniformly random byte leaves the distribution unchanged.
+let fallbackCounter = 0;
+
 export default function generateId(): string {
   const hasCrypto = typeof crypto !== 'undefined';
 
@@ -19,6 +24,11 @@ export default function generateId(): string {
     for (let i = 0; i < bytes.length; i++) {
       bytes[i] = Math.floor(Math.random() * 256);
     }
+    fallbackCounter = (fallbackCounter + 1) >>> 0;
+    bytes[12] ^= fallbackCounter >>> 24;
+    bytes[13] ^= fallbackCounter >>> 16;
+    bytes[14] ^= fallbackCounter >>> 8;
+    bytes[15] ^= fallbackCounter;
   }
 
   // Version 4, variant 10xx (RFC 4122, section 4.4).

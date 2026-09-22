@@ -93,11 +93,16 @@ describe('generateId', () => {
     it('pads single-digit hex bytes and stays within byte range', () => {
       delete global.crypto;
 
+      // The last four bytes also carry the uniqueness counter, so only the first twelve are exact.
       jest.spyOn(Math, 'random').mockReturnValue(0);
-      expect(generateId()).toBe('00000000-0000-4000-8000-000000000000');
+      const zeros = generateId();
+      expect(zeros.slice(0, 28)).toBe('00000000-0000-4000-8000-0000');
+      expect(zeros).toMatch(UUID_V4);
 
       Math.random.mockReturnValue(0.999999999);
-      expect(generateId()).toBe('ffffffff-ffff-4fff-bfff-ffffffffffff');
+      const ones = generateId();
+      expect(ones.slice(0, 28)).toBe('ffffffff-ffff-4fff-bfff-ffff');
+      expect(ones).toMatch(UUID_V4);
     });
 
     it('generates unique IDs', () => {
@@ -105,6 +110,15 @@ describe('generateId', () => {
       const ids = new Set(Array.from({ length: 1000 }, () => generateId()));
 
       expect(ids.size).toBe(1000);
+    });
+
+    it('generates unique IDs when `Math.random` is stubbed to a constant', () => {
+      delete global.crypto;
+      jest.spyOn(Math, 'random').mockReturnValue(0.5);
+      const ids = Array.from({ length: 1000 }, () => generateId());
+
+      ids.forEach(id => expect(id).toMatch(UUID_V4));
+      expect(new Set(ids).size).toBe(1000);
     });
   });
 });
