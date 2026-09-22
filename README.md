@@ -4,9 +4,6 @@
   <a href="#buildstatus">
     <img alt="build status" src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg">
   </a>
-  <a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master">
-    <img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
-  </a>
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
   </a>

@@ -73,6 +73,9 @@ pnpm test:watch
 # Load the packed tarball as a consumer through `require()` and `import` (needs a prior build)
 pnpm test:smoke
 
+# Check package.json and the type entry points with publint and attw (needs a prior build)
+pnpm check:package
+
 # Lint src/, scripts/, and test/
 pnpm lint
 
@@ -98,7 +101,8 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 - Vite parses JSX by file extension, so a test that contains JSX takes the `.test.jsx` extension; a test without JSX keeps `.test.js`. Both tsconfigs and `typedoc.json` exclude `*.test.jsx`; without that, `allowJs` would compile a test into `lib/`.
 - Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.jsx`) and colocated tests (`src/Node/index.test.jsx`). Shared fixtures live in `src/Tree/tests/mockData.js`.
 - `pnpm test` runs with `--coverage` (v8) and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Coverage counts library source only (`src/**/*.{ts,tsx}` minus tests and fixtures). Additions that drop coverage below these thresholds fail the run, so add tests alongside new code. Vitest fails the run on an uncaught exception during a test, so a jsdom gap shows up as an error, not as a silently passing test.
-- Tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only.
+- Tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only. It also asserts that the tarball holds only `lib/`, `package.json`, `README.md`, and `LICENSE`.
+- `pnpm check:package` (`scripts/check-package.js`) runs publint and attw (Are the types wrong?) against the build. Three findings predate the check and are allowed by name in the script: the `types` condition is listed after `import` and `require` in `exports`, and one ESM `.d.ts` set serves the CommonJS entry. Fixing them changes the `exports` map, which is a compatibility contract, so they wait for a major version. Any other finding fails CI.
 
 ## Code style and conventions
 
@@ -126,7 +130,7 @@ npm link react-d3-tree
 
 For hot reloading, run `pnpm build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm build`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
 
