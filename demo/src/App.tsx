@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import type { Orientation } from 'react-d3-tree';
 import { CodeDrawer } from './components/CodeDrawer.jsx';
 import { Inspector } from './components/Inspector.jsx';
 import { TopBar } from './components/TopBar.jsx';
-import { TreeCanvas, type LiveTransform, type Size } from './components/TreeCanvas.jsx';
+import { TreeCanvas, type Size } from './components/TreeCanvas.jsx';
 import { builtInDatasets, type Dataset } from './data/datasets.js';
 import { nodeRenderers } from './nodes/renderers.jsx';
 import { toJsx } from './state/jsx.js';
-import type { Orientation } from 'react-d3-tree';
+import { createLiveStore } from './state/liveTransform.js';
 import { applyPatch, defaults, reducer, type Point } from './state/playground.js';
 import { fromSearchParams, writeUrl } from './state/url.js';
 
@@ -26,7 +27,7 @@ export function App() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
   const [customDataset, setCustomDataset] = useState<Dataset | null>(null);
   const [size, setSize] = useState<Size | null>(null);
-  const [live, setLive] = useState<LiveTransform | null>(null);
+  const liveStore = useMemo(() => createLiveStore(), []);
 
   useEffect(() => {
     writeUrl(state);
@@ -59,18 +60,6 @@ export function App() {
     );
   }, []);
 
-  // `Tree` reports on every update, so keep the same object when nothing moved or React loops.
-  const onUpdate = useCallback((next: LiveTransform) => {
-    setLive(prev =>
-      prev &&
-      prev.zoom === next.zoom &&
-      prev.translate.x === next.translate.x &&
-      prev.translate.y === next.translate.y
-        ? prev
-        : next
-    );
-  }, []);
-
   const loadCustom = (next: Dataset) => {
     setCustomDataset(next);
     dispatch({ type: 'patch', patch: { dataset: 'custom' } });
@@ -85,9 +74,8 @@ export function App() {
         size={size}
         translate={translate}
         renderNode={renderNode}
-        live={live}
+        liveStore={liveStore}
         onSize={onSize}
-        onUpdate={onUpdate}
         onReset={() => dispatch({ type: 'reset-all' })}
       />
       <CodeDrawer jsx={jsx} />

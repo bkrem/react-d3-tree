@@ -2,7 +2,9 @@ import { Component, useEffect, useRef, type ReactNode } from 'react';
 import Tree, { type TreeProps } from 'react-d3-tree';
 import type { Dataset } from '../data/datasets.js';
 import type { RenderNode } from '../nodes/renderers.jsx';
+import type { LiveStore } from '../state/liveTransform.js';
 import type { PlaygroundState, Point } from '../state/playground.js';
+import { StatusBar } from './StatusBar.jsx';
 
 export interface Size {
   width: number;
@@ -43,20 +45,14 @@ class TreeBoundary extends Component<BoundaryProps, { error: string | null }> {
   }
 }
 
-export interface LiveTransform {
-  zoom: number;
-  translate: Point;
-}
-
 interface TreeCanvasProps {
   state: PlaygroundState;
   dataset: Dataset;
   size: Size | null;
   translate: Point;
   renderNode: RenderNode | undefined;
-  live: LiveTransform | null;
+  liveStore: LiveStore;
   onSize: (size: Size) => void;
-  onUpdate: (live: LiveTransform) => void;
   onReset: () => void;
 }
 
@@ -66,9 +62,8 @@ export function TreeCanvas({
   size,
   translate,
   renderNode,
-  live,
+  liveStore,
   onSize,
-  onUpdate,
   onReset,
 }: TreeCanvasProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -108,10 +103,9 @@ export function TreeCanvas({
     hasInteractiveNodes: state.hasInteractiveNodes,
     renderCustomNodeElement: renderNode,
     svgClassName: 'playground__svg',
-    onUpdate: ({ zoom, translate: t }) => onUpdate({ zoom, translate: t }),
+    // Fires on every drag and zoom tick; the store keeps that out of React state.
+    onUpdate: ({ zoom, translate: t }) => liveStore.set({ zoom, translate: t }),
   };
-
-  const shown = live ?? { zoom: state.zoom, translate };
 
   return (
     <main className="canvas" ref={ref}>
@@ -120,17 +114,11 @@ export function TreeCanvas({
           <Tree {...treeProps} />
         </TreeBoundary>
       )}
-      <div className="status" aria-live="off">
-        <span>
-          <b>{dataset.nodeCount.toLocaleString()}</b> nodes
-        </span>
-        <span>
-          zoom <b>{shown.zoom.toFixed(2)}</b>
-        </span>
-        <span>
-          translate <b>{Math.round(shown.translate.x)}</b>, <b>{Math.round(shown.translate.y)}</b>
-        </span>
-      </div>
+      <StatusBar
+        store={liveStore}
+        nodeCount={dataset.nodeCount}
+        fallback={{ zoom: state.zoom, translate }}
+      />
     </main>
   );
 }
