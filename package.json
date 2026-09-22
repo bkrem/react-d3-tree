@@ -76,6 +76,7 @@
     "@arethetypeswrong/cli": "^0.18.5",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
+    "@types/clone": "^2.1.4",
     "@types/d3-selection": "^3.0.12",
     "@types/d3-transition": "^3.0.9",
     "@types/d3-zoom": "^3.0.8",

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactElement } from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
@@ -29,10 +30,10 @@ type InternalData = {
 };
 
 type LayoutOptions = {
-  orientation: TreeProps['orientation'];
-  nodeSize: TreeProps['nodeSize'];
-  separation: TreeProps['separation'];
-  depthFactor: TreeProps['depthFactor'];
+  orientation: 'horizontal' | 'vertical';
+  nodeSize: { x: number; y: number };
+  separation: { siblings: number; nonSiblings: number };
+  depthFactor: number | undefined;
 };
 
 /**
@@ -131,7 +132,7 @@ function generateTree(data: TreeNodeDatum[], options: LayoutOptions) {
   const tree = d3tree<TreeNodeDatum>()
     .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
     .separation((a, b) =>
-      a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
+      a.parent?.data.__rd3t.id === b.parent?.data.__rd3t.id
         ? separation.siblings
         : separation.nonSiblings
     );
@@ -149,7 +150,7 @@ function generateTree(data: TreeNodeDatum[], options: LayoutOptions) {
   return { nodes, links };
 }
 
-function Tree(props: TreeProps) {
+function Tree(props: TreeProps): ReactElement {
   const {
     data,
     orientation = 'horizontal',
@@ -184,11 +185,16 @@ function Tree(props: TreeProps) {
     onUpdate,
   } = props;
   // Primitives from the object props, so effects and memos depend on values, not identities:
-  // a fresh `{ x: 0, y: 0 }` literal on every render must not rebind zoom.
+  // a fresh `{ x: 0, y: 0 }` literal on every render must not rebind zoom. A partial
+  // `scaleExtent` or `separation` takes the default for the missing key.
   const { x: translateX, y: translateY } = translate;
-  const { min: scaleMin, max: scaleMax } = scaleExtent;
+  const { min: scaleMin = DEFAULT_SCALE_EXTENT.min, max: scaleMax = DEFAULT_SCALE_EXTENT.max } =
+    scaleExtent;
   const { x: nodeSizeX, y: nodeSizeY } = nodeSize;
-  const { siblings: siblingSeparation, nonSiblings: nonSiblingSeparation } = separation;
+  const {
+    siblings: siblingSeparation = DEFAULT_SEPARATION.siblings,
+    nonSiblings: nonSiblingSeparation = DEFAULT_SEPARATION.nonSiblings,
+  } = separation;
 
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
@@ -259,8 +265,11 @@ function Tree(props: TreeProps) {
   // Binds d3's zoom to the svg. The initial transform goes through a listener-less behaviour
   // first, so setting it emits no zoom event and `onUpdate` sees no call.
   useEffect(() => {
-    const svg = select(svgRef.current);
-    const g = select(gRef.current);
+    const svgElement = svgRef.current;
+    const gElement = gRef.current;
+    if (!svgElement || !gElement) return undefined;
+    const svg = select(svgElement);
+    const g = select(gElement);
     transformRef.current = geometry;
 
     svg.call(
@@ -430,9 +439,11 @@ function Tree(props: TreeProps) {
       zoom: level,
       centeringTransitionDuration: duration,
     } = latest.current;
-    if (!size) return;
-    const g = select(gRef.current);
-    const svg = select(svgRef.current);
+    const svgElement = svgRef.current;
+    const gElement = gRef.current;
+    if (!size || !svgElement || !gElement) return;
+    const g = select(gElement);
+    const svg = select(svgElement);
     const scale = transformRef.current.scale;
 
     let x: number;

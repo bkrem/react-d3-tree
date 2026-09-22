@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react';
+import { ReactElement, SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 
 export type Orientation = 'horizontal' | 'vertical';
@@ -73,4 +73,4 @@ export interface CustomNodeElementProps {
   addChildren: AddChildrenFunction;
 }
 
-export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => JSX.Element;
+export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => ReactElement;

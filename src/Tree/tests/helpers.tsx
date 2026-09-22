@@ -20,6 +20,14 @@ export const renderTree = (props: TreeProps): TreeView => {
   };
 };
 
+// The query helpers throw instead of returning null: a missing element is a test failure, and
+// the callers stay free of null checks.
+export const queryOrThrow = (container: ParentNode, selector: string): Element => {
+  const element = container.querySelector(selector);
+  if (!element) throw new Error(`No element matches ${selector}`);
+  return element;
+};
+
 export const nodeElements = (container: ParentNode) =>
   Array.from(container.querySelectorAll('g.rd3t-node, g.rd3t-leaf-node'));
 
@@ -29,17 +37,21 @@ export const linkElements = (container: ParentNode) =>
 export const nodeLabels = (container: ParentNode) =>
   Array.from(container.querySelectorAll('.rd3t-label__title')).map(element => element.textContent);
 
-export const getNodeByLabel = (container: ParentNode, label: string) => {
+export const getNodeByLabel = (container: ParentNode, label: string): Element => {
   const title = Array.from(container.querySelectorAll('.rd3t-label__title')).find(
     element => element.textContent === label
   );
-  if (!title) throw new Error(`Node label not found: ${label}`);
-  return title.closest('g.rd3t-node, g.rd3t-leaf-node');
+  const node = title?.closest('g.rd3t-node, g.rd3t-leaf-node');
+  if (!node) throw new Error(`Node label not found: ${label}`);
+  return node;
 };
 
-export const getTreeGroup = (container: ParentNode) => container.querySelector('g.rd3t-g');
+export const circleOf = (container: ParentNode, label: string) =>
+  queryOrThrow(getNodeByLabel(container, label), 'circle');
 
-export const getSvg = (container: ParentNode) => container.querySelector('svg.rd3t-svg');
+export const getTreeGroup = (container: ParentNode) => queryOrThrow(container, 'g.rd3t-g');
+
+export const getSvg = (container: ParentNode) => queryOrThrow(container, 'svg.rd3t-svg');
 
 export const dispatch = (target: Element | Window, event: Event) => {
   fireEvent(target, event);
@@ -68,8 +80,9 @@ export const mouse = (type: string, init: MouseEventInit = {}) => {
 };
 
 export const transformCoordinates = (element: Element) => {
-  const match = element.getAttribute('transform').match(/^translate\(([-\d.]+),([-\d.]+)\)$/);
-  if (!match) throw new Error(`Unexpected transform: ${element.getAttribute('transform')}`);
+  const transform = element.getAttribute('transform');
+  const match = transform?.match(/^translate\(([-\d.]+),([-\d.]+)\)$/);
+  if (!match) throw new Error(`Unexpected transform: ${transform}`);
   return { x: Number(match[1]), y: Number(match[2]) };
 };
 

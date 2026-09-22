@@ -62,7 +62,12 @@ const report = <T>(
 };
 
 const { messages, pkg } = await publint({ pack: false, level: 'warning' });
-report('publint', messages, describePublint, message => formatMessage(message, pkg));
+report(
+  'publint',
+  messages,
+  describePublint,
+  message => formatMessage(message, pkg) ?? describePublint(message)
+);
 
 // attw exits 1 whenever it finds a problem, so the exit code says nothing about newness. It
 // exits right after printing, which truncates a piped stdout at one chunk; a file gets it all.

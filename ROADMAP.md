@@ -351,7 +351,13 @@ proves the server markup equals the mounted markup for three prop sets, which tu
 server-rendering matrix row into evidence; the default node label renders each attribute as one
 string, which removes React's text-boundary comments from server output; the class-component
 rule downgrades left `.oxlintrc.json`. No class components remain in `src/`.
-Next: strict types, the React 18 and 19 CI matrix.
+Commit 4 (`refactor: turn on strict types`) landed: `strict: true` for the source, tests, and
+scripts; `TreeNodeEventCallback`, `TreeLinkEventCallback`, and `onUpdate` return `void`;
+`RenderCustomNodeElementFn` returns `ReactElement`; the components declare `ReactElement` return
+types so the declarations don't reference `React.JSX`; a partial `scaleExtent` or `separation`
+takes the default for a missing key; `@types/clone` is a dev dependency until Phase 5 removes
+`clone`; the test query helpers throw instead of returning null. Next: the React 18 and 19 CI
+matrix.
 
 Goal: the same v3 behaviour from function components, verified by the Phase 1 suite and oracle.
 This phase keeps the v3 prop names. The API changes come in Phase 5, so each PR here has one

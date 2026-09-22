@@ -5,6 +5,7 @@ import type { OnUpdate } from './helpers.js';
 import { mockData, mockData2, mockData4, mockTree_D1N2_D2N2 } from './mockData.js';
 import {
   act,
+  circleOf,
   click,
   dispatch,
   getNodeByLabel,
@@ -13,14 +14,12 @@ import {
   linkElements,
   nodeElements,
   nodeLabels,
+  queryOrThrow,
   renderTree,
   transformCoordinates,
   wheel,
   zoomTransform,
 } from './helpers.js';
-
-const circleOf = (container: ParentNode, label: string) =>
-  getNodeByLabel(container, label).querySelector('circle');
 
 describe('<Tree />', () => {
   it('renders a node for every datum and a link for every parent-child relation', () => {
@@ -44,7 +43,12 @@ describe('<Tree />', () => {
     expect(nodeLabels(view.container)).toEqual(['Top Level', 'Level 2: A']);
 
     view.rerender({
-      data: [{ ...mockData2[0], children: [...mockData2[0].children, { name: 'Level 2: B' }] }],
+      data: [
+        {
+          ...mockData2[0],
+          children: [...(mockData2[0].children ?? []), { name: 'Level 2: B' }],
+        },
+      ],
     });
 
     expect(nodeLabels(view.container)).toEqual(['Top Level', 'Level 2: A', 'Level 2: B']);
@@ -103,6 +107,14 @@ describe('<Tree />', () => {
       const below = renderTree({ data: mockData, scaleExtent, zoom: 0.1 });
       expect(getTreeGroup(below.container).getAttribute('transform')).toBe(
         'translate(0,0) scale(0.2)'
+      );
+    });
+
+    it('takes the default for a missing `scaleExtent` key', () => {
+      const view = renderTree({ data: mockData, scaleExtent: { max: 0.8 }, zoom: 0.05 });
+
+      expect(getTreeGroup(view.container).getAttribute('transform')).toBe(
+        'translate(0,0) scale(0.1)'
       );
     });
 
@@ -209,7 +221,7 @@ describe('<Tree />', () => {
     // Renders every node as a circle that records its name and depth, and captures the
     // `addChildren` handler of the node named `target`.
     const captureAddChildren = (target: string) => {
-      let addChildren: CustomNodeElementProps['addChildren'];
+      let addChildren: CustomNodeElementProps['addChildren'] | undefined;
       const renderCustomNodeElement = (props: CustomNodeElementProps) => {
         if (props.nodeDatum.name === target) {
           addChildren = props.addChildren;
@@ -225,8 +237,10 @@ describe('<Tree />', () => {
       return {
         renderCustomNodeElement,
         addChildren: (children: RawNodeDatum[]) => {
+          if (!addChildren) throw new Error(`addChildren was not captured for ${target}`);
+          const captured = addChildren;
           act(() => {
-            addChildren(children);
+            captured(children);
           });
         },
       };
@@ -239,7 +253,7 @@ describe('<Tree />', () => {
         renderCustomNodeElement: capture.renderCustomNodeElement,
       });
       const depthOf = (name: string) =>
-        view.container.querySelector(`[data-name="${name}"]`).getAttribute('data-depth');
+        queryOrThrow(view.container, `[data-name="${name}"]`).getAttribute('data-depth');
       expect(nodeElements(view.container)).toHaveLength(5);
 
       capture.addChildren(newChildren);
@@ -294,6 +308,19 @@ describe('<Tree />', () => {
         });
       }
     );
+
+    it('centers on click even when the tree is not collapsible', () => {
+      const view = renderTree({ data: mockData, dimensions, collapsible: false, zoom: 1 });
+      const { x, y } = transformCoordinates(getNodeByLabel(view.container, '2: B'));
+
+      click(circleOf(view.container, '2: B'));
+
+      expect(zoomTransform(getSvg(view.container))).toMatchObject({
+        x: -x + dimensions.width / 2,
+        y: -y + dimensions.height / 2,
+        k: 1,
+      });
+    });
 
     it('does nothing without `dimensions`', () => {
       const view = renderTree({ data: mockData, zoom: 0.5 });

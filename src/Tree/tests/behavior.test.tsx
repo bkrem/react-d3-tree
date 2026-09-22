@@ -10,6 +10,7 @@ import type {
 } from '../../index.js';
 import type { OnUpdate } from './helpers.js';
 import {
+  circleOf,
   click,
   dispatch,
   getNodeByLabel,
@@ -19,6 +20,7 @@ import {
   mouse,
   nodeElements,
   nodeLabels,
+  queryOrThrow,
   renderTree,
   transformCoordinates,
   wheel,
@@ -83,7 +85,7 @@ describe('Tree public behavior', () => {
 
     it('reapplies initialDepth when a new dataset is rendered', () => {
       const view = renderTree({ data: treeData(), dataKey: 'dataset-a', initialDepth: 0 });
-      click(getNodeByLabel(view.container, 'root').querySelector('circle'));
+      click(circleOf(view.container, 'root'));
       expect(nodeElements(view.container).length).toBeGreaterThan(1);
 
       view.rerender({
@@ -101,7 +103,7 @@ describe('Tree public behavior', () => {
       const before = JSON.parse(JSON.stringify(data));
 
       const view = renderTree({ data });
-      click(getNodeByLabel(view.container, 'root').querySelector('circle'));
+      click(circleOf(view.container, 'root'));
 
       expect(data).toEqual(before);
     });
@@ -110,20 +112,19 @@ describe('Tree public behavior', () => {
   describe('collapse and expansion', () => {
     it('removes descendants and restores one collapsed level per toggle', () => {
       const view = renderTree({ data: treeData() });
-      const rootCircle = () => getNodeByLabel(view.container, 'root').querySelector('circle');
 
       expect(nodeElements(view.container)).toHaveLength(6);
       expect(linkElements(view.container)).toHaveLength(5);
 
-      click(rootCircle());
+      click(circleOf(view.container, 'root'));
       expect(nodeLabels(view.container)).toEqual(['root']);
       expect(linkElements(view.container)).toHaveLength(0);
 
-      click(rootCircle());
+      click(circleOf(view.container, 'root'));
       expect(nodeLabels(view.container)).toEqual(['root', 'branch-a', 'branch-b']);
       expect(linkElements(view.container)).toHaveLength(2);
 
-      click(getNodeByLabel(view.container, 'branch-a').querySelector('circle'));
+      click(circleOf(view.container, 'branch-a'));
       expect(nodeLabels(view.container)).toEqual([
         'root',
         'branch-a',
@@ -137,7 +138,7 @@ describe('Tree public behavior', () => {
       const onNodeClick = vi.fn<TreeNodeEventCallback>();
       const view = renderTree({ data: treeData(), collapsible: false, onNodeClick });
 
-      click(getNodeByLabel(view.container, 'root').querySelector('circle'));
+      click(circleOf(view.container, 'root'));
 
       expect(nodeElements(view.container)).toHaveLength(6);
       expect(linkElements(view.container)).toHaveLength(5);
@@ -152,7 +153,7 @@ describe('Tree public behavior', () => {
         shouldCollapseNeighborNodes: true,
       });
 
-      click(getNodeByLabel(view.container, 'branch-a').querySelector('circle'));
+      click(circleOf(view.container, 'branch-a'));
       expect(nodeLabels(view.container)).toEqual([
         'root',
         'branch-a',
@@ -161,7 +162,7 @@ describe('Tree public behavior', () => {
         'leaf-a2',
       ]);
 
-      click(getNodeByLabel(view.container, 'branch-b').querySelector('circle'));
+      click(circleOf(view.container, 'branch-b'));
       expect(nodeLabels(view.container)).toEqual(['root', 'branch-a', 'branch-b', 'leaf-b1']);
     });
   });
@@ -253,7 +254,7 @@ describe('Tree public behavior', () => {
       const view = renderTree({ data: treeData() });
       const root = getNodeByLabel(view.container, 'root');
 
-      expect(root.querySelector('.rd3t-label__title').textContent).toBe('root');
+      expect(queryOrThrow(root, '.rd3t-label__title').textContent).toBe('root');
       expect(
         Array.from(root.querySelectorAll('.rd3t-label__attributes tspan')).map(
           node => node.textContent
@@ -328,7 +329,7 @@ describe('Tree public behavior', () => {
         onNodeMouseOver,
         onNodeMouseOut,
       });
-      const root = view.container.querySelector('[data-custom-node="root"]');
+      const root = queryOrThrow(view.container, '[data-custom-node="root"]');
 
       expect(root.getAttribute('data-depth')).toBe('0');
       dispatch(root, new MouseEvent('mouseover', { bubbles: true }));
@@ -355,7 +356,7 @@ describe('Tree public behavior', () => {
       );
       const view = renderTree({ data, renderCustomNodeElement });
 
-      click(view.container.querySelector('[data-custom-node="root"]'));
+      click(queryOrThrow(view.container, '[data-custom-node="root"]'));
 
       expect(view.container.querySelector('[data-custom-node="added-child"]')).not.toBeNull();
       expect(data).toEqual(before);
@@ -378,22 +379,16 @@ describe('Tree public behavior', () => {
         onLinkClick,
       });
 
-      click(
-        view.container.querySelector(
-          '[data-custom-node="root"], [data-custom-node="replacement-root"]'
-        )
-      );
+      click(queryOrThrow(view.container, '[data-custom-node="replacement-root"]'));
       click(linkElements(view.container)[0]);
 
       const [clickedNode, nodeEvent] = onNodeClick.mock.calls[0];
       const [source, target, linkEvent] = onLinkClick.mock.calls[0];
       expect(clickedNode.data.name).toBe('replacement-root');
       expect(clickedNode).not.toBe(renderedNodes.get('replacement-root'));
-      expect(clickedNode.data).not.toBe(renderedNodes.get('replacement-root').data);
+      expect(clickedNode.data).not.toBe(renderedNodes.get('replacement-root')?.data);
       expect(nodeEvent.type).toBe('click');
-      expect(nodeEvent.nativeEvent).toBeInstanceOf(
-        view.container.ownerDocument.defaultView.MouseEvent
-      );
+      expect(nodeEvent.nativeEvent).toBeInstanceOf(MouseEvent);
       expect([source.data.name, target.data.name]).toEqual([
         'replacement-root',
         'replacement-leaf',
@@ -401,9 +396,7 @@ describe('Tree public behavior', () => {
       expect(source).not.toBe(renderedNodes.get('replacement-root'));
       expect(target).not.toBe(renderedNodes.get('replacement-leaf'));
       expect(linkEvent.type).toBe('click');
-      expect(linkEvent.nativeEvent).toBeInstanceOf(
-        view.container.ownerDocument.defaultView.MouseEvent
-      );
+      expect(linkEvent.nativeEvent).toBeInstanceOf(MouseEvent);
 
       clickedNode.data.name = 'changed-by-consumer';
       expect(view.container.querySelector('[data-custom-node="replacement-root"]')).not.toBeNull();
@@ -449,7 +442,7 @@ describe('Tree public behavior', () => {
       const view = renderTree({ data: treeData(), onUpdate });
       onUpdate.mockClear();
 
-      click(getNodeByLabel(view.container, 'root').querySelector('circle'));
+      click(circleOf(view.container, 'root'));
 
       expect(onUpdate).toHaveBeenCalledTimes(1);
       expect(onUpdate).toHaveBeenCalledWith({
@@ -503,7 +496,7 @@ describe('Tree public behavior', () => {
         scaleExtent: { min: 0.5, max: 2 },
         onUpdate,
       });
-      const control = view.container.querySelector('[data-node-control="replacement-root"]');
+      const control = queryOrThrow(view.container, '[data-node-control="replacement-root"]');
       const before = getTreeGroup(view.container).getAttribute('transform');
       onUpdate.mockClear();
 

@@ -14,13 +14,13 @@ import {
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
-) => any;
+) => void;
 
 export type TreeLinkEventCallback = (
   sourceNode: HierarchyPointNode<TreeNodeDatum>,
   targetNode: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
-) => any;
+) => void;
 
 /**
  * Props accepted by the `Tree` component.
@@ -97,7 +97,7 @@ export interface TreeProps {
    *
    * {@link Tree.defaultProps.onUpdate | Default value}
    */
-  onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => any;
+  onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => void;
 
   /**
    * Determines along which axis the tree is oriented.

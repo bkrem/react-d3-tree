@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { SyntheticEvent } from 'react';
+import type { ReactElement, SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import {
   CustomNodeElementProps,
@@ -42,7 +42,7 @@ function Node({
   onNodeMouseOver,
   onNodeMouseOut,
   handleAddChildrenToNode,
-}: NodeProps) {
+}: NodeProps): ReactElement {
   const id = data.__rd3t.id;
   // A horizontal tree swaps the layout axes on screen.
   const transform =

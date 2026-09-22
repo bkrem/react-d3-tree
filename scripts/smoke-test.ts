@@ -110,7 +110,8 @@ try {
       run(`"${path.join(repoRoot, 'node_modules', '.bin', 'tsc')}" -p "${dir}"`, project);
     } catch (error) {
       // tsc prints its diagnostics on stdout.
-      throw new Error(`type-check from a ${kind} file (${moduleMode}) failed:\n${error.stdout}`);
+      const { stdout } = error as { stdout?: Buffer };
+      throw new Error(`type-check from a ${kind} file (${moduleMode}) failed:\n${stdout}`);
     }
     console.log(`type-check from a ${kind} file (${moduleMode}): ok`);
   }

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { SyntheticEvent } from 'react';
+import type { ReactElement, SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import {
   Orientation,
@@ -94,7 +94,7 @@ function Link({
   onClick,
   onMouseOver,
   onMouseOut,
-}: LinkProps) {
+}: LinkProps): ReactElement {
   const { source, target } = linkData;
   return (
     <path
