@@ -25,6 +25,43 @@ export type TreeLinkEventCallback = (
 /** One node's collapse or expansion, as reported by `onCollapsedChange`. */
 export type CollapsedChange = { id: string; collapsed: boolean };
 
+/** The zoom transform: a translation in pixels and a scale factor. */
+export type TreeTransform = { x: number; y: number; k: number };
+
+/**
+ * The methods a `ref` on `Tree` exposes.
+ *
+ * ```tsx
+ * const tree = useRef<TreeHandle>(null);
+ * <Tree ref={tree} data={data} />
+ * tree.current?.centerNode('0.1');
+ * ```
+ */
+export interface TreeHandle {
+  /**
+   * Centers the node with `id` in the container. Needs `dimensions`. Animates over
+   * `options.duration` milliseconds, or `centeringTransitionDuration` by default; a duration of
+   * 0 applies the transform at once.
+   */
+  centerNode(id: string, options?: { duration?: number }): void;
+  /** Collapses or expands the node with `id`. Works even when `collapsible` is false. */
+  toggleNode(id: string): void;
+  /** Expands every node. */
+  expandAll(): void;
+  /** Collapses every node, so only the root is visible. */
+  collapseAll(): void;
+  /** Collapses every node at `depth` or deeper and expands the rest. */
+  expandToDepth(depth: number): void;
+  /**
+   * Sets the zoom transform. Animates over `options.duration` milliseconds; without a duration
+   * the transform applies at once. The change reports through the same callbacks as a user
+   * zoom.
+   */
+  setTransform(transform: TreeTransform, options?: { duration?: number }): void;
+  /** The current zoom transform. */
+  getTransform(): TreeTransform;
+}
+
 /**
  * Props accepted by the `Tree` component.
  *

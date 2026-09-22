@@ -272,7 +272,13 @@ describe('<Tree />', () => {
     );
 
     it('centers on click even when the tree is not collapsible', () => {
-      const view = renderTree({ data: mockData, dimensions, collapsible: false, zoom: 1 });
+      const view = renderTree({
+        data: mockData,
+        dimensions,
+        collapsible: false,
+        zoom: 1,
+        centeringTransitionDuration: 0,
+      });
       const { x, y } = transformCoordinates(getNodeByLabel(view.container, '2: B'));
 
       click(circleOf(view.container, '2: B'));

@@ -1,10 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { ReactElement } from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
-import type { D3ZoomEvent } from 'd3-zoom';
-// Registers `selection.transition()`, which `centerNode` uses.
+import type { D3ZoomEvent, ZoomBehavior } from 'd3-zoom';
+// Registers `selection.transition()`, which animated transforms use.
 import 'd3-transition';
 import clone from 'clone';
 
@@ -13,9 +21,11 @@ import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
 import {
   CollapsedChange,
+  TreeHandle,
   TreeLinkEventCallback,
   TreeNodeEventCallback,
   TreeProps,
+  TreeTransform,
 } from './types.js';
 import globalCss from '../globalCss.js';
 import { warnOnce } from '../warn.js';
@@ -39,6 +49,11 @@ type LayoutOptions = {
   nodeSize: { x: number; y: number };
   separation: { siblings: number; nonSiblings: number };
   depthFactor: number | undefined;
+};
+
+type Layout = {
+  nodes: HierarchyPointNode<TreeNodeDatum>[];
+  links: { source: HierarchyPointNode<TreeNodeDatum>; target: HierarchyPointNode<TreeNodeDatum> }[];
 };
 
 /**
@@ -98,7 +113,7 @@ function calculateGeometry(zoom: number, min: number, max: number, translate: Po
 }
 
 /** Lays out the tree from `root`, hiding the children of collapsed nodes. */
-function generateTree(root: TreeNodeDatum, collapsed: Set<string>, options: LayoutOptions) {
+function generateTree(root: TreeNodeDatum, collapsed: Set<string>, options: LayoutOptions): Layout {
   const { orientation, nodeSize, separation, depthFactor } = options;
   const tree = d3tree<TreeNodeDatum>()
     .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
@@ -119,7 +134,7 @@ function generateTree(root: TreeNodeDatum, collapsed: Set<string>, options: Layo
   return { nodes, links };
 }
 
-function Tree(props: TreeProps): ReactElement {
+const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactElement {
   const {
     data,
     orientation = 'horizontal',
@@ -168,6 +183,9 @@ function Tree(props: TreeProps): ReactElement {
 
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
+  // The zoom behaviour bound to the svg; programmatic transforms go through it so they report
+  // like user zooms.
+  const behaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
 
   const tree = useMemo(() => buildInternalTree(data), [data]);
 
@@ -197,34 +215,6 @@ function Tree(props: TreeProps): ReactElement {
   }
   const effectiveCollapsed = controlledCollapsed ?? ownCollapsed;
 
-  // The latest props and state, for the callbacks and d3 handlers that outlive the render they
-  // were created in. React flushes this effect before it dispatches the next event.
-  const latestValues = {
-    tree,
-    collapsed: effectiveCollapsed,
-    controlled: controlledCollapsed !== undefined,
-    collapsible,
-    shouldCollapseNeighborNodes,
-    draggable,
-    hasInteractiveNodes,
-    dimensions,
-    orientation,
-    zoom,
-    centeringTransitionDuration,
-    onCollapsedChange,
-    onNodeClick,
-    onNodeMouseOver,
-    onNodeMouseOut,
-    onLinkClick,
-    onLinkMouseOver,
-    onLinkMouseOut,
-    onUpdate,
-  };
-  const latest = useRef(latestValues);
-  useEffect(() => {
-    latest.current = latestValues;
-  });
-
   const geometry = useMemo(
     () => calculateGeometry(zoom, scaleMin, scaleMax, { x: translateX, y: translateY }),
     [zoom, scaleMin, scaleMax, translateX, translateY]
@@ -252,6 +242,34 @@ function Tree(props: TreeProps): ReactElement {
     ]
   );
 
+  // The latest props and state, for the callbacks and d3 handlers that outlive the render they
+  // were created in. React flushes this effect before it dispatches the next event.
+  const latestValues = {
+    tree,
+    layout,
+    collapsed: effectiveCollapsed,
+    controlled: controlledCollapsed !== undefined,
+    collapsible,
+    shouldCollapseNeighborNodes,
+    draggable,
+    hasInteractiveNodes,
+    dimensions,
+    orientation,
+    centeringTransitionDuration,
+    onCollapsedChange,
+    onNodeClick,
+    onNodeMouseOver,
+    onNodeMouseOut,
+    onLinkClick,
+    onLinkMouseOver,
+    onLinkMouseOut,
+    onUpdate,
+  };
+  const latest = useRef(latestValues);
+  useEffect(() => {
+    latest.current = latestValues;
+  });
+
   // Binds d3's zoom to the svg. The initial transform goes through a listener-less behaviour
   // first, so setting it emits no zoom event and `onUpdate` sees no call.
   useEffect(() => {
@@ -275,9 +293,12 @@ function Tree(props: TreeProps): ReactElement {
         return true;
       })
       .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        // A programmatic transform has no source event.
+        const sourceType: string | undefined = event.sourceEvent?.type;
         if (
           !latest.current.draggable &&
-          ['mousemove', 'touchmove', 'dblclick'].includes(event.sourceEvent.type)
+          sourceType !== undefined &&
+          ['mousemove', 'touchmove', 'dblclick'].includes(sourceType)
         ) {
           return;
         }
@@ -294,9 +315,11 @@ function Tree(props: TreeProps): ReactElement {
         }
       });
     svg.call(behavior);
+    behaviorRef.current = behavior;
 
     return () => {
       svg.on('.zoom', null);
+      behaviorRef.current = null;
     };
   }, [geometry, zoomable, draggable, zoom, scaleMin, scaleMax, translateX, translateY]);
 
@@ -363,6 +386,49 @@ function Tree(props: TreeProps): ReactElement {
     [commitCollapsed]
   );
 
+  // Sets the zoom transform through the bound behaviour, at once or over `duration` ms.
+  const applyTransform = useCallback((transform: TreeTransform, duration: number) => {
+    const svgElement = svgRef.current;
+    const behavior = behaviorRef.current;
+    if (!svgElement || !behavior) return;
+    const target = zoomIdentity.translate(transform.x, transform.y).scale(transform.k);
+    const svg = select(svgElement);
+    if (duration > 0) {
+      behavior.transform(svg.transition().duration(duration), target);
+    } else {
+      behavior.transform(svg, target);
+    }
+  }, []);
+
+  /**
+   * Centers the node with `nodeId` in the container when `dimensions` is set.
+   * Adapted from Rob Schmuecker's centerNode: http://bl.ocks.org/robschmuecker/7880033
+   */
+  const centerNode = useCallback(
+    (nodeId: string, options?: { duration?: number }) => {
+      const {
+        layout: currentLayout,
+        dimensions: size,
+        orientation: axis,
+        centeringTransitionDuration: defaultDuration,
+      } = latest.current;
+      const node = currentLayout.nodes.find(candidate => candidate.data.id === nodeId);
+      if (!size || !node) return;
+      const scale = transformRef.current.scale;
+      // A horizontal tree swaps the layout axes on screen.
+      const [screenX, screenY] = axis === 'horizontal' ? [node.y, node.x] : [node.x, node.y];
+      applyTransform(
+        {
+          x: -screenX * scale + size.width / 2,
+          y: -screenY * scale + size.height / 2,
+          k: scale,
+        },
+        options?.duration ?? defaultDuration
+      );
+    },
+    [applyTransform]
+  );
+
   // A click on a node centers it once the layout that follows the click is in place. The ref
   // holds the node; the counter makes the effect run even when the layout doesn't change.
   const centerRequestRef = useRef<string | null>(null);
@@ -371,6 +437,31 @@ function Tree(props: TreeProps): ReactElement {
     centerRequestRef.current = nodeId;
     setCenterRequestCount(count => count + 1);
   }, []);
+  useEffect(() => {
+    const nodeId = centerRequestRef.current;
+    if (nodeId === null) return;
+    centerRequestRef.current = null;
+    centerNode(nodeId);
+  }, [layout, centerRequestCount, centerNode]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      centerNode,
+      toggleNode,
+      expandAll: () => commitCollapsed(new Set(), null),
+      collapseAll: () => commitCollapsed(new Set(idsFromDepth(latest.current.tree, 0)), null),
+      expandToDepth: depth =>
+        commitCollapsed(new Set(idsFromDepth(latest.current.tree, depth)), null),
+      setTransform: (transform, options) => applyTransform(transform, options?.duration ?? 0),
+      getTransform: () => ({
+        x: transformRef.current.translate.x,
+        y: transformRef.current.translate.y,
+        k: transformRef.current.scale,
+      }),
+    }),
+    [centerNode, toggleNode, commitCollapsed, applyTransform]
+  );
 
   const handleNodeToggle = useCallback(
     (nodeId: string) => {
@@ -433,47 +524,6 @@ function Tree(props: TreeProps): ReactElement {
     }
   }, []);
 
-  /**
-   * Centers `hierarchyPointNode` in the container when `dimensions` is set.
-   * Adapted from Rob Schmuecker's centerNode: http://bl.ocks.org/robschmuecker/7880033
-   */
-  const centerNode = useCallback((hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
-    const {
-      dimensions: size,
-      orientation: axis,
-      zoom: level,
-      centeringTransitionDuration: duration,
-    } = latest.current;
-    const svgElement = svgRef.current;
-    const gElement = gRef.current;
-    if (!size || !svgElement || !gElement) return;
-    const g = select(gElement);
-    const svg = select(svgElement);
-    const scale = transformRef.current.scale;
-
-    let x: number;
-    let y: number;
-    // A horizontal tree swaps the layout axes on screen.
-    if (axis === 'horizontal') {
-      y = -hierarchyPointNode.x * scale + size.height / 2;
-      x = -hierarchyPointNode.y * scale + size.width / 2;
-    } else {
-      x = -hierarchyPointNode.x * scale + size.width / 2;
-      y = -hierarchyPointNode.y * scale + size.height / 2;
-    }
-    g.transition().duration(duration).attr('transform', `translate(${x},${y})scale(${scale})`);
-    // Moves d3's viewport to the new center so the next drag or zoom starts from it.
-    svg.call(d3zoom<SVGSVGElement, unknown>().transform, zoomIdentity.translate(x, y).scale(level));
-  }, []);
-
-  useEffect(() => {
-    const nodeId = centerRequestRef.current;
-    if (nodeId === null) return;
-    centerRequestRef.current = null;
-    const target = layout.nodes.find(node => node.data.id === nodeId);
-    if (target) centerNode(target);
-  }, [layout, centerRequestCount, centerNode]);
-
   const getNodeClassName = (
     parent: HierarchyPointNode<TreeNodeDatum> | null,
     nodeDatum: TreeNodeDatum
@@ -533,6 +583,6 @@ function Tree(props: TreeProps): ReactElement {
       </svg>
     </div>
   );
-}
+});
 
 export default Tree;

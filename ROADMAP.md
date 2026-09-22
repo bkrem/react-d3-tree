@@ -391,7 +391,14 @@ clone; caller data untouched), `__rd3t` is gone from `TreeNodeDatum` in favour o
 collapsed set is the only tree state with a controlled mode (`collapsed` + `onCollapsedChange`)
 and an uncontrolled mode (seeded from `initialDepth`, kept across `data` updates for surviving
 ids, `initialDepth` applied to new ids), `dataKey` and `addChildren` are gone, and `clone` no
-longer runs on the toggle path. Snapshots unchanged. 5.3 to 5.5 follow.
+longer runs on the toggle path. Snapshots unchanged. 5.3 landed (`feat: expose a ref handle`):
+`Tree` is a `forwardRef` component exposing `TreeHandle` (`centerNode`, `toggleNode`,
+`expandAll`, `collapseAll`, `expandToDepth`, `setTransform`, `getTransform`). Programmatic
+transforms go through the bound zoom behaviour, so `centerNode` and `setTransform` update d3's
+viewport, the `g` attribute, and the callbacks in one path; that also ends the v3 inconsistency
+where the group was scaled by the live scale while d3's viewport got the `zoom` prop. A duration
+of 0 applies at once, which the tests rely on. The handle's `toggleNode` isn't gated by
+`collapsible`; user clicks are. 5.4 and 5.5 follow.
 
 Goal: the API described in [The v4 API](#the-v4-api), one concern per PR.
 
