@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 
-import Tree from '../../index.ts';
+import Tree from '../../index.js';
 
 const mountedContainers = new Set();
 
@@ -621,6 +621,38 @@ describe('Tree public behavior', () => {
 
       view.unmount();
       wheel(detachedSvg);
+
+      expect(onUpdate).not.toHaveBeenCalled();
+    });
+
+    it('ends an active mouse gesture when the tree unmounts', () => {
+      const onUpdate = vi.fn();
+      const view = renderTree({ data: replacementData(), onUpdate });
+      const svg = getSvg(view.container);
+      onUpdate.mockClear();
+
+      dispatch(
+        svg,
+        mouse('mousedown', {
+          clientX: 10,
+          clientY: 10,
+        })
+      );
+      view.unmount();
+      dispatch(
+        window,
+        mouse('mousemove', {
+          clientX: 50,
+          clientY: 60,
+        })
+      );
+      dispatch(
+        window,
+        mouse('mouseup', {
+          clientX: 50,
+          clientY: 60,
+        })
+      );
 
       expect(onUpdate).not.toHaveBeenCalled();
     });
