@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 // The naming of the mock trees describes their shape.
 // E.g. `mockTree_D1N2_D2N2` -> _Depth1with2Nodes_Depth2with2Nodes_...
 

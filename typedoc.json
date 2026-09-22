@@ -1,6 +1,6 @@
 {
   "entryPoints": ["./src"],
-  "exclude": ["**/tests/*", "**/*.test.js"],
+  "exclude": ["**/tests/*", "**/*.test.js", "**/*.test.jsx"],
   "out": "demo/public/docs",
   "includeVersion": true
 }

@@ -30,6 +30,10 @@ jobs:
       # `npm stage publish` requires npm 11.15.0 or later.
       - run: npm install -g npm@^11.15.0
 
+      # pnpm installs the dependencies and runs the scripts; npm only publishes.
+      - name: Install the pnpm version from `packageManager`
+        run: npm install -g "$(node -p "require('./package.json').packageManager")"
+
       - name: Resolve version and dist-tag
         id: meta
         env:
@@ -58,9 +62,10 @@ jobs:
 
           echo "dist_tag=$dist_tag" >> "$GITHUB_OUTPUT"
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      # `prepublishOnly` runs the tests and the build.
+      # `prepublishOnly` runs the tests and the build through pnpm.
       - run: npm stage publish --tag "$DIST_TAG"
         env:
           DIST_TAG: ${{ steps.meta.outputs.dist_tag }}
+          HUSKY: 0 # `prepare` runs on publish; skip the git hook setup

@@ -1,0 +1,11 @@
+# Minutes. Versions published less than 3 days ago are not installed.
+minimumReleaseAge: 4320
+
+# Dependency install scripts run only when listed as `true`.
+allowBuilds:
+  fsevents: false
+
+# Works around a `node:stream` failure in the test run (enzyme depends on cheerio).
+# See https://github.com/inikulin/parse5/issues/1260
+overrides:
+  cheerio: 1.0.0-rc.12

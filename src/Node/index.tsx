@@ -123,9 +123,7 @@ export default class Node extends React.Component<NodeProps, NodeState> {
         .style('opacity', opacity)
         .on('end', done);
     } else {
-      select(this.nodeRef)
-        .attr('transform', transform)
-        .style('opacity', opacity);
+      select(this.nodeRef).attr('transform', transform).style('opacity', opacity);
       done();
     }
   }

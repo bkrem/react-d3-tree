@@ -4,9 +4,6 @@
   <a href="#buildstatus">
     <img alt="build status" src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg">
   </a>
-  <a href="https://coveralls.io/github/bkrem/react-d3-tree?branch=master">
-    <img alt="coverage status" src="https://coveralls.io/repos/github/bkrem/react-d3-tree/badge.svg?branch=master">
-  </a>
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package" src="https://img.shields.io/npm/v/react-d3-tree?style=flat">
   </a>
@@ -19,8 +16,8 @@
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
   </a>
-  <a href="https://github.com/prettier/prettier">
-    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
+  <a href="https://oxc.rs/docs/guide/usage/formatter">
+    <img alt="code style: oxfmt" src="https://img.shields.io/badge/code_style-oxfmt-0d6efd.svg">
   </a>
 </p>
 
@@ -287,12 +284,14 @@ function CustomPathFuncTree() {
 
 ## Development
 ### Setup
+The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
+
 To set up `react-d3-tree` for local development, clone the repo and follow the steps below:
 
 ```bash
 # 1. Set up the library, create a reference to it for symlinking.
 cd react-d3-tree
-npm i
+pnpm install
 npm link
 
 # 2. Set up the demo/playground, symlink to the local copy of `react-d3-tree`.
@@ -305,7 +304,7 @@ npm link react-d3-tree
 
 ### Hot reloading
 ```bash
-npm run build:watch
+pnpm build:watch
 ```
 
 If you're using `react-d3-tree/demo` for development, open up another terminal window in the `demo` directory and call:

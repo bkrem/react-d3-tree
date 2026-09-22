@@ -3,17 +3,22 @@
     "module": "commonjs",
     "allowJs": true,
     "target": "es5",
+    "lib": ["dom", "es2017"],
+    "types": [],
     "jsx": "react",
     "outDir": "./lib/cjs",
     "declaration": true,
     "declarationDir": "./lib/types",
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "*.js": ["*"]
-    }
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/tests/*", "**/*.spec.ts", "**/*.test.ts", "**/*.test.js"]
+  "exclude": [
+    "node_modules",
+    "**/tests/*",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.test.js",
+    "**/*.test.jsx"
+  ]
 }

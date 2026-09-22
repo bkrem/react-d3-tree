@@ -56,20 +56,15 @@ describe('<Node />', () => {
     allowForeignObjects: false,
   };
 
-  jest.spyOn(Node.prototype, 'applyTransform');
+  vi.spyOn(Node.prototype, 'applyTransform');
 
   // Clear method spies on prototype after each test
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(<Node {...mockProps} />);
 
-    expect(
-      renderedComponent
-        .find('g')
-        .first()
-        .prop('id')
-    ).toBe(data.__rd3t.id);
+    expect(renderedComponent.find('g').first().prop('id')).toBe(data.__rd3t.id);
   });
 
   it('applies correct base className if `data.children` is defined and not empty', () => {
@@ -81,36 +76,20 @@ describe('<Node />', () => {
       <Node {...mockProps} data={{ ...data, children: [{ name: 'leaf' }] }} />
     );
 
-    expect(
-      leafNodeComponent
-        .find('g')
-        .first()
-        .prop('className')
-    ).toBe('rd3t-leaf-node');
-    expect(
-      leafNodeComponentWithEmptyChildren
-        .find('g')
-        .first()
-        .prop('className')
-    ).toBe('rd3t-leaf-node');
-    expect(
-      nodeComponent
-        .find('g')
-        .first()
-        .prop('className')
-    ).toBe('rd3t-node');
+    expect(leafNodeComponent.find('g').first().prop('className')).toBe('rd3t-leaf-node');
+    expect(leafNodeComponentWithEmptyChildren.find('g').first().prop('className')).toBe(
+      'rd3t-leaf-node'
+    );
+    expect(nodeComponent.find('g').first().prop('className')).toBe('rd3t-node');
   });
 
   it('applies `nodeClassName` if defined', () => {
     const fixture = 'additionalNodeClass';
     const leafNodeComponent = shallow(<Node {...mockProps} nodeClassName={fixture} />);
 
-    expect(
-      leafNodeComponent
-        .find('g')
-        .first()
-        .prop('className')
-    ).toBe(['rd3t-leaf-node', fixture].join(' '));
+    expect(leafNodeComponent.find('g').first().prop('className')).toBe(
+      ['rd3t-leaf-node', fixture].join(' ')
+    );
   });
 
   it('applies correct `transform` prop based on its `orientation`', () => {
@@ -118,23 +97,13 @@ describe('<Node />', () => {
     const verticalTransform = `translate(${mockProps.parent.x},${mockProps.parent.y})`;
     const horizontalComponent = shallow(<Node {...mockProps} />);
     const verticalComponent = shallow(<Node {...mockProps} orientation="vertical" />);
-    expect(
-      horizontalComponent
-        .find('g')
-        .first()
-        .prop('transform')
-    ).toBe(horizontalTransform);
-    expect(
-      verticalComponent
-        .find('g')
-        .first()
-        .prop('transform')
-    ).toBe(verticalTransform);
+    expect(horizontalComponent.find('g').first().prop('transform')).toBe(horizontalTransform);
+    expect(verticalComponent.find('g').first().prop('transform')).toBe(verticalTransform);
   });
 
   describe('Events', () => {
     it('handles onNodeToggle and passes its nodeId to handler', () => {
-      const onNodeToggleSpy = jest.fn();
+      const onNodeToggleSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(
         <Node {...mockProps} onNodeToggle={onNodeToggleSpy} onNodeClick={() => {}} />
@@ -146,7 +115,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeClick events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onClickSpy = jest.fn();
+      const onClickSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(
         <Node {...mockProps} onNodeToggle={() => {}} onNodeClick={onClickSpy} />
@@ -161,7 +130,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeMouseOver events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onMouseOverSpy = jest.fn();
+      const onMouseOverSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOver={onMouseOverSpy} />);
 
@@ -174,7 +143,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeMouseOut events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onMouseOutSpy = jest.fn();
+      const onMouseOutSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOut={onMouseOutSpy} />);
 
