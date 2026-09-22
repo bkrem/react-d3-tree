@@ -1,5 +1,6 @@
 // Installs the packed tarball into a throwaway project and loads it through both entry points
 // of the `exports` map, the way a consuming app does. Requires a prior `pnpm build`.
+import assert from 'node:assert';
 import { execSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -23,9 +24,16 @@ const env = { ...process.env, COREPACK_ENABLE_STRICT: '0', HUSKY: '0' };
 const run = (command, cwd) => execSync(command, { cwd, env, stdio: ['ignore', 'pipe', 'inherit'] });
 
 try {
-  const [{ filename }] = JSON.parse(
+  const [{ filename, files }] = JSON.parse(
     run(`npm pack --json --ignore-scripts --pack-destination "${project}"`, repoRoot)
   );
+
+  // Only the build output and the package metadata belong in the tarball.
+  const allowed = /^(lib\/.+|package\.json|README\.md|LICENSE)$/;
+  const stray = files.map(f => f.path).filter(p => !allowed.test(p) || /\.test\./.test(p));
+  assert.deepStrictEqual(stray, [], 'tarball contains only lib/, package.json, README.md, LICENSE');
+  console.log(`tarball: ${files.length} files, all under lib/ or package metadata`);
+
   writeFileSync(
     path.join(project, 'package.json'),
     JSON.stringify({ name: 'rd3t-smoke', private: true })
