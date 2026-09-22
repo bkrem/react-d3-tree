@@ -1,5 +1,5 @@
 // Installs the packed tarball into a throwaway project and loads it through both entry points
-// of the `exports` map, the way a consuming app does. Requires a prior `npm run build`.
+// of the `exports` map, the way a consuming app does. Requires a prior `pnpm build`.
 import { execSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -10,13 +10,17 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const fixtures = path.join(repoRoot, 'scripts', 'smoke');
 
 if (!existsSync(path.join(repoRoot, 'lib', 'cjs', 'index.js'))) {
-  console.error('lib/ is missing. Run `npm run build` first.');
+  console.error('lib/ is missing. Run `pnpm build` first.');
   process.exit(1);
 }
 
 // Lives outside the repo so module resolution can't reach the repo's node_modules.
 const project = mkdtempSync(path.join(tmpdir(), 'rd3t-smoke-'));
-const run = (command, cwd) => execSync(command, { cwd, stdio: ['ignore', 'pipe', 'inherit'] });
+// The consumer side uses npm on purpose. With an npm shim installed, Corepack rejects npm in a
+// project whose `packageManager` is pnpm unless strict mode is off.
+// `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
+const env = { ...process.env, COREPACK_ENABLE_STRICT: '0', HUSKY: '0' };
+const run = (command, cwd) => execSync(command, { cwd, env, stdio: ['ignore', 'pipe', 'inherit'] });
 
 try {
   const [{ filename }] = JSON.parse(

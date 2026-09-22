@@ -37,7 +37,8 @@ The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (
 
 ## Tech stack
 
-- TypeScript (source), compiled with `tsc`.
+- pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.1 or later: the highest `engines.node` floor among the dev dependencies (`lint-staged`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a separate npm project.
+- TypeScript 5.9 (source), compiled with `tsc`. Keep the `~5.9` range: TypeScript 6 deprecates `target: es5` and TypeScript 7 removes it, and the CJS build must keep that target within v3.
 - React 16–19 (peer dependency). Dev and test dependencies pin React 16 for the enzyme adapter.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
 - Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
@@ -51,35 +52,45 @@ Run these from the repo root.
 
 ```bash
 # Install dependencies
-npm i
+pnpm install
 
 # Build the library (cleans lib/, then emits CJS + type declarations, then ESM)
-npm run build
+pnpm build
 
 # Build CJS + declarations only / ESM only
-npm run build:cjs
-npm run build:esm
+pnpm build:cjs
+pnpm build:esm
 
 # Rebuild ESM on change (used for local development)
-npm run build:watch
+pnpm build:watch
 
 # Run the test suite with coverage
-npm test
+pnpm test
 
 # Watch tests
-npm run test:watch
+pnpm test:watch
 
 # Load the packed tarball as a consumer through `require()` and `import` (needs a prior build)
-npm run test:smoke
+pnpm test:smoke
 
 # Lint (see the note under Code style — this covers .js files only)
-npm run lint
+pnpm lint
 
 # Generate API docs into demo/public/docs
-npm run build:docs
+pnpm build:docs
 ```
 
-There's no separate format script. Prettier runs through the pre-commit hook and can be run directly (`npx prettier --write <path>`).
+There's no separate format script. Prettier runs through the pre-commit hook and can be run directly (`pnpm exec prettier --write <path>`).
+
+## Dependencies
+
+pnpm settings live in `pnpm-workspace.yaml`:
+
+- `minimumReleaseAge: 4320` (minutes) blocks versions published less than 3 days ago. An install fails when the lockfile holds a younger version, so add or update dependencies only to versions past that age.
+- `allowBuilds` lists every dependency that has an install script, with `true` to run it or `false` to deny it. pnpm fails the install when a dependency with an install script is missing from the list.
+- `overrides` pins transitive versions. pnpm ignores an `overrides` field in `package.json`.
+
+pnpm links only declared dependencies into `node_modules`. Declare every imported package, and every `@types/*` package the build needs, in `package.json`. The tsconfigs set `types: []` and an explicit `lib`, so the build doesn't pick up ambient types from packages that happen to be installed.
 
 ## Testing
 
@@ -87,16 +98,17 @@ There's no separate format script. Prettier runs through the pre-commit hook and
 - TypeScript source is transformed by `ts-jest`; test files are written in `.js` and transformed by `babel-jest`.
 - Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.js`) and colocated tests (`src/Node/index.test.js`). Shared fixtures live in `src/Tree/tests/mockData.js`.
 - CSS imports are mapped to `jest/mocks/cssModule.js`. The `moduleNameMapper` also strips the `.js` suffix from relative imports so they resolve against the `.ts`/`.tsx` source (see Code style).
-- `npm test` runs with `--coverage` and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Additions that drop coverage below these thresholds fail the run, so add tests alongside new code.
-- Jest tests import `src/` and never load `lib/`. `npm run test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build, installs the tarball plus React into a temporary project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only.
+- `pnpm test` runs with `--coverage` and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Additions that drop coverage below these thresholds fail the run, so add tests alongside new code.
+- The `transformIgnorePatterns` entry in `jest.config.json` also matches `node_modules/.pnpm/` paths, so Jest transforms the ESM-only d3 packages.
+- Jest tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only.
 
 ## Code style and conventions
 
-- In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. The `tsconfig` `paths` mapping (`"*.js": ["*"]`) and the Jest `moduleNameMapper` exist to resolve these during type-checking and testing. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
+- In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. `tsc` resolves a `./x.js` import to `./x.ts` or `./x.tsx` without extra config, and the Jest `moduleNameMapper` does the same during testing. Don't add `baseUrl` or a `paths` mapping to the tsconfigs: under pnpm's symlinked `node_modules` they make `tsc` emit a broken `import("node_modules/@types/…")` specifier into `lib/types`. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
 - Prettier settings (`.prettierrc`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`.
-- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `npm run lint`. Prettier formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
+- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `pnpm lint`. Prettier formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
 - Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js`.
-- The pre-commit hook (`husky` + `lint-staged`) runs Prettier and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, and additionally ESLint on staged `.js` files.
+- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs Prettier and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, and additionally ESLint on staged `.js`/`.jsx` files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
 
 ## Development workflow
 
@@ -104,18 +116,18 @@ To develop the library against the demo playground, symlink the local build into
 
 ```bash
 # In the repo root
-npm i
+pnpm install
 npm link
 
-# In demo/
+# In demo/ (an npm project)
 cd demo
 npm i
 npm link react-d3-tree
 ```
 
-For hot reloading, run `npm run build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
+For hot reloading, run `pnpm build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 20.x with `npm ci`, `npm run build`, `npm test`, and `npm run test:smoke`. Match that sequence locally before pushing.
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm build`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
 

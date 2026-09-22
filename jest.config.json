@@ -6,7 +6,7 @@
     "^.+\\.jsx?$": "babel-jest",
     "\\.(ts|tsx)$": "ts-jest"
   },
-  "transformIgnorePatterns": ["node_modules/(?!(d3-.+))"],
+  "transformIgnorePatterns": ["node_modules/(?!(?:\\.pnpm/)?d3-)"],
   "moduleNameMapper": {
     ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/jest/mocks/cssModule.js",
     "(.*)\\.js$": "$1"
