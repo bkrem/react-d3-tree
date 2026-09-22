@@ -37,7 +37,7 @@ The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (
 
 ## Tech stack
 
-- pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.1 or later: the highest `engines.node` floor among the dev dependencies (`lint-staged`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a separate npm project.
+- pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.2 or later, or 24.15 or later: the highest `engines.node` floor among the dev dependencies (`jsdom`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a separate npm project.
 - TypeScript 5.9 (source), compiled with `tsc`. Keep the `~5.9` range: TypeScript 6 deprecates `target: es5` and TypeScript 7 removes it, and the CJS build must keep that target within v3.
 - React 16–19 (peer dependency). Dev and test dependencies pin React 16 for the enzyme adapter.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
