@@ -43,7 +43,7 @@ The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
 - Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
 - Jest with `ts-jest` and `babel-jest`, enzyme with `enzyme-adapter-react-16`.
-- ESLint (airbnb config) for `.js` files and oxfmt for formatting.
+- oxlint for linting and oxfmt for formatting.
 - TypeDoc for API documentation.
 
 ## Commands
@@ -73,7 +73,7 @@ pnpm test:watch
 # Load the packed tarball as a consumer through `require()` and `import` (needs a prior build)
 pnpm test:smoke
 
-# Lint (see the note under Code style — this covers .js files only)
+# Lint src/, scripts/, and jest/
 pnpm lint
 
 # Generate API docs into demo/public/docs
@@ -106,9 +106,10 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 
 - In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. `tsc` resolves a `./x.js` import to `./x.ts` or `./x.tsx` without extra config, and the Jest `moduleNameMapper` does the same during testing. Don't add `baseUrl` or a `paths` mapping to the tsconfigs: under pnpm's symlinked `node_modules` they make `tsc` emit a broken `import("node_modules/@types/…")` specifier into `lib/types`. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
 - oxfmt settings (`.oxfmtrc.json`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`. Markdown, `package.json`, `pnpm-lock.yaml`, `demo/`, and build output are excluded. The reformat commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to hide it from `git blame`.
-- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`; `eslint-config-prettier` turns off the airbnb formatting rules that would fight oxfmt. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `pnpm lint`. oxfmt formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
+- oxlint (`.oxlintrc.json`) lints `src/`, `scripts/`, and `jest/`, TypeScript included. The `correctness` category is an error; the `react`, `jsx-a11y`, `import`, `typescript`, and `jest` plugins are on. `pnpm lint` runs in CI and must exit 0; warnings are allowed. Don't change library behavior to satisfy a lint rule: downgrade or disable the rule instead. The React class-component rules (`no-did-mount-set-state`, `no-did-update-set-state`, `no-direct-mutation-state`) are warnings because `Tree` and `Node` use those patterns.
+- oxlint reads ignore files from parent directories. In a worktree nested inside a checkout that still has an `.eslintignore` with `*.ts`, a directory walk skips every TypeScript file; pass `--ignore-path <empty file>` or name the files explicitly to lint them.
 - Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js`.
-- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxfmt and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, additionally ESLint on staged `.js`/`.jsx` files, and oxfmt alone on staged config and script files outside `src/`. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
+- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxlint, oxfmt, and `jest --findRelatedTests` on staged files under `src/`, oxlint and oxfmt on staged files under `scripts/` and `jest/`, and oxfmt on staged JSON and YAML files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
 
 ## Development workflow
 
