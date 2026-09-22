@@ -398,7 +398,11 @@ transforms go through the bound zoom behaviour, so `centerNode` and `setTransfor
 viewport, the `g` attribute, and the callbacks in one path; that also ends the v3 inconsistency
 where the group was scaled by the live scale while d3's viewport got the `zoom` prop. A duration
 of 0 applies at once, which the tests rely on. The handle's `toggleNode` isn't gated by
-`collapsible`; user clicks are. 5.4 and 5.5 follow.
+`collapsible`; user clicks are. 5.4 landed (`feat: measure the container instead of taking
+dimensions`): the tree measures its container with `getBoundingClientRect` on mount and a
+`ResizeObserver` afterwards, keeps the size in a ref, and centers from it; `dimensions` is gone
+and `centerOnClick` (default off) gates centering on click; `test/setup.ts` stubs
+`ResizeObserver` for jsdom and the centering tests mock `getBoundingClientRect`. 5.5 follows.
 
 Goal: the API described in [The v4 API](#the-v4-api), one concern per PR.
 

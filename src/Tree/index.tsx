@@ -159,7 +159,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     leafNodeClassName = '',
     renderCustomNodeElement,
     hasInteractiveNodes = false,
-    dimensions,
+    centerOnClick = false,
     centeringTransitionDuration = 800,
     onNodeClick,
     onNodeMouseOver,
@@ -181,11 +181,28 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     nonSiblings: nonSiblingSeparation = DEFAULT_SEPARATION.nonSiblings,
   } = separation;
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
   // The zoom behaviour bound to the svg; programmatic transforms go through it so they report
   // like user zooms.
   const behaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  // The container size, measured on mount and on every resize. A ref, because nothing
+  // re-renders on resize; centering reads it at call time.
+  const sizeRef = useRef({ width: 0, height: 0 });
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return undefined;
+    const measure = () => {
+      const rect = container.getBoundingClientRect();
+      sizeRef.current = { width: rect.width, height: rect.height };
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const tree = useMemo(() => buildInternalTree(data), [data]);
 
@@ -253,7 +270,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     shouldCollapseNeighborNodes,
     draggable,
     hasInteractiveNodes,
-    dimensions,
+    centerOnClick,
     orientation,
     centeringTransitionDuration,
     onCollapsedChange,
@@ -401,19 +418,19 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
   }, []);
 
   /**
-   * Centers the node with `nodeId` in the container when `dimensions` is set.
+   * Centers the node with `nodeId` in the container.
    * Adapted from Rob Schmuecker's centerNode: http://bl.ocks.org/robschmuecker/7880033
    */
   const centerNode = useCallback(
     (nodeId: string, options?: { duration?: number }) => {
       const {
         layout: currentLayout,
-        dimensions: size,
         orientation: axis,
         centeringTransitionDuration: defaultDuration,
       } = latest.current;
       const node = currentLayout.nodes.find(candidate => candidate.data.id === nodeId);
-      if (!size || !node) return;
+      if (!node) return;
+      const size = sizeRef.current;
       const scale = transformRef.current.scale;
       // A horizontal tree swaps the layout axes on screen.
       const [screenX, screenY] = axis === 'horizontal' ? [node.y, node.x] : [node.x, node.y];
@@ -429,11 +446,13 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     [applyTransform]
   );
 
-  // A click on a node centers it once the layout that follows the click is in place. The ref
-  // holds the node; the counter makes the effect run even when the layout doesn't change.
+  // With `centerOnClick`, a click on a node centers it once the layout that follows the click is
+  // in place. The ref holds the node; the counter makes the effect run even when the layout
+  // doesn't change.
   const centerRequestRef = useRef<string | null>(null);
   const [centerRequestCount, setCenterRequestCount] = useState(0);
   const requestCenter = useCallback((nodeId: string) => {
+    if (!latest.current.centerOnClick) return;
     centerRequestRef.current = nodeId;
     setCenterRequestCount(count => count + 1);
   }, []);
@@ -535,7 +554,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
   };
 
   return (
-    <div className="rd3t-tree-container rd3t-grabbable">
+    <div ref={containerRef} className="rd3t-tree-container rd3t-grabbable">
       <style>{globalCss}</style>
       <svg
         ref={svgRef}

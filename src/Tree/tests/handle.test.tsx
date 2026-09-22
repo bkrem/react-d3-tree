@@ -9,6 +9,7 @@ import {
   getNodeByLabel,
   getSvg,
   getTreeGroup,
+  mockContainerSize,
   nodeElements,
   nodeLabels,
   transformCoordinates,
@@ -96,30 +97,26 @@ describe('TreeHandle', () => {
     expect(view.handle().getTransform()).toEqual({ x: 12, y: 34, k: 0.5 });
   });
 
-  it('centers a node by id at the live scale', () => {
-    const dimensions = { width: 400, height: 300 };
-    const view = mount({
-      dimensions,
-      orientation: 'vertical',
-      zoom: 0.5,
-      centeringTransitionDuration: 0,
-    });
+  it('centers a node by id at the live scale, in the container size measured on mount', () => {
+    const size = { width: 400, height: 300 };
+    mockContainerSize(size.width, size.height);
+    const view = mount({ orientation: 'vertical', zoom: 0.5, centeringTransitionDuration: 0 });
     const { x, y } = transformCoordinates(getNodeByLabel(view.container, 'branch-b'));
 
     view.handle().centerNode('0.1');
 
-    const expected = { x: -x * 0.5 + dimensions.width / 2, y: -y * 0.5 + dimensions.height / 2 };
+    const expected = { x: -x * 0.5 + size.width / 2, y: -y * 0.5 + size.height / 2 };
     expect(zoomTransform(getSvg(view.container))).toMatchObject({ ...expected, k: 0.5 });
     expect(getTreeGroup(view.container).getAttribute('transform')).toBe(
       `translate(${expected.x},${expected.y}) scale(0.5)`
     );
+    vi.restoreAllMocks();
   });
 
-  it('ignores centerNode without dimensions or for an unknown id', () => {
+  it('ignores centerNode for an unknown id', () => {
     const view = mount({ zoom: 0.5, centeringTransitionDuration: 0 });
     const before = { ...zoomTransform(getSvg(view.container)) };
 
-    view.handle().centerNode('0.1');
     view.handle().centerNode('no-such-node');
 
     expect(zoomTransform(getSvg(view.container))).toMatchObject(before);

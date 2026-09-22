@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { CustomNodeElementProps, RawNodeDatum, TreeNodeEventCallback } from '../../index.js';
 import type { OnUpdate } from './helpers.js';
@@ -11,6 +11,7 @@ import {
   getSvg,
   getTreeGroup,
   linkElements,
+  mockContainerSize,
   nodeElements,
   nodeLabels,
   queryOrThrow,
@@ -244,16 +245,21 @@ describe('<Tree />', () => {
     });
   });
 
-  describe('centerNode', () => {
-    const dimensions = { width: 400, height: 300 };
+  describe('centerOnClick', () => {
+    const size = { width: 400, height: 300 };
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
 
     it.each(['horizontal', 'vertical'] as const)(
       'centers the clicked node in a %s tree',
       orientation => {
+        mockContainerSize(size.width, size.height);
         const zoom = 0.5;
         const view = renderTree({
           data: mockData,
-          dimensions,
+          centerOnClick: true,
           orientation,
           zoom,
           centeringTransitionDuration: 0,
@@ -264,17 +270,18 @@ describe('<Tree />', () => {
         // The node's rendered transform is its layout position in screen axes.
         const { x, y } = transformCoordinates(getNodeByLabel(view.container, '2: A'));
         expect(zoomTransform(getSvg(view.container))).toMatchObject({
-          x: -x * zoom + dimensions.width / 2,
-          y: -y * zoom + dimensions.height / 2,
+          x: -x * zoom + size.width / 2,
+          y: -y * zoom + size.height / 2,
           k: zoom,
         });
       }
     );
 
     it('centers on click even when the tree is not collapsible', () => {
+      mockContainerSize(size.width, size.height);
       const view = renderTree({
         data: mockData,
-        dimensions,
+        centerOnClick: true,
         collapsible: false,
         zoom: 1,
         centeringTransitionDuration: 0,
@@ -284,14 +291,15 @@ describe('<Tree />', () => {
       click(circleOf(view.container, '2: B'));
 
       expect(zoomTransform(getSvg(view.container))).toMatchObject({
-        x: -x + dimensions.width / 2,
-        y: -y + dimensions.height / 2,
+        x: -x + size.width / 2,
+        y: -y + size.height / 2,
         k: 1,
       });
     });
 
-    it('does nothing without `dimensions`', () => {
-      const view = renderTree({ data: mockData, zoom: 0.5 });
+    it('does nothing without `centerOnClick`', () => {
+      mockContainerSize(size.width, size.height);
+      const view = renderTree({ data: mockData, zoom: 0.5, centeringTransitionDuration: 0 });
       const before = { ...zoomTransform(getSvg(view.container)) };
 
       click(circleOf(view.container, '2: A'));

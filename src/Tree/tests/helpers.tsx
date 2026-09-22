@@ -1,4 +1,5 @@
 import { act, fireEvent, render } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import Tree from '../../index.js';
 import type { TreeProps } from '../../index.js';
@@ -91,6 +92,21 @@ export const transformCoordinates = (element: Element) => {
 export const formatMarkup = (html: string) => html.replace(/></g, '>\n<');
 
 export const renderedMarkup = (container: HTMLElement) => formatMarkup(container.innerHTML);
+
+// jsdom reports every element as 0 by 0. The tree measures its container through
+// `getBoundingClientRect` on mount, so install this before rendering; restore it afterwards.
+export const mockContainerSize = (width: number, height: number) =>
+  vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+    width,
+    height,
+    x: 0,
+    y: 0,
+    top: 0,
+    left: 0,
+    right: width,
+    bottom: height,
+    toJSON: () => ({}),
+  });
 
 export type ZoomTransform = { x: number; y: number; k: number };
 

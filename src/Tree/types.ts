@@ -39,9 +39,9 @@ export type TreeTransform = { x: number; y: number; k: number };
  */
 export interface TreeHandle {
   /**
-   * Centers the node with `id` in the container. Needs `dimensions`. Animates over
-   * `options.duration` milliseconds, or `centeringTransitionDuration` by default; a duration of
-   * 0 applies the transform at once.
+   * Centers the node with `id` in the container, using the container size the tree measured.
+   * Animates over `options.duration` milliseconds, or `centeringTransitionDuration` by default;
+   * a duration of 0 applies the transform at once.
    */
   centerNode(id: string, options?: { duration?: number }): void;
   /** Collapses or expands the node with `id`. Works even when `collapsible` is false. */
@@ -164,20 +164,17 @@ export interface TreeProps {
   translate?: Point;
 
   /**
-   * Enables the centering of nodes on click by providing the dimensions of the tree container,
-   * e.g. via {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect | `getBoundingClientRect()`}.
-   *
-   * If dimensions are given: node will center on click. If not, node will not center on click.
+   * Centers a node in the container when it is clicked. The tree measures its container
+   * itself, so nothing else is needed. Off by default. `centerNode` on the ref handle centers a
+   * node at any other time.
    */
-  dimensions?: {
-    width: number;
-    height: number;
-  };
+  centerOnClick?: boolean;
 
   /**
-   * Sets the time (in milliseconds) for the transition to center a node once clicked.
+   * The duration (in milliseconds) of the animation that centers a node. 0 applies the change
+   * at once.
    *
-   * {@link Tree.defaultProps.centeringTransitionDuration | Default value}
+   * @default 800
    */
   centeringTransitionDuration?: number;
 
