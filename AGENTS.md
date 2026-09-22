@@ -17,7 +17,7 @@ Beyond obvious source-level API changes, a change is breaking if it affects any 
 - Build output: changing the `exports` map or the CJS, ESM, or types entry points, dropping a module format, or raising the compile target (CJS `es5`, ESM `es6`) so runtimes or bundlers that work today stop working.
 - Shipped types: raising the minimum TypeScript version the `.d.ts` files need, or changing emitted types so existing consumer code stops type-checking.
 
-When unsure whether a change breaks consumers, treat it as breaking.
+When a change might break consumers, don't assume either way. Research and validate it: build the package before and after and compare the output, run the smoke test and any package checks the repo has, and test the specific consumer setup the change could affect (module format, resolution mode, TypeScript version). Record what you verified and what stays unverified. If the evidence still leaves a judgement call, for example a fix that changes what some consumers see, give the maintainer the evidence and let them decide; don't classify the change as breaking or safe on an untested assumption.
 
 ## Architecture
 
