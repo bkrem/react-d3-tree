@@ -11,7 +11,12 @@ import clone from 'clone';
 import Node from '../Node/index.js';
 import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
-import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types.js';
+import {
+  CollapsedChange,
+  TreeLinkEventCallback,
+  TreeNodeEventCallback,
+  TreeProps,
+} from './types.js';
 import globalCss from '../globalCss.js';
 import { warnOnce } from '../warn.js';
 
@@ -22,11 +27,11 @@ const DEFAULT_SEPARATION = { siblings: 1, nonSiblings: 2 };
 
 type Geometry = { translate: Point; scale: number };
 
-// The internal copy of `data`, stamped with `__rd3t`, plus what it was derived from.
-type InternalData = {
-  source: TreeProps['data'];
-  dataKey: string | undefined;
-  data: TreeNodeDatum[];
+/** `data` with every id filled in, plus lookups by id. Built once per `data` reference. */
+type InternalTree = {
+  root: TreeNodeDatum;
+  nodeById: Map<string, TreeNodeDatum>;
+  depthById: Map<string, number>;
 };
 
 type LayoutOptions = {
@@ -36,113 +41,46 @@ type LayoutOptions = {
   depthFactor: number | undefined;
 };
 
-type StampOptions = {
-  /** The id of the parent, or null for the root level. Path ids are built from it. */
-  parentId: string | null;
-  /** The index of the first node in `nodes` among its siblings. */
-  firstIndex: number;
-  depth: number;
-  initialDepth: number | undefined;
-  /** Every id assigned so far, for the duplicate warning. */
-  seen: Set<string>;
-};
-
 /**
- * Stamps every node in `nodes` with the internal id, depth, and collapsed state the tree needs.
- * A node without an `id` gets its path: the root is `"0"`, its children `"0.0"`, `"0.1"`, and
- * so on. Mutates and returns `nodes`; callers pass a clone. With `initialDepth`, nodes at that
- * depth and below start collapsed.
+ * Copies `data` node by node, giving every node an id. A node without one gets its path: the
+ * root is `"0"`, its children `"0.0"`, `"0.1"`, and so on. The caller's objects are left as
+ * they are; `attributes` are shared by reference.
  */
-function assignInternalProperties(nodes: RawNodeDatum[], options: StampOptions): TreeNodeDatum[] {
-  const { parentId, firstIndex, depth, initialDepth, seen } = options;
-  return nodes.map((n, offset) => {
-    const nodeDatum = n as TreeNodeDatum;
-    const index = firstIndex + offset;
-    const path = parentId === null ? `${index}` : `${parentId}.${index}`;
-    const id = nodeDatum.id ?? path;
-    if (seen.has(id)) {
+function buildInternalTree(data: RawNodeDatum): InternalTree {
+  const nodeById = new Map<string, TreeNodeDatum>();
+  const depthById = new Map<string, number>();
+  const visit = (node: RawNodeDatum, path: string, depth: number): TreeNodeDatum => {
+    const id = node.id ?? path;
+    if (nodeById.has(id)) {
       warnOnce(`two nodes share the id "${id}"; collapse state and keys need unique ids.`);
     }
-    seen.add(id);
-    nodeDatum.__rd3t = {
-      id,
-      depth,
-      collapsed: initialDepth !== undefined && depth >= initialDepth,
-    };
-    if (nodeDatum.children && nodeDatum.children.length > 0) {
-      nodeDatum.children = assignInternalProperties(nodeDatum.children, {
-        parentId: id,
-        firstIndex: 0,
-        depth: depth + 1,
-        initialDepth,
-        seen,
-      });
+    const { children, ...rest } = node;
+    const copy: TreeNodeDatum = { ...rest, id };
+    if (children && children.length > 0) {
+      copy.children = children.map((child, index) => visit(child, `${id}.${index}`, depth + 1));
+    } else if (children) {
+      copy.children = [];
     }
-    return nodeDatum;
-  });
+    nodeById.set(id, copy);
+    depthById.set(id, depth);
+    return copy;
+  };
+  return { root: visit(data, '0', 0), nodeById, depthById };
 }
 
-/** Clones `data` and stamps it; the tree keeps the root in a one-element array. */
-function buildInternalData(data: RawNodeDatum, initialDepth?: number): TreeNodeDatum[] {
-  return assignInternalProperties([clone(data)], {
-    parentId: null,
-    firstIndex: 0,
-    depth: 0,
-    initialDepth,
-    seen: new Set(),
-  });
-}
-
-/** Every id in the nested `nodeSet`. */
-function collectIds(nodeSet: TreeNodeDatum[], ids = new Set<string>()): Set<string> {
-  for (const node of nodeSet) {
-    ids.add(node.__rd3t.id);
-    if (node.children && node.children.length > 0) collectIds(node.children, ids);
+/** The ids at `depth` or deeper: what `initialDepth` collapses. */
+function idsFromDepth(tree: InternalTree, depth: number): string[] {
+  const ids: string[] = [];
+  for (const [id, nodeDepth] of tree.depthById) {
+    if (nodeDepth >= depth) ids.push(id);
   }
   return ids;
 }
 
-/** Walks the nested `nodeSet` until a node matching `nodeId` is found. */
-function findNodeById(nodeId: string, nodeSet: TreeNodeDatum[]): TreeNodeDatum | undefined {
-  for (const node of nodeSet) {
-    if (node.__rd3t.id === nodeId) return node;
-    if (node.children && node.children.length > 0) {
-      const hit = findNodeById(nodeId, node.children);
-      if (hit) return hit;
-    }
-  }
-  return undefined;
-}
-
-/** Collects every node in the nested `nodeSet` at `depth`. */
-function findNodesAtDepth(depth: number, nodeSet: TreeNodeDatum[]): TreeNodeDatum[] {
-  const hits: TreeNodeDatum[] = [];
-  for (const node of nodeSet) {
-    if (node.__rd3t.depth === depth) hits.push(node);
-    if (node.children && node.children.length > 0) {
-      hits.push(...findNodesAtDepth(depth, node.children));
-    }
-  }
-  return hits;
-}
-
-/** Collapses `nodeDatum` and every node below it. */
-function collapseNode(nodeDatum: TreeNodeDatum) {
-  nodeDatum.__rd3t.collapsed = true;
-  if (nodeDatum.children && nodeDatum.children.length > 0) {
-    nodeDatum.children.forEach(collapseNode);
-  }
-}
-
-function expandNode(nodeDatum: TreeNodeDatum) {
-  nodeDatum.__rd3t.collapsed = false;
-}
-
-/** Collapses every node at the same depth as `targetNode`, except `targetNode` itself. */
-function collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
-  findNodesAtDepth(targetNode.__rd3t.depth, nodeSet)
-    .filter(node => node.__rd3t.id !== targetNode.__rd3t.id)
-    .forEach(collapseNode);
+/** Adds `node` and everything below it to `into`. */
+function collapseSubtree(node: TreeNodeDatum, into: Set<string>) {
+  into.add(node.id);
+  node.children?.forEach(child => collapseSubtree(child, into));
 }
 
 /**
@@ -159,18 +97,16 @@ function calculateGeometry(zoom: number, min: number, max: number, translate: Po
   return { translate, scale };
 }
 
-/** Lays out the tree from the root of `data`, honouring collapsed nodes and `depthFactor`. */
-function generateTree(data: TreeNodeDatum[], options: LayoutOptions) {
+/** Lays out the tree from `root`, hiding the children of collapsed nodes. */
+function generateTree(root: TreeNodeDatum, collapsed: Set<string>, options: LayoutOptions) {
   const { orientation, nodeSize, separation, depthFactor } = options;
   const tree = d3tree<TreeNodeDatum>()
     .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
     .separation((a, b) =>
-      a.parent?.data.__rd3t.id === b.parent?.data.__rd3t.id
-        ? separation.siblings
-        : separation.nonSiblings
+      a.parent?.data.id === b.parent?.data.id ? separation.siblings : separation.nonSiblings
     );
 
-  const rootNode = tree(hierarchy(data[0], d => (d.__rd3t.collapsed ? null : d.children)));
+  const rootNode = tree(hierarchy(root, d => (collapsed.has(d.id) ? null : d.children)));
   const nodes = rootNode.descendants();
   const links = rootNode.links();
 
@@ -193,6 +129,8 @@ function Tree(props: TreeProps): ReactElement {
     depthFactor,
     collapsible = true,
     initialDepth,
+    collapsed,
+    onCollapsedChange,
     zoomable = true,
     draggable = true,
     zoom = 1,
@@ -208,7 +146,6 @@ function Tree(props: TreeProps): ReactElement {
     hasInteractiveNodes = false,
     dimensions,
     centeringTransitionDuration = 800,
-    dataKey,
     onNodeClick,
     onNodeMouseOver,
     onNodeMouseOut,
@@ -232,9 +169,40 @@ function Tree(props: TreeProps): ReactElement {
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
 
-  // The latest props, for the callbacks and d3 handlers that outlive the render they were
-  // created in. React flushes this effect before it dispatches the next event.
-  const latestProps = {
+  const tree = useMemo(() => buildInternalTree(data), [data]);
+
+  // Collapse state: the caller's set when `collapsed` is given, otherwise the tree's own.
+  const controlledCollapsed = useMemo(
+    () => (collapsed === undefined ? undefined : new Set(collapsed)),
+    [collapsed]
+  );
+  const [ownCollapsed, setOwnCollapsed] = useState(
+    () => new Set(initialDepth === undefined ? [] : idsFromDepth(tree, initialDepth))
+  );
+  // A `data` update keeps the state of the ids that survive it, applies the `initialDepth` rule
+  // to ids that are new, and drops ids that left.
+  const [seenTree, setSeenTree] = useState(tree);
+  if (tree !== seenTree) {
+    setSeenTree(tree);
+    setOwnCollapsed(previous => {
+      const next = new Set<string>();
+      for (const [id, depth] of tree.depthById) {
+        const keep = seenTree.depthById.has(id)
+          ? previous.has(id)
+          : initialDepth !== undefined && depth >= initialDepth;
+        if (keep) next.add(id);
+      }
+      return next;
+    });
+  }
+  const effectiveCollapsed = controlledCollapsed ?? ownCollapsed;
+
+  // The latest props and state, for the callbacks and d3 handlers that outlive the render they
+  // were created in. React flushes this effect before it dispatches the next event.
+  const latestValues = {
+    tree,
+    collapsed: effectiveCollapsed,
+    controlled: controlledCollapsed !== undefined,
     collapsible,
     shouldCollapseNeighborNodes,
     draggable,
@@ -243,6 +211,7 @@ function Tree(props: TreeProps): ReactElement {
     orientation,
     zoom,
     centeringTransitionDuration,
+    onCollapsedChange,
     onNodeClick,
     onNodeMouseOver,
     onNodeMouseOut,
@@ -251,23 +220,10 @@ function Tree(props: TreeProps): ReactElement {
     onLinkMouseOut,
     onUpdate,
   };
-  const latest = useRef(latestProps);
+  const latest = useRef(latestValues);
   useEffect(() => {
-    latest.current = latestProps;
+    latest.current = latestValues;
   });
-
-  // The internal tree is state because toggles and `addChildren` change it. A new `data`
-  // reference replaces it, unless `dataKey` is set and unchanged.
-  const [internal, setInternal] = useState<InternalData>(() => ({
-    source: data,
-    dataKey,
-    data: buildInternalData(data, initialDepth),
-  }));
-  let current = internal;
-  if (data !== internal.source && (!dataKey || dataKey !== internal.dataKey)) {
-    current = { source: data, dataKey, data: buildInternalData(data, initialDepth) };
-    setInternal(current);
-  }
 
   const geometry = useMemo(
     () => calculateGeometry(zoom, scaleMin, scaleMax, { x: translateX, y: translateY }),
@@ -278,14 +234,15 @@ function Tree(props: TreeProps): ReactElement {
 
   const layout = useMemo(
     () =>
-      generateTree(current.data, {
+      generateTree(tree.root, effectiveCollapsed, {
         orientation,
         nodeSize: { x: nodeSizeX, y: nodeSizeY },
         separation: { siblings: siblingSeparation, nonSiblings: nonSiblingSeparation },
         depthFactor,
       }),
     [
-      current.data,
+      tree,
+      effectiveCollapsed,
       orientation,
       nodeSizeX,
       nodeSizeY,
@@ -343,13 +300,14 @@ function Tree(props: TreeProps): ReactElement {
     };
   }, [geometry, zoomable, draggable, zoom, scaleMin, scaleMax, translateX, translateY]);
 
-  // Reports each change of the internal tree through `onUpdate`: once after mount with no node,
-  // then once per toggle with the toggled node (or no node for `addChildren` and new data).
+  // Reports each change of the tree or its collapse state through `onUpdate`: once after mount
+  // with no node, then with the toggled node after a toggle (or no node for new data).
   const lastToggledRef = useRef<TreeNodeDatum | null>(null);
-  const reportedRef = useRef<TreeNodeDatum[] | null>(null);
+  const reportedRef = useRef<{ tree: InternalTree; collapsed: Set<string> } | null>(null);
   useEffect(() => {
-    if (reportedRef.current === current.data) return;
-    reportedRef.current = current.data;
+    const reported = reportedRef.current;
+    if (reported && reported.tree === tree && reported.collapsed === effectiveCollapsed) return;
+    reportedRef.current = { tree, collapsed: effectiveCollapsed };
     const node = lastToggledRef.current;
     lastToggledRef.current = null;
     const { onUpdate: report } = latest.current;
@@ -360,7 +318,50 @@ function Tree(props: TreeProps): ReactElement {
         translate: transformRef.current.translate,
       });
     }
-  }, [current.data]);
+  }, [tree, effectiveCollapsed]);
+
+  // Applies a collapse change: the tree's own state changes only in uncontrolled mode, and the
+  // caller hears about every change in both modes.
+  const commitCollapsed = useCallback((next: Set<string>, change: CollapsedChange | null) => {
+    const { controlled, onCollapsedChange: report } = latest.current;
+    if (!controlled) setOwnCollapsed(next);
+    if (typeof report === 'function') report(next, change);
+  }, []);
+
+  const toggleNode = useCallback(
+    (nodeId: string) => {
+      const {
+        tree: currentTree,
+        collapsed: current,
+        shouldCollapseNeighborNodes: collapseNeighbors,
+      } = latest.current;
+      const node = currentTree.nodeById.get(nodeId);
+      if (!node) return;
+
+      const next = new Set(current);
+      let change: CollapsedChange;
+      if (current.has(nodeId)) {
+        next.delete(nodeId);
+        if (collapseNeighbors) {
+          const depth = currentTree.depthById.get(nodeId);
+          for (const [otherId, otherDepth] of currentTree.depthById) {
+            const neighbor = currentTree.nodeById.get(otherId);
+            if (otherDepth === depth && otherId !== nodeId && neighbor) {
+              collapseSubtree(neighbor, next);
+            }
+          }
+        }
+        change = { id: nodeId, collapsed: false };
+      } else {
+        // Collapsing hides the whole subtree; re-expanding later shows one level at a time.
+        collapseSubtree(node, next);
+        change = { id: nodeId, collapsed: true };
+      }
+      lastToggledRef.current = node;
+      commitCollapsed(next, change);
+    },
+    [commitCollapsed]
+  );
 
   // A click on a node centers it once the layout that follows the click is in place. The ref
   // holds the node; the counter makes the effect run even when the layout doesn't change.
@@ -375,46 +376,14 @@ function Tree(props: TreeProps): ReactElement {
     (nodeId: string) => {
       requestCenter(nodeId);
       if (!latest.current.collapsible) return;
-      setInternal(prev => {
-        const nextData = clone(prev.data);
-        const target = findNodeById(nodeId, nextData);
-        if (!target) return prev;
-
-        if (target.__rd3t.collapsed) {
-          expandNode(target);
-          if (latest.current.shouldCollapseNeighborNodes) collapseNeighborNodes(target, nextData);
-        } else {
-          collapseNode(target);
-        }
-        lastToggledRef.current = target;
-        return { ...prev, data: nextData };
-      });
+      toggleNode(nodeId);
     },
-    [requestCenter]
+    [requestCenter, toggleNode]
   );
-
-  const handleAddChildrenToNode = useCallback((nodeId: string, childrenData: RawNodeDatum[]) => {
-    setInternal(prev => {
-      const nextData = clone(prev.data);
-      const target = findNodeById(nodeId, nextData);
-      if (!target) return prev;
-
-      target.children = target.children || [];
-      const added = assignInternalProperties(clone(childrenData), {
-        parentId: target.__rd3t.id,
-        firstIndex: target.children.length,
-        depth: target.__rd3t.depth + 1,
-        initialDepth: undefined,
-        seen: collectIds(nextData),
-      });
-      target.children.push(...added);
-      return { ...prev, data: nextData };
-    });
-  }, []);
 
   const handleOnNodeClickCb = useCallback<TreeNodeEventCallback>(
     (hierarchyPointNode, evt) => {
-      requestCenter(hierarchyPointNode.data.__rd3t.id);
+      requestCenter(hierarchyPointNode.data.id);
       const { onNodeClick: handler } = latest.current;
       if (typeof handler === 'function') {
         evt.persist();
@@ -501,7 +470,7 @@ function Tree(props: TreeProps): ReactElement {
     const nodeId = centerRequestRef.current;
     if (nodeId === null) return;
     centerRequestRef.current = null;
-    const target = layout.nodes.find(node => node.data.__rd3t.id === nodeId);
+    const target = layout.nodes.find(node => node.data.id === nodeId);
     if (target) centerNode(target);
   }, [layout, centerRequestCount, centerNode]);
 
@@ -531,7 +500,7 @@ function Tree(props: TreeProps): ReactElement {
         >
           {layout.links.map(linkData => (
             <Link
-              key={linkData.target.data.__rd3t.id}
+              key={linkData.target.data.id}
               orientation={orientation}
               pathFunc={pathFunc}
               pathClassFunc={pathClassFunc}
@@ -546,7 +515,7 @@ function Tree(props: TreeProps): ReactElement {
             const { data: nodeDatum, x, y, parent } = hierarchyPointNode;
             return (
               <Node
-                key={nodeDatum.__rd3t.id}
+                key={nodeDatum.id}
                 data={nodeDatum}
                 position={{ x, y }}
                 hierarchyPointNode={hierarchyPointNode}
@@ -557,7 +526,6 @@ function Tree(props: TreeProps): ReactElement {
                 onNodeClick={handleOnNodeClickCb}
                 onNodeMouseOver={handleOnNodeMouseOverCb}
                 onNodeMouseOut={handleOnNodeMouseOutCb}
-                handleAddChildrenToNode={handleAddChildrenToNode}
               />
             );
           })}

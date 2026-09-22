@@ -4,6 +4,7 @@ import Tree from '../../index.js';
 import type { TreeProps } from '../../index.js';
 
 export type OnUpdate = NonNullable<TreeProps['onUpdate']>;
+export type OnCollapsedChange = NonNullable<TreeProps['onCollapsedChange']>;
 
 export type TreeView = {
   container: HTMLElement;

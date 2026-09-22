@@ -4,7 +4,6 @@ import type { CustomNodeElementProps, RawNodeDatum, TreeNodeEventCallback } from
 import type { OnUpdate } from './helpers.js';
 import { mockData, mockData2, mockData4, mockTree_D1N2_D2N2 } from './mockData.js';
 import {
-  act,
   circleOf,
   click,
   dispatch,
@@ -196,51 +195,26 @@ describe('<Tree />', () => {
     });
   });
 
-  describe('addChildren', () => {
-    const newChildren: RawNodeDatum[] = [
-      { name: 'added A' },
-      { name: 'added B', children: [{ name: 'added B1' }] },
-    ];
-
-    // Renders every node as a circle that records its name and depth, and captures the
-    // `addChildren` handler of the node named `target`.
-    const captureAddChildren = (target: string) => {
-      let addChildren: CustomNodeElementProps['addChildren'] | undefined;
-      const renderCustomNodeElement = (props: CustomNodeElementProps) => {
-        if (props.nodeDatum.name === target) {
-          addChildren = props.addChildren;
-        }
-        return (
-          <circle
-            r={10}
-            data-name={props.nodeDatum.name}
-            data-depth={props.hierarchyPointNode.depth}
-          />
-        );
-      };
-      return {
-        renderCustomNodeElement,
-        addChildren: (children: RawNodeDatum[]) => {
-          if (!addChildren) throw new Error(`addChildren was not captured for ${target}`);
-          const captured = addChildren;
-          act(() => {
-            captured(children);
-          });
-        },
-      };
+  describe('children added through a data update', () => {
+    const renderCustomNodeElement = (props: CustomNodeElementProps) => (
+      <circle r={10} data-name={props.nodeDatum.name} data-depth={props.hierarchyPointNode.depth} />
+    );
+    const withAddedChildren = (): RawNodeDatum => {
+      const data: RawNodeDatum = JSON.parse(JSON.stringify(mockData));
+      data.children!.push(
+        { name: 'added A' },
+        { name: 'added B', children: [{ name: 'added B1' }] }
+      );
+      return data;
     };
 
-    it('appends the children and their descendants below the target node', () => {
-      const capture = captureAddChildren('Top Level');
-      const view = renderTree({
-        data: mockData,
-        renderCustomNodeElement: capture.renderCustomNodeElement,
-      });
+    it('renders the new nodes at their depth below an expanded parent', () => {
+      const view = renderTree({ data: mockData, renderCustomNodeElement });
       const depthOf = (name: string) =>
         queryOrThrow(view.container, `[data-name="${name}"]`).getAttribute('data-depth');
       expect(nodeElements(view.container)).toHaveLength(5);
 
-      capture.addChildren(newChildren);
+      view.rerender({ data: withAddedChildren(), renderCustomNodeElement });
 
       expect(nodeElements(view.container)).toHaveLength(8);
       expect(linkElements(view.container)).toHaveLength(7);
@@ -249,20 +223,24 @@ describe('<Tree />', () => {
       expect(depthOf('added B1')).toBe('2');
     });
 
-    it('does nothing when the node it was captured from has been removed', () => {
-      // The last node of `mockData` has no counterpart in `mockData2`, so its element unmounts.
-      const capture = captureAddChildren('3: Daughter of A');
-      const view = renderTree({
-        data: mockData,
-        renderCustomNodeElement: capture.renderCustomNodeElement,
-      });
+    it('keeps them hidden below a collapsed parent until it expands', () => {
+      const view = renderTree({ data: mockData });
+      click(circleOf(view.container, 'Top Level'));
+      expect(nodeLabels(view.container)).toEqual(['Top Level']);
 
-      view.rerender({ data: mockData2, renderCustomNodeElement: capture.renderCustomNodeElement });
-      expect(nodeElements(view.container)).toHaveLength(2);
+      view.rerender({ data: withAddedChildren() });
+      expect(nodeLabels(view.container)).toEqual(['Top Level']);
 
-      capture.addChildren(newChildren);
-
-      expect(nodeElements(view.container)).toHaveLength(2);
+      // Expanding the root shows one level: the new nodes and the old ones, which stay collapsed.
+      click(circleOf(view.container, 'Top Level'));
+      expect(nodeLabels(view.container)).toEqual([
+        'Top Level',
+        '2: A',
+        '2: B',
+        'added A',
+        'added B',
+        'added B1',
+      ]);
     });
   });
 

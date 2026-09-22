@@ -385,7 +385,13 @@ deleted. The 15 snapshots changed only in the ids. Two decisions taken while imp
 `svg` gets no `useId`-derived `id`, because nothing in the DOM contract references it and it
 would put a React-generated token into every snapshot; and `dataKey` gets no replacement in
 5.2, because with path ids a new dataset reuses the old ids, so the React answer is a `key`
-remount (`<Tree key={datasetId} />`), which the migration guide will say. 5.2 to 5.5 follow.
+remount (`<Tree key={datasetId} />`), which the migration guide will say. 5.2 landed
+(`feat: own collapse state as a set of ids`): the internal tree is a memo over `data` (no deep
+clone; caller data untouched), `__rd3t` is gone from `TreeNodeDatum` in favour of `id`, the
+collapsed set is the only tree state with a controlled mode (`collapsed` + `onCollapsedChange`)
+and an uncontrolled mode (seeded from `initialDepth`, kept across `data` updates for surviving
+ids, `initialDepth` applied to new ids), `dataKey` and `addChildren` are gone, and `clone` no
+longer runs on the toggle path. Snapshots unchanged. 5.3 to 5.5 follow.
 
 Goal: the API described in [The v4 API](#the-v4-api), one concern per PR.
 

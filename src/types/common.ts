@@ -20,13 +20,10 @@ export interface RawNodeDatum {
   children?: RawNodeDatum[];
 }
 
+/** A node as the tree hands it to renderers and callbacks: `RawNodeDatum` with its id filled in. */
 export interface TreeNodeDatum extends RawNodeDatum {
+  id: string;
   children?: TreeNodeDatum[];
-  __rd3t: {
-    id: string;
-    depth: number;
-    collapsed: boolean;
-  };
 }
 
 export interface TreeLinkDatum {
@@ -39,7 +36,6 @@ export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => st
 export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
-export type AddChildrenFunction = (children: RawNodeDatum[]) => void;
 
 /**
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
@@ -73,10 +69,6 @@ export interface CustomNodeElementProps {
    * The `onNodeMouseOut` handler defined for `Tree` (if any).
    */
   onNodeMouseOut: SyntheticEventHandler;
-  /**
-   * The `Node` class's internal `addChildren` handler.
-   */
-  addChildren: AddChildrenFunction;
 }
 
 export type RenderCustomNodeElementFn = (rd3tNodeProps: CustomNodeElementProps) => ReactElement;

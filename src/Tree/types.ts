@@ -22,6 +22,9 @@ export type TreeLinkEventCallback = (
   event: SyntheticEvent
 ) => void;
 
+/** One node's collapse or expansion, as reported by `onCollapsedChange`. */
+export type CollapsedChange = { id: string; collapsed: boolean };
+
 /**
  * Props accepted by the `Tree` component.
  *
@@ -186,13 +189,30 @@ export interface TreeProps {
   collapsible?: boolean;
 
   /**
-   * Sets the maximum node depth to which the tree is expanded on its initial render.
-   *
-   * By default, the tree renders to full depth.
-   *
-   * {@link Tree.defaultProps.initialDepth | Default value}
+   * The depth at and below which nodes start collapsed. Without it, the tree renders to full
+   * depth. The rule applies when the tree first sees a node: at mount, and for nodes that a
+   * `data` update introduces. Ignored when `collapsed` is set.
    */
   initialDepth?: number;
+
+  /**
+   * The ids of the collapsed nodes, when the caller owns the collapse state. The tree renders
+   * exactly this set and reports every requested change through `onCollapsedChange` without
+   * changing anything itself.
+   *
+   * Without it, the tree owns the state: it seeds the state from `initialDepth`, keeps it
+   * across `data` updates for the ids that survive them, and applies the `initialDepth` rule to
+   * ids that are new. To reset it for a new dataset, remount the tree with a `key`.
+   */
+  collapsed?: Iterable<string>;
+
+  /**
+   * Called with the next collapsed set and the change that asked for it whenever a click asks
+   * for a toggle (or, with `shouldCollapseNeighborNodes`, for the neighbours to collapse as
+   * well). `change` is `null` for a wholesale change. In uncontrolled mode the tree applies the
+   * change itself as well.
+   */
+  onCollapsedChange?: (collapsed: Set<string>, change: CollapsedChange | null) => void;
 
   /**
    * Toggles ability to zoom in/out on the Tree by scaling it according to `scaleExtent`.
@@ -290,13 +310,4 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
-
-  /**
-   * Indicates the tree being represented by the data. If the dataKey changes, then we should re-render the tree.
-   * If the data changes but the dataKey keeps being the same, then it's a change (like adding children to a node) for the same tree,
-   * so we shouldn't re-render the tree.
-   *
-   * {@link Tree.defaultProps.dataKey | Default value}
-   */
-  dataKey?: string;
 }

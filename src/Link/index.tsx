@@ -103,8 +103,8 @@ function Link({
       onClick={evt => onClick(source, target, evt)}
       onMouseOver={evt => onMouseOver(source, target, evt)}
       onMouseOut={evt => onMouseOut(source, target, evt)}
-      data-source-id={source.data.__rd3t.id}
-      data-target-id={target.data.__rd3t.id}
+      data-source-id={source.data.id}
+      data-target-id={target.data.id}
     />
   );
 }

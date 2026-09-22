@@ -1,5 +1,7 @@
+import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import Tree from '../../index.js';
 import type {
   CustomNodeElementProps,
   PathClassFunction,
@@ -8,7 +10,7 @@ import type {
   TreeLinkEventCallback,
   TreeNodeEventCallback,
 } from '../../index.js';
-import type { OnUpdate } from './helpers.js';
+import type { OnCollapsedChange, OnUpdate } from './helpers.js';
 import {
   circleOf,
   click,
@@ -66,33 +68,47 @@ describe('Tree public behavior', () => {
       expect(linkElements(view.container)).toHaveLength(1);
     });
 
-    it('keeps the rendered dataset when its dataKey is unchanged', () => {
-      const view = renderTree({ data: treeData(), dataKey: 'dataset-a' });
+    it('keeps collapse state across a data update for the ids that survive it', () => {
+      const view = renderTree({ data: treeData(), initialDepth: 1 });
+      click(circleOf(view.container, 'branch-a'));
+      expect(nodeLabels(view.container)).toEqual([
+        'root',
+        'branch-a',
+        'branch-b',
+        'leaf-a1',
+        'leaf-a2',
+      ]);
 
-      view.rerender({ data: replacementData(), dataKey: 'dataset-a' });
+      const updated = treeData();
+      updated.children![1].children!.push({ name: 'leaf-b2' });
+      view.rerender({ data: updated, initialDepth: 1 });
 
-      expect(nodeLabels(view.container)).toContain('root');
-      expect(nodeLabels(view.container)).not.toContain('replacement-root');
+      // branch-a stays expanded, branch-b stays collapsed with its new leaf hidden.
+      expect(nodeLabels(view.container)).toEqual([
+        'root',
+        'branch-a',
+        'branch-b',
+        'leaf-a1',
+        'leaf-a2',
+      ]);
     });
 
-    it('replaces the rendered dataset when its dataKey changes', () => {
-      const view = renderTree({ data: treeData(), dataKey: 'dataset-a' });
+    it('applies initialDepth to nodes that a data update introduces', () => {
+      const view = renderTree({ data: treeData(), initialDepth: 1 });
 
-      view.rerender({ data: replacementData(), dataKey: 'dataset-b' });
+      const updated = treeData();
+      updated.children!.push({ name: 'branch-c', children: [{ name: 'leaf-c1' }] });
+      view.rerender({ data: updated, initialDepth: 1 });
 
-      expect(nodeLabels(view.container)).toEqual(['replacement-root', 'replacement-leaf']);
+      expect(nodeLabels(view.container)).toEqual(['root', 'branch-a', 'branch-b', 'branch-c']);
     });
 
-    it('reapplies initialDepth when a new dataset is rendered', () => {
-      const view = renderTree({ data: treeData(), dataKey: 'dataset-a', initialDepth: 0 });
+    it('resets collapse state when the tree remounts with a new key', () => {
+      const view = render(<Tree key="a" data={treeData()} initialDepth={0} />);
       click(circleOf(view.container, 'root'));
       expect(nodeElements(view.container).length).toBeGreaterThan(1);
 
-      view.rerender({
-        data: replacementData(),
-        dataKey: 'dataset-b',
-        initialDepth: 0,
-      });
+      view.rerender(<Tree key="b" data={replacementData()} initialDepth={0} />);
 
       expect(nodeLabels(view.container)).toEqual(['replacement-root']);
       expect(linkElements(view.container)).toHaveLength(0);
@@ -164,6 +180,60 @@ describe('Tree public behavior', () => {
 
       click(circleOf(view.container, 'branch-b'));
       expect(nodeLabels(view.container)).toEqual(['root', 'branch-a', 'branch-b', 'leaf-b1']);
+    });
+  });
+
+  describe('collapse state', () => {
+    it('reports every toggle through onCollapsedChange in uncontrolled mode', () => {
+      const onCollapsedChange = vi.fn<OnCollapsedChange>();
+      const view = renderTree({ data: treeData(), onCollapsedChange });
+
+      click(circleOf(view.container, 'branch-a'));
+      click(circleOf(view.container, 'branch-a'));
+
+      expect(onCollapsedChange).toHaveBeenCalledTimes(2);
+      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.0', '0.0.0', '0.0.1']);
+      expect(onCollapsedChange.mock.calls[0][1]).toEqual({ id: '0.0', collapsed: true });
+      expect([...onCollapsedChange.mock.calls[1][0]]).toEqual(['0.0.0', '0.0.1']);
+      expect(onCollapsedChange.mock.calls[1][1]).toEqual({ id: '0.0', collapsed: false });
+    });
+
+    it('renders exactly the controlled set and leaves changing it to the caller', () => {
+      const onCollapsedChange = vi.fn<OnCollapsedChange>();
+      const data = treeData();
+      const view = renderTree({ data, collapsed: ['0.1'], onCollapsedChange });
+      expect(nodeLabels(view.container)).toEqual([
+        'root',
+        'branch-a',
+        'branch-b',
+        'leaf-a1',
+        'leaf-a2',
+      ]);
+
+      click(circleOf(view.container, 'branch-a'));
+
+      // The request is reported, the tree is unchanged.
+      expect(onCollapsedChange).toHaveBeenCalledTimes(1);
+      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.1', '0.0', '0.0.0', '0.0.1']);
+      expect(nodeLabels(view.container)).toEqual([
+        'root',
+        'branch-a',
+        'branch-b',
+        'leaf-a1',
+        'leaf-a2',
+      ]);
+
+      view.rerender({ data, collapsed: onCollapsedChange.mock.calls[0][0], onCollapsedChange });
+      expect(nodeLabels(view.container)).toEqual(['root', 'branch-a', 'branch-b']);
+
+      view.rerender({ data, collapsed: [], onCollapsedChange });
+      expect(nodeElements(view.container)).toHaveLength(6);
+    });
+
+    it('ignores initialDepth while the caller owns the collapse state', () => {
+      const view = renderTree({ data: treeData(), initialDepth: 0, collapsed: [] });
+
+      expect(nodeElements(view.container)).toHaveLength(6);
     });
   });
 
@@ -380,23 +450,14 @@ describe('Tree public behavior', () => {
       expect(onNodeMouseOut.mock.calls[0][0].data.name).toBe('root');
     });
 
-    it('adds children through a custom leaf node without mutating the input', () => {
-      const data: RawNodeDatum = { name: 'root' };
-      const before = JSON.parse(JSON.stringify(data));
-      const renderCustomNodeElement = (props: CustomNodeElementProps) => (
-        <g
-          data-custom-node={props.nodeDatum.name}
-          onClick={() => props.addChildren([{ name: 'added-child' }])}
-        >
-          <text>{props.nodeDatum.name}</text>
-        </g>
-      );
-      const view = renderTree({ data, renderCustomNodeElement });
+    it('shows children added to a leaf through a data update', () => {
+      const view = renderTree({ data: { name: 'root' } });
+      expect(nodeLabels(view.container)).toEqual(['root']);
 
-      click(queryOrThrow(view.container, '[data-custom-node="root"]'));
+      view.rerender({ data: { name: 'root', children: [{ name: 'added-child' }] } });
 
-      expect(view.container.querySelector('[data-custom-node="added-child"]')).not.toBeNull();
-      expect(data).toEqual(before);
+      expect(nodeLabels(view.container)).toEqual(['root', 'added-child']);
+      expect(linkElements(view.container)).toHaveLength(1);
     });
 
     it('passes cloned node and link data with the native event', () => {

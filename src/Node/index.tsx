@@ -6,7 +6,6 @@ import {
   Orientation,
   Point,
   TreeNodeDatum,
-  RawNodeDatum,
   RenderCustomNodeElementFn,
 } from '../types/common.js';
 import DefaultNodeElement from './DefaultNodeElement.js';
@@ -27,7 +26,6 @@ type NodeProps = {
   onNodeClick: NodeEventHandler;
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
-  handleAddChildrenToNode: (nodeId: string, children: RawNodeDatum[]) => void;
 };
 
 function Node({
@@ -41,9 +39,8 @@ function Node({
   onNodeClick,
   onNodeMouseOver,
   onNodeMouseOut,
-  handleAddChildrenToNode,
 }: NodeProps): ReactElement {
-  const id = data.__rd3t.id;
+  const { id } = data;
   // A horizontal tree swaps the layout axes on screen.
   const transform =
     orientation === 'horizontal'
@@ -58,7 +55,6 @@ function Node({
     onNodeClick: evt => onNodeClick(hierarchyPointNode, evt),
     onNodeMouseOver: evt => onNodeMouseOver(hierarchyPointNode, evt),
     onNodeMouseOut: evt => onNodeMouseOut(hierarchyPointNode, evt),
-    addChildren: children => handleAddChildrenToNode(id, children),
   };
 
   return (
