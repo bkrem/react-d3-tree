@@ -236,6 +236,13 @@ contracts, and the demo builds against the local library through the workspace.
 
 ### Phase 1: behaviour test suite
 
+Status (2026-09-23): 1.1 and the 1.3 gap tests landed on `feat/v4` in one commit (`test: move
+the suite to Testing Library and TypeScript`); 80 tests, coverage 100/98.98/100/100. `lib/`
+JavaScript is byte-identical to the baseline; the declarations changed because `@types/react` 18
+emits `React.JSX.Element` where 16 emitted the global `JSX.Element`. `@testing-library/user-event`
+wasn't needed: the contracts dispatch raw wheel and mouse events with coordinates, which
+`user-event` doesn't model. 1.2 is pending.
+
 Goal: a test suite that describes v3 behaviour from the outside, so every later phase has an
 oracle that doesn't depend on class internals. This mirrors the `lib/` byte-level oracle that
 gated the build-chain work. The contracts branch already does this for 36 cases; Phase 1 keeps
@@ -243,7 +250,7 @@ them, moves them onto a harness that survives React 19, and covers the rest.
 
 | PR | Branch | Work |
 | --- | --- | --- |
-| 1.1 | `test/rtl-migration` | Replace enzyme and the React 16 adapter with `@testing-library/react` 16, `@testing-library/user-event` 14, and `@testing-library/dom` 10. Bump the dev copy of React to 18.3.1 (Testing Library 16 needs 18 or 19). The 36 contracts in `behavior.test.jsx` are the base: swap their `react-dom` harness for Testing Library's `render`, keep every assertion, and port what only the enzyme suites cover (`centerNode` through `dimensions`, `onUpdate` on zoom, `persist` on events, `addChildren` with an unknown id, the `enableLegacyTransitions` toggle lock, Node and Link rendering details, `generateId`) as DOM-level tests in the same style. Then delete the enzyme suites. Keep the coverage thresholds. Drop the `cheerio` override in `pnpm-workspace.yaml`; it exists only for enzyme. Tests that exercise `enableLegacyTransitions` stay until Phase 4 removes the flag. Every rewritten test is TypeScript: `*.test.ts` without JSX, `*.test.tsx` with it, and `mockData.ts` typed as `RawNodeDatum`. Tests import from `vitest` explicitly and `globals: true` goes. Add `tsconfig.test.json` (extends the build config, `noEmit`, includes `src/**/*.test.ts`, `src/**/*.test.tsx`, `src/**/tests/**`, `test/**`) and a `pnpm typecheck` script that CI runs after `lint`. Update the `exclude` lists in `tsconfig.json` and `typedoc.json`, the `include` pattern in `vitest.config.ts`, and the lint-staged globs to the new extensions. Remove `allowJs`. Untyped d3 or Testing Library edges surface here as type errors, not at runtime. |
+| 1.1 | `test/rtl-migration` | Replace enzyme and the React 16 adapter with `@testing-library/react` 16 and `@testing-library/dom` 10. Bump the dev copy of React to 18.3.1 (Testing Library 16 needs 18 or 19). The 36 contracts in `behavior.test.jsx` are the base: swap their `react-dom` harness for Testing Library's `render`, keep every assertion, and port what only the enzyme suites cover (`centerNode` through `dimensions`, `onUpdate` on zoom, `persist` on events, `addChildren` with an unknown id, the `enableLegacyTransitions` toggle lock, Node and Link rendering details, `generateId`) as DOM-level tests in the same style. Then delete the enzyme suites. Keep the coverage thresholds. Drop the `cheerio` override in `pnpm-workspace.yaml`; it exists only for enzyme. Tests that exercise `enableLegacyTransitions` stay until Phase 4 removes the flag. Every rewritten test is TypeScript: `*.test.ts` without JSX, `*.test.tsx` with it, and `mockData.ts` typed as `RawNodeDatum`. Tests import from `vitest` explicitly and `globals: true` goes. Add `tsconfig.test.json` (extends the build config, `noEmit`, includes `src/**/*.test.ts`, `src/**/*.test.tsx`, `src/**/tests/**`, `test/**`) and a `pnpm typecheck` script that CI runs after `lint`. Update the `exclude` lists in `tsconfig.json` and `typedoc.json`, the `include` pattern in `vitest.config.ts`, and the lint-staged globs to the new extensions. Remove `allowJs`. Untyped d3 or Testing Library edges surface here as type errors, not at runtime. |
 | 1.2 | `test/render-oracle` | Add a rendered-markup oracle: mount each fixture (`mockData`, the org chart, `initialDepth` 0 and 1, each `pathFunc`, each `orientation`, `depthFactor`, `separation`) with Testing Library's `render`, let effects run, and snapshot `container.innerHTML` with random ids and instance classes masked. The oracle uses the mounted DOM, not `renderToString`: v3's server markup has every node and link at opacity 0 and at its parent's position until `componentDidMount` runs (see [Server rendering](#server-rendering)), which is v3 behaviour v4 fixes rather than preserves. Later phases update a snapshot only with a documented reason in the PR. |
 | 1.3 | `test/zoom-gaps` | The contracts already cover wheel zoom, `zoomable`, `draggable`, `hasInteractiveNodes` with Shift, prop updates, instance isolation, and unmount. Fill the gaps: `scaleExtent.min` clamps zooming out, a `zoom` prop outside `scaleExtent` is clamped on mount, and a `scaleExtent` change rebinds. |
 
@@ -544,7 +551,7 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | `@types/d3-selection`, `@types/d3-shape`, `@types/d3-zoom` (dev) | 1.x | 3.x | Match the runtimes. |
 | `@types/d3-transition` (dev) | Absent | 3.0.9 | Removes three `@ts-ignore`. |
 | `enzyme`, `enzyme-adapter-react-16` (dev) | 3.x | Removed | Testing Library. |
-| `@testing-library/react`, `/dom`, `/user-event` (dev) | Absent | 16.3.3, 10.4.2, 14.6.7 | Peer range needs React 18 or 19. |
+| `@testing-library/react`, `/dom` (dev) | Absent | 16.3.3, 10.4.2 | Peer range needs React 18 or 19. `user-event` isn't used: the tests dispatch raw wheel and mouse events. |
 | `react`, `react-dom` (dev) | 16.14 | 19.3.0, with an 18.3.1 CI job | |
 | `@types/react` (dev) | 16.9 | 19.x | |
 | `typescript` (dev) | ~5.9.3 | 6.x or 7.x after PR 2.3 | |

@@ -1,12 +1,31 @@
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
-import Tree from '../../index.ts';
+import type {
+  CustomNodeElementProps,
+  PathClassFunction,
+  PathFunction,
+  RawNodeDatum,
+  TreeLinkEventCallback,
+  TreeNodeEventCallback,
+} from '../../index.js';
+import type { OnUpdate } from './helpers.js';
+import {
+  click,
+  dispatch,
+  getNodeByLabel,
+  getSvg,
+  getTreeGroup,
+  linkElements,
+  mouse,
+  nodeElements,
+  nodeLabels,
+  renderTree,
+  transformCoordinates,
+  wheel,
+} from './helpers.js';
 
-const mountedContainers = new Set();
-
-const treeData = () => ({
+const treeData = (): RawNodeDatum => ({
   name: 'root',
   attributes: { active: true, count: 0 },
   children: [
@@ -21,94 +40,9 @@ const treeData = () => ({
   ],
 });
 
-const replacementData = () => ({
+const replacementData = (): RawNodeDatum => ({
   name: 'replacement-root',
   children: [{ name: 'replacement-leaf' }],
-});
-
-const renderTree = props => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-  mountedContainers.add(container);
-
-  const rerender = nextProps => {
-    act(() => {
-      render(<Tree {...nextProps} />, container);
-    });
-  };
-
-  rerender(props);
-
-  return {
-    container,
-    rerender,
-    unmount: () => {
-      act(() => {
-        unmountComponentAtNode(container);
-      });
-      container.remove();
-      mountedContainers.delete(container);
-    },
-  };
-};
-
-const nodeElements = container => [...container.querySelectorAll('g.rd3t-node, g.rd3t-leaf-node')];
-const linkElements = container => [...container.querySelectorAll('path.rd3t-link')];
-const nodeLabels = container =>
-  [...container.querySelectorAll('.rd3t-label__title')].map(element => element.textContent);
-const getNodeByLabel = (container, label) => {
-  const title = [...container.querySelectorAll('.rd3t-label__title')].find(
-    element => element.textContent === label
-  );
-  if (!title) throw new Error(`Node label not found: ${label}`);
-  return title.closest('g.rd3t-node, g.rd3t-leaf-node');
-};
-const getTreeGroup = container => container.querySelector('g.rd3t-g');
-const getSvg = container => container.querySelector('svg.rd3t-svg');
-
-const dispatch = (element, event) => {
-  act(() => {
-    element.dispatchEvent(event);
-  });
-};
-
-const click = (element, init = {}) =>
-  dispatch(element, new MouseEvent('click', { bubbles: true, ...init }));
-
-const wheel = (element, init = {}) => {
-  const event = new WheelEvent('wheel', {
-    bubbles: true,
-    cancelable: true,
-    clientX: 20,
-    clientY: 20,
-    deltaY: -100,
-    ...init,
-  });
-  Object.defineProperty(event, 'view', { value: window });
-  dispatch(element, event);
-};
-
-const mouse = (type, init = {}) => {
-  const event = new MouseEvent(type, { bubbles: true, cancelable: true, ...init });
-  Object.defineProperty(event, 'view', { value: window });
-  return event;
-};
-
-const transformCoordinates = element => {
-  const match = element.getAttribute('transform').match(/^translate\(([-\d.]+),([-\d.]+)\)$/);
-  if (!match) throw new Error(`Unexpected transform: ${element.getAttribute('transform')}`);
-  return { x: Number(match[1]), y: Number(match[2]) };
-};
-
-afterEach(() => {
-  mountedContainers.forEach(container => {
-    act(() => {
-      unmountComponentAtNode(container);
-    });
-    container.remove();
-  });
-  mountedContainers.clear();
-  vi.useRealTimers();
 });
 
 describe('Tree public behavior', () => {
@@ -201,7 +135,7 @@ describe('Tree public behavior', () => {
     });
 
     it('fires onNodeClick without changing visibility when collapsible is false', () => {
-      const onNodeClick = vi.fn();
+      const onNodeClick = vi.fn<TreeNodeEventCallback>();
       const view = renderTree({ data: treeData(), collapsible: false, onNodeClick });
 
       click(getNodeByLabel(view.container, 'root').querySelector('circle'));
@@ -322,7 +256,9 @@ describe('Tree public behavior', () => {
 
       expect(root.querySelector('.rd3t-label__title').textContent).toBe('root');
       expect(
-        [...root.querySelectorAll('.rd3t-label__attributes tspan')].map(node => node.textContent)
+        Array.from(root.querySelectorAll('.rd3t-label__attributes tspan')).map(
+          node => node.textContent
+        )
       ).toEqual(['active: true', 'count: 0']);
     });
 
@@ -337,7 +273,7 @@ describe('Tree public behavior', () => {
       });
     });
 
-    it.each(['diagonal', 'elbow', 'straight', 'step'])(
+    it.each(['diagonal', 'elbow', 'straight', 'step'] as const)(
       'renders the %s path function through the public Tree prop',
       pathFunc => {
         const view = renderTree({ data: replacementData(), pathFunc });
@@ -347,8 +283,8 @@ describe('Tree public behavior', () => {
     );
 
     it('uses custom path and path class functions with public link data', () => {
-      const pathFunc = vi.fn(() => 'M1,2L3,4');
-      const pathClassFunc = vi.fn(() => 'custom-link');
+      const pathFunc = vi.fn<PathFunction>(() => 'M1,2L3,4');
+      const pathClassFunc = vi.fn<PathClassFunction>(() => 'custom-link');
       const view = renderTree({
         data: replacementData(),
         orientation: 'vertical',
@@ -369,10 +305,10 @@ describe('Tree public behavior', () => {
 
   describe('custom nodes and callbacks', () => {
     it('provides custom nodes with public data, hierarchy data, handlers, and toggle control', () => {
-      const onNodeClick = vi.fn();
-      const onNodeMouseOver = vi.fn();
-      const onNodeMouseOut = vi.fn();
-      const renderCustomNodeElement = props => (
+      const onNodeClick = vi.fn<TreeNodeEventCallback>();
+      const onNodeMouseOver = vi.fn<TreeNodeEventCallback>();
+      const onNodeMouseOut = vi.fn<TreeNodeEventCallback>();
+      const renderCustomNodeElement = (props: CustomNodeElementProps) => (
         <g
           data-custom-node={props.nodeDatum.name}
           data-depth={props.hierarchyPointNode.depth}
@@ -408,9 +344,9 @@ describe('Tree public behavior', () => {
     });
 
     it('adds children through a custom leaf node without mutating the input', () => {
-      const data = { name: 'root' };
+      const data: RawNodeDatum = { name: 'root' };
       const before = JSON.parse(JSON.stringify(data));
-      const renderCustomNodeElement = props => (
+      const renderCustomNodeElement = (props: CustomNodeElementProps) => (
         <g
           data-custom-node={props.nodeDatum.name}
           onClick={() => props.addChildren([{ name: 'added-child' }])}
@@ -427,10 +363,10 @@ describe('Tree public behavior', () => {
     });
 
     it('passes cloned node and link data with the native event', () => {
-      const renderedNodes = new Map();
-      const onNodeClick = vi.fn();
-      const onLinkClick = vi.fn();
-      const renderCustomNodeElement = props => {
+      const renderedNodes = new Map<string, CustomNodeElementProps['hierarchyPointNode']>();
+      const onNodeClick = vi.fn<TreeNodeEventCallback>();
+      const onLinkClick = vi.fn<TreeLinkEventCallback>();
+      const renderCustomNodeElement = (props: CustomNodeElementProps) => {
         renderedNodes.set(props.nodeDatum.name, props.hierarchyPointNode);
         return (
           <circle data-custom-node={props.nodeDatum.name} r={10} onClick={props.onNodeClick} />
@@ -475,8 +411,8 @@ describe('Tree public behavior', () => {
     });
 
     it('passes exact link endpoints to native hover callbacks', () => {
-      const onLinkMouseOver = vi.fn();
-      const onLinkMouseOut = vi.fn();
+      const onLinkMouseOver = vi.fn<TreeLinkEventCallback>();
+      const onLinkMouseOut = vi.fn<TreeLinkEventCallback>();
       const view = renderTree({ data: replacementData(), onLinkMouseOver, onLinkMouseOut });
       const link = linkElements(view.container)[0];
 
@@ -492,7 +428,7 @@ describe('Tree public behavior', () => {
     });
 
     it('reports the initial geometry through onUpdate after mount', () => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
 
       renderTree({
         data: replacementData(),
@@ -510,7 +446,7 @@ describe('Tree public behavior', () => {
     });
 
     it('reports one semantic onUpdate for one toggle after mount', () => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
       const view = renderTree({ data: treeData(), onUpdate });
       onUpdate.mockClear();
 
@@ -527,7 +463,7 @@ describe('Tree public behavior', () => {
 
   describe('zoom and pan controls', () => {
     it('zooms through a native wheel event and respects scaleExtent', () => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
       const view = renderTree({
         data: replacementData(),
         scaleExtent: { min: 0.5, max: 1.2 },
@@ -543,7 +479,7 @@ describe('Tree public behavior', () => {
     });
 
     it('does not zoom when zoomable is false', () => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
       const view = renderTree({ data: replacementData(), zoomable: false, onUpdate });
       const before = getTreeGroup(view.container).getAttribute('transform');
       onUpdate.mockClear();
@@ -555,8 +491,8 @@ describe('Tree public behavior', () => {
     });
 
     it('blocks wheel events from interactive node content unless Shift is held', () => {
-      const onUpdate = vi.fn();
-      const renderCustomNodeElement = props => (
+      const onUpdate = vi.fn<OnUpdate>();
+      const renderCustomNodeElement = (props: CustomNodeElementProps) => (
         <foreignObject width={80} height={30}>
           <button data-node-control={props.nodeDatum.name}>Control</button>
         </foreignObject>
@@ -610,7 +546,7 @@ describe('Tree public behavior', () => {
     });
 
     it('removes native zoom listeners when the tree unmounts', () => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
       const view = renderTree({
         data: replacementData(),
         scaleExtent: { min: 0.5, max: 2 },
@@ -629,7 +565,7 @@ describe('Tree public behavior', () => {
       [true, true],
       [false, false],
     ])('applies draggable=%s to native mouse dragging', (draggable, shouldMove) => {
-      const onUpdate = vi.fn();
+      const onUpdate = vi.fn<OnUpdate>();
       const view = renderTree({ data: replacementData(), draggable, onUpdate });
       const svg = getSvg(view.container);
       const before = getTreeGroup(view.container).getAttribute('transform');

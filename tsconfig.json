@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "allowJs": true,
     "target": "es5",
     "lib": ["dom", "es2017"],
     "types": [],
@@ -13,12 +12,5 @@
     "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "**/tests/*",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.test.js",
-    "**/*.test.jsx"
-  ]
+  "exclude": ["node_modules", "**/tests/*", "**/*.test.ts", "**/*.test.tsx"]
 }

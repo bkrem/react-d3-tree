@@ -1,8 +1,9 @@
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
-// @ts-ignore
-configure({ adapter: new Adapter() });
+// Testing Library registers its own cleanup only when `afterEach` is a global. The tests import
+// from `vitest` instead, so register it here.
+afterEach(cleanup);
 
 // jsdom doesn't implement the SVG animated properties that d3 reads: d3-interpolate reads
 // `transform` when it tweens a `transform` attribute, and d3-zoom reads `width` and `height`

@@ -6,9 +6,8 @@ export default defineConfig({
     jsx: { runtime: 'classic' },
   },
   test: {
-    globals: true,
     environment: 'jsdom',
-    include: ['src/**/*.test.{js,jsx}'],
+    include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',

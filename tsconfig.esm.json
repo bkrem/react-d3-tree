@@ -5,19 +5,11 @@
     "target": "es6",
     "lib": ["dom", "es2017"],
     "types": [],
-    "allowJs": true,
     "jsx": "react",
     "outDir": "./lib/esm",
     "skipLibCheck": true,
     "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "**/tests/*",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.test.js",
-    "**/*.test.jsx"
-  ]
+  "exclude": ["node_modules", "**/tests/*", "**/*.test.ts", "**/*.test.tsx"]
 }

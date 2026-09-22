@@ -39,10 +39,10 @@ The build emits four artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`
 
 - pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.2 or later, or 24.15 or later: the highest `engines.node` floor among the dev dependencies (`jsdom`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a separate npm project.
 - TypeScript 5.9 (source), compiled with `tsc`. Keep the `~5.9` range: TypeScript 6 deprecates `target: es5` and TypeScript 7 removes it, and the CJS build must keep that target within v3.
-- React 16–19 (peer dependency). Dev and test dependencies pin React 16 for the enzyme adapter.
+- React 16–19 (peer dependency). Dev and test dependencies use React 18.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
 - Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
-- Vitest with jsdom, enzyme with `enzyme-adapter-react-16`.
+- Vitest with jsdom and `@testing-library/react`.
 - oxlint for linting and oxfmt for formatting.
 - TypeDoc for API documentation.
 
@@ -79,6 +79,9 @@ pnpm check:package
 # Lint src/, scripts/, and test/
 pnpm lint
 
+# Type-check the tests, fixtures, and source through tsconfig.test.json
+pnpm typecheck
+
 # Generate API docs into demo/public/docs
 pnpm build:docs
 ```
@@ -97,9 +100,9 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 
 ## Testing
 
-- The test runner is Vitest (`vitest.config.ts`) with the `jsdom` environment and `globals: true`, so `describe`, `it`, `expect`, and `vi` need no imports. Test setup lives in `test/setup.ts`, which configures enzyme with `enzyme-adapter-react-16` and polyfills the SVG animated properties (`transform`, `width`, `height`) that d3 reads and jsdom lacks.
-- Vite parses JSX by file extension, so a test that contains JSX takes the `.test.jsx` extension; a test without JSX keeps `.test.js`. Both tsconfigs and `typedoc.json` exclude `*.test.jsx`; without that, `allowJs` would compile a test into `lib/`.
-- Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.jsx`) and colocated tests (`src/Node/index.test.jsx`). Shared fixtures live in `src/Tree/tests/mockData.js`.
+- The test runner is Vitest (`vitest.config.ts`) with the `jsdom` environment. Tests import `describe`, `it`, `expect`, and `vi` from `vitest`; there are no test globals. Components render through `@testing-library/react`, and tests assert on the DOM and on the public callbacks, never on component internals. Test setup lives in `test/setup.ts`, which registers Testing Library's cleanup and polyfills the SVG animated properties (`transform`, `width`, `height`) that d3 reads and jsdom lacks.
+- Tests are TypeScript: `.test.tsx` when the file contains JSX, `.test.ts` otherwise. Both build tsconfigs and `typedoc.json` exclude `*.test.ts`, `*.test.tsx`, and `tests/` folders, so nothing test-related lands in `lib/`. `pnpm typecheck` type-checks the tests, fixtures, and source through `tsconfig.test.json`; CI runs it. Type every `vi.fn()` (`vi.fn<TreeNodeEventCallback>()`), which the lint config requires.
+- Tests live in a `tests/` subfolder (for example `src/Tree/tests/index.test.tsx`) or next to the module (`src/generateId.test.ts`). Shared fixtures live in `src/Tree/tests/mockData.ts`; the render and DOM query helpers in `src/Tree/tests/helpers.tsx`. `src/Tree/tests/behavior.test.tsx` holds the public behaviour contracts: a change to the library keeps them passing or updates them with the reason stated in the commit.
 - `pnpm test` runs with `--coverage` (v8) and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Coverage counts library source only (`src/**/*.{ts,tsx}` minus tests and fixtures). Additions that drop coverage below these thresholds fail the run, so add tests alongside new code. Vitest fails the run on an uncaught exception during a test, so a jsdom gap shows up as an error, not as a silently passing test.
 - Tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only. It also asserts that the tarball holds only `lib/`, `package.json`, `README.md`, and `LICENSE`.
 - `pnpm check:package` (`scripts/check-package.js`) runs publint and attw (Are the types wrong?) against the build. Every finding fails CI. To accept one deliberately, add it to the script's allowlist pinned to its location, with the reason; the same finding at another location still fails.
@@ -110,7 +113,7 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 - oxfmt settings (`.oxfmtrc.json`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`. Markdown, `package.json`, `pnpm-lock.yaml`, `demo/`, and build output are excluded. The reformat commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to hide it from `git blame`.
 - oxlint (`.oxlintrc.json`) lints `src/`, `scripts/`, and `test/`, TypeScript included. The `correctness` category is an error; the `react`, `jsx-a11y`, `import`, `typescript`, and `vitest` plugins are on. `pnpm lint` runs in CI and must exit 0; warnings are allowed. Don't change library behavior to satisfy a lint rule: downgrade or disable the rule instead. The React class-component rules (`no-did-mount-set-state`, `no-did-update-set-state`, `no-direct-mutation-state`) are warnings because `Tree` and `Node` use those patterns.
 - oxlint reads ignore files from parent directories. In a worktree nested inside a checkout that still has an `.eslintignore` with `*.ts`, a directory walk skips every TypeScript file; pass `--ignore-path <empty file>` or name the files explicitly to lint them.
-- Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js` or `.test.jsx` (see Testing).
+- Source and tests are TypeScript; keep new components and modules in `.ts`/`.tsx` and their tests in `.test.ts`/`.test.tsx` (see Testing).
 - The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxlint, oxfmt, and `vitest related --run` on staged files under `src/`, oxlint and oxfmt on staged files under `scripts/` and `test/`, and oxfmt on staged JSON and YAML files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
 
 ## Development workflow
@@ -130,7 +133,7 @@ npm link react-d3-tree
 
 For hot reloading, run `pnpm build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
 

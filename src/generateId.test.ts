@@ -1,9 +1,22 @@
-import generateId from './generateId.ts';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import generateId from './generateId.js';
 
 const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
+type GetRandomValues = (bytes: Uint8Array) => Uint8Array;
+
+// The tests swap `crypto` for partial fakes; the cast keeps the assignments terse.
+const setCrypto = (value: unknown) => {
+  globalThis.crypto = value as Crypto;
+};
+
+const removeCrypto = () => {
+  Reflect.deleteProperty(globalThis, 'crypto');
+};
+
 describe('generateId', () => {
-  const originalCrypto = global.crypto;
+  const originalCrypto = globalThis.crypto;
 
   // jsdom defines `crypto` as a getter-only property; make it assignable for the tests below.
   Object.defineProperty(globalThis, 'crypto', {
@@ -14,29 +27,30 @@ describe('generateId', () => {
 
   afterEach(() => {
     if (originalCrypto === undefined) {
-      delete global.crypto;
+      removeCrypto();
     } else {
-      global.crypto = originalCrypto;
+      setCrypto(originalCrypto);
     }
     vi.restoreAllMocks();
   });
 
   describe('when `crypto.randomUUID` is available', () => {
     it('returns the native UUID', () => {
-      const randomUUID = vi.fn(() => '3b241101-e2bb-4255-8caf-4136c566a962');
-      global.crypto = { randomUUID, getRandomValues: vi.fn() };
+      const randomUUID = vi.fn<() => string>(() => '3b241101-e2bb-4255-8caf-4136c566a962');
+      const getRandomValues = vi.fn<GetRandomValues>();
+      setCrypto({ randomUUID, getRandomValues });
 
       expect(generateId()).toBe('3b241101-e2bb-4255-8caf-4136c566a962');
       expect(randomUUID).toHaveBeenCalledTimes(1);
-      expect(global.crypto.getRandomValues).not.toHaveBeenCalled();
+      expect(getRandomValues).not.toHaveBeenCalled();
     });
 
     it('calls `randomUUID` with `crypto` as the receiver', () => {
-      global.crypto = {
+      setCrypto({
         randomUUID() {
-          return this === global.crypto ? '3b241101-e2bb-4255-8caf-4136c566a962' : 'unbound';
+          return this === globalThis.crypto ? '3b241101-e2bb-4255-8caf-4136c566a962' : 'unbound';
         },
-      };
+      });
 
       expect(generateId()).toBe('3b241101-e2bb-4255-8caf-4136c566a962');
     });
@@ -44,37 +58,36 @@ describe('generateId', () => {
 
   describe('when only `crypto.getRandomValues` is available', () => {
     it('formats the random bytes as a v4 UUID', () => {
-      global.crypto = {
-        getRandomValues: vi.fn(bytes => {
-          bytes.forEach((_, i) => {
-            bytes[i] = i * 17; // 0x00, 0x11, ... 0xff
-          });
-          return bytes;
-        }),
-      };
+      const getRandomValues = vi.fn<GetRandomValues>(bytes => {
+        bytes.forEach((_, i) => {
+          bytes[i] = i * 17; // 0x00, 0x11, ... 0xff
+        });
+        return bytes;
+      });
+      setCrypto({ getRandomValues });
 
       // Bytes 6 (0x66) and 8 (0x88) carry the version and variant bits.
       expect(generateId()).toBe('00112233-4455-4677-8899-aabbccddeeff');
-      expect(global.crypto.getRandomValues).toHaveBeenCalledTimes(1);
+      expect(getRandomValues).toHaveBeenCalledTimes(1);
     });
 
     it('sets the version and variant bits regardless of the random bytes', () => {
-      global.crypto = { getRandomValues: bytes => bytes.fill(0xff) };
+      setCrypto({ getRandomValues: (bytes: Uint8Array) => bytes.fill(0xff) });
       expect(generateId()).toBe('ffffffff-ffff-4fff-bfff-ffffffffffff');
 
-      global.crypto = { getRandomValues: bytes => bytes.fill(0x00) };
+      setCrypto({ getRandomValues: (bytes: Uint8Array) => bytes.fill(0x00) });
       expect(generateId()).toBe('00000000-0000-4000-8000-000000000000');
     });
 
     it('calls `getRandomValues` with `crypto` as the receiver', () => {
-      global.crypto = {
-        getRandomValues(bytes) {
-          if (this !== global.crypto) {
+      setCrypto({
+        getRandomValues(bytes: Uint8Array) {
+          if (this !== globalThis.crypto) {
             throw new TypeError('Illegal invocation');
           }
           return bytes;
         },
-      };
+      });
 
       expect(generateId()).toMatch(UUID_V4);
     });
@@ -82,7 +95,7 @@ describe('generateId', () => {
 
   describe('when `crypto` is unavailable', () => {
     it('falls back to `Math.random` if `crypto` is undefined', () => {
-      delete global.crypto;
+      removeCrypto();
       const random = vi.spyOn(Math, 'random');
 
       expect(generateId()).toMatch(UUID_V4);
@@ -90,7 +103,7 @@ describe('generateId', () => {
     });
 
     it('falls back to `Math.random` if `crypto` has no usable methods', () => {
-      global.crypto = {};
+      setCrypto({});
       const random = vi.spyOn(Math, 'random');
 
       expect(generateId()).toMatch(UUID_V4);
@@ -98,17 +111,18 @@ describe('generateId', () => {
     });
 
     it('pads single-digit hex bytes and stays within byte range', () => {
-      delete global.crypto;
+      removeCrypto();
+      const random = vi.spyOn(Math, 'random');
 
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      random.mockReturnValue(0);
       expect(generateId()).toBe('00000000-0000-4000-8000-000000000000');
 
-      Math.random.mockReturnValue(0.999999999);
+      random.mockReturnValue(0.999999999);
       expect(generateId()).toBe('ffffffff-ffff-4fff-bfff-ffffffffffff');
     });
 
     it('generates unique IDs', () => {
-      delete global.crypto;
+      removeCrypto();
       const ids = new Set(Array.from({ length: 1000 }, () => generateId()));
 
       expect(ids.size).toBe(1000);
