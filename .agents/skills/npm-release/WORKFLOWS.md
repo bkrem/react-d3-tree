@@ -106,33 +106,28 @@ The script checks the dist-tag, decodes the provenance attestation and compares 
 
 ## 9. Optional: deploy the demo
 
-The demo is a Create React App 3 project (webpack 4) that installs the published package. Compiling it is a useful consumer check in its own right.
+The demo is a Vite app in the pnpm workspace that imports the library from `lib/` through `workspace:*`. It builds from the repository source, so nothing in `demo/` changes for a release. Deploy it from `master` once the release commit is there.
+
+Build it locally first, the way the workflow does:
 
 ```bash
-git switch -c chore/demo-use-<version> origin/master --no-track
-npm --prefix demo install react-d3-tree@<version> --save-exact --no-audit --no-fund
-pnpm build:docs                 # typedoc writes to demo/public/docs, which is gitignored
-npm --prefix demo run build
+pnpm build:demo                 # pnpm build, pnpm build:docs, then the Vite build into demo/dist
 ```
-
-Use an exact version. A caret range such as `^3.6.3` never resolves to a prerelease of a later patch version.
 
 Verify the build before deploying:
 
 ```bash
-grep -ohE '[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+\.[0-9]+)?' demo/build/static/js/2.*.chunk.js | sort | uniq -c   # includes <version>
-grep -ohE 'react-d3-tree - v[^<"]*' demo/build/docs/index.html | sort -u                                   # v<version>
+grep -ohE '"[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+\.[0-9]+)?"' demo/dist/assets/index-*.js | sort -u   # "<version>"
+grep -ohE 'react-d3-tree - v[^<"]*' demo/dist/docs/index.html | sort -u                        # v<version>
 ```
 
-Check the built demo in a browser with the `visual-test` skill or the Playwright tools: the heading shows `v<version>`, the tree renders, a node collapses and expands, and the console has no errors.
+Check the built demo in a browser (`pnpm --filter rd3t-demo preview`, then `http://localhost:4173/react-d3-tree/`): the top bar shows `v<version>`, the tree renders, a node collapses and expands, and the console has no errors.
 
-Commit `demo/package.json` and `demo/package-lock.json` as `chore(demo): use react-d3-tree <version>`, and land the commit through a pull request. After the maintainer's yes, deploy:
+After the maintainer's yes, deploy with the `Pages` workflow, which runs the same build on the dispatched ref and deploys `demo/dist`:
 
 ```bash
-npm --prefix demo run deploy    # pushes demo/build to the gh-pages branch
-gh api repos/bkrem/react-d3-tree/pages/builds/latest --jq '{status, commit: .commit[0:7]}'
+gh workflow run pages.yml --ref master
+gh run watch "$(gh run list --workflow pages.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
 ```
 
-The Pages deployment can take several minutes after the push. The site is live when the status is `built` and `https://bkrem.github.io/react-d3-tree/` references the new `static/js/2.*.chunk.js`. Returning visitors might see the old version until a hard refresh, because the demo registers a service worker.
-
-The root script `pnpm run deploy:demo` runs the same build and deploy, and also rebuilds `lib/` first. The demo doesn't consume `lib/`, so that rebuild is harmless and unnecessary. The script has no verification step, so prefer the sequence above.
+The workflow's deploy job needs the repository's Pages source set to **GitHub Actions** (Settings → Pages → Build and deployment); it fails with a clear error otherwise. The site is live when the run succeeds and `https://bkrem.github.io/react-d3-tree/` references the new `assets/index-*.js`. The old Create React App build registered a service worker; `demo/index.html` unregisters it, so returning visitors get the new bundle on their next load.
