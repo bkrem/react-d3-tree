@@ -887,8 +887,9 @@ packages:
   '@babel/runtime-corejs3@7.8.7':
     resolution: {integrity: sha512-sc7A+H4I8kTd7S61dgB9RomXu/C+F4IrRr4Ytze4dnfx7AXEpCrejSNpjx7vq6y/Bak9S6Kbk65a/WgMLtg43Q==}
 
-  '@babel/runtime@7.8.7':
-    resolution: {integrity: sha512-+AATMUFppJDw6aiR5NVPHqIQBlV/Pj8wY/EZH+lmvRdUo9xBaz/rF3alAwFJQavvKfeOlPE7oaaDHVbcySbCsg==}
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/template@7.22.15':
     resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
@@ -4230,9 +4231,7 @@ snapshots:
       core-js-pure: 3.6.4
       regenerator-runtime: 0.13.5
 
-  '@babel/runtime@7.8.7':
-    dependencies:
-      regenerator-runtime: 0.13.5
+  '@babel/runtime@7.29.7': {}
 
   '@babel/template@7.22.15':
     dependencies:
@@ -5104,7 +5103,7 @@ snapshots:
 
   dom-helpers@3.4.0:
     dependencies:
-      '@babel/runtime': 7.8.7
+      '@babel/runtime': 7.29.7
 
   dom-serializer@2.0.0:
     dependencies:
@@ -5292,7 +5291,7 @@ snapshots:
 
   eslint-plugin-jsx-a11y@6.2.3(eslint@4.16.0(supports-color@6.1.0)):
     dependencies:
-      '@babel/runtime': 7.8.7
+      '@babel/runtime': 7.29.7
       aria-query: 3.0.0
       array-includes: 3.1.1
       ast-types-flow: 0.0.7
@@ -6741,7 +6740,7 @@ snapshots:
 
   regenerator-transform@0.15.1:
     dependencies:
-      '@babel/runtime': 7.8.7
+      '@babel/runtime': 7.29.7
 
   regex-not@1.0.2:
     dependencies:
