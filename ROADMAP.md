@@ -378,11 +378,20 @@ transition tests, oracle snapshots unchanged, coverage at or above thresholds.
 
 ### Phase 5: public API
 
+Status (2026-09-23): 5.1 landed (`feat: give nodes stable ids`): `RawNodeDatum.id`, path ids
+(`"0"`, `"0.0"`, `"0.1"`) for nodes without one, a one-time development warning for duplicate
+ids, `data-id` on node elements, React keys by id, single-root `data`, and `generateId.ts`
+deleted. The 15 snapshots changed only in the ids. Two decisions taken while implementing: the
+`svg` gets no `useId`-derived `id`, because nothing in the DOM contract references it and it
+would put a React-generated token into every snapshot; and `dataKey` gets no replacement in
+5.2, because with path ids a new dataset reuses the old ids, so the React answer is a `key`
+remount (`<Tree key={datasetId} />`), which the migration guide will say. 5.2 to 5.5 follow.
+
 Goal: the API described in [The v4 API](#the-v4-api), one concern per PR.
 
 | PR | Branch | Work |
 | --- | --- | --- |
-| 5.1 | `feat/stable-ids` | `RawNodeDatum.id?: string`. `useTreeLayout` builds an internal `TreeNodeDatum` tree once per `data` change, assigning `id ?? <path id>`. Duplicate ids log a development-only warning. `generateId.ts` is deleted. The React `key` of every node and link moves from the array index to the node id, so `React.memo` from PR 4.2 holds across toggles and the 4.1 exit animations have stable keys. The DOM carries `data-id` on each node `<g>` and keeps `data-source-id` and `data-target-id` on links. The `useId` hook prefixes the `svg` element's `id` so several trees on one page stay distinct. The `data` prop becomes `RawNodeDatum`. Oracle snapshots change in this PR (ids become deterministic), which is the documented reason. The contract that reads the node `id` attribute reads `data-id` instead. |
+| 5.1 | `feat/stable-ids` | `RawNodeDatum.id?: string`. `useTreeLayout` builds an internal `TreeNodeDatum` tree once per `data` change, assigning `id ?? <path id>`. Duplicate ids log a development-only warning. `generateId.ts` is deleted. The React `key` of every node and link moves from the array index to the node id, so `React.memo` from PR 4.2 holds across toggles and the 4.1 exit animations have stable keys. The DOM carries `data-id` on each node `<g>` and keeps `data-source-id` and `data-target-id` on links. The `data` prop becomes `RawNodeDatum`. Oracle snapshots change in this PR (ids become deterministic), which is the documented reason. The contract that reads the node `id` attribute reads `data-id` instead. |
 | 5.2 | `feat/collapse-state` | Collapse state becomes a set of ids held in `useCollapsedState`. Uncontrolled: seeded from `initialDepth`, kept across `data` changes, applied to nodes the tree hasn't seen before. Controlled: the `collapsed` prop is the source of truth and every toggle calls `onCollapsedChange`. `shouldCollapseNeighborNodes` and `collapsible` work on the set. `dataKey` and `addChildren` are removed; the README shows the replacement (update `data`; collapse state keyed by id survives). The two `dataKey` contracts and the `addChildren` contract become contracts for collapse state surviving a `data` update and for children added through `data`. |
 | 5.3 | `feat/tree-handle` | `useImperativeHandle` exposes `TreeHandle`: `centerNode`, `toggleNode`, `expandAll`, `collapseAll`, `expandToDepth`, `setTransform`, `getTransform`. In controlled mode the collapse methods compute the next set and call `onCollapsedChange` instead of setting state. |
 | 5.4 | `feat/resize-observer` | `useContainerSize(containerRef)` measures the container. `centerNode` uses it. The `dimensions` prop is removed; a new `centerOnClick` prop (default `false`) decides whether a node click centers it. The test setup gains a `ResizeObserver` stub for jsdom. |
@@ -542,7 +551,7 @@ type RenderCustomNodeElementFn = (props: CustomNodeElementProps) => React.ReactE
 
 ### DOM contract
 
-- The `svg` keeps the `rd3t-svg` class and gains an `id` derived from `useId`. No random classes.
+- The `svg` keeps the `rd3t-svg` class and carries no `id`. No random classes.
 - Each node `<g>` keeps `rd3t-node` or `rd3t-leaf-node` plus the class-name props, and carries
   `data-id`. The `id` attribute is dropped: user-supplied ids would collide with the host page.
 - Each link `<path>` keeps `rd3t-link` and `data-source-id` and `data-target-id`.
@@ -564,7 +573,7 @@ type RenderCustomNodeElementFn = (props: CustomNodeElementProps) => React.ReactE
 | `__rd3t.id` (random UUID) | `id` (user-supplied or path) | Stable identity for state, keys, and SSR. |
 | `__rd3t.depth` | `hierarchyPointNode.depth`, `CustomNodeElementProps.depth` | d3 already computes it. |
 | `__rd3t.collapsed` | `collapsed` set, `CustomNodeElementProps.isCollapsed` | State leaves the data. |
-| `dataKey` | Removed | Collapse state keyed by id survives data changes without it. |
+| `dataKey` | Removed | Collapse state keyed by id survives a `data` update. To reset it for a new dataset, remount with `key`: `<Tree key={datasetId} />`. |
 | `addChildren` in the node renderer | Removed | Update `data` instead; state survives. Flagged as a parity change that needs a consumer-side edit. |
 | `initialDepth` | Kept (uncontrolled seed) | |
 | `collapsible`, `shouldCollapseNeighborNodes` | Kept | |

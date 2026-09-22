@@ -29,7 +29,7 @@ The library source lives in `src/`. Everything else supports building, testing, 
 - `src/Node/index.tsx` — renders a single node as a memoised function component; `src/Node/DefaultNodeElement.tsx` is the default node renderer used when no custom renderer is supplied.
 - `src/Link/index.tsx` — renders the path between two nodes as a memoised function component; supports the built-in `pathFunc` variants and a caller-supplied function.
 - `src/types/common.ts` — shared data types (`RawNodeDatum`, `TreeNodeDatum`, `Point`, event handler types).
-- `src/generateId.ts` — generates the v4 UUIDs that `Tree` uses for its SVG and group class references and for node IDs. Not part of the public API.
+- `src/warn.ts` — a development-only, once-per-message `console.warn`, used for duplicate node ids. Node ids come from `RawNodeDatum.id` or, when absent, from the node's path in the tree (`"0"`, `"0.0"`, `"0.1"`).
 - `src/globalCss.ts` — injected base styles.
 
 The build is ESM only: one `tsc` pass (`module: NodeNext`, `target: ES2020`) emits the JavaScript and the declarations side by side under `lib/`. The `package.json` `exports` map has a single `.` entry with `types` before `default`; `main` and `types` point at the same files for resolvers that ignore `exports`, and `sideEffects` is `false`. A CommonJS consumer loads the package through Node's `require(esm)`, so `require()` needs Node 22.12 or later; the smoke test covers both entry styles.

@@ -264,13 +264,50 @@ describe('Tree public behavior', () => {
 
     it('keeps node IDs unique and makes every link reference rendered nodes', () => {
       const view = renderTree({ data: treeData() });
-      const nodeIds = nodeElements(view.container).map(node => node.id);
+      const nodeIds = nodeElements(view.container).map(node => node.getAttribute('data-id'));
 
       expect(new Set(nodeIds).size).toBe(nodeIds.length);
       linkElements(view.container).forEach(link => {
         expect(nodeIds).toContain(link.getAttribute('data-source-id'));
         expect(nodeIds).toContain(link.getAttribute('data-target-id'));
       });
+    });
+
+    it('uses the path of a node as its id and a supplied id as is', () => {
+      const view = renderTree({
+        data: {
+          name: 'root',
+          children: [
+            { name: 'first' },
+            { id: 'custom', name: 'second', children: [{ name: 'x' }] },
+          ],
+        },
+      });
+
+      expect(nodeElements(view.container).map(node => node.getAttribute('data-id'))).toEqual([
+        '0',
+        '0.0',
+        'custom',
+        'custom.0',
+      ]);
+    });
+
+    it('warns once in development when two nodes share an id', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const data: RawNodeDatum = {
+        name: 'root',
+        children: [
+          { id: 'dup', name: 'a' },
+          { id: 'dup', name: 'b' },
+        ],
+      };
+
+      renderTree({ data });
+      renderTree({ data });
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toContain('"dup"');
+      warn.mockRestore();
     });
 
     it.each(['diagonal', 'elbow', 'straight', 'step'] as const)(

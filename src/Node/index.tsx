@@ -63,7 +63,7 @@ function Node({
 
   return (
     <g
-      id={id}
+      data-id={id}
       className={[
         data.children && data.children.length > 0 ? 'rd3t-node' : 'rd3t-leaf-node',
         nodeClassName,

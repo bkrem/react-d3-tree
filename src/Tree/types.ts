@@ -32,10 +32,11 @@ export interface TreeProps {
    * The root node object, in which child nodes (also of type `RawNodeDatum`)
    * are recursively defined in the `children` key.
    *
-   * `react-d3-tree` will automatically attach a unique `id` attribute to each node in the DOM,
-   * as well as `data-source-id` & `data-target-id` attributes to each link connecting two nodes.
+   * Every node's `<g>` carries its id in a `data-id` attribute, and every link's `<path>`
+   * carries the ids of its endpoints in `data-source-id` and `data-target-id`. A node without
+   * an `id` gets its path in the tree.
    */
-  data: RawNodeDatum[] | RawNodeDatum;
+  data: RawNodeDatum;
 
   /**
    * Custom render function that will be used for every node in the tree.

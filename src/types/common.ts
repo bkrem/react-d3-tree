@@ -9,6 +9,12 @@ export interface Point {
 }
 
 export interface RawNodeDatum {
+  /**
+   * The node's stable identity: collapse state, React keys, and the DOM `data-id` attribute use
+   * it. Defaults to the node's path in the tree (`"0"` for the root, `"0.2"` for its third
+   * child), which stays stable as long as the structure does. Supply ids when nodes move.
+   */
+  id?: string;
   name: string;
   attributes?: Record<string, string | number | boolean>;
   children?: RawNodeDatum[];

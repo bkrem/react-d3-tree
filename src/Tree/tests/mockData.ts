@@ -9,58 +9,52 @@ const attributes = {
   keyC: 'val C',
 };
 
-export const mockTree_D1N2_D2N2: RawNodeDatum[] = [
-  {
-    name: 'Top Level',
-    attributes,
-    children: [
-      {
-        name: 'Level 2: A',
-        attributes,
-        children: [
-          { name: '3: Son of A', attributes },
-          { name: '3: Daughter of A', attributes },
-        ],
-      },
-      {
-        name: 'Level 2: B',
-      },
-    ],
-  },
-];
+export const mockTree_D1N2_D2N2: RawNodeDatum = {
+  name: 'Top Level',
+  attributes,
+  children: [
+    {
+      name: 'Level 2: A',
+      attributes,
+      children: [
+        { name: '3: Son of A', attributes },
+        { name: '3: Daughter of A', attributes },
+      ],
+    },
+    {
+      name: 'Level 2: B',
+    },
+  ],
+};
 
-export const mockData: RawNodeDatum[] = [
-  {
-    name: 'Top Level',
-    attributes,
-    children: [
-      {
-        name: '2: A',
-        attributes,
-        children: [
-          { name: '3: Son of A', attributes },
-          { name: '3: Daughter of A', attributes },
-        ],
-      },
-      {
-        name: '2: B',
-      },
-    ],
-  },
-];
+export const mockData: RawNodeDatum = {
+  name: 'Top Level',
+  attributes,
+  children: [
+    {
+      name: '2: A',
+      attributes,
+      children: [
+        { name: '3: Son of A', attributes },
+        { name: '3: Daughter of A', attributes },
+      ],
+    },
+    {
+      name: '2: B',
+    },
+  ],
+};
 
-export const mockData2: RawNodeDatum[] = [
-  {
-    name: 'Top Level',
-    attributes,
-    children: [
-      {
-        name: 'Level 2: A',
-        attributes,
-      },
-    ],
-  },
-];
+export const mockData2: RawNodeDatum = {
+  name: 'Top Level',
+  attributes,
+  children: [
+    {
+      name: 'Level 2: A',
+      attributes,
+    },
+  ],
+};
 
 // The README's usage example.
 export const orgChart: RawNodeDatum = {
@@ -85,20 +79,18 @@ export const orgChart: RawNodeDatum = {
   ],
 };
 
-export const mockData4: RawNodeDatum[] = [
-  {
-    name: 'Top Level',
-    attributes,
-    children: [
-      {
-        name: 'Level 2: A',
-        attributes,
-        children: [{ name: 'Level 3: A' }, { name: 'Level 3: B' }],
-      },
-      {
-        name: 'Level 2: B',
-        children: [{ name: 'Level 3: B' }],
-      },
-    ],
-  },
-];
+export const mockData4: RawNodeDatum = {
+  name: 'Top Level',
+  attributes,
+  children: [
+    {
+      name: 'Level 2: A',
+      attributes,
+      children: [{ name: 'Level 3: A' }, { name: 'Level 3: B' }],
+    },
+    {
+      name: 'Level 2: B',
+      children: [{ name: 'Level 3: B' }],
+    },
+  ],
+};

@@ -86,12 +86,10 @@ export const transformCoordinates = (element: Element) => {
   return { x: Number(match[1]), y: Number(match[2]) };
 };
 
-const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g;
+// Markup with one tag per line, so snapshot diffs read well.
+export const formatMarkup = (html: string) => html.replace(/></g, '>\n<');
 
-// Markup with the random ids masked, one tag per line so snapshot diffs read well.
-export const maskMarkup = (html: string) => html.replace(UUID, 'ID').replace(/></g, '>\n<');
-
-export const renderedMarkup = (container: HTMLElement) => maskMarkup(container.innerHTML);
+export const renderedMarkup = (container: HTMLElement) => formatMarkup(container.innerHTML);
 
 export type ZoomTransform = { x: number; y: number; k: number };
 

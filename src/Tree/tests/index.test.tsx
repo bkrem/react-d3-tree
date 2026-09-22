@@ -38,22 +38,6 @@ describe('<Tree />', () => {
     expect(getNodeByLabel(view.container, 'root').classList.contains('rd3t-leaf-node')).toBe(true);
   });
 
-  it('re-renders when the array form of `data` gets a new reference', () => {
-    const view = renderTree({ data: mockData2 });
-    expect(nodeLabels(view.container)).toEqual(['Top Level', 'Level 2: A']);
-
-    view.rerender({
-      data: [
-        {
-          ...mockData2[0],
-          children: [...(mockData2[0].children ?? []), { name: 'Level 2: B' }],
-        },
-      ],
-    });
-
-    expect(nodeLabels(view.container)).toEqual(['Top Level', 'Level 2: A', 'Level 2: B']);
-  });
-
   describe('initialDepth', () => {
     it('expands the tree to full depth by default', () => {
       const view = renderTree({ data: mockTree_D1N2_D2N2 });

@@ -13,7 +13,7 @@ import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
 import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types.js';
 import globalCss from '../globalCss.js';
-import generateId from '../generateId.js';
+import { warnOnce } from '../warn.js';
 
 const DEFAULT_TRANSLATE: Point = { x: 0, y: 0 };
 const DEFAULT_SCALE_EXTENT = { min: 0.1, max: 1 };
@@ -36,37 +36,70 @@ type LayoutOptions = {
   depthFactor: number | undefined;
 };
 
+type StampOptions = {
+  /** The id of the parent, or null for the root level. Path ids are built from it. */
+  parentId: string | null;
+  /** The index of the first node in `nodes` among its siblings. */
+  firstIndex: number;
+  depth: number;
+  initialDepth: number | undefined;
+  /** Every id assigned so far, for the duplicate warning. */
+  seen: Set<string>;
+};
+
 /**
- * Wraps a single root in an array and stamps every node with the internal id, depth, and
- * collapsed state the tree needs. Mutates and returns `data`; callers pass a clone.
- * With `initialDepth`, nodes at that depth and below start collapsed.
+ * Stamps every node in `nodes` with the internal id, depth, and collapsed state the tree needs.
+ * A node without an `id` gets its path: the root is `"0"`, its children `"0.0"`, `"0.1"`, and
+ * so on. Mutates and returns `nodes`; callers pass a clone. With `initialDepth`, nodes at that
+ * depth and below start collapsed.
  */
-function assignInternalProperties(
-  data: RawNodeDatum | RawNodeDatum[],
-  currentDepth = 0,
-  initialDepth?: number
-): TreeNodeDatum[] {
-  const nodes = Array.isArray(data) ? data : [data];
-  return nodes.map(n => {
+function assignInternalProperties(nodes: RawNodeDatum[], options: StampOptions): TreeNodeDatum[] {
+  const { parentId, firstIndex, depth, initialDepth, seen } = options;
+  return nodes.map((n, offset) => {
     const nodeDatum = n as TreeNodeDatum;
+    const index = firstIndex + offset;
+    const path = parentId === null ? `${index}` : `${parentId}.${index}`;
+    const id = nodeDatum.id ?? path;
+    if (seen.has(id)) {
+      warnOnce(`two nodes share the id "${id}"; collapse state and keys need unique ids.`);
+    }
+    seen.add(id);
     nodeDatum.__rd3t = {
-      id: generateId(),
-      depth: currentDepth,
-      collapsed: initialDepth !== undefined && currentDepth >= initialDepth,
+      id,
+      depth,
+      collapsed: initialDepth !== undefined && depth >= initialDepth,
     };
     if (nodeDatum.children && nodeDatum.children.length > 0) {
-      nodeDatum.children = assignInternalProperties(
-        nodeDatum.children,
-        currentDepth + 1,
-        initialDepth
-      );
+      nodeDatum.children = assignInternalProperties(nodeDatum.children, {
+        parentId: id,
+        firstIndex: 0,
+        depth: depth + 1,
+        initialDepth,
+        seen,
+      });
     }
     return nodeDatum;
   });
 }
 
-function buildInternalData(data: TreeProps['data'], initialDepth?: number): TreeNodeDatum[] {
-  return assignInternalProperties(clone(data), 0, initialDepth);
+/** Clones `data` and stamps it; the tree keeps the root in a one-element array. */
+function buildInternalData(data: RawNodeDatum, initialDepth?: number): TreeNodeDatum[] {
+  return assignInternalProperties([clone(data)], {
+    parentId: null,
+    firstIndex: 0,
+    depth: 0,
+    initialDepth,
+    seen: new Set(),
+  });
+}
+
+/** Every id in the nested `nodeSet`. */
+function collectIds(nodeSet: TreeNodeDatum[], ids = new Set<string>()): Set<string> {
+  for (const node of nodeSet) {
+    ids.add(node.__rd3t.id);
+    if (node.children && node.children.length > 0) collectIds(node.children, ids);
+  }
+  return ids;
 }
 
 /** Walks the nested `nodeSet` until a node matching `nodeId` is found. */
@@ -366,12 +399,15 @@ function Tree(props: TreeProps): ReactElement {
       const target = findNodeById(nodeId, nextData);
       if (!target) return prev;
 
-      const depth = target.__rd3t.depth;
-      const formattedChildren = clone(childrenData).map(node =>
-        assignInternalProperties([node], depth + 1)
-      );
       target.children = target.children || [];
-      target.children.push(...formattedChildren.flat());
+      const added = assignInternalProperties(clone(childrenData), {
+        parentId: target.__rd3t.id,
+        firstIndex: target.children.length,
+        depth: target.__rd3t.depth + 1,
+        initialDepth: undefined,
+        seen: collectIds(nextData),
+      });
+      target.children.push(...added);
       return { ...prev, data: nextData };
     });
   }, []);
@@ -493,9 +529,9 @@ function Tree(props: TreeProps): ReactElement {
           className="rd3t-g"
           transform={`translate(${geometry.translate.x},${geometry.translate.y}) scale(${geometry.scale})`}
         >
-          {layout.links.map((linkData, i) => (
+          {layout.links.map(linkData => (
             <Link
-              key={`link-${i}`}
+              key={linkData.target.data.__rd3t.id}
               orientation={orientation}
               pathFunc={pathFunc}
               pathClassFunc={pathClassFunc}
@@ -506,11 +542,11 @@ function Tree(props: TreeProps): ReactElement {
             />
           ))}
 
-          {layout.nodes.map((hierarchyPointNode, i) => {
+          {layout.nodes.map(hierarchyPointNode => {
             const { data: nodeDatum, x, y, parent } = hierarchyPointNode;
             return (
               <Node
-                key={`node-${i}`}
+                key={nodeDatum.__rd3t.id}
                 data={nodeDatum}
                 position={{ x, y }}
                 hierarchyPointNode={hierarchyPointNode}
