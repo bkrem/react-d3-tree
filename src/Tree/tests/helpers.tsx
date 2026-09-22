@@ -74,6 +74,12 @@ export const transformCoordinates = (element: Element) => {
   return { x: Number(match[1]), y: Number(match[2]) };
 };
 
+const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g;
+
+// The mounted markup with the random ids masked, one tag per line so snapshot diffs read well.
+export const renderedMarkup = (container: HTMLElement) =>
+  container.innerHTML.replace(UUID, 'ID').replace(/></g, '>\n<');
+
 export type ZoomTransform = { x: number; y: number; k: number };
 
 // d3-zoom keeps the current transform on the element it is bound to.

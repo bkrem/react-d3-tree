@@ -241,7 +241,8 @@ the suite to Testing Library and TypeScript`); 80 tests, coverage 100/98.98/100/
 JavaScript is byte-identical to the baseline; the declarations changed because `@types/react` 18
 emits `React.JSX.Element` where 16 emitted the global `JSX.Element`. `@testing-library/user-event`
 wasn't needed: the contracts dispatch raw wheel and mouse events with coordinates, which
-`user-event` doesn't model. 1.2 is pending.
+`user-event` doesn't model. 1.2 landed next (`test: add a mounted-DOM render oracle`): 15
+snapshot cases in `oracle.test.tsx`. Phase 1 is complete.
 
 Goal: a test suite that describes v3 behaviour from the outside, so every later phase has an
 oracle that doesn't depend on class internals. This mirrors the `lib/` byte-level oracle that

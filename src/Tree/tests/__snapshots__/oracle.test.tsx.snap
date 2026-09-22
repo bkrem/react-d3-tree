@@ -1,0 +1,1834 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`render oracle > class name props 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID svg-x" width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node root-x" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node branch-x" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(280,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > default props 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > depthFactor 300 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,-70,300,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,70,300,70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M300,-70C450,-70,450,-140,600,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M300,-70C450,-70,450,0,600,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(300,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(300,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(600,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(600,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > elbow path 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0V-70H140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0V70H140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70V-140H280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70V0H280" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > initialDepth 0 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > initialDepth 1 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > negative depthFactor, vertical 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,-70,-100,-70,-200" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,70,-100,70,-200" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,-200C-70,-300,-140,-300,-140,-400" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,-200C-70,-300,0,-300,0,-400" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,-200)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,-200)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,-400)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,-400)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > nodeSize 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,-150,100,-150" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,150,100,150" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M100,-150C150,-150,150,-300,200,-300" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M100,-150C150,-150,150,0,200,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(100,-150)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(100,150)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(200,-300)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(200,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > org chart, horizontal 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,0,140,0" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,0C210,0,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,0C210,0,210,140,280,140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M280,-140C350,-140,350,-140,420,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M280,140C350,140,350,140,420,140" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">CEO</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Manager</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Production</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Foreman</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Fabrication</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(280,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Foreman</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Assembly</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(420,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Worker</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(420,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Worker</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > org chart, vertical 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,0,70,0,140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,140C0,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,140C0,210,140,210,140,280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-140,280C-140,350,-140,350,-140,420" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,280C140,350,140,350,140,420" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">CEO</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Manager</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Production</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-140,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Foreman</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Fabrication</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Foreman</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">department: Assembly</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,420)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Worker</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,420)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Worker</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > separation 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-280,140,-280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,280,140,280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-280C210,-280,210,-420,280,-420" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-280C210,-280,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,280C210,280,210,280,280,280" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-420)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 3: A</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 3: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Level 3: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > step path, vertical 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H-70 V140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H70 V140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,140 V210 H-140 V280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,140 V210 H0 V280" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > straight path 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0L140,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0L140,70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70L280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70L280,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > vertical orientation 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,-70,70,-70,140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,70,70,70,140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,140C-70,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M-70,140C-70,210,0,210,0,280" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,280)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;
+
+exports[`render oracle > zoom and translate 1`] = `
+"<div class="rd3t-tree-container rd3t-grabbable">
+<style>
+/* Tree */
+.rd3t-tree-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rd3t-grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.rd3t-grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Node */
+.rd3t-node {
+  cursor: pointer;
+  fill: #777;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: transparent;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.rd3t-label__title {
+  fill: #000;
+  stroke: none;
+  font-weight: bolder;
+}
+
+.rd3t-label__attributes {
+  fill: #777;
+  stroke: none;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+/* Link */
+.rd3t-link {
+  fill: none;
+  stroke: #000;
+}
+</style>
+<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
+<g class="rd3t-g rd3t-g-ID" transform="translate(100,50) scale(0.5)">
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+</path>
+<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+</path>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">Top Level</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">2: B</text>
+<text class="rd3t-label__attributes">
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Son of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<circle r="15">
+</circle>
+<g class="rd3t-label">
+<text class="rd3t-label__title" text-anchor="start" x="40">3: Daughter of A</text>
+<text class="rd3t-label__attributes">
+<tspan x="40" dy="1.2em">keyA: val A</tspan>
+<tspan x="40" dy="1.2em">keyB: val B</tspan>
+<tspan x="40" dy="1.2em">keyC: val C</tspan>
+</text>
+</g>
+</g>
+</g>
+</svg>
+</div>"
+`;

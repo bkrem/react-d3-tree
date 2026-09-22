@@ -62,6 +62,29 @@ export const mockData2: RawNodeDatum[] = [
   },
 ];
 
+// The README's usage example.
+export const orgChart: RawNodeDatum = {
+  name: 'CEO',
+  children: [
+    {
+      name: 'Manager',
+      attributes: { department: 'Production' },
+      children: [
+        {
+          name: 'Foreman',
+          attributes: { department: 'Fabrication' },
+          children: [{ name: 'Worker' }],
+        },
+        {
+          name: 'Foreman',
+          attributes: { department: 'Assembly' },
+          children: [{ name: 'Worker' }],
+        },
+      ],
+    },
+  ],
+};
+
 export const mockData4: RawNodeDatum[] = [
   {
     name: 'Top Level',
