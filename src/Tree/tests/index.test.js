@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { render } from 'react-dom';

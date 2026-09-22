@@ -1,6 +1,9 @@
 {
-  "src/**/*.{js,jsx}": ["eslint", "oxfmt", "jest --config jest.config.json --findRelatedTests"],
-  "src/**/*.{ts,tsx}": ["oxfmt", "jest --config jest.config.json --findRelatedTests"],
-  "{scripts,jest}/**/*.{js,mjs,cjs,ts}": ["oxfmt"],
+  "src/**/*.{js,jsx,ts,tsx}": [
+    "oxlint",
+    "oxfmt",
+    "jest --config jest.config.json --findRelatedTests"
+  ],
+  "{scripts,jest}/**/*.{js,mjs,cjs,ts}": ["oxlint", "oxfmt"],
   "*.{json,yml,yaml}": ["oxfmt"]
 }
