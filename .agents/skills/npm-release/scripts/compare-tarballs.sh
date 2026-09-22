@@ -45,16 +45,18 @@ echo; echo "=== 3. Build output checks on the new tarball ==="
 check() { # label, count, expected
   if [ "$2" -eq "$3" ]; then echo "ok    $1"; else echo "FAIL  $1 (found $2, expected $3)"; failed=1; fi
 }
-check "cjs build has no import/export statements" "$(grep -rlE '^(import|export) ' "$N/lib/cjs" --include='*.js' | wc -l | tr -d ' ')" 0
-check "esm build has no require( or exports." "$(grep -rlE 'require\(|exports\.' "$N/lib/esm" --include='*.js' | wc -l | tr -d ' ')" 0
-check "cjs build keeps the es5 target (no const, let, arrows, classes)" "$(grep -rnE '^\s*(const|let) |=>|^class ' "$N/lib/cjs" --include='*.js' | wc -l | tr -d ' ')" 0
-check "no ES2020+ syntax (?., ??, ??=, ||=, &&=)" "$(grep -rnE '\?\.[a-zA-Z_(\[]|\?\?=?|\|\|=|&&=' "$N/lib" --include='*.js' | grep -vE ':\s*//' | wc -l | tr -d ' ')" 0
+# The package is ESM only, compiled for ES2020: one flat lib/ with .js and .d.ts side by side.
+check "lib/ has the entry point at its root and no cjs, esm, or types-cjs subtree" "$(find "$N/lib" -maxdepth 1 \( -type d \( -name cjs -o -name esm -o -name types-cjs \) \) -o \( -maxdepth 1 -name index.js \) | grep -c index.js)" 1
+check "build has no require( or exports." "$(grep -rlE 'require\(|exports\.' "$N/lib" --include='*.js' | wc -l | tr -d ' ')" 0
+check "every module is ESM (has import or export)" "$(find "$N/lib" -name '*.js' | wc -l | tr -d ' ')" "$(grep -rlE '^(import|export) ' "$N/lib" --include='*.js' | wc -l | tr -d ' ')"
+check "no ES2021+ syntax (??=, ||=, &&=)" "$(grep -rnE '\?\?=|\|\|=|&&=' "$N/lib" --include='*.js' | grep -vE ':\s*//' | wc -l | tr -d ' ')" 0
 check "no CRLF line endings" "$(grep -rlI $'\r' "$N" | wc -l | tr -d ' ')" 0
 check "no sourcemaps, tests, or specs" "$(find "$N" -name '*.map' -o -name '*.test.*' -o -name '*.spec.*' | wc -l | tr -d ' ')" 0
 
 echo; echo "=== 4. Imports in lib/ against declared dependencies ==="
-grep -rhoE "(from |require\()['\"][^'\".][^'\"]*['\"]" "$N/lib" --include='*.js' --include='*.d.ts' \
-  | sed -E "s/^(from |require\()['\"]//; s/['\"]$//" | sed -E 's#^(@[^/]+/[^/]+|[^/]+).*#\1#' | sort -u > "$work/imports.txt"
+# Matches `from 'x'`, `require('x')`, and the bare side-effect form `import 'x'`.
+grep -rhoE "(from |require\(|^import )['\"][^'\".][^'\"]*['\"]" "$N/lib" --include='*.js' --include='*.d.ts' \
+  | sed -E "s/^(from |require\(|import )['\"]//; s/['\"]$//" | sed -E 's#^(@[^/]+/[^/]+|[^/]+).*#\1#' | sort -u > "$work/imports.txt"
 node -e '
   const pkg = require(process.argv[1] + "/package.json");
   const declared = new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]);

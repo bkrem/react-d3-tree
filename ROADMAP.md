@@ -642,12 +642,12 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 
 | Consumer setup | v3 today | v4 | Evidence |
 | --- | --- | --- | --- |
-| ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works | `consumer-import.mjs` in the smoke test; the demo. |
+| ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works in Node (`consumer-import.mjs`); unverified through a bundler for v4 until the demo follows the v4 API (row 0.6) | The demo on `feat/v4` still targets v3, so no bundler has built against the v4 package yet. |
 | `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes against the ESM-only build on Node 22.13.1 in this worktree (2026-09-23); CI runs 22 and 24. |
 | `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | Unverified: based on the d3 packages shipping `"type": "module"` only and on the smoke test's own skip logic. No such Node version was run here. |
 | Jest, ESM mode (`node --experimental-vm-modules jest`) | Works | Works | The smoke test's Jest 30 consumer passes against the packed package (2026-09-23). |
 | Jest with the default CommonJS transform | Needs `transformIgnorePatterns` for the d3 packages | Needs it for `react-d3-tree` too | Unverified: not exercised. The migration guide points at ESM mode. |
-| Server rendering (Next.js, Remix) | Renders, but every node and link is at opacity 0 and at its parent's position until the client mounts; ids differ between server and client | Renders the final layout with deterministic ids | `renderToString` run in this worktree (see [Server rendering](#server-rendering)); the mounted-DOM oracle in PR 1.2 and a hydration test in PR 5.1. |
+| Server rendering (Next.js, Remix) | Renders, but every node and link is at opacity 0 and at its parent's position until the client mounts; ids differ between server and client | Renders the final layout with deterministic ids | `src/Tree/tests/server.test.tsx` (Phase 4, commit 3) asserts that `renderToString` output equals the mounted markup for three prop sets. Not run inside a Next.js or Remix app. |
 | TypeScript, `moduleResolution: bundler` | Works | Works | `check:package` (attw) today and after. |
 | TypeScript, ES module file, `node16` | Works (fixed in 3.7.0) | Works | Smoke type-check consumer. |
 | TypeScript, CommonJS file, `nodenext` | Works (fixed in 3.7.0) | Works | The smoke test's CommonJS consumer type-checks under `nodenext` with TypeScript 5.9.3 against the ESM-only build (2026-09-23). |
@@ -690,6 +690,13 @@ Peer dependencies: `react` and `react-dom` at `^18.0.0 || ^19.0.0`.
   time; check its `engineStrict` setting in that PR.
 - **TypeScript 7.** Not tried: TypeDoc 0.28.20 declares a peer range of 5.0.x to 6.0.x. Revisit
   when TypeDoc adds 7.
+- **`sideEffects: false` and the bare `import 'd3-transition'`.** The package declares itself
+  side-effect free, and the tree imports `d3-transition` only for the `transition()` it adds to
+  selections. That is safe because `d3-transition` 3.0.1 lists `./src/index.js` and
+  `./src/selection/index.js` in its own `sideEffects`, so a bundler keeps the import (checked
+  in its `package.json`). If a future d3-transition dropped that list, animated `centerNode`
+  and `setTransform` would break under tree shaking; the dependency pass that bumps it must
+  re-check.
 - **`useId` output.** React 18.3.1 emits ids like `:R0:` and React 19.3.0 like `_R_0_` (both
   checked with `renderToString`). The React 18 form needs escaping in CSS selectors. The `svg` id
   is for uniqueness, not for consumer selectors; document that and keep `rd3t-svg` as the class
