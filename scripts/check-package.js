@@ -16,7 +16,12 @@ import { formatMessage, formatMessagePath } from 'publint/utils';
 // Entries look like 'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types'.
 const knownPublint = new Set([]);
 // Entries look like 'FallbackCondition at . (node16-cjs)' or 'FalseESM at <types file>'.
-const knownAttw = new Set([]);
+const knownAttw = new Set([
+  // The package is ESM-only, so a CommonJS `require()` resolves to an ES module. Node 22.12 and
+  // later load it through `require(esm)`, which the smoke test's CommonJS consumer proves. attw's
+  // `esm-only` profile ignores this finding in its table but still lists it in the JSON.
+  'CJSResolvesToESM at . (node16-cjs)',
+]);
 
 // `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
 const env = { ...process.env, HUSKY: '0' };
@@ -62,6 +67,6 @@ const attw = JSON.parse(readFileSync(attwOut, 'utf8'));
 rmSync(path.dirname(attwOut), { recursive: true, force: true });
 report('attw', Object.values(attw.problems ?? {}).flat(), describeAttw, describeAttw);
 // The table gives the per-resolution view for humans; the JSON above decides the exit code.
-spawnSync('attw', ['--pack', '.'], { stdio: 'inherit', env });
+spawnSync('attw', ['--pack', '.', '--profile', 'esm-only'], { stdio: 'inherit', env });
 
 if (failed) process.exit(1);

@@ -260,11 +260,16 @@ above the thresholds, and the oracle snapshots checked in.
 
 ### Phase 2: ESM-only build
 
+Status (2026-09-23): 2.1 landed on `feat/v4` (`build: emit an ESM-only package`), including the
+smoke-test and package-check updates the new layout needs so the commit stays green. Against
+the Phase 1 baseline, the JavaScript differs only by native object spread (the ES2020 target) and
+the declarations are unchanged. 2.2 to 2.5 follow.
+
 Goal: one build, one tsconfig, no CJS scaffolding.
 
 | PR | Branch | Work |
 | --- | --- | --- |
-| 2.1 | `build/esm-only` | Delete `tsconfig.esm.json`, `scripts/mark-cjs.js`, and `lib/types-cjs`. One `tsconfig.json` with `target: ES2020`, `module: NodeNext`, `moduleResolution: NodeNext`, `jsx: react-jsx`, `declaration: true`, `outDir: lib`. `strict` stays off here so the `lib/` diff against the previous ESM output shows only the module-format change; it turns on in PR 4.3. `package.json`: `exports["."]` becomes `{ "types": "./lib/index.d.ts", "default": "./lib/index.js" }`, `main` and `types` point at the same files, `module` field removed, `sideEffects: false`. Update `scripts/check-package.js` to run attw with `--profile esm-only` and keep the allowlists empty. |
+| 2.1 | `build/esm-only` | Delete `tsconfig.esm.json`, `scripts/mark-cjs.js`, and `lib/types-cjs`. One `tsconfig.json` with `target: ES2020`, `module: NodeNext`, `moduleResolution: NodeNext`, `jsx: react-jsx`, `declaration: true`, `outDir: lib`. `strict` stays off here so the `lib/` diff against the previous ESM output shows only the module-format change; it turns on in PR 4.3. `package.json`: `exports["."]` becomes `{ "types": "./lib/index.d.ts", "default": "./lib/index.js" }`, `main` and `types` point at the same files, `module` field removed, `sideEffects: false`. In `scripts/check-package.js`, allowlist attw's `CJSResolvesToESM at . (node16-cjs)` finding with the reason (the smoke test proves `require(esm)` works) and show the table with `--profile esm-only`; the JSON output ignores the profile, so the allowlist is the gate. |
 | 2.2 | `test/smoke-esm-only` | The smoke test keeps both consumers. `consumer-import.mjs` is the main check. `consumer-require.cjs` now requires the ESM build and must pass on Node 22 and 24 in CI, which proves that CommonJS apps on a current Node keep working. The type-check consumers move from `node16` to `nodenext` for the CommonJS file and keep `node16` for the ES module file. Add a Jest consumer that renders the tree under Jest's default CommonJS transform, so the matrix row for Jest becomes evidence instead of a guess. |
 | 2.3 | `chore/typescript-6` | Lift the `~5.9` cap. Try TypeScript 6 first; try 7 only if 6 passes. Validate with the build, `check:package`, the smoke test, and a diff of `lib/` against the 2.1 output. Unverified until run: TypeScript 7 is a new compiler and may change emitted declarations or reject config options. |
 | 2.4 | `chore/toolchain-cleanup` | Remove the stale `rimraf ./docs` step. Update `AGENTS.md` (the Testing and Code style sections now say tests are `.test.ts` or `.test.tsx` and scripts are `.ts`), README, `.oxlintrc.json` (drop the class-component rule downgrades once Phase 4 lands; enable the hooks rules), `vitest.config.ts` (`jsx: automatic`), and the lint-staged config for the new file set. |
@@ -526,13 +531,14 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | Consumer setup | v3 today | v4 | Evidence |
 | --- | --- | --- | --- |
 | ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works | `consumer-import.mjs` in the smoke test; the demo. |
-| `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes on Node 22.13.1 in this worktree; CI runs 22 and 24. |
+| `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes against the ESM-only build on Node 22.13.1 in this worktree (2026-09-23); CI runs 22 and 24. |
 | `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | Unverified: based on the d3 packages shipping `"type": "module"` only and on the smoke test's own skip logic. No such Node version was run here. |
 | Jest with the default CommonJS transform | Needs `transformIgnorePatterns` for the d3 packages | Needs it for `react-d3-tree` too | Unverified until PR 2.2 adds a Jest consumer. |
 | Server rendering (Next.js, Remix) | Renders, but every node and link is at opacity 0 and at its parent's position until the client mounts; ids differ between server and client | Renders the final layout with deterministic ids | `renderToString` run in this worktree (see [Server rendering](#server-rendering)); the mounted-DOM oracle in PR 1.2 and a hydration test in PR 5.1. |
 | TypeScript, `moduleResolution: bundler` | Works | Works | `check:package` (attw) today and after. |
 | TypeScript, ES module file, `node16` | Works (fixed in 3.7.0) | Works | Smoke type-check consumer. |
-| TypeScript, CommonJS file, `node16` | Works (fixed in 3.7.0) | Errors: TypeScript rejects an ESM-only package from a CommonJS file under `node16` | Unverified: based on TypeScript's `node16` rules; PR 2.2 confirms and moves the consumer to `nodenext`, which allows it on TypeScript 5.8 or later (also unverified until run). |
+| TypeScript, CommonJS file, `nodenext` | Works (fixed in 3.7.0) | Works | The smoke test's CommonJS consumer type-checks under `nodenext` with TypeScript 5.9.3 against the ESM-only build (2026-09-23). |
+| TypeScript, CommonJS file, `node16` | Works (fixed in 3.7.0) | attw reports `CJSResolvesToESM` for this resolution and the `esm-only` profile marks it ignored | Unverified whether a `node16` CommonJS consumer gets a compile error; attw's finding and TypeScript's rule say so. The documented answer for such consumers is `nodenext`, which TypeScript 5.8 and later ship. |
 | React 16 or 17 | Works | Not supported | Peer range. |
 | `enableLegacyTransitions` on React 19 | Throws (`findDOMNode` removed) | Prop removed | `findDOMNode` call found in the fork's `CSSTransitionGroupChild.js`. Unverified: not run under React 19 here. |
 

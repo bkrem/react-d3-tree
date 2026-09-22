@@ -1,3 +1,5 @@
+// Loads the ESM-only package through `require(esm)`; the smoke test runs this consumer only on
+// a Node version that supports it.
 const assert = require('node:assert');
 const React = require('react');
 const { renderToString } = require('react-dom/server');

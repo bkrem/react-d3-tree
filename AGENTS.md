@@ -14,7 +14,7 @@ Beyond obvious source-level API changes, a change is breaking if it affects any 
 
 - Public API: renaming, removing, or changing the behavior of the `src/index.ts` exports (`Tree`, its props, its defaults, or the exported types).
 - Peer dependencies: narrowing the supported `react`/`react-dom` range (16.x–19.x) or adding a new required peer dependency.
-- Build output: changing which files the `exports` map or the `main`, `module`, and `types` fields resolve to for a consumer that works today, dropping a module format, or raising the compile target (CJS `es5`, ESM `es6`) so runtimes or bundlers that work today stop working. Restructuring `exports` is fine when every existing consumer keeps resolving the same runtime file and equivalent types; `pnpm check:package` and the consumer type-checks in `pnpm test:smoke` are the evidence.
+- Build output: changing which files the `exports` map or the `main` and `types` fields resolve to for a consumer that works today, adding or dropping a module format, or raising the compile target (`ES2020`) so runtimes or bundlers that work today stop working. Restructuring `exports` is fine when every existing consumer keeps resolving the same runtime file and equivalent types; `pnpm check:package` and the consumer type-checks in `pnpm test:smoke` are the evidence.
 - Shipped types: raising the minimum TypeScript version the `.d.ts` files need, or changing emitted types so existing consumer code stops type-checking.
 
 When a change might break consumers, don't assume either way. Research and validate it: build the package before and after and compare the output, run the smoke test and any package checks the repo has, and test the specific consumer setup the change could affect (module format, resolution mode, TypeScript version). Record what you verified and what stays unverified. If the evidence still leaves a judgement call, for example a fix that changes what some consumers see, give the maintainer the evidence and let them decide; don't classify the change as breaking or safe on an untested assumption.
@@ -33,7 +33,7 @@ The library source lives in `src/`. Everything else supports building, testing, 
 - `src/generateId.ts` — generates the v4 UUIDs that `Tree` uses for its SVG and group class references and for node IDs. Not part of the public API.
 - `src/globalCss.ts` — injected base styles.
 
-The build emits four artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`lib/esm`), type declarations (`lib/types`), and a copy of the declarations for CommonJS consumers (`lib/types-cjs`). Because the root `package.json` sets `"type": "module"`, `scripts/mark-cjs.js` writes a `package.json` with `"type": "commonjs"` into `lib/cjs` and `lib/types-cjs`; without the second marker TypeScript reads the declarations as ESM and rejects them from a CommonJS file under `node16` resolution. The `package.json` `exports` map lists `types` before `default` under both the `import` and the `require` condition.
+The build is ESM only: one `tsc` pass (`module: NodeNext`, `target: ES2020`) emits the JavaScript and the declarations side by side under `lib/`. The `package.json` `exports` map has a single `.` entry with `types` before `default`; `main` and `types` point at the same files for resolvers that ignore `exports`, and `sideEffects` is `false`. A CommonJS consumer loads the package through Node's `require(esm)`, so `require()` needs Node 22.12 or later; the smoke test covers both entry styles.
 
 ## Tech stack
 
@@ -54,14 +54,10 @@ Run these from the repo root.
 # Install dependencies
 pnpm install
 
-# Build the library (cleans lib/, then emits CJS + type declarations, then ESM)
+# Build the library (cleans lib/, then emits ESM and type declarations)
 pnpm build
 
-# Build CJS + declarations only / ESM only
-pnpm build:cjs
-pnpm build:esm
-
-# Rebuild ESM on change (used for local development)
+# Rebuild on change (used for local development)
 pnpm build:watch
 
 # Run the test suite with coverage

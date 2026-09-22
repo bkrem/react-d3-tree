@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtures = path.join(repoRoot, 'scripts', 'smoke');
 
-if (!existsSync(path.join(repoRoot, 'lib', 'cjs', 'index.js'))) {
+if (!existsSync(path.join(repoRoot, 'lib', 'index.js'))) {
   console.error('lib/ is missing. Run `pnpm build` first.');
   process.exit(1);
 }
@@ -44,7 +44,7 @@ try {
   );
 
   const consumers = ['consumer-import.mjs'];
-  // The d3 dependencies are ESM-only, so `require()` needs a Node version that can load ES modules.
+  // The package is ESM-only, so `require()` needs a Node version that can load ES modules.
   if (process.features.require_module) {
     consumers.push('consumer-require.cjs');
   } else {
@@ -56,12 +56,15 @@ try {
     process.stdout.write(run(`"${process.execPath}" ${consumer}`, project));
   });
 
-  // Type-check the same imports from a CommonJS and an ES module file under `node16`
-  // resolution, the mode that reads the `exports` conditions and the nearest `package.json`
-  // `type`. The repo's TypeScript and @types/react are linked in so no extra install is needed.
+  // Type-check the same imports from a CommonJS and an ES module file, in the modes that read
+  // the `exports` conditions and the nearest `package.json` `type`. The ES module file uses
+  // `node16`. The CommonJS file uses `nodenext`, the only mode in which TypeScript lets a
+  // CommonJS file import an ES module (through `require(esm)`, supported since TypeScript 5.8).
+  // The repo's TypeScript and @types/react are linked in so no extra install is needed.
   const typesProject = path.join(project, 'types');
   for (const kind of ['commonjs', 'module']) {
     const dir = path.join(typesProject, kind);
+    const moduleMode = kind === 'commonjs' ? 'nodenext' : 'node16';
     mkdirSync(dir, { recursive: true });
     writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ type: kind }));
     copyFileSync(path.join(fixtures, 'consumer.ts'), path.join(dir, 'consumer.ts'));
@@ -69,8 +72,8 @@ try {
       path.join(dir, 'tsconfig.json'),
       JSON.stringify({
         compilerOptions: {
-          module: 'node16',
-          moduleResolution: 'node16',
+          module: moduleMode,
+          moduleResolution: moduleMode,
           strict: true,
           noEmit: true,
           esModuleInterop: true,
@@ -86,9 +89,9 @@ try {
       run(`"${path.join(repoRoot, 'node_modules', '.bin', 'tsc')}" -p "${dir}"`, project);
     } catch (error) {
       // tsc prints its diagnostics on stdout.
-      throw new Error(`type-check from a ${kind} file (node16) failed:\n${error.stdout}`);
+      throw new Error(`type-check from a ${kind} file (${moduleMode}) failed:\n${error.stdout}`);
     }
-    console.log(`type-check from a ${kind} file (node16): ok`);
+    console.log(`type-check from a ${kind} file (${moduleMode}): ok`);
   }
 } finally {
   rmSync(project, { recursive: true, force: true });

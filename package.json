@@ -12,27 +12,19 @@
     "lib"
   ],
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "import": {
-        "types": "./lib/types/index.d.ts",
-        "default": "./lib/esm/index.js"
-      },
-      "require": {
-        "types": "./lib/types-cjs/index.d.ts",
-        "default": "./lib/cjs/index.js"
-      }
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
     }
   },
-  "module": "lib/esm/index.js",
-  "main": "lib/cjs/index.js",
-  "types": "lib/types/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build:docs": "rimraf ./docs && typedoc",
-    "build:cjs": "tsc -p tsconfig.json && node scripts/mark-cjs.js",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build": "rimraf lib && pnpm run build:cjs && pnpm run build:esm",
-    "build:watch": "rimraf lib && tsc -p tsconfig.esm.json -w",
+    "build": "rimraf lib && tsc -p tsconfig.json",
+    "build:watch": "rimraf lib && tsc -p tsconfig.json -w",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint src scripts test",

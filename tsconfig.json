@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "lib": ["dom", "es2017"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "lib": ["dom", "es2020"],
     "types": [],
     "jsx": "react",
-    "outDir": "./lib/cjs",
+    "outDir": "./lib",
     "declaration": true,
-    "declarationDir": "./lib/types",
     "skipLibCheck": true,
     "esModuleInterop": true
   },
