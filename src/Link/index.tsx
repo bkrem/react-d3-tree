@@ -1,6 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
+// Registers `selection.transition()`, which the legacy transitions use.
+import 'd3-transition';
 import {
   Orientation,
   TreeLinkDatum,
@@ -56,7 +58,6 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   ) {
     if (this.props.enableLegacyTransitions) {
       select(this.linkRef)
-        // @ts-ignore
         .transition()
         .duration(transitionDuration)
         .style('opacity', opacity)

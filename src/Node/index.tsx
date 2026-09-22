@@ -1,6 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
+// Registers `selection.transition()`, which the legacy transitions use.
+import 'd3-transition';
 import {
   Orientation,
   Point,
@@ -116,7 +118,6 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   ) {
     if (this.props.enableLegacyTransitions) {
       select(this.nodeRef)
-        // @ts-ignore
         .transition()
         .duration(transitionDuration)
         .attr('transform', transform)

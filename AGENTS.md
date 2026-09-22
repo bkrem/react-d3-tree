@@ -41,7 +41,7 @@ The build is ESM only: one `tsc` pass (`module: NodeNext`, `target: ES2020`) emi
 - The scripts under `scripts/` are TypeScript that Node runs directly through type stripping, on by default since Node 22.18.0 and 23.6.0. On an older Node, `pnpm build`, `pnpm check:package`, and `pnpm test:smoke` fail with a syntax error; `.nvmrc` names the CI major. `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle (enums, namespaces, parameter properties). The smoke-test consumers in `scripts/smoke/` stay JavaScript on purpose: they load the package the way a plain JavaScript app does.
 - TypeScript 6.0 (source), compiled with `tsc`, pinned to `~6.0` because TypeDoc 0.28 supports 6.0.x only; TypeScript 7 waits for TypeDoc. TypeScript 6 makes `strict` the default and no longer infers `rootDir`, so `tsconfig.json` sets both explicitly: `strict: false` until the hooks rewrite turns it on, and `rootDir: ./src`. The extending configs set `rootDir: .` because they include files outside `src/`.
 - React 16–19 (peer dependency). Dev and test dependencies use React 18.
-- D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
+- D3 modules: `d3-hierarchy`, `d3-selection`, `d3-transition`, `d3-zoom`, all 3.x with matching `@types/d3-*` packages. `d3-transition` is imported for its side effect (it adds `transition()` to selections); the diagonal link path is a local Bézier, not `d3-shape`.
 - Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
 - Vitest with jsdom and `@testing-library/react`.
 - oxlint for linting and oxfmt for formatting.
@@ -92,6 +92,8 @@ pnpm settings live in `pnpm-workspace.yaml`:
 - `minimumReleaseAge: 4320` (minutes) blocks versions published less than 3 days ago. An install fails when the lockfile holds a younger version, so add or update dependencies only to versions past that age.
 - `allowBuilds` lists every dependency that has an install script, with `true` to run it or `false` to deny it. pnpm fails the install when a dependency with an install script is missing from the list.
 - `overrides` pins transitive versions. pnpm ignores an `overrides` field in `package.json`.
+
+When a `@types/d3-*` package is added or bumped, run `pnpm dedupe` and check `pnpm why @types/d3-selection` reports one version: the `@types/d3-*` packages depend on each other through `*` ranges, which pnpm satisfies with whatever version the lockfile already holds, and two copies of `@types/d3-selection` split the `Selection` interface so the `d3-transition` augmentation lands on the wrong one.
 
 pnpm links only declared dependencies into `node_modules`. Declare every imported package, and every `@types/*` package the build needs, in `package.json`. The tsconfigs set `types: []` and an explicit `lib`, so the build doesn't pick up ambient types from packages that happen to be installed.
 

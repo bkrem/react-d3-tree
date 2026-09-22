@@ -304,7 +304,13 @@ formula over 28,561 coordinate pairs, including fractions and extreme magnitudes
 mismatches, and `links.test.tsx` pins fractional-coordinate output for every `pathFunc` in both
 orientations (the literals were run against `d3-shape` before the swap). `d3-shape` 3.x rounds
 path coordinates to three decimals through `link.digits()`, so keeping it would have changed
-output for non-integer layouts; the local formula keeps 1.3.7's exact strings.
+output for non-integer layouts; the local formula keeps 1.3.7's exact strings. 3.1 landed next
+(`chore(deps): move the d3 modules to 3.x and declare d3-transition`): `d3-hierarchy` 3.1.2
+with types 3.1.7, `@types/d3-selection` 3.0.12, `@types/d3-zoom` 3.0.8, `d3-transition` 3.0.1
+with types 3.0.9, typed selections and zoom events in place of the five `@ts-ignore` comments,
+and the oracle snapshots unchanged. Gotcha recorded in `AGENTS.md`: the new `@types/d3-*`
+packages resolved their `@types/d3-selection@*` range to the 1.4.3 left in the lockfile, which
+split the `Selection` interface until `pnpm dedupe`. 3.2 (`dequal`) folds into 4.1.
 
 Goal: every runtime dependency earns its place, and the types match the runtimes.
 
@@ -571,14 +577,14 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | `d3-hierarchy` | 1.1.9 | 3.1.2 | ESM-only, fine once the build is ESM-only. |
 | `d3-selection` | 3.0.0 | 3.x | Unchanged. |
 | `d3-zoom` | 3.0.0 | 3.x | Unchanged. |
-| `d3-shape` | 1.3.7 | 3.2.0, or removed | PR 3.3 decides with a comparison test. |
-| `d3-transition` | Transitive only | 3.0.1, declared | Used by `centerNode` and by 4.1 animations. |
+| `d3-shape` | 1.3.7 | Removed (PR 3.3) | A local Bézier reproduces `linkHorizontal` and `linkVertical` byte for byte. |
+| `d3-transition` | Transitive only | 3.0.1, declared (PR 3.1) | Used by `centerNode` and by 4.1 animations. |
 | `@types/d3-hierarchy` | 1.1.8 (runtime dep) | 3.1.7 (runtime dep) | Exported types reference `HierarchyPointNode`. |
 | `@bkrem/react-transition-group` | 1.3.5 | Removed | With the flag. |
 | `clone` | 2.1.2 | Removed | With callback cloning. |
 | `dequal` | 2.0.2 | Removed | Effects compare primitives. |
-| `@types/d3-selection`, `@types/d3-shape`, `@types/d3-zoom` (dev) | 1.x | 3.x | Match the runtimes. |
-| `@types/d3-transition` (dev) | Absent | 3.0.9 | Removes three `@ts-ignore`. |
+| `@types/d3-selection`, `@types/d3-zoom` (dev) | 1.x | 3.0.12, 3.0.8 (PR 3.1) | Match the runtimes; `@types/d3-shape` went with `d3-shape`. |
+| `@types/d3-transition` (dev) | Absent | 3.0.9 (PR 3.1) | Removes three `@ts-ignore`. |
 | `enzyme`, `enzyme-adapter-react-16` (dev) | 3.x | Removed | Testing Library. |
 | `@testing-library/react`, `/dom` (dev) | Absent | 16.3.3, 10.4.2 | Peer range needs React 18 or 19. `user-event` isn't used: the tests dispatch raw wheel and mouse events. |
 | `react`, `react-dom` (dev) | 16.14 | 19.3.0, with an 18.3.1 CI job | |

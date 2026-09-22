@@ -2,6 +2,9 @@ import React from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
+import type { D3ZoomEvent } from 'd3-zoom';
+// Registers `selection.transition()`, which `centerNode` uses.
+import 'd3-transition';
 import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
 
@@ -154,14 +157,16 @@ class Tree extends React.Component<TreeProps, TreeState> {
    */
   bindZoomListener(props: TreeProps) {
     const { zoomable, scaleExtent, translate, zoom, onUpdate, hasInteractiveNodes } = props;
-    const svg = select(`.${this.svgInstanceRef}`);
-    const g = select(`.${this.gInstanceRef}`);
+    const svg = select<SVGSVGElement, unknown>(`.${this.svgInstanceRef}`);
+    const g = select<SVGGElement, unknown>(`.${this.gInstanceRef}`);
 
     // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
-    // @ts-ignore
-    svg.call(d3zoom().transform, zoomIdentity.translate(translate.x, translate.y).scale(zoom));
     svg.call(
-      d3zoom()
+      d3zoom<SVGSVGElement, unknown>().transform,
+      zoomIdentity.translate(translate.x, translate.y).scale(zoom)
+    );
+    svg.call(
+      d3zoom<SVGSVGElement, unknown>()
         .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
         // TODO: break this out into a separate zoom handler fn, rather than inlining it.
         .filter((event: any) => {
@@ -174,7 +179,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
           }
           return true;
         })
-        .on('zoom', (event: any) => {
+        .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
           if (
             !this.props.draggable &&
             ['mousemove', 'touchmove', 'dblclick'].includes(event.sourceEvent.type)
@@ -182,7 +187,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
             return;
           }
 
-          g.attr('transform', event.transform);
+          g.attr('transform', event.transform.toString());
           if (typeof onUpdate === 'function') {
             // This callback is magically called not only on "zoom", but on "drag", as well,
             // even though event.type == "zoom".
@@ -432,8 +437,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
   centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
     const { dimensions, orientation, zoom, centeringTransitionDuration } = this.props;
     if (dimensions) {
-      const g = select(`.${this.gInstanceRef}`);
-      const svg = select(`.${this.svgInstanceRef}`);
+      const g = select<SVGGElement, unknown>(`.${this.gInstanceRef}`);
+      const svg = select<SVGSVGElement, unknown>(`.${this.svgInstanceRef}`);
       const scale = this.state.d3.scale;
 
       let x: number;
@@ -447,14 +452,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
         x = -hierarchyPointNode.x * scale + dimensions.width / 2;
         y = -hierarchyPointNode.y * scale + dimensions.height / 2;
       }
-      //@ts-ignore
       g.transition()
         .duration(centeringTransitionDuration)
         .attr('transform', 'translate(' + x + ',' + y + ')scale(' + scale + ')');
       // Sets the viewport to the new center so that it does not jump back to original
       // coordinates when dragged/zoomed
-      //@ts-ignore
-      svg.call(d3zoom().transform, zoomIdentity.translate(x, y).scale(zoom));
+      svg.call(
+        d3zoom<SVGSVGElement, unknown>().transform,
+        zoomIdentity.translate(x, y).scale(zoom)
+      );
     }
   };
 
