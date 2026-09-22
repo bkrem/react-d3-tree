@@ -3,7 +3,6 @@ minimumReleaseAge: 4320
 
 # Dependency install scripts run only when listed as `true`.
 allowBuilds:
-  core-js-pure: false
   fsevents: false
 
 # Works around a `node:stream` failure in the test run (enzyme depends on cheerio).

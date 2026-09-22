@@ -5,19 +5,26 @@ const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f
 describe('generateId', () => {
   const originalCrypto = global.crypto;
 
+  // jsdom defines `crypto` as a getter-only property; make it assignable for the tests below.
+  Object.defineProperty(globalThis, 'crypto', {
+    value: originalCrypto,
+    writable: true,
+    configurable: true,
+  });
+
   afterEach(() => {
     if (originalCrypto === undefined) {
       delete global.crypto;
     } else {
       global.crypto = originalCrypto;
     }
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('when `crypto.randomUUID` is available', () => {
     it('returns the native UUID', () => {
-      const randomUUID = jest.fn(() => '3b241101-e2bb-4255-8caf-4136c566a962');
-      global.crypto = { randomUUID, getRandomValues: jest.fn() };
+      const randomUUID = vi.fn(() => '3b241101-e2bb-4255-8caf-4136c566a962');
+      global.crypto = { randomUUID, getRandomValues: vi.fn() };
 
       expect(generateId()).toBe('3b241101-e2bb-4255-8caf-4136c566a962');
       expect(randomUUID).toHaveBeenCalledTimes(1);
@@ -38,7 +45,7 @@ describe('generateId', () => {
   describe('when only `crypto.getRandomValues` is available', () => {
     it('formats the random bytes as a v4 UUID', () => {
       global.crypto = {
-        getRandomValues: jest.fn(bytes => {
+        getRandomValues: vi.fn(bytes => {
           bytes.forEach((_, i) => {
             bytes[i] = i * 17; // 0x00, 0x11, ... 0xff
           });
@@ -76,7 +83,7 @@ describe('generateId', () => {
   describe('when `crypto` is unavailable', () => {
     it('falls back to `Math.random` if `crypto` is undefined', () => {
       delete global.crypto;
-      const random = jest.spyOn(Math, 'random');
+      const random = vi.spyOn(Math, 'random');
 
       expect(generateId()).toMatch(UUID_V4);
       expect(random).toHaveBeenCalledTimes(16);
@@ -84,7 +91,7 @@ describe('generateId', () => {
 
     it('falls back to `Math.random` if `crypto` has no usable methods', () => {
       global.crypto = {};
-      const random = jest.spyOn(Math, 'random');
+      const random = vi.spyOn(Math, 'random');
 
       expect(generateId()).toMatch(UUID_V4);
       expect(random).toHaveBeenCalledTimes(16);
@@ -93,7 +100,7 @@ describe('generateId', () => {
     it('pads single-digit hex bytes and stays within byte range', () => {
       delete global.crypto;
 
-      jest.spyOn(Math, 'random').mockReturnValue(0);
+      vi.spyOn(Math, 'random').mockReturnValue(0);
       expect(generateId()).toBe('00000000-0000-4000-8000-000000000000');
 
       Math.random.mockReturnValue(0.999999999);

@@ -287,7 +287,7 @@ function CustomPathFuncTree() {
 
 ## Development
 ### Setup
-The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.1 or later. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
+The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
 
 To set up `react-d3-tree` for local development, clone the repo and follow the steps below:
 

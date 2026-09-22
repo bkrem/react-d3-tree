@@ -56,10 +56,10 @@ describe('<Node />', () => {
     allowForeignObjects: false,
   };
 
-  jest.spyOn(Node.prototype, 'applyTransform');
+  vi.spyOn(Node.prototype, 'applyTransform');
 
   // Clear method spies on prototype after each test
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   it('has the correct `id` attribute value', () => {
     const renderedComponent = shallow(<Node {...mockProps} />);
@@ -103,7 +103,7 @@ describe('<Node />', () => {
 
   describe('Events', () => {
     it('handles onNodeToggle and passes its nodeId to handler', () => {
-      const onNodeToggleSpy = jest.fn();
+      const onNodeToggleSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(
         <Node {...mockProps} onNodeToggle={onNodeToggleSpy} onNodeClick={() => {}} />
@@ -115,7 +115,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeClick events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onClickSpy = jest.fn();
+      const onClickSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(
         <Node {...mockProps} onNodeToggle={() => {}} onNodeClick={onClickSpy} />
@@ -130,7 +130,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeMouseOver events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onMouseOverSpy = jest.fn();
+      const onMouseOverSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOver={onMouseOverSpy} />);
 
@@ -143,7 +143,7 @@ describe('<Node />', () => {
     });
 
     it('handles onNodeMouseOut events and passes its `hierarchyPointNode` representation & event object to handler', () => {
-      const onMouseOutSpy = jest.fn();
+      const onMouseOutSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Node {...mockProps} onNodeMouseOut={onMouseOutSpy} />);
 
