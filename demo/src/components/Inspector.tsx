@@ -164,7 +164,7 @@ export function Inspector({ state, dispatch, datasets, onLoadCustom }: Inspector
             />
           </span>
         </Row>
-        <Hint>Empty translate fields fit the root to the canvas.</Hint>
+        <Hint>Empty fields fit the root to the canvas. Dragging the tree fills them in.</Hint>
         <Row label="initialDepth" htmlFor="initialDepth" modified={mod('initialDepth')}>
           <NumberField
             id="initialDepth"

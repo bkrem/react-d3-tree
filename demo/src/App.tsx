@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { Orientation } from 'react-d3-tree';
 import { CodeDrawer } from './components/CodeDrawer.jsx';
 import { Inspector } from './components/Inspector.jsx';
@@ -23,6 +23,14 @@ function initialState() {
   return applyPatch(defaults, fromSearchParams(new URLSearchParams(window.location.search)));
 }
 
+/** How long after the last drag or zoom tick the view counts as settled. */
+const SETTLE_MS = 150;
+
+const round = (n: number, decimals = 0) => {
+  const f = 10 ** decimals;
+  return Math.round(n * f) / f;
+};
+
 export function App() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
   const [customDataset, setCustomDataset] = useState<Dataset | null>(null);
@@ -37,6 +45,42 @@ export function App() {
   const dataset = datasets.find(d => d.id === state.dataset) ?? builtInDatasets[0];
 
   const translate = state.translate ?? fitTranslate(size, state.orientation);
+
+  // `Tree` re-derives its transform from the `translate` and `zoom` props on every render, which
+  // would snap a dragged tree back whenever another control changes. Once a gesture settles, the
+  // live transform becomes the state, so the props, the URL, and the snippet match the view.
+  const effective = useRef({ translate, zoom: state.zoom });
+  useEffect(() => {
+    effective.current = { translate, zoom: state.zoom };
+  }, [translate, state.zoom]);
+  useEffect(() => {
+    let timer: number | undefined;
+    const unsubscribe = liveStore.subscribe(() => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const live = liveStore.get();
+        if (!live) return;
+        const next = {
+          translate: { x: round(live.translate.x), y: round(live.translate.y) },
+          zoom: round(live.zoom, 3),
+        };
+        const current = effective.current;
+        if (
+          next.zoom === current.zoom &&
+          next.translate.x === current.translate.x &&
+          next.translate.y === current.translate.y
+        ) {
+          return;
+        }
+        dispatch({ type: 'set-transform', ...next });
+      }, SETTLE_MS);
+    });
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
+  }, [liveStore]);
+
   const renderer = nodeRenderers.find(r => r.id === state.nodeRenderer) ?? nodeRenderers[0];
   const renderNode = useMemo(
     () => renderer.make?.({ orientation: state.orientation, nodeSize: state.nodeSize }),

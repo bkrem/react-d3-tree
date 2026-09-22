@@ -136,7 +136,9 @@ export function applyPatch(state: PlaygroundState, patch: Patch): PlaygroundStat
 export type Action =
   | { type: 'patch'; patch: Patch }
   | { type: 'reset-group'; group: GroupId }
-  | { type: 'reset-all' };
+  | { type: 'reset-all' }
+  /** The transform the user reached by dragging and zooming; `translate` becomes explicit. */
+  | { type: 'set-transform'; translate: Point; zoom: number };
 
 export function reducer(state: PlaygroundState, action: Action): PlaygroundState {
   switch (action.type) {
@@ -146,5 +148,8 @@ export function reducer(state: PlaygroundState, action: Action): PlaygroundState
       return resetGroup(state, action.group);
     case 'reset-all':
       return defaults;
+    case 'set-transform':
+      if (sameValue(state.translate, action.translate) && state.zoom === action.zoom) return state;
+      return { ...state, translate: action.translate, zoom: action.zoom };
   }
 }
