@@ -131,6 +131,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
     this.internalState.targetNode = null;
   }
 
+  componentWillUnmount() {
+    select(`.${this.svgInstanceRef}`).on('.zoom', null);
+  }
+
   /**
    * Collapses all tree nodes with a `depth` larger than `initialDepth`.
    *
@@ -339,6 +343,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       const formattedChildren = clone(childrenData).map((node: RawNodeDatum) =>
         Tree.assignInternalProperties([node], depth + 1)
       );
+      targetNodeDatum.children = targetNodeDatum.children || [];
       targetNodeDatum.children.push(...formattedChildren.flat());
 
       this.setState({ data });
@@ -481,7 +486,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       this.setInitialTreeDepth(nodes, initialDepth);
     }
 
-    if (depthFactor) {
+    if (depthFactor !== undefined) {
       nodes.forEach(node => {
         node.y = node.depth * depthFactor;
       });
