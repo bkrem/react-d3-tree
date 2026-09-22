@@ -30,16 +30,16 @@ describe('<Link />', () => {
       orientation && `M${d.source.y},${d.source.x}V${d.target.x}H${d.target.y}`,
   };
 
-  jest.spyOn(Link.prototype, 'drawPath');
-  jest.spyOn(Link.prototype, 'drawDiagonalPath');
-  jest.spyOn(Link.prototype, 'drawElbowPath');
-  jest.spyOn(Link.prototype, 'drawStraightPath');
-  jest.spyOn(Link.prototype, 'drawStepPath');
-  jest.spyOn(Link.prototype, 'applyOpacity');
-  jest.spyOn(pathFuncs, 'testPathFunc');
+  vi.spyOn(Link.prototype, 'drawPath');
+  vi.spyOn(Link.prototype, 'drawDiagonalPath');
+  vi.spyOn(Link.prototype, 'drawElbowPath');
+  vi.spyOn(Link.prototype, 'drawStraightPath');
+  vi.spyOn(Link.prototype, 'drawStepPath');
+  vi.spyOn(Link.prototype, 'applyOpacity');
+  vi.spyOn(pathFuncs, 'testPathFunc');
 
   // Clear method spies on prototype after each test
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   it('binds IDs of source & target nodes to data-source-id/data-target-id', () => {
     linkData.source.id = 1;
@@ -137,7 +137,7 @@ describe('<Link />', () => {
 
   describe('Events', () => {
     it('handles onClick events and passes its nodeId & event object to onClick handler', () => {
-      const onClickSpy = jest.fn();
+      const onClickSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Link {...mockProps} onClick={onClickSpy} />);
 
@@ -151,7 +151,7 @@ describe('<Link />', () => {
     });
 
     it('handles onMouseOver events and passes its nodeId & event object to onMouseOver handler', () => {
-      const onMouseOverSpy = jest.fn();
+      const onMouseOverSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Link {...mockProps} onMouseOver={onMouseOverSpy} />);
 
@@ -165,7 +165,7 @@ describe('<Link />', () => {
     });
 
     it('handles onMouseOut events and passes its nodeId & event object to onMouseOut handler', () => {
-      const onMouseOutSpy = jest.fn();
+      const onMouseOutSpy = vi.fn();
       const mockEvt = { mock: 'event' };
       const renderedComponent = shallow(<Link {...mockProps} onMouseOut={onMouseOutSpy} />);
 
