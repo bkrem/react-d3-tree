@@ -4,38 +4,74 @@
 // publint validates `package.json` against the files in `lib/`. attw (Are the types wrong?)
 // packs the package and resolves its types under every TypeScript module resolution mode.
 //
-// Findings that predate these checks are allowed by name. Fixing them means changing the
-// `exports` map, which is a compatibility contract; see AGENTS.md. Everything else fails.
-import { execFileSync } from 'node:child_process';
+// Findings that predate these checks are allowed one by one, each pinned to its location.
+// Fixing them means changing the `exports` map, which is a compatibility contract; see
+// AGENTS.md. Everything else, including a known finding at a new location, fails.
+import { spawnSync } from 'node:child_process';
+import { closeSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { publint } from 'publint';
 import { formatMessage, formatMessagePath } from 'publint/utils';
 
 // The `types` condition is listed after `import` and `require`, and one ESM `.d.ts` set serves
 // both entry points. Both are visible to consumers today and stay as they are within v3.
-// Each entry names one diagnostic at one manifest location, so the same code at another
-// location (for example a new export subpath) still fails.
 const knownPublint = new Set([
   'EXPORTS_TYPES_SHOULD_BE_FIRST at pkg.exports["."].types',
   'TYPES_NOT_EXPORTED at pkg.exports["."].import',
   'TYPES_NOT_EXPORTED at pkg.exports["."].require',
 ]);
-const knownAttwRules = ['fallback-condition', 'false-esm'];
-
-const describe = message => `${message.code} at ${formatMessagePath(message.path)}`;
-
-const { messages, pkg } = await publint({ pack: false, level: 'warning' });
-const unexpected = messages.filter(message => !knownPublint.has(describe(message)));
-for (const message of messages) {
-  const marker = knownPublint.has(describe(message)) ? 'known' : 'NEW';
-  console.log(`publint ${message.type} (${marker}): ${formatMessage(message, pkg)}`);
-}
-if (unexpected.length > 0) {
-  console.error(`publint: ${unexpected.length} new finding(s)`);
-  process.exit(1);
-}
+const knownAttw = new Set([
+  'FallbackCondition at . (node16-cjs)',
+  'FallbackCondition at . (node16-esm)',
+  'FallbackCondition at . (bundler)',
+  'FalseESM at /node_modules/react-d3-tree/lib/types/index.d.ts',
+]);
 
 // `npm pack` runs `prepare` despite `--ignore-scripts`; `HUSKY=0` keeps it from touching git config.
-execFileSync('attw', ['--pack', '.', '--ignore-rules', ...knownAttwRules], {
-  stdio: 'inherit',
-  env: { ...process.env, HUSKY: '0' },
+const env = { ...process.env, HUSKY: '0' };
+
+const describePublint = message => `${message.code} at ${formatMessagePath(message.path)}`;
+const describeAttw = problem =>
+  problem.entrypoint !== undefined
+    ? `${problem.kind} at ${problem.entrypoint} (${problem.resolutionKind})`
+    : `${problem.kind} at ${problem.typesFileName}`;
+
+let failed = false;
+const report = (tool, findings, describe, format) => {
+  let unexpected = 0;
+  for (const finding of findings) {
+    const known = tool === 'publint' ? knownPublint : knownAttw;
+    const marker = known.has(describe(finding)) ? 'known' : 'NEW';
+    if (marker === 'NEW') unexpected += 1;
+    console.log(`${tool} (${marker}): ${format(finding)}`);
+  }
+  if (unexpected > 0) {
+    console.error(`${tool}: ${unexpected} new finding(s)`);
+    failed = true;
+  }
+};
+
+const { messages, pkg } = await publint({ pack: false, level: 'warning' });
+report('publint', messages, describePublint, message => formatMessage(message, pkg));
+
+// attw exits 1 whenever it finds a problem, so the exit code says nothing about newness. It
+// exits right after printing, which truncates a piped stdout at one chunk; a file gets it all.
+const attwOut = path.join(mkdtempSync(path.join(tmpdir(), 'rd3t-attw-')), 'attw.json');
+const attwFd = openSync(attwOut, 'w');
+const attwRun = spawnSync('attw', ['--pack', '.', '--format', 'json'], {
+  env,
+  stdio: ['ignore', attwFd, 'inherit'],
 });
+closeSync(attwFd);
+if (attwRun.error) {
+  console.error('attw did not run', attwRun.error);
+  process.exit(1);
+}
+const attw = JSON.parse(readFileSync(attwOut, 'utf8'));
+rmSync(path.dirname(attwOut), { recursive: true, force: true });
+report('attw', Object.values(attw.problems ?? {}).flat(), describeAttw, describeAttw);
+// The table gives the per-resolution view for humans; the JSON above decides the exit code.
+spawnSync('attw', ['--pack', '.'], { stdio: 'inherit', env });
+
+if (failed) process.exit(1);
