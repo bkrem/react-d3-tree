@@ -11,11 +11,16 @@ import {
   TreeNodeDatum,
 } from '../types/common.js';
 
+/**
+ * Receives the tree's own layout node, not a copy: read it, don't change it. After the next
+ * layout its coordinates are stale.
+ */
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
 ) => void;
 
+/** Receives the tree's own layout nodes for both ends of the link, not copies. */
 export type TreeLinkEventCallback = (
   sourceNode: HierarchyPointNode<TreeNodeDatum>,
   targetNode: HierarchyPointNode<TreeNodeDatum>,
@@ -133,12 +138,11 @@ export interface TreeProps {
   onLinkMouseOut?: TreeLinkEventCallback;
 
   /**
-   * Called when the inner D3 component updates. That is - on every zoom or translate event,
-   * or when tree branches are toggled.
-   *
-   * {@link Tree.defaultProps.onUpdate | Default value}
+   * Called with the new zoom transform on every zoom or pan tick and after every programmatic
+   * transform (`centerNode`, `setTransform`, centering on click). Nothing fires on mount;
+   * `getTransform` on the ref handle reads the current transform.
    */
-  onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => void;
+  onTransformChange?: (transform: TreeTransform) => void;
 
   /**
    * Determines along which axis the tree is oriented.
@@ -232,7 +236,8 @@ export interface TreeProps {
   /**
    * The ids of the collapsed nodes, when the caller owns the collapse state. The tree renders
    * exactly this set and reports every requested change through `onCollapsedChange` without
-   * changing anything itself.
+   * changing anything itself. Only nodes with children collapse: a leaf's id in the set has no
+   * effect, and the tree never reports one.
    *
    * Without it, the tree owns the state: it seeds the state from `initialDepth`, keeps it
    * across `data` updates for the ids that survive them, and applies the `initialDepth` rule to

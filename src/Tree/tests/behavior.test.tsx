@@ -10,7 +10,7 @@ import type {
   TreeLinkEventCallback,
   TreeNodeEventCallback,
 } from '../../index.js';
-import type { OnCollapsedChange, OnUpdate } from './helpers.js';
+import type { OnCollapsedChange, OnTransformChange } from './helpers.js';
 import {
   circleOf,
   click,
@@ -192,10 +192,20 @@ describe('Tree public behavior', () => {
       click(circleOf(view.container, 'branch-a'));
 
       expect(onCollapsedChange).toHaveBeenCalledTimes(2);
-      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.0', '0.0.0', '0.0.1']);
+      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.0']);
       expect(onCollapsedChange.mock.calls[0][1]).toEqual({ id: '0.0', collapsed: true });
-      expect([...onCollapsedChange.mock.calls[1][0]]).toEqual(['0.0.0', '0.0.1']);
+      expect([...onCollapsedChange.mock.calls[1][0]]).toEqual([]);
       expect(onCollapsedChange.mock.calls[1][1]).toEqual({ id: '0.0', collapsed: false });
+    });
+
+    it('never collapses a leaf, so a leaf click reports nothing', () => {
+      const onCollapsedChange = vi.fn<OnCollapsedChange>();
+      const view = renderTree({ data: treeData(), onCollapsedChange });
+
+      click(circleOf(view.container, 'leaf-a1'));
+
+      expect(onCollapsedChange).not.toHaveBeenCalled();
+      expect(nodeElements(view.container)).toHaveLength(6);
     });
 
     it('renders exactly the controlled set and leaves changing it to the caller', () => {
@@ -214,7 +224,7 @@ describe('Tree public behavior', () => {
 
       // The request is reported, the tree is unchanged.
       expect(onCollapsedChange).toHaveBeenCalledTimes(1);
-      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.1', '0.0', '0.0.0', '0.0.1']);
+      expect([...onCollapsedChange.mock.calls[0][0]]).toEqual(['0.1', '0.0']);
       expect(nodeLabels(view.container)).toEqual([
         'root',
         'branch-a',
@@ -411,6 +421,35 @@ describe('Tree public behavior', () => {
   });
 
   describe('custom nodes and callbacks', () => {
+    it('describes each node to its custom renderer', () => {
+      const renderCustomNodeElement = (props: CustomNodeElementProps) => (
+        <circle
+          r={10}
+          data-custom-node={props.nodeDatum.name}
+          data-id={props.id}
+          data-depth={props.depth}
+          data-root={props.isRoot}
+          data-leaf={props.isLeaf}
+          data-collapsed={props.isCollapsed}
+          onClick={props.toggleNode}
+        />
+      );
+      const view = renderTree({ data: treeData(), initialDepth: 1, renderCustomNodeElement });
+      const describe = (name: string) => {
+        const element = queryOrThrow(view.container, `[data-custom-node="${name}"]`);
+        return ['id', 'depth', 'root', 'leaf', 'collapsed'].map(attribute =>
+          element.getAttribute(`data-${attribute}`)
+        );
+      };
+
+      expect(describe('root')).toEqual(['0', '0', 'true', 'false', 'false']);
+      expect(describe('branch-a')).toEqual(['0.0', '1', 'false', 'false', 'true']);
+
+      click(queryOrThrow(view.container, '[data-custom-node="branch-a"]'));
+      expect(describe('branch-a')).toEqual(['0.0', '1', 'false', 'false', 'false']);
+      expect(describe('leaf-a1')).toEqual(['0.0.0', '2', 'false', 'true', 'false']);
+    });
+
     it('provides custom nodes with public data, hierarchy data, handlers, and toggle control', () => {
       const onNodeClick = vi.fn<TreeNodeEventCallback>();
       const onNodeMouseOver = vi.fn<TreeNodeEventCallback>();
@@ -460,7 +499,7 @@ describe('Tree public behavior', () => {
       expect(linkElements(view.container)).toHaveLength(1);
     });
 
-    it('passes cloned node and link data with the native event', () => {
+    it('passes the live layout nodes and the native event to click callbacks', () => {
       const renderedNodes = new Map<string, CustomNodeElementProps['hierarchyPointNode']>();
       const onNodeClick = vi.fn<TreeNodeEventCallback>();
       const onLinkClick = vi.fn<TreeLinkEventCallback>();
@@ -482,22 +521,13 @@ describe('Tree public behavior', () => {
 
       const [clickedNode, nodeEvent] = onNodeClick.mock.calls[0];
       const [source, target, linkEvent] = onLinkClick.mock.calls[0];
-      expect(clickedNode.data.name).toBe('replacement-root');
-      expect(clickedNode).not.toBe(renderedNodes.get('replacement-root'));
-      expect(clickedNode.data).not.toBe(renderedNodes.get('replacement-root')?.data);
+      expect(clickedNode).toBe(renderedNodes.get('replacement-root'));
       expect(nodeEvent.type).toBe('click');
       expect(nodeEvent.nativeEvent).toBeInstanceOf(MouseEvent);
-      expect([source.data.name, target.data.name]).toEqual([
-        'replacement-root',
-        'replacement-leaf',
-      ]);
-      expect(source).not.toBe(renderedNodes.get('replacement-root'));
-      expect(target).not.toBe(renderedNodes.get('replacement-leaf'));
+      expect(source).toBe(renderedNodes.get('replacement-root'));
+      expect(target).toBe(renderedNodes.get('replacement-leaf'));
       expect(linkEvent.type).toBe('click');
       expect(linkEvent.nativeEvent).toBeInstanceOf(MouseEvent);
-
-      clickedNode.data.name = 'changed-by-consumer';
-      expect(view.container.querySelector('[data-custom-node="replacement-root"]')).not.toBeNull();
     });
 
     it('passes exact link endpoints to native hover callbacks', () => {
@@ -516,72 +546,50 @@ describe('Tree public behavior', () => {
         expect(callback.mock.calls[0][2].type).toMatch(/^mouse/);
       }
     });
+  });
 
-    it('reports the initial geometry through onUpdate after mount', () => {
-      const onUpdate = vi.fn<OnUpdate>();
+  describe('zoom and pan controls', () => {
+    it('fires no transform change on mount', () => {
+      const onTransformChange = vi.fn<OnTransformChange>();
 
       renderTree({
         data: replacementData(),
         zoom: 0.7,
         translate: { x: 12, y: 34 },
-        onUpdate,
+        onTransformChange,
       });
 
-      expect(onUpdate).toHaveBeenCalledTimes(1);
-      expect(onUpdate).toHaveBeenCalledWith({
-        node: null,
-        zoom: 0.7,
-        translate: { x: 12, y: 34 },
-      });
+      expect(onTransformChange).not.toHaveBeenCalled();
     });
 
-    it('reports one semantic onUpdate for one toggle after mount', () => {
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({ data: treeData(), onUpdate });
-      onUpdate.mockClear();
-
-      click(circleOf(view.container, 'root'));
-
-      expect(onUpdate).toHaveBeenCalledTimes(1);
-      expect(onUpdate).toHaveBeenCalledWith({
-        node: expect.objectContaining({ name: 'root' }),
-        zoom: 1,
-        translate: { x: 0, y: 0 },
-      });
-    });
-  });
-
-  describe('zoom and pan controls', () => {
     it('zooms through a native wheel event and respects scaleExtent', () => {
-      const onUpdate = vi.fn<OnUpdate>();
+      const onTransformChange = vi.fn<OnTransformChange>();
       const view = renderTree({
         data: replacementData(),
         scaleExtent: { min: 0.5, max: 1.2 },
-        onUpdate,
+        onTransformChange,
       });
-      onUpdate.mockClear();
 
       wheel(getSvg(view.container), { deltaY: -10000 });
 
       expect(getTreeGroup(view.container).getAttribute('transform')).toContain('scale(1.2)');
-      expect(onUpdate).toHaveBeenCalledTimes(1);
-      expect(onUpdate.mock.calls[0][0].zoom).toBe(1.2);
+      expect(onTransformChange).toHaveBeenCalledTimes(1);
+      expect(onTransformChange.mock.calls[0][0].k).toBe(1.2);
     });
 
     it('does not zoom when zoomable is false', () => {
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({ data: replacementData(), zoomable: false, onUpdate });
+      const onTransformChange = vi.fn<OnTransformChange>();
+      const view = renderTree({ data: replacementData(), zoomable: false, onTransformChange });
       const before = getTreeGroup(view.container).getAttribute('transform');
-      onUpdate.mockClear();
 
       wheel(getSvg(view.container));
 
       expect(getTreeGroup(view.container).getAttribute('transform')).toBe(before);
-      expect(onUpdate).not.toHaveBeenCalled();
+      expect(onTransformChange).not.toHaveBeenCalled();
     });
 
     it('blocks wheel events from interactive node content unless Shift is held', () => {
-      const onUpdate = vi.fn<OnUpdate>();
+      const onTransformChange = vi.fn<OnTransformChange>();
       const renderCustomNodeElement = (props: CustomNodeElementProps) => (
         <foreignObject width={80} height={30}>
           <button data-node-control={props.nodeDatum.name}>Control</button>
@@ -592,19 +600,18 @@ describe('Tree public behavior', () => {
         hasInteractiveNodes: true,
         renderCustomNodeElement,
         scaleExtent: { min: 0.5, max: 2 },
-        onUpdate,
+        onTransformChange,
       });
       const control = queryOrThrow(view.container, '[data-node-control="replacement-root"]');
       const before = getTreeGroup(view.container).getAttribute('transform');
-      onUpdate.mockClear();
 
       wheel(control);
       expect(getTreeGroup(view.container).getAttribute('transform')).toBe(before);
-      expect(onUpdate).not.toHaveBeenCalled();
+      expect(onTransformChange).not.toHaveBeenCalled();
 
       wheel(control, { shiftKey: true });
       expect(getTreeGroup(view.container).getAttribute('transform')).not.toBe(before);
-      expect(onUpdate).toHaveBeenCalledTimes(1);
+      expect(onTransformChange).toHaveBeenCalledTimes(1);
     });
 
     it('updates the visible transform when zoom and translate props change', () => {
@@ -636,30 +643,28 @@ describe('Tree public behavior', () => {
     });
 
     it('removes native zoom listeners when the tree unmounts', () => {
-      const onUpdate = vi.fn<OnUpdate>();
+      const onTransformChange = vi.fn<OnTransformChange>();
       const view = renderTree({
         data: replacementData(),
         scaleExtent: { min: 0.5, max: 2 },
-        onUpdate,
+        onTransformChange,
       });
       const detachedSvg = getSvg(view.container);
-      onUpdate.mockClear();
 
       view.unmount();
       wheel(detachedSvg);
 
-      expect(onUpdate).not.toHaveBeenCalled();
+      expect(onTransformChange).not.toHaveBeenCalled();
     });
 
     it.each([
       [true, true],
       [false, false],
     ])('applies draggable=%s to native mouse dragging', (draggable, shouldMove) => {
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({ data: replacementData(), draggable, onUpdate });
+      const onTransformChange = vi.fn<OnTransformChange>();
+      const view = renderTree({ data: replacementData(), draggable, onTransformChange });
       const svg = getSvg(view.container);
       const before = getTreeGroup(view.container).getAttribute('transform');
-      onUpdate.mockClear();
 
       dispatch(
         svg,
@@ -684,7 +689,7 @@ describe('Tree public behavior', () => {
       );
 
       expect(getTreeGroup(view.container).getAttribute('transform') !== before).toBe(shouldMove);
-      expect(onUpdate.mock.calls.length > 0).toBe(shouldMove);
+      expect(onTransformChange.mock.calls.length > 0).toBe(shouldMove);
     });
   });
 });

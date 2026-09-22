@@ -402,7 +402,17 @@ of 0 applies at once, which the tests rely on. The handle's `toggleNode` isn't g
 dimensions`): the tree measures its container with `getBoundingClientRect` on mount and a
 `ResizeObserver` afterwards, keeps the size in a ref, and centers from it; `dimensions` is gone
 and `centerOnClick` (default off) gates centering on click; `test/setup.ts` stubs
-`ResizeObserver` for jsdom and the centering tests mock `getBoundingClientRect`. 5.5 follows.
+`ResizeObserver` for jsdom and the centering tests mock `getBoundingClientRect`. 5.5 landed
+(`feat: pass live nodes and split onUpdate`): callbacks receive the tree's own layout nodes, so
+`clone` is no longer a dependency and the runtime dependencies are the four d3 modules plus
+`@types/d3-hierarchy`; `onUpdate` is gone in favour of `onTransformChange` (every zoom, pan, and
+programmatic transform; nothing on mount) and `onCollapsedChange`; `CustomNodeElementProps`
+gains `id`, `depth`, `isRoot`, `isLeaf`, and `isCollapsed`; one leaf predicate (no children or
+an empty array) serves the base class and the class-name props, where v3 gave a `children: []`
+node the branch class name. The collapsed set only ever holds nodes with children: `initialDepth`,
+subtree collapse, and the handle skip leaves, and a click on a leaf reports nothing (v3 marked
+leaves collapsed too, which would have made `isCollapsed` true on a leaf). Snapshots unchanged.
+Phase 5 is complete; the v4 API in this document is what `feat/v4` implements.
 
 Goal: the API described in [The v4 API](#the-v4-api), one concern per PR.
 
@@ -603,7 +613,7 @@ type RenderCustomNodeElementFn = (props: CustomNodeElementProps) => React.ReactE
 | `zoom`, `translate`, `scaleExtent`, `zoomable`, `draggable`, `hasInteractiveNodes` | Kept, same semantics | |
 | `orientation`, `nodeSize`, `separation`, `depthFactor`, `pathFunc`, `pathClassFunc` | Kept | |
 | `svgClassName`, `rootNodeClassName`, `branchNodeClassName`, `leafNodeClassName` | Kept | |
-| `renderCustomNodeElement` | Kept; renderer props gain `id`, `depth`, `isRoot`, `isLeaf`, `isCollapsed` | |
+| `renderCustomNodeElement` | Kept; renderer props gain `id`, `depth`, `isRoot`, `isLeaf`, `isCollapsed` | `isLeaf` is true for a node with no children or an empty `children` array, and the class-name props use the same rule (v3 gave a `children: []` node `branchNodeClassName`). |
 | `onNode*` and `onLink*` callbacks | Kept; receive live nodes; return `void` | No per-event tree walk. Consumers that mutated the clone must copy first. |
 | `RenderCustomNodeElementFn` returns `JSX.Element` | Returns `React.ReactElement` | The global `JSX` namespace is gone in `@types/react` 19. |
 | Node `<g id={uuid}>` | `<g data-id={id}>` | User ids must not collide with host-page ids. |

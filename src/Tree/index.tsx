@@ -14,9 +14,8 @@ import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import type { D3ZoomEvent, ZoomBehavior } from 'd3-zoom';
 // Registers `selection.transition()`, which animated transforms use.
 import 'd3-transition';
-import clone from 'clone';
 
-import Node from '../Node/index.js';
+import Node, { isLeafNode } from '../Node/index.js';
 import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
 import {
@@ -83,17 +82,21 @@ function buildInternalTree(data: RawNodeDatum): InternalTree {
   return { root: visit(data, '0', 0), nodeById, depthById };
 }
 
-/** The ids at `depth` or deeper: what `initialDepth` collapses. */
+// The collapsed set only ever holds nodes with children: a leaf has nothing to collapse.
+
+/** The ids of the nodes with children at `depth` or deeper: what `initialDepth` collapses. */
 function idsFromDepth(tree: InternalTree, depth: number): string[] {
   const ids: string[] = [];
-  for (const [id, nodeDepth] of tree.depthById) {
-    if (nodeDepth >= depth) ids.push(id);
+  for (const [id, node] of tree.nodeById) {
+    const nodeDepth = tree.depthById.get(id) ?? 0;
+    if (nodeDepth >= depth && !isLeafNode(node)) ids.push(id);
   }
   return ids;
 }
 
-/** Adds `node` and everything below it to `into`. */
+/** Adds `node` and every node with children below it to `into`. */
 function collapseSubtree(node: TreeNodeDatum, into: Set<string>) {
+  if (isLeafNode(node)) return;
   into.add(node.id);
   node.children?.forEach(child => collapseSubtree(child, into));
 }
@@ -167,7 +170,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     onLinkClick,
     onLinkMouseOver,
     onLinkMouseOut,
-    onUpdate,
+    onTransformChange,
   } = props;
   // Primitives from the object props, so effects and memos depend on values, not identities:
   // a fresh `{ x: 0, y: 0 }` literal on every render must not rebind zoom. A partial
@@ -280,7 +283,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     onLinkClick,
     onLinkMouseOver,
     onLinkMouseOut,
-    onUpdate,
+    onTransformChange,
   };
   const latest = useRef(latestValues);
   useEffect(() => {
@@ -288,7 +291,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
   });
 
   // Binds d3's zoom to the svg. The initial transform goes through a listener-less behaviour
-  // first, so setting it emits no zoom event and `onUpdate` sees no call.
+  // first, so setting it emits no zoom event and `onTransformChange` sees no call.
   useEffect(() => {
     const svgElement = svgRef.current;
     const gElement = gRef.current;
@@ -325,10 +328,10 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
           scale: event.transform.k,
         };
         transformRef.current = next;
-        const { onUpdate: report } = latest.current;
+        const { onTransformChange: report } = latest.current;
         if (typeof report === 'function') {
           // d3 emits "zoom" for pans as well, so this covers dragging too.
-          report({ node: null, zoom: next.scale, translate: next.translate });
+          report({ x: next.translate.x, y: next.translate.y, k: next.scale });
         }
       });
     svg.call(behavior);
@@ -339,26 +342,6 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
       behaviorRef.current = null;
     };
   }, [geometry, zoomable, draggable, zoom, scaleMin, scaleMax, translateX, translateY]);
-
-  // Reports each change of the tree or its collapse state through `onUpdate`: once after mount
-  // with no node, then with the toggled node after a toggle (or no node for new data).
-  const lastToggledRef = useRef<TreeNodeDatum | null>(null);
-  const reportedRef = useRef<{ tree: InternalTree; collapsed: Set<string> } | null>(null);
-  useEffect(() => {
-    const reported = reportedRef.current;
-    if (reported && reported.tree === tree && reported.collapsed === effectiveCollapsed) return;
-    reportedRef.current = { tree, collapsed: effectiveCollapsed };
-    const node = lastToggledRef.current;
-    lastToggledRef.current = null;
-    const { onUpdate: report } = latest.current;
-    if (typeof report === 'function') {
-      report({
-        node: node ? clone(node) : null,
-        zoom: transformRef.current.scale,
-        translate: transformRef.current.translate,
-      });
-    }
-  }, [tree, effectiveCollapsed]);
 
   // Applies a collapse change: the tree's own state changes only in uncontrolled mode, and the
   // caller hears about every change in both modes.
@@ -376,7 +359,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
         shouldCollapseNeighborNodes: collapseNeighbors,
       } = latest.current;
       const node = currentTree.nodeById.get(nodeId);
-      if (!node) return;
+      if (!node || isLeafNode(node)) return;
 
       const next = new Set(current);
       let change: CollapsedChange;
@@ -397,7 +380,6 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
         collapseSubtree(node, next);
         change = { id: nodeId, collapsed: true };
       }
-      lastToggledRef.current = node;
       commitCollapsed(next, change);
     },
     [commitCollapsed]
@@ -497,7 +479,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
       const { onNodeClick: handler } = latest.current;
       if (typeof handler === 'function') {
         evt.persist();
-        handler(clone(hierarchyPointNode), evt);
+        handler(hierarchyPointNode, evt);
       }
     },
     [requestCenter]
@@ -507,7 +489,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     const { onNodeMouseOver: handler } = latest.current;
     if (typeof handler === 'function') {
       evt.persist();
-      handler(clone(hierarchyPointNode), evt);
+      handler(hierarchyPointNode, evt);
     }
   }, []);
 
@@ -515,7 +497,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     const { onNodeMouseOut: handler } = latest.current;
     if (typeof handler === 'function') {
       evt.persist();
-      handler(clone(hierarchyPointNode), evt);
+      handler(hierarchyPointNode, evt);
     }
   }, []);
 
@@ -523,7 +505,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     const { onLinkClick: handler } = latest.current;
     if (typeof handler === 'function') {
       evt.persist();
-      handler(clone(source), clone(target), evt);
+      handler(source, target, evt);
     }
   }, []);
 
@@ -531,7 +513,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     const { onLinkMouseOver: handler } = latest.current;
     if (typeof handler === 'function') {
       evt.persist();
-      handler(clone(source), clone(target), evt);
+      handler(source, target, evt);
     }
   }, []);
 
@@ -539,7 +521,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     const { onLinkMouseOut: handler } = latest.current;
     if (typeof handler === 'function') {
       evt.persist();
-      handler(clone(source), clone(target), evt);
+      handler(source, target, evt);
     }
   }, []);
 
@@ -547,10 +529,8 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
     parent: HierarchyPointNode<TreeNodeDatum> | null,
     nodeDatum: TreeNodeDatum
   ) => {
-    if (parent) {
-      return nodeDatum.children ? branchNodeClassName : leafNodeClassName;
-    }
-    return rootNodeClassName;
+    if (!parent) return rootNodeClassName;
+    return isLeafNode(nodeDatum) ? leafNodeClassName : branchNodeClassName;
   };
 
   return (
@@ -588,6 +568,7 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
                 data={nodeDatum}
                 position={{ x, y }}
                 hierarchyPointNode={hierarchyPointNode}
+                isCollapsed={effectiveCollapsed.has(nodeDatum.id)}
                 nodeClassName={getNodeClassName(parent, nodeDatum)}
                 renderCustomNodeElement={renderCustomNodeElement}
                 orientation={orientation}

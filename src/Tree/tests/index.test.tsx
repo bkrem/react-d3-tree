@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { CustomNodeElementProps, RawNodeDatum, TreeNodeEventCallback } from '../../index.js';
-import type { OnUpdate } from './helpers.js';
+import type { OnTransformChange } from './helpers.js';
 import { mockData, mockData2, mockData4, mockTree_D1N2_D2N2 } from './mockData.js';
 import {
   circleOf,
@@ -32,10 +32,17 @@ describe('<Tree />', () => {
     expect(linkElements(larger.container)).toHaveLength(5);
   });
 
-  it('marks a node with an empty `children` array as a leaf', () => {
-    const view = renderTree({ data: { name: 'root', children: [] } });
+  it('treats a node with an empty `children` array as a leaf', () => {
+    const view = renderTree({
+      data: { name: 'root', children: [{ name: 'child', children: [] }] },
+      leafNodeClassName: 'leaf-x',
+      branchNodeClassName: 'branch-x',
+    });
+    const child = getNodeByLabel(view.container, 'child');
 
-    expect(getNodeByLabel(view.container, 'root').classList.contains('rd3t-leaf-node')).toBe(true);
+    expect(child.classList.contains('rd3t-leaf-node')).toBe(true);
+    expect(child.classList.contains('leaf-x')).toBe(true);
+    expect(child.classList.contains('branch-x')).toBe(false);
   });
 
   describe('initialDepth', () => {
@@ -147,7 +154,8 @@ describe('<Tree />', () => {
         onLinkClick: notAFunction,
         onLinkMouseOver: notAFunction,
         onLinkMouseOut: notAFunction,
-        onUpdate: notAFunction,
+        onTransformChange: notAFunction,
+        onCollapsedChange: notAFunction,
       });
       const circle = circleOf(view.container, 'Level 2: A');
       const link = linkElements(view.container)[0];
@@ -164,34 +172,22 @@ describe('<Tree />', () => {
     });
   });
 
-  describe('onUpdate', () => {
-    it('reports the zoom transform with no node on wheel', () => {
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({ data: mockData, onUpdate, scaleExtent: { min: 0.1, max: 10 } });
-      onUpdate.mockClear();
+  describe('onTransformChange', () => {
+    it('reports the transform on wheel', () => {
+      const onTransformChange = vi.fn<OnTransformChange>();
+      const view = renderTree({
+        data: mockData,
+        onTransformChange,
+        scaleExtent: { min: 0.1, max: 10 },
+      });
 
       wheel(getSvg(view.container));
 
-      expect(onUpdate).toHaveBeenCalledTimes(1);
-      expect(onUpdate).toHaveBeenCalledWith({
-        node: null,
-        zoom: expect.any(Number),
-        translate: { x: expect.any(Number), y: expect.any(Number) },
-      });
-    });
-
-    it('reports the toggled node with the current zoom and translate', () => {
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({ data: mockData, zoom: 0.7, translate: { x: 10, y: 5 }, onUpdate });
-      onUpdate.mockClear();
-
-      click(circleOf(view.container, 'Top Level'));
-
-      expect(onUpdate).toHaveBeenCalledTimes(1);
-      expect(onUpdate).toHaveBeenCalledWith({
-        node: expect.objectContaining({ name: 'Top Level' }),
-        zoom: 0.7,
-        translate: { x: 10, y: 5 },
+      expect(onTransformChange).toHaveBeenCalledTimes(1);
+      expect(onTransformChange).toHaveBeenCalledWith({
+        x: expect.any(Number),
+        y: expect.any(Number),
+        k: expect.any(Number),
       });
     });
   });

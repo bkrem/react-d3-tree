@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import Tree from '../../index.js';
 import type { RawNodeDatum, TreeHandle, TreeProps } from '../../index.js';
-import type { OnCollapsedChange, OnUpdate } from './helpers.js';
+import type { OnCollapsedChange, OnTransformChange } from './helpers.js';
 import {
   getNodeByLabel,
   getSvg,
@@ -65,17 +65,15 @@ describe('TreeHandle', () => {
     act(() => view.handle().collapseAll());
 
     expect(onCollapsedChange).toHaveBeenCalledTimes(1);
-    expect([...onCollapsedChange.mock.calls[0][0]].sort()).toEqual(
-      ['0', '0.0', '0.0.0', '0.0.1', '0.1', '0.1.0'].sort()
-    );
+    // Only nodes with children collapse; the leaves stay out of the set.
+    expect([...onCollapsedChange.mock.calls[0][0]].sort()).toEqual(['0', '0.0', '0.1']);
     expect(onCollapsedChange.mock.calls[0][1]).toBeNull();
     expect(nodeElements(view.container)).toHaveLength(6);
   });
 
   it('sets and reads the transform, reporting it like a user zoom', () => {
-    const onUpdate = vi.fn<OnUpdate>();
-    const view = mount({ onUpdate });
-    onUpdate.mockClear();
+    const onTransformChange = vi.fn<OnTransformChange>();
+    const view = mount({ onTransformChange });
 
     view.handle().setTransform({ x: 40, y: 20, k: 0.75 });
 
@@ -83,12 +81,8 @@ describe('TreeHandle', () => {
       'translate(40,20) scale(0.75)'
     );
     expect(view.handle().getTransform()).toEqual({ x: 40, y: 20, k: 0.75 });
-    expect(onUpdate).toHaveBeenCalledTimes(1);
-    expect(onUpdate).toHaveBeenCalledWith({
-      node: null,
-      zoom: 0.75,
-      translate: { x: 40, y: 20 },
-    });
+    expect(onTransformChange).toHaveBeenCalledTimes(1);
+    expect(onTransformChange).toHaveBeenCalledWith({ x: 40, y: 20, k: 0.75 });
   });
 
   it('reads the initial transform before any interaction', () => {

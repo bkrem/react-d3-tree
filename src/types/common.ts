@@ -41,13 +41,23 @@ export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
  * The properties that are passed to the user-defined `renderCustomNodeElement` render function.
  */
 export interface CustomNodeElementProps {
+  /** The node's id: the one in `data`, or its path in the tree. */
+  id: string;
+  /** The node's depth; the root is at 0. */
+  depth: number;
+  isRoot: boolean;
+  /** True when the node has no children, including an empty `children` array. */
+  isLeaf: boolean;
+  /** True when the node's children are hidden. */
+  isCollapsed: boolean;
   /**
-   * The full datum of the node that is being rendered.
+   * The full datum of the node that is being rendered. The tree's own object: read it, don't
+   * change it.
    */
   nodeDatum: TreeNodeDatum;
   /**
    * The D3 `HierarchyPointNode` representation of the node, which wraps `nodeDatum`
-   * with additional properties.
+   * with its layout position and its links to parent and children. Read-only.
    */
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
   /**

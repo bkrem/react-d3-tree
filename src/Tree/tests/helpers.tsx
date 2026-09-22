@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import Tree from '../../index.js';
 import type { TreeProps } from '../../index.js';
 
-export type OnUpdate = NonNullable<TreeProps['onUpdate']>;
+export type OnTransformChange = NonNullable<TreeProps['onTransformChange']>;
 export type OnCollapsedChange = NonNullable<TreeProps['onCollapsedChange']>;
 
 export type TreeView = {

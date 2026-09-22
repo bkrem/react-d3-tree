@@ -19,6 +19,7 @@ type NodeProps = {
   data: TreeNodeDatum;
   position: Point;
   hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
+  isCollapsed: boolean;
   nodeClassName: string;
   orientation: Orientation;
   renderCustomNodeElement?: RenderCustomNodeElementFn;
@@ -28,10 +29,14 @@ type NodeProps = {
   onNodeMouseOut: NodeEventHandler;
 };
 
+/** A node with no children, including one with an empty `children` array. */
+export const isLeafNode = (node: TreeNodeDatum) => !node.children || node.children.length === 0;
+
 function Node({
   data,
   position,
   hierarchyPointNode,
+  isCollapsed,
   nodeClassName,
   orientation,
   renderCustomNodeElement,
@@ -41,6 +46,7 @@ function Node({
   onNodeMouseOut,
 }: NodeProps): ReactElement {
   const { id } = data;
+  const isLeaf = isLeafNode(data);
   // A horizontal tree swaps the layout axes on screen.
   const transform =
     orientation === 'horizontal'
@@ -49,6 +55,11 @@ function Node({
   const renderNode =
     typeof renderCustomNodeElement === 'function' ? renderCustomNodeElement : DefaultNodeElement;
   const nodeProps: CustomNodeElementProps = {
+    id,
+    depth: hierarchyPointNode.depth,
+    isRoot: hierarchyPointNode.parent === null,
+    isLeaf,
+    isCollapsed,
     hierarchyPointNode,
     nodeDatum: data,
     toggleNode: () => onNodeToggle(id),
@@ -60,12 +71,7 @@ function Node({
   return (
     <g
       data-id={id}
-      className={[
-        data.children && data.children.length > 0 ? 'rd3t-node' : 'rd3t-leaf-node',
-        nodeClassName,
-      ]
-        .join(' ')
-        .trim()}
+      className={[isLeaf ? 'rd3t-leaf-node' : 'rd3t-node', nodeClassName].join(' ').trim()}
       transform={transform}
     >
       {renderNode(nodeProps)}
