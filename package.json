@@ -22,7 +22,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build:docs": "rimraf ./docs && typedoc",
+    "build:docs": "typedoc",
     "build": "rimraf lib && tsc -p tsconfig.json",
     "build:watch": "rimraf lib && tsc -p tsconfig.json -w",
     "fmt": "oxfmt",

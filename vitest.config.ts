@@ -1,10 +1,6 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  oxc: {
-    // The source uses `React.createElement` through the classic JSX transform.
-    jsx: { runtime: 'classic' },
-  },
   test: {
     environment: 'jsdom',
     include: ['src/**/*.test.{ts,tsx}'],

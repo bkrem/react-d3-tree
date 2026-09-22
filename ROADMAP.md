@@ -263,7 +263,10 @@ above the thresholds, and the oracle snapshots checked in.
 Status (2026-09-23): 2.1 landed on `feat/v4` (`build: emit an ESM-only package`), including the
 smoke-test and package-check updates the new layout needs so the commit stays green. Against
 the Phase 1 baseline, the JavaScript differs only by native object spread (the ES2020 target) and
-the declarations are unchanged. 2.2 to 2.5 follow.
+the declarations are unchanged. 2.4 landed next (`build: compile JSX through the automatic
+runtime`): `jsx: react-jsx` in the build, Vite's default runtime in tests, `build:docs` runs
+`typedoc` alone (TypeDoc cleans its output directory itself), and the `.oxlintrc.json`
+class-component rule downgrades wait for Phase 4. 2.5, 2.3, and 2.2 follow in that order.
 
 Goal: one build, one tsconfig, no CJS scaffolding.
 
