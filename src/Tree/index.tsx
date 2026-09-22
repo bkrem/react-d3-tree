@@ -320,23 +320,36 @@ function Tree(props: TreeProps) {
     }
   }, [current.data]);
 
-  const handleNodeToggle = useCallback((nodeId: string) => {
-    if (!latest.current.collapsible) return;
-    setInternal(prev => {
-      const nextData = clone(prev.data);
-      const target = findNodeById(nodeId, nextData);
-      if (!target) return prev;
-
-      if (target.__rd3t.collapsed) {
-        expandNode(target);
-        if (latest.current.shouldCollapseNeighborNodes) collapseNeighborNodes(target, nextData);
-      } else {
-        collapseNode(target);
-      }
-      lastToggledRef.current = target;
-      return { ...prev, data: nextData };
-    });
+  // A click on a node centers it once the layout that follows the click is in place. The ref
+  // holds the node; the counter makes the effect run even when the layout doesn't change.
+  const centerRequestRef = useRef<string | null>(null);
+  const [centerRequestCount, setCenterRequestCount] = useState(0);
+  const requestCenter = useCallback((nodeId: string) => {
+    centerRequestRef.current = nodeId;
+    setCenterRequestCount(count => count + 1);
   }, []);
+
+  const handleNodeToggle = useCallback(
+    (nodeId: string) => {
+      requestCenter(nodeId);
+      if (!latest.current.collapsible) return;
+      setInternal(prev => {
+        const nextData = clone(prev.data);
+        const target = findNodeById(nodeId, nextData);
+        if (!target) return prev;
+
+        if (target.__rd3t.collapsed) {
+          expandNode(target);
+          if (latest.current.shouldCollapseNeighborNodes) collapseNeighborNodes(target, nextData);
+        } else {
+          collapseNode(target);
+        }
+        lastToggledRef.current = target;
+        return { ...prev, data: nextData };
+      });
+    },
+    [requestCenter]
+  );
 
   const handleAddChildrenToNode = useCallback((nodeId: string, childrenData: RawNodeDatum[]) => {
     setInternal(prev => {
@@ -354,13 +367,17 @@ function Tree(props: TreeProps) {
     });
   }, []);
 
-  const handleOnNodeClickCb = useCallback<TreeNodeEventCallback>((hierarchyPointNode, evt) => {
-    const { onNodeClick: handler } = latest.current;
-    if (typeof handler === 'function') {
-      evt.persist();
-      handler(clone(hierarchyPointNode), evt);
-    }
-  }, []);
+  const handleOnNodeClickCb = useCallback<TreeNodeEventCallback>(
+    (hierarchyPointNode, evt) => {
+      requestCenter(hierarchyPointNode.data.__rd3t.id);
+      const { onNodeClick: handler } = latest.current;
+      if (typeof handler === 'function') {
+        evt.persist();
+        handler(clone(hierarchyPointNode), evt);
+      }
+    },
+    [requestCenter]
+  );
 
   const handleOnNodeMouseOverCb = useCallback<TreeNodeEventCallback>((hierarchyPointNode, evt) => {
     const { onNodeMouseOver: handler } = latest.current;
@@ -433,6 +450,14 @@ function Tree(props: TreeProps) {
     svg.call(d3zoom<SVGSVGElement, unknown>().transform, zoomIdentity.translate(x, y).scale(level));
   }, []);
 
+  useEffect(() => {
+    const nodeId = centerRequestRef.current;
+    if (nodeId === null) return;
+    centerRequestRef.current = null;
+    const target = layout.nodes.find(node => node.data.__rd3t.id === nodeId);
+    if (target) centerNode(target);
+  }, [layout, centerRequestCount, centerNode]);
+
   const getNodeClassName = (
     parent: HierarchyPointNode<TreeNodeDatum> | null,
     nodeDatum: TreeNodeDatum
@@ -442,9 +467,6 @@ function Tree(props: TreeProps) {
     }
     return rootNodeClassName;
   };
-
-  // Node re-renders when this object changes identity, which is every render.
-  const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
 
   return (
     <div className="rd3t-tree-container rd3t-grabbable">
@@ -481,18 +503,14 @@ function Tree(props: TreeProps) {
                 data={nodeDatum}
                 position={{ x, y }}
                 hierarchyPointNode={hierarchyPointNode}
-                parent={parent}
                 nodeClassName={getNodeClassName(parent, nodeDatum)}
                 renderCustomNodeElement={renderCustomNodeElement}
-                nodeSize={nodeSize}
                 orientation={orientation}
                 onNodeToggle={handleNodeToggle}
                 onNodeClick={handleOnNodeClickCb}
                 onNodeMouseOver={handleOnNodeMouseOverCb}
                 onNodeMouseOut={handleOnNodeMouseOutCb}
                 handleAddChildrenToNode={handleAddChildrenToNode}
-                subscriptions={subscriptions}
-                centerNode={centerNode}
               />
             );
           })}

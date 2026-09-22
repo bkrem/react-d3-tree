@@ -57,15 +57,15 @@ exports[`render oracle > class name props 1`] = `
 </style>
 <svg class="rd3t-svg svg-x" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node root-x" transform="translate(0,0)">
+<g id="ID" class="rd3t-node root-x" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -77,7 +77,7 @@ exports[`render oracle > class name props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node branch-x" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node branch-x" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -89,7 +89,7 @@ exports[`render oracle > class name props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(140,70)">
+<g id="ID" class="rd3t-leaf-node leaf-x" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -98,7 +98,7 @@ exports[`render oracle > class name props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node leaf-x" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -110,7 +110,7 @@ exports[`render oracle > class name props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node leaf-x" transform="translate(280,0)">
+<g id="ID" class="rd3t-leaf-node leaf-x" transform="translate(280,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -184,15 +184,15 @@ exports[`render oracle > default props 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -204,7 +204,7 @@ exports[`render oracle > default props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -216,7 +216,7 @@ exports[`render oracle > default props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -225,7 +225,7 @@ exports[`render oracle > default props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -237,7 +237,7 @@ exports[`render oracle > default props 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -311,15 +311,15 @@ exports[`render oracle > depthFactor 300 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,-70,300,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C150,0,150,-70,300,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,70,300,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C150,0,150,70,300,70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M300,-70C450,-70,450,-140,600,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M300,-70C450,-70,450,-140,600,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M300,-70C450,-70,450,0,600,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M300,-70C450,-70,450,0,600,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -331,7 +331,7 @@ exports[`render oracle > depthFactor 300 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(300,-70)">
+<g id="ID" class="rd3t-node" transform="translate(300,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -343,7 +343,7 @@ exports[`render oracle > depthFactor 300 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(300,70)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(300,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -352,7 +352,7 @@ exports[`render oracle > depthFactor 300 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(600,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(600,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -364,7 +364,7 @@ exports[`render oracle > depthFactor 300 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(600,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(600,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -438,15 +438,15 @@ exports[`render oracle > elbow path 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0V-70H140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0V-70H140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0V70H140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0V70H140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70V-140H280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70V-140H280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70V0H280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70V0H280" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -458,7 +458,7 @@ exports[`render oracle > elbow path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -470,7 +470,7 @@ exports[`render oracle > elbow path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -479,7 +479,7 @@ exports[`render oracle > elbow path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -491,7 +491,7 @@ exports[`render oracle > elbow path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -565,7 +565,7 @@ exports[`render oracle > initialDepth 0 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -639,11 +639,11 @@ exports[`render oracle > initialDepth 1 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -655,7 +655,7 @@ exports[`render oracle > initialDepth 1 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -667,7 +667,7 @@ exports[`render oracle > initialDepth 1 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,70)">
+<g id="ID" class="rd3t-node" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -738,15 +738,15 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,-70,-100,-70,-200" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C0,-100,-70,-100,-70,-200" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,70,-100,70,-200" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C0,-100,70,-100,70,-200" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,-200C-70,-300,-140,-300,-140,-400" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,-200C-70,-300,-140,-300,-140,-400" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,-200C-70,-300,0,-300,0,-400" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,-200C-70,-300,0,-300,0,-400" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -758,7 +758,7 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,-200)">
+<g id="ID" class="rd3t-node" transform="translate(-70,-200)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -770,7 +770,7 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,-200)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(70,-200)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -779,7 +779,7 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,-400)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(-140,-400)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -791,7 +791,7 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,-400)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(0,-400)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -865,15 +865,15 @@ exports[`render oracle > nodeSize 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,-150,100,-150" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C50,0,50,-150,100,-150" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,150,100,150" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C50,0,50,150,100,150" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M100,-150C150,-150,150,-300,200,-300" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M100,-150C150,-150,150,-300,200,-300" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M100,-150C150,-150,150,0,200,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M100,-150C150,-150,150,0,200,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -885,7 +885,7 @@ exports[`render oracle > nodeSize 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(100,-150)">
+<g id="ID" class="rd3t-node" transform="translate(100,-150)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -897,7 +897,7 @@ exports[`render oracle > nodeSize 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(100,150)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(100,150)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -906,7 +906,7 @@ exports[`render oracle > nodeSize 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(200,-300)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(200,-300)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -918,7 +918,7 @@ exports[`render oracle > nodeSize 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(200,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(200,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -992,17 +992,17 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,0,140,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,0,140,0" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,0C210,0,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,0C210,0,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,0C210,0,210,140,280,140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,0C210,0,210,140,280,140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M280,-140C350,-140,350,-140,420,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M280,-140C350,-140,350,-140,420,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M280,140C350,140,350,140,420,140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M280,140C350,140,350,140,420,140" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1011,7 +1011,7 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,0)">
+<g id="ID" class="rd3t-node" transform="translate(140,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1021,7 +1021,7 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1031,7 +1031,7 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(280,140)">
+<g id="ID" class="rd3t-node" transform="translate(280,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1041,7 +1041,7 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(420,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(420,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1050,7 +1050,7 @@ exports[`render oracle > org chart, horizontal 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(420,140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(420,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1121,17 +1121,17 @@ exports[`render oracle > org chart, vertical 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,0,70,0,140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C0,70,0,70,0,140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,140C0,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,140C0,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,140C0,210,140,210,140,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,140C0,210,140,210,140,280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-140,280C-140,350,-140,350,-140,420" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-140,280C-140,350,-140,350,-140,420" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,280C140,350,140,350,140,420" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,280C140,350,140,350,140,420" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1140,7 +1140,7 @@ exports[`render oracle > org chart, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,140)">
+<g id="ID" class="rd3t-node" transform="translate(0,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1150,7 +1150,7 @@ exports[`render oracle > org chart, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-140,280)">
+<g id="ID" class="rd3t-node" transform="translate(-140,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1160,7 +1160,7 @@ exports[`render oracle > org chart, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,280)">
+<g id="ID" class="rd3t-node" transform="translate(140,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1170,7 +1170,7 @@ exports[`render oracle > org chart, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,420)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(-140,420)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1179,7 +1179,7 @@ exports[`render oracle > org chart, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,420)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(140,420)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1250,17 +1250,17 @@ exports[`render oracle > separation 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-280,140,-280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,-280,140,-280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,280,140,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,280,140,280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-280C210,-280,210,-420,280,-420" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-280C210,-280,210,-420,280,-420" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-280C210,-280,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-280C210,-280,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,280C210,280,210,280,280,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,280C210,280,210,280,280,280" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1272,7 +1272,7 @@ exports[`render oracle > separation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-280)">
+<g id="ID" class="rd3t-node" transform="translate(140,-280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1284,7 +1284,7 @@ exports[`render oracle > separation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,280)">
+<g id="ID" class="rd3t-node" transform="translate(140,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1293,7 +1293,7 @@ exports[`render oracle > separation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-420)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-420)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1302,7 +1302,7 @@ exports[`render oracle > separation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1311,7 +1311,7 @@ exports[`render oracle > separation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,280)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1382,15 +1382,15 @@ exports[`render oracle > step path, vertical 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H-70 V140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0 V70 H-70 V140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H70 V140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0 V70 H70 V140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,140 V210 H-140 V280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,140 V210 H-140 V280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,140 V210 H0 V280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,140 V210 H0 V280" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1402,7 +1402,7 @@ exports[`render oracle > step path, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,140)">
+<g id="ID" class="rd3t-node" transform="translate(-70,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1414,7 +1414,7 @@ exports[`render oracle > step path, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(70,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1423,7 +1423,7 @@ exports[`render oracle > step path, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,280)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(-140,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1435,7 +1435,7 @@ exports[`render oracle > step path, vertical 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,280)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(0,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1509,15 +1509,15 @@ exports[`render oracle > straight path 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0L140,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0L140,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0L140,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0L140,70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70L280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70L280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70L280,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70L280,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1529,7 +1529,7 @@ exports[`render oracle > straight path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1541,7 +1541,7 @@ exports[`render oracle > straight path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1550,7 +1550,7 @@ exports[`render oracle > straight path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1562,7 +1562,7 @@ exports[`render oracle > straight path 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1636,15 +1636,15 @@ exports[`render oracle > vertical orientation 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(0,0) scale(1)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,-70,70,-70,140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C0,70,-70,70,-70,140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,70,70,70,140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C0,70,70,70,70,140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,140C-70,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,140C-70,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M-70,140C-70,210,0,210,0,280" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M-70,140C-70,210,0,210,0,280" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1656,7 +1656,7 @@ exports[`render oracle > vertical orientation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(-70,140)">
+<g id="ID" class="rd3t-node" transform="translate(-70,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1668,7 +1668,7 @@ exports[`render oracle > vertical orientation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(70,140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(70,140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1677,7 +1677,7 @@ exports[`render oracle > vertical orientation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(-140,280)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(-140,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1689,7 +1689,7 @@ exports[`render oracle > vertical orientation 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(0,280)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(0,280)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1763,15 +1763,15 @@ exports[`render oracle > zoom and translate 1`] = `
 </style>
 <svg class="rd3t-svg" width="100%" height="100%">
 <g class="rd3t-g" transform="translate(100,50) scale(0.5)">
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
 </path>
-<path style="opacity: 1;" class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
+<path class="rd3t-link" d="M140,-70C210,-70,210,0,280,0" data-source-id="ID" data-target-id="ID">
 </path>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
+<g id="ID" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1783,7 +1783,7 @@ exports[`render oracle > zoom and translate 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(140,-70)">
+<g id="ID" class="rd3t-node" transform="translate(140,-70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1795,7 +1795,7 @@ exports[`render oracle > zoom and translate 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(140,70)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(140,70)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1804,7 +1804,7 @@ exports[`render oracle > zoom and translate 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,-140)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,-140)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">
@@ -1816,7 +1816,7 @@ exports[`render oracle > zoom and translate 1`] = `
 </text>
 </g>
 </g>
-<g id="ID" style="opacity: 1;" class="rd3t-leaf-node" transform="translate(280,0)">
+<g id="ID" class="rd3t-leaf-node" transform="translate(280,0)">
 <circle r="15">
 </circle>
 <g class="rd3t-label">

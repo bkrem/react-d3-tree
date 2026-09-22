@@ -343,7 +343,15 @@ snapshots changed only in the `svg` and `g` class strings. Two v3 quirks went wi
 emits one node where v3 emitted the whole tree, and `onUpdate` after a toggle reports the live
 zoom instead of the prop values. `Tree.defaultProps` and the statics `assignInternalProperties`,
 `collapseNode`, `expandNode`, and `calculateD3Geometry` are no longer reachable on the export.
-Next: Node and Link with hooks, strict types, the React 18 and 19 CI matrix.
+Commit 3 (`refactor: rewrite Node and Link with hooks`) landed: both are memoised function
+components that render their position and path as attributes, with no d3 writes after mount and
+no inline opacity (the 15 snapshots changed only by that attribute); centering on click moved
+into a Tree effect that runs after the layout for the click is in place; `server.test.tsx`
+proves the server markup equals the mounted markup for three prop sets, which turns the
+server-rendering matrix row into evidence; the default node label renders each attribute as one
+string, which removes React's text-boundary comments from server output; the class-component
+rule downgrades left `.oxlintrc.json`. No class components remain in `src/`.
+Next: strict types, the React 18 and 19 CI matrix.
 
 Goal: the same v3 behaviour from function components, verified by the Phase 1 suite and oracle.
 This phase keeps the v3 prop names. The API changes come in Phase 5, so each PR here has one
