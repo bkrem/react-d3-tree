@@ -2,7 +2,7 @@
 // of the `exports` map, the way a consuming app does. Requires a prior `pnpm build`.
 import assert from 'node:assert';
 import { execSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,6 +55,41 @@ try {
     copyFileSync(path.join(fixtures, consumer), path.join(project, consumer));
     process.stdout.write(run(`"${process.execPath}" ${consumer}`, project));
   });
+
+  // Type-check the same imports from a CommonJS and an ES module file under `node16`
+  // resolution, the mode that reads the `exports` conditions and the nearest `package.json`
+  // `type`. The repo's TypeScript and @types/react are linked in so no extra install is needed.
+  const typesProject = path.join(project, 'types');
+  for (const kind of ['commonjs', 'module']) {
+    const dir = path.join(typesProject, kind);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ type: kind }));
+    copyFileSync(path.join(fixtures, 'consumer.ts'), path.join(dir, 'consumer.ts'));
+    writeFileSync(
+      path.join(dir, 'tsconfig.json'),
+      JSON.stringify({
+        compilerOptions: {
+          module: 'node16',
+          moduleResolution: 'node16',
+          strict: true,
+          noEmit: true,
+          esModuleInterop: true,
+          jsx: 'react',
+          skipLibCheck: true,
+          typeRoots: [path.join(repoRoot, 'node_modules', '@types')],
+          types: ['react'],
+        },
+        files: ['consumer.ts'],
+      })
+    );
+    try {
+      run(`"${path.join(repoRoot, 'node_modules', '.bin', 'tsc')}" -p "${dir}"`, project);
+    } catch (error) {
+      // tsc prints its diagnostics on stdout.
+      throw new Error(`type-check from a ${kind} file (node16) failed:\n${error.stdout}`);
+    }
+    console.log(`type-check from a ${kind} file (node16): ok`);
+  }
 } finally {
   rmSync(project, { recursive: true, force: true });
 }

@@ -14,9 +14,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./lib/esm/index.js",
-      "require": "./lib/cjs/index.js",
-      "types": "./lib/types/index.d.ts"
+      "import": {
+        "types": "./lib/types/index.d.ts",
+        "default": "./lib/esm/index.js"
+      },
+      "require": {
+        "types": "./lib/types-cjs/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
     }
   },
   "module": "lib/esm/index.js",
