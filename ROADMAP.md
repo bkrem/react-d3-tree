@@ -28,8 +28,8 @@ v4 is the next major line of the library. It has five goals:
    (see [Transitions](#transitions)).
 3. Remove dependencies that are unused, replaceable, or only exist to serve v3 internals.
 4. Finish the move to TypeScript. Tests, fixtures, and repo scripts become `.ts` and `.tsx`, and
-   `allowJs` goes. The only JavaScript left is the pair of smoke-test consumers, which exist to
-   load the package from plain JavaScript.
+   `allowJs` goes. The only JavaScript left is the smoke-test consumers, which exist to load the
+   package from plain JavaScript.
 5. Simplify and extend the public API: stable node identity, controlled collapse state, and an
    imperative handle for the actions the issue tracker keeps asking for.
 6. Later in 4.x, bring animations back as a supported feature with an implementation that scales
@@ -50,7 +50,7 @@ v4 is the next major line of the library. It has five goals:
 | Click-to-center | A `centerOnClick` prop, default `false`, replaces the implicit switch that `dimensions` was. `centerNode(id)` on the handle covers every other trigger. | Decided |
 | `addChildren` | Removed from the custom-node renderer props. Consumers update `data`; collapse state keyed by id survives the update. | Decided |
 | `onUpdate` | Replaced by `onTransformChange` (per zoom or pan tick) and `onCollapsedChange` (per toggle). | Decided |
-| TypeScript everywhere | Tests, fixtures, and repo scripts move to TypeScript; `allowJs` is removed. The two smoke-test consumers (`consumer-import.mjs`, `consumer-require.cjs`) stay JavaScript because their job is to load the package the way a plain JavaScript app does. | Decided |
+| TypeScript everywhere | Tests, fixtures, and repo scripts move to TypeScript; `allowJs` is removed. The smoke-test consumers (`consumer-import.mjs`, `consumer-require.cjs`, `consumer-jest.test.mjs`) stay JavaScript because their job is to load the package the way a plain JavaScript app does. | Decided |
 | Test type-checking | `tsconfig.test.json` extends the build config with `noEmit` and covers `src/**/*.test.ts(x)`, fixtures, and `test/`. A `pnpm typecheck` script runs it and CI runs the script. Tests import `describe`, `it`, `expect`, and `vi` from `vitest` instead of relying on `globals: true`. | Proposed |
 | Script runtime | Repo scripts run as `.ts` through Node's built-in type stripping (on by default since Node 22.18.0 and 23.6.0, warning-free since 22.18.0 and 24.3.0). `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle. | Proposed |
 | Module output | `lib/` holds one ESM build plus declarations. `exports` lists `types` then `default`; `main` and `types` point at the same files for resolvers that ignore `exports`; `sideEffects: false`. | Proposed |
@@ -270,11 +270,13 @@ class-component rule downgrades wait for Phase 4. 2.5 landed after it (`build: r
 scripts as TypeScript`): `check-package.ts`, `smoke-test.ts`, and a `clean.ts` that replaces
 `rimraf`; `tsconfig.scripts.json` under `erasableSyntaxOnly` joins `pnpm typecheck`;
 `@types/node` is a dev dependency; `.nvmrc` and `engines.node` state the Node floor. The only
-JavaScript left in the repo is the pair of smoke consumers. 2.3 landed after that (`build: move
+JavaScript left outside `demo/` is the smoke consumers. 2.3 landed after that (`build: move
 to TypeScript 6`): TypeScript 6.0.3 with TypeDoc 0.28.20, `lib/` byte-identical to the 5.9
 build; TypeScript 6 needed an explicit `rootDir` and an explicit `strict: false`. TypeScript 7
 is blocked by TypeDoc's peer range (5.0.x to 6.0.x) and attw bundles its own compiler, so it
-doesn't matter there. 2.2 follows.
+doesn't matter there. 2.2 landed last (`test: run a Jest consumer against the packed package`):
+the smoke test installs Jest 30 and runs a test in ESM mode, which loads the package natively;
+the smoke test takes about 23 seconds with it. Phase 2 is complete.
 
 Goal: one build, one tsconfig, no CJS scaffolding.
 
@@ -288,7 +290,7 @@ Goal: one build, one tsconfig, no CJS scaffolding.
 
 Exit: `lib/` contains one JavaScript tree plus declarations, `check:package` passes with empty
 allowlists, the smoke test passes on Node 22 and 24, the consumer matrix below has evidence in
-every row marked "Phase 2", and this command lists only the two smoke consumers:
+every row marked "Phase 2", and this command lists only the smoke consumers under `scripts/smoke/`:
 
 ```bash
 git ls-files '*.js' '*.jsx' '*.mjs' '*.cjs'
@@ -544,7 +546,8 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works | `consumer-import.mjs` in the smoke test; the demo. |
 | `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes against the ESM-only build on Node 22.13.1 in this worktree (2026-09-23); CI runs 22 and 24. |
 | `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | Unverified: based on the d3 packages shipping `"type": "module"` only and on the smoke test's own skip logic. No such Node version was run here. |
-| Jest with the default CommonJS transform | Needs `transformIgnorePatterns` for the d3 packages | Needs it for `react-d3-tree` too | Unverified until PR 2.2 adds a Jest consumer. |
+| Jest, ESM mode (`node --experimental-vm-modules jest`) | Works | Works | The smoke test's Jest 30 consumer passes against the packed package (2026-09-23). |
+| Jest with the default CommonJS transform | Needs `transformIgnorePatterns` for the d3 packages | Needs it for `react-d3-tree` too | Unverified: not exercised. The migration guide points at ESM mode. |
 | Server rendering (Next.js, Remix) | Renders, but every node and link is at opacity 0 and at its parent's position until the client mounts; ids differ between server and client | Renders the final layout with deterministic ids | `renderToString` run in this worktree (see [Server rendering](#server-rendering)); the mounted-DOM oracle in PR 1.2 and a hydration test in PR 5.1. |
 | TypeScript, `moduleResolution: bundler` | Works | Works | `check:package` (attw) today and after. |
 | TypeScript, ES module file, `node16` | Works (fixed in 3.7.0) | Works | Smoke type-check consumer. |

@@ -59,6 +59,24 @@ try {
     process.stdout.write(run(`"${process.execPath}" ${consumer}`, project));
   });
 
+  // Jest's default CommonJS transform can't load an ESM-only package, but its ESM mode loads
+  // the package natively. Run the documented setup: a test file in a `type: module` directory,
+  // Jest started with `--experimental-vm-modules`.
+  run('npm install --no-audit --no-fund --no-package-lock jest@30', project);
+  const jestDir = path.join(project, 'jest');
+  mkdirSync(jestDir, { recursive: true });
+  writeFileSync(path.join(jestDir, 'package.json'), JSON.stringify({ type: 'module' }));
+  copyFileSync(
+    path.join(fixtures, 'consumer-jest.test.mjs'),
+    path.join(jestDir, 'consumer.test.js')
+  );
+  const jestBin = path.join(project, 'node_modules', 'jest', 'bin', 'jest.js');
+  run(
+    `"${process.execPath}" --experimental-vm-modules "${jestBin}" --rootDir "${jestDir}"`,
+    jestDir
+  );
+  console.log('jest (ESM mode): ok');
+
   // Type-check the same imports from a CommonJS and an ES module file, in the modes that read
   // the `exports` conditions and the nearest `package.json` `type`. The ES module file uses
   // `node16`. The CommonJS file uses `nodenext`, the only mode in which TypeScript lets a
