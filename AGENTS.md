@@ -43,7 +43,7 @@ The build emits three artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
 - Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
 - Jest with `ts-jest` and `babel-jest`, enzyme with `enzyme-adapter-react-16`.
-- ESLint (airbnb config) and Prettier.
+- ESLint (airbnb config) for `.js` files and oxfmt for formatting.
 - TypeDoc for API documentation.
 
 ## Commands
@@ -80,7 +80,7 @@ pnpm lint
 pnpm build:docs
 ```
 
-There's no separate format script. Prettier runs through the pre-commit hook and can be run directly (`pnpm exec prettier --write <path>`).
+`pnpm fmt` formats the repo with oxfmt and `pnpm fmt:check` reports unformatted files; CI runs the check.
 
 ## Dependencies
 
@@ -105,10 +105,10 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 ## Code style and conventions
 
 - In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. `tsc` resolves a `./x.js` import to `./x.ts` or `./x.tsx` without extra config, and the Jest `moduleNameMapper` does the same during testing. Don't add `baseUrl` or a `paths` mapping to the tsconfigs: under pnpm's symlinked `node_modules` they make `tsc` emit a broken `import("node_modules/@types/…")` specifier into `lib/types`. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
-- Prettier settings (`.prettierrc`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`.
-- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `pnpm lint`. Prettier formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
+- oxfmt settings (`.oxfmtrc.json`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`. Markdown, `package.json`, `pnpm-lock.yaml`, `demo/`, and build output are excluded. The reformat commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to hide it from `git blame`.
+- ESLint (`.eslintrc.json`) extends `airbnb` plus `prettier`; `eslint-config-prettier` turns off the airbnb formatting rules that would fight oxfmt. The `lint` script targets `src/**/*.js`, which matches the test files and `mockData.js` — the TypeScript source is not covered by `pnpm lint`. oxfmt formatting (and, for `.js` files, ESLint) runs through the pre-commit hook.
 - Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js`.
-- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs Prettier and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, and additionally ESLint on staged `.js`/`.jsx` files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
+- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxfmt and `jest --findRelatedTests` on staged `.ts`/`.tsx` files, additionally ESLint on staged `.js`/`.jsx` files, and oxfmt alone on staged config and script files outside `src/`. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
 
 ## Development workflow
 
