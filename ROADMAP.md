@@ -55,7 +55,7 @@ v4 is the next major line of the library. It has five goals:
 | Script runtime | Repo scripts run as `.ts` through Node's built-in type stripping (on by default since Node 22.18.0 and 23.6.0, warning-free since 22.18.0 and 24.3.0). `tsconfig.scripts.json` type-checks them under `erasableSyntaxOnly`, which rejects the syntax type stripping can't handle. | Proposed |
 | Module output | `lib/` holds one ESM build plus declarations. `exports` lists `types` then `default`; `main` and `types` point at the same files for resolvers that ignore `exports`; `sideEffects: false`. | Proposed |
 | Compile settings | `target: ES2020`, `module: NodeNext`, `jsx: react-jsx`. One `tsconfig.json` for the library build; `tsconfig.test.json` and `tsconfig.scripts.json` extend it with `noEmit`. `strict: true` lands in Phase 4, after the hooks rewrite, so the Phase 2 `lib/` diff shows only the module-format change. | Proposed |
-| TypeScript version | Keep `~5.9` until the `es5` target is gone (Phase 2), then lift the cap in its own PR with its own validation. | Proposed |
+| TypeScript version | `~6.0` from Phase 2.3 on, pinned by TypeDoc 0.28's peer range; TypeScript 7 when TypeDoc supports it. | Decided |
 | Entry points | Keep both `export default Tree` and `export { Tree }`. | Proposed |
 | Prereleases | `4.0.0-next.N` on the `next` dist-tag. `publish.yml` already derives the tag from the version. | Proposed |
 | Branching | Integration branch `feat/v4`, cut from `master` at `905437b` on 2026-09-23. Work lands on it in PR-sized commits, one per row of the phase tables, so any row can be split into its own PR on request. One final PR takes it to `master` at 4.0.0, after the `v3` branch is cut. | Decided |
@@ -270,7 +270,11 @@ class-component rule downgrades wait for Phase 4. 2.5 landed after it (`build: r
 scripts as TypeScript`): `check-package.ts`, `smoke-test.ts`, and a `clean.ts` that replaces
 `rimraf`; `tsconfig.scripts.json` under `erasableSyntaxOnly` joins `pnpm typecheck`;
 `@types/node` is a dev dependency; `.nvmrc` and `engines.node` state the Node floor. The only
-JavaScript left in the repo is the pair of smoke consumers. 2.3 and 2.2 follow.
+JavaScript left in the repo is the pair of smoke consumers. 2.3 landed after that (`build: move
+to TypeScript 6`): TypeScript 6.0.3 with TypeDoc 0.28.20, `lib/` byte-identical to the 5.9
+build; TypeScript 6 needed an explicit `rootDir` and an explicit `strict: false`. TypeScript 7
+is blocked by TypeDoc's peer range (5.0.x to 6.0.x) and attw bundles its own compiler, so it
+doesn't matter there. 2.2 follows.
 
 Goal: one build, one tsconfig, no CJS scaffolding.
 
@@ -568,7 +572,7 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | `@testing-library/react`, `/dom` (dev) | Absent | 16.3.3, 10.4.2 | Peer range needs React 18 or 19. `user-event` isn't used: the tests dispatch raw wheel and mouse events. |
 | `react`, `react-dom` (dev) | 16.14 | 19.3.0, with an 18.3.1 CI job | |
 | `@types/react` (dev) | 16.9 | 19.x | |
-| `typescript` (dev) | ~5.9.3 | 6.x or 7.x after PR 2.3 | |
+| `typescript` (dev) | ~5.9.3 | ~6.0.3 | TypeDoc 0.28.20 alongside; 7 waits for TypeDoc. |
 | `@types/node` (dev) | Absent | Matching the CI Node floor | Only `tsconfig.scripts.json` references it; the library build keeps `types: []`. |
 | `rimraf` (dev) | 3.0.0 | Bump or replace | Cosmetic; keep off the critical path. |
 
@@ -582,8 +586,8 @@ Peer dependencies: `react` and `react-dom` at `^18.0.0 || ^19.0.0`.
   while 24.16.0 is installed under nvm. The `.nvmrc` and `engines` range from PR 2.5 turn that
   into a clear message. Unverified: whether pnpm 12 can be told to enforce `engines` at install
   time; check its `engineStrict` setting in that PR.
-- **TypeScript 6 and 7.** Both are unverified in this repo. PR 2.3 is isolated so it can be reverted
-  without touching the ESM work.
+- **TypeScript 7.** Not tried: TypeDoc 0.28.20 declares a peer range of 5.0.x to 6.0.x. Revisit
+  when TypeDoc adds 7.
 - **`useId` output.** React 18.3.1 emits ids like `:R0:` and React 19.3.0 like `_R_0_` (both
   checked with `renderToString`). The React 18 form needs escaping in CSS selectors. The `svg` id
   is for uniqueness, not for consumer selectors; document that and keep `rd3t-svg` as the class

@@ -6,6 +6,8 @@
     "lib": ["dom", "es2020"],
     "types": [],
     "jsx": "react-jsx",
+    "strict": false,
+    "rootDir": "./src",
     "outDir": "./lib",
     "declaration": true,
     "skipLibCheck": true,
