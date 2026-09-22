@@ -25,6 +25,7 @@ jobs:
           install: false
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm fmt:check
       - run: pnpm build
       - run: pnpm test
       - run: pnpm test:smoke

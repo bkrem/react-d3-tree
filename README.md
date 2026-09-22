@@ -19,8 +19,8 @@
   <a href="https://www.npmjs.com/package/react-d3-tree">
     <img alt="npm package: types" src="https://img.shields.io/npm/types/react-d3-tree">
   </a>
-  <a href="https://github.com/prettier/prettier">
-    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
+  <a href="https://oxc.rs/docs/guide/usage/formatter">
+    <img alt="code style: oxfmt" src="https://img.shields.io/badge/code_style-oxfmt-0d6efd.svg">
   </a>
 </p>
 
