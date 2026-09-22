@@ -281,27 +281,6 @@ export interface TreeProps {
   leafNodeClassName?: string;
 
   /**
-   * Enables/disables legacy transitions using `react-transition-group`.
-   *
-   * **Note:** This flag is considered legacy and **usage is discouraged for large trees**,
-   * as responsiveness may suffer.
-   *
-   * `enableLegacyTransitions` will be deprecated once a suitable
-   * replacement for transitions has been found.
-   *
-   * {@link Tree.defaultProps.enableLegacyTransitions | Default value}
-   */
-  enableLegacyTransitions?: boolean;
-
-  /**
-   * Sets the animation duration (in milliseconds) of each expansion/collapse of a tree node.
-   * Requires `enableLegacyTransition` to be `true`.
-   *
-   * {@link Tree.defaultProps.transitionDuration | Default value}
-   */
-  transitionDuration?: number;
-
-  /**
    * Disables drag/pan/zoom D3 events when hovering over a node.
    * Useful for cases where D3 events interfere when interacting with inputs or other interactive elements on a node.
    *

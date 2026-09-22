@@ -327,6 +327,14 @@ Exit: zero `@ts-ignore` in `src/`, and the dependency table below matches `packa
 
 ### Phase 4: hooks rewrite
 
+Status (2026-09-23): the phase runs as five commits, legacy transitions first so the Tree
+rewrite has one axis fewer. Commit 1 (`refactor: remove the legacy transitions`) landed:
+`enableLegacyTransitions` and `transitionDuration` are gone from the props, together with
+`TransitionGroupWrapper`, the `@bkrem/react-transition-group` dependency, `componentWillLeave`
+on Node and Link, and the toggle lock; the four flag tests went with them; the oracle snapshots
+are unchanged because the flag defaulted to off. Next: Tree with hooks (with the `dequal`
+removal), Node and Link with hooks, strict types, the React 18 and 19 CI matrix.
+
 Goal: the same v3 behaviour from function components, verified by the Phase 1 suite and oracle.
 This phase keeps the v3 prop names. The API changes come in Phase 5, so each PR here has one
 kind of change to review.

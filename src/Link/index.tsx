@@ -1,8 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
-// Registers `selection.transition()`, which the legacy transitions use.
-import 'd3-transition';
 import {
   Orientation,
   TreeLinkDatum,
@@ -23,8 +21,6 @@ interface LinkProps {
   orientation: Orientation;
   pathFunc: PathFunctionOption | PathFunction;
   pathClassFunc?: PathClassFunction;
-  enableLegacyTransitions: boolean;
-  transitionDuration: number;
   onClick: LinkEventHandler;
   onMouseOver: LinkEventHandler;
   onMouseOut: LinkEventHandler;
@@ -44,28 +40,7 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   };
 
   componentDidMount() {
-    this.applyOpacity(1, this.props.transitionDuration);
-  }
-
-  componentWillLeave(done) {
-    this.applyOpacity(0, this.props.transitionDuration, done);
-  }
-
-  applyOpacity(
-    opacity: number,
-    transitionDuration: LinkProps['transitionDuration'],
-    done = () => {}
-  ) {
-    if (this.props.enableLegacyTransitions) {
-      select(this.linkRef)
-        .transition()
-        .duration(transitionDuration)
-        .style('opacity', opacity)
-        .on('end', done);
-    } else {
-      select(this.linkRef).style('opacity', opacity);
-      done();
-    }
+    select(this.linkRef).style('opacity', 1);
   }
 
   drawStepPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {

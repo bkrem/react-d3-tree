@@ -8,7 +8,6 @@ import 'd3-transition';
 import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
 
-import TransitionGroupWrapper from './TransitionGroupWrapper.js';
 import Node from '../Node/index.js';
 import Link from '../Link/index.js';
 import { TreeNodeDatum, Point, RawNodeDatum } from '../types/common.js';
@@ -20,7 +19,6 @@ type TreeState = {
   dataRef: TreeProps['data'];
   data: TreeNodeDatum[];
   d3: { translate: Point; scale: number };
-  isTransitioning: boolean;
   isInitialRenderForDataset: boolean;
   dataKey: string;
 };
@@ -38,7 +36,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
     translate: { x: 0, y: 0 },
     pathFunc: 'diagonal',
     pathClassFunc: undefined,
-    transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
     initialDepth: undefined,
@@ -54,7 +51,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
     branchNodeClassName: '',
     leafNodeClassName: '',
     renderCustomNodeElement: undefined,
-    enableLegacyTransitions: false,
     hasInteractiveNodes: false,
     dimensions: undefined,
     centeringTransitionDuration: 800,
@@ -65,14 +61,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
     dataRef: this.props.data,
     data: Tree.assignInternalProperties(clone(this.props.data)),
     d3: Tree.calculateD3Geometry(this.props),
-    isTransitioning: false,
     isInitialRenderForDataset: true,
     dataKey: this.props.dataKey,
   };
 
   private internalState = {
     targetNode: null,
-    isTransitioning: false,
   };
 
   svgInstanceRef = `rd3t-svg-${generateId()}`;
@@ -115,11 +109,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
       !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
       this.props.zoomable !== prevProps.zoomable ||
       this.props.draggable !== prevProps.draggable ||
-      this.props.zoom !== prevProps.zoom ||
-      this.props.enableLegacyTransitions !== prevProps.enableLegacyTransitions
+      this.props.zoom !== prevProps.zoom
     ) {
       // If zoom-specific props change -> rebind listener with new values.
-      // Or: rebind zoom listeners to new DOM nodes in case legacy transitions were enabled/disabled.
       this.bindZoomListener(this.props);
     }
 
@@ -313,7 +305,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const matches = this.findNodesById(nodeId, data, []);
     const targetNodeDatum = matches[0];
 
-    if (this.props.collapsible && !this.state.isTransitioning) {
+    if (this.props.collapsible) {
       if (targetNodeDatum.__rd3t.collapsed) {
         Tree.expandNode(targetNodeDatum);
         this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNodeDatum, data);
@@ -321,18 +313,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
         Tree.collapseNode(targetNodeDatum);
       }
 
-      if (this.props.enableLegacyTransitions) {
-        // Lock node toggling while transition takes place.
-        this.setState({ data, isTransitioning: true });
-        // Await transitionDuration + 10 ms before unlocking node toggling again.
-        setTimeout(
-          () => this.setState({ isTransitioning: false }),
-          this.props.transitionDuration + 10
-        );
-      } else {
-        this.setState({ data });
-      }
-
+      this.setState({ data });
       this.internalState.targetNode = targetNodeDatum;
     }
   };
@@ -543,12 +524,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
       renderCustomNodeElement,
       orientation,
       pathFunc,
-      transitionDuration,
       nodeSize,
       depthFactor,
       initialDepth,
       separation,
-      enableLegacyTransitions,
       svgClassName,
       pathClassFunc,
     } = this.props;
@@ -568,9 +547,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
           width="100%"
           height="100%"
         >
-          <TransitionGroupWrapper
-            enableLegacyTransitions={enableLegacyTransitions}
-            component="g"
+          <g
             className={`rd3t-g ${this.gInstanceRef}`}
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
@@ -585,8 +562,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   onClick={this.handleOnLinkClickCb}
                   onMouseOver={this.handleOnLinkMouseOverCb}
                   onMouseOut={this.handleOnLinkMouseOutCb}
-                  enableLegacyTransitions={enableLegacyTransitions}
-                  transitionDuration={transitionDuration}
                 />
               );
             })}
@@ -604,8 +579,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
                   renderCustomNodeElement={renderCustomNodeElement}
                   nodeSize={nodeSize}
                   orientation={orientation}
-                  enableLegacyTransitions={enableLegacyTransitions}
-                  transitionDuration={transitionDuration}
                   onNodeToggle={this.handleNodeToggle}
                   onNodeClick={this.handleOnNodeClickCb}
                   onNodeMouseOver={this.handleOnNodeMouseOverCb}
@@ -616,7 +589,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 />
               );
             })}
-          </TransitionGroupWrapper>
+          </g>
         </svg>
       </div>
     );

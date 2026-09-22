@@ -1,5 +1,4 @@
-import { waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { CustomNodeElementProps, RawNodeDatum, TreeNodeEventCallback } from '../../index.js';
 import type { OnUpdate } from './helpers.js';
@@ -24,10 +23,6 @@ const circleOf = (container: ParentNode, label: string) =>
   getNodeByLabel(container, label).querySelector('circle');
 
 describe('<Tree />', () => {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it('renders a node for every datum and a link for every parent-child relation', () => {
     const small = renderTree({ data: mockData });
     expect(nodeElements(small.container)).toHaveLength(5);
@@ -318,73 +313,6 @@ describe('<Tree />', () => {
       click(circleOf(view.container, 'Level 2: B'));
 
       expect(nodeElements(view.container)).toHaveLength(6);
-    });
-  });
-
-  describe('enableLegacyTransitions', () => {
-    it('renders the tree group with its transform in both modes', () => {
-      const translate = { x: 5, y: 6 };
-
-      const withFlag = renderTree({ data: mockData, enableLegacyTransitions: true, translate });
-      expect(getTreeGroup(withFlag.container).getAttribute('transform')).toBe(
-        'translate(5,6) scale(1)'
-      );
-
-      const withoutFlag = renderTree({ data: mockData, translate });
-      expect(getTreeGroup(withoutFlag.container).getAttribute('transform')).toBe(
-        'translate(5,6) scale(1)'
-      );
-    });
-
-    it('keeps zooming after the flag changes, which swaps the tree group element', () => {
-      const scaleExtent = { min: 0.5, max: 2 };
-      const view = renderTree({ data: mockData, scaleExtent });
-
-      view.rerender({ data: mockData, scaleExtent, enableLegacyTransitions: true });
-      const before = getTreeGroup(view.container).getAttribute('transform');
-      wheel(getSvg(view.container));
-
-      expect(getTreeGroup(view.container).getAttribute('transform')).not.toBe(before);
-    });
-
-    it('ignores toggles until `transitionDuration` has elapsed', () => {
-      vi.useFakeTimers();
-      const onUpdate = vi.fn<OnUpdate>();
-      const view = renderTree({
-        data: mockData,
-        enableLegacyTransitions: true,
-        transitionDuration: 500,
-        onUpdate,
-      });
-      const toggles = () => onUpdate.mock.calls.filter(([update]) => update.node !== null).length;
-
-      click(circleOf(view.container, 'Top Level'));
-      click(circleOf(view.container, 'Top Level'));
-      expect(toggles()).toBe(1);
-
-      act(() => {
-        vi.advanceTimersByTime(510);
-      });
-      click(circleOf(view.container, 'Top Level'));
-
-      expect(toggles()).toBe(2);
-    });
-
-    it('removes collapsed descendants once their exit transition ends', async () => {
-      const view = renderTree({
-        data: mockData2,
-        enableLegacyTransitions: true,
-        transitionDuration: 50,
-      });
-
-      click(circleOf(view.container, 'Top Level'));
-
-      // The children stay in the DOM while they fade out.
-      expect(nodeLabels(view.container)).toEqual(['Top Level', 'Level 2: A']);
-      await waitFor(() => {
-        expect(nodeLabels(view.container)).toEqual(['Top Level']);
-      });
-      expect(linkElements(view.container)).toHaveLength(0);
     });
   });
 });

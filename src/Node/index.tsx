@@ -1,8 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
-// Registers `selection.transition()`, which the legacy transitions use.
-import 'd3-transition';
 import {
   Orientation,
   Point,
@@ -29,8 +27,6 @@ type NodeProps = {
     y: number;
   };
   orientation: Orientation;
-  enableLegacyTransitions: boolean;
-  transitionDuration: number;
   renderCustomNodeElement: RenderCustomNodeElementFn;
   onNodeToggle: (nodeId: string) => void;
   onNodeClick: NodeEventHandler;
@@ -110,32 +106,12 @@ export default class Node extends React.Component<NodeProps, NodeState> {
       : `translate(${position.x},${position.y})`;
   }
 
-  applyTransform(
-    transform: string,
-    transitionDuration: NodeProps['transitionDuration'],
-    opacity = 1,
-    done = () => {}
-  ) {
-    if (this.props.enableLegacyTransitions) {
-      select(this.nodeRef)
-        .transition()
-        .duration(transitionDuration)
-        .attr('transform', transform)
-        .style('opacity', opacity)
-        .on('end', done);
-    } else {
-      select(this.nodeRef).attr('transform', transform).style('opacity', opacity);
-      done();
-    }
-  }
-
   commitTransform() {
-    const { orientation, transitionDuration, position, parent } = this.props;
+    const { orientation, position, parent } = this.props;
     const transform = this.setTransform(position, parent, orientation);
-    this.applyTransform(transform, transitionDuration);
+    select(this.nodeRef).attr('transform', transform).style('opacity', 1);
   }
 
-  // TODO: needs tests
   renderNodeElement = () => {
     const { data, hierarchyPointNode, renderCustomNodeElement } = this.props;
     const renderNode =
@@ -174,12 +150,6 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   handleAddChildren: AddChildrenFunction = childrenData => {
     this.props.handleAddChildrenToNode(this.props.data.__rd3t.id, childrenData);
   };
-
-  componentWillLeave(done) {
-    const { orientation, transitionDuration, position, parent } = this.props;
-    const transform = this.setTransform(position, parent, orientation, true);
-    this.applyTransform(transform, transitionDuration, 0, done);
-  }
 
   render() {
     const { data, nodeClassName } = this.props;

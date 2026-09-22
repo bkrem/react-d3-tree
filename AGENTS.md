@@ -25,7 +25,6 @@ The library source lives in `src/`. Everything else supports building, testing, 
 
 - `src/index.ts` — public API entry point. Exports `Tree` (default and named) and re-exports the public types.
 - `src/Tree/index.tsx` — the `Tree` component, a class component that owns layout state, zoom, pan, and collapse/expand. Computes the layout with `d3-hierarchy` and wires zoom with `d3-zoom`/`d3-selection`.
-- `src/Tree/TransitionGroupWrapper.tsx` — animation wrapper around `@bkrem/react-transition-group`.
 - `src/Tree/types.ts` — `Tree` prop and callback types.
 - `src/Node/index.tsx` — renders a single node; `src/Node/DefaultNodeElement.tsx` is the default node renderer used when no custom renderer is supplied.
 - `src/Link/index.tsx` — renders the path between two nodes; supports the built-in `pathFunc` variants and a caller-supplied function.
@@ -42,7 +41,7 @@ The build is ESM only: one `tsc` pass (`module: NodeNext`, `target: ES2020`) emi
 - TypeScript 6.0 (source), compiled with `tsc`, pinned to `~6.0` because TypeDoc 0.28 supports 6.0.x only; TypeScript 7 waits for TypeDoc. TypeScript 6 makes `strict` the default and no longer infers `rootDir`, so `tsconfig.json` sets both explicitly: `strict: false` until the hooks rewrite turns it on, and `rootDir: ./src`. The extending configs set `rootDir: .` because they include files outside `src/`.
 - React 16–19 (peer dependency). Dev and test dependencies use React 18.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-transition`, `d3-zoom`, all 3.x with matching `@types/d3-*` packages. `d3-transition` is imported for its side effect (it adds `transition()` to selections); the diagonal link path is a local Bézier, not `d3-shape`.
-- Other runtime dependencies: `@bkrem/react-transition-group`, `clone`, `dequal`.
+- Other runtime dependencies: `clone`, `dequal`.
 - Vitest with jsdom and `@testing-library/react`.
 - oxlint for linting and oxfmt for formatting.
 - TypeDoc for API documentation.
