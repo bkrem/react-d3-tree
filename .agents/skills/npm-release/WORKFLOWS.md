@@ -117,8 +117,8 @@ pnpm build:demo                 # pnpm build, pnpm build:docs, then the Vite bui
 Verify the build before deploying:
 
 ```bash
-grep -ohE '"[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+\.[0-9]+)?"' demo/dist/assets/index-*.js | sort -u   # "<version>"
-grep -ohE 'react-d3-tree - v[^<"]*' demo/dist/docs/index.html | sort -u                        # v<version>
+grep -l -F '<version>' demo/dist/assets/index-*.js                        # prints the bundle that embeds the version
+grep -ohE 'react-d3-tree - v[^<"]*' demo/dist/docs/index.html | sort -u   # v<version>
 ```
 
 Check the built demo in a browser (`pnpm --filter rd3t-demo preview`, then `http://localhost:4173/react-d3-tree/`): the top bar shows `v<version>`, the tree renders, a node collapses and expands, and the console has no errors.
