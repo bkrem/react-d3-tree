@@ -1,5 +1,5 @@
 {
   "src/**/*.{ts,tsx}": ["oxlint", "oxfmt", "vitest related --run"],
   "{scripts,test}/**/*.{js,mjs,cjs,ts}": ["oxlint", "oxfmt"],
-  "*.{json,yml,yaml}": ["oxfmt"]
+  "*.{json,yml,yaml}": ["oxfmt --no-error-on-unmatched-pattern"]
 }

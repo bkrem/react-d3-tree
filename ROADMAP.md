@@ -298,6 +298,14 @@ git ls-files '*.js' '*.jsx' '*.mjs' '*.cjs'
 
 ### Phase 3: dependency pass
 
+Status (2026-09-23): 3.3 landed first (`refactor: draw diagonal links without d3-shape`). A
+comparison of `linkHorizontal` and `linkVertical` from `d3-shape` 1.3.7 against the local
+formula over 28,561 coordinate pairs, including fractions and extreme magnitudes, found zero
+mismatches, and `links.test.tsx` pins fractional-coordinate output for every `pathFunc` in both
+orientations (the literals were run against `d3-shape` before the swap). `d3-shape` 3.x rounds
+path coordinates to three decimals through `link.digits()`, so keeping it would have changed
+output for non-integer layouts; the local formula keeps 1.3.7's exact strings.
+
 Goal: every runtime dependency earns its place, and the types match the runtimes.
 
 | PR | Branch | Work |

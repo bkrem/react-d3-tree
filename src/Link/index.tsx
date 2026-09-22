@@ -1,5 +1,4 @@
 import React, { SyntheticEvent } from 'react';
-import { linkHorizontal, linkVertical } from 'd3-shape';
 import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import {
@@ -76,17 +75,16 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
       : `M${source.x},${source.y} V${source.y + deltaY / 2} H${target.x} V${target.y}`;
   }
 
+  // A cubic Bézier whose control points sit halfway along the depth axis: the same curve
+  // d3-shape's `linkHorizontal` and `linkVertical` draw, with the same number formatting.
   drawDiagonalPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
     const { source, target } = linkData;
-    return orientation === 'horizontal'
-      ? linkHorizontal()({
-          source: [source.y, source.x],
-          target: [target.y, target.x],
-        })
-      : linkVertical()({
-          source: [source.x, source.y],
-          target: [target.x, target.y],
-        });
+    if (orientation === 'horizontal') {
+      const mid = (source.y + target.y) / 2;
+      return `M${source.y},${source.x}C${mid},${source.x},${mid},${target.x},${target.y},${target.x}`;
+    }
+    const mid = (source.y + target.y) / 2;
+    return `M${source.x},${source.y}C${source.x},${mid},${target.x},${mid},${target.x},${target.y}`;
   }
 
   drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']) {
