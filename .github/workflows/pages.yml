@@ -1,0 +1,55 @@
+# Builds the library, the API docs, and the demo, then deploys demo/dist to GitHub Pages.
+# Manual only: the demo is deployed when the maintainer asks, after a release is approved.
+# Requires the repository's Pages source to be "GitHub Actions" (Settings → Pages).
+
+name: Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Reads the pnpm version from `packageManager` in package.json.
+      - name: Install pnpm and Node.js 24
+        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm build:docs
+      - run: pnpm --filter rd3t-demo build
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: demo/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

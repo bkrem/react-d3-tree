@@ -31,3 +31,8 @@ jobs:
       - run: pnpm check:package
       - run: pnpm test
       - run: pnpm test:smoke
+
+      # The demo consumes lib/ through the workspace link, so its build is a consumer check.
+      - run: pnpm --filter rd3t-demo typecheck
+      - run: pnpm --filter rd3t-demo test
+      - run: pnpm --filter rd3t-demo build
