@@ -184,9 +184,6 @@ importers:
       d3-zoom:
         specifier: ^3.0.0
         version: 3.0.0
-      dequal:
-        specifier: ^2.0.2
-        version: 2.0.3
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.18.5

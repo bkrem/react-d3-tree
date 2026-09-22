@@ -66,8 +66,7 @@
     "d3-hierarchy": "^3.1.2",
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
-    "d3-zoom": "^3.0.0",
-    "dequal": "^2.0.2"
+    "d3-zoom": "^3.0.0"
   },
   "peerDependencies": {
     "react": "16.x || 17.x || 18.x || 19.x",

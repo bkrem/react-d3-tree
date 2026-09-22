@@ -1,11 +1,10 @@
-import React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { tree as d3tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import type { D3ZoomEvent } from 'd3-zoom';
 // Registers `selection.transition()`, which `centerNode` uses.
 import 'd3-transition';
-import { dequal as deepEqual } from 'dequal/lite';
 import clone from 'clone';
 
 import Node from '../Node/index.js';
@@ -15,585 +14,492 @@ import { TreeLinkEventCallback, TreeNodeEventCallback, TreeProps } from './types
 import globalCss from '../globalCss.js';
 import generateId from '../generateId.js';
 
-type TreeState = {
-  dataRef: TreeProps['data'];
+const DEFAULT_TRANSLATE: Point = { x: 0, y: 0 };
+const DEFAULT_SCALE_EXTENT = { min: 0.1, max: 1 };
+const DEFAULT_NODE_SIZE = { x: 140, y: 140 };
+const DEFAULT_SEPARATION = { siblings: 1, nonSiblings: 2 };
+
+type Geometry = { translate: Point; scale: number };
+
+// The internal copy of `data`, stamped with `__rd3t`, plus what it was derived from.
+type InternalData = {
+  source: TreeProps['data'];
+  dataKey: string | undefined;
   data: TreeNodeDatum[];
-  d3: { translate: Point; scale: number };
-  isInitialRenderForDataset: boolean;
-  dataKey: string;
 };
 
-class Tree extends React.Component<TreeProps, TreeState> {
-  static defaultProps: Partial<TreeProps> = {
-    onNodeClick: undefined,
-    onNodeMouseOver: undefined,
-    onNodeMouseOut: undefined,
-    onLinkClick: undefined,
-    onLinkMouseOver: undefined,
-    onLinkMouseOut: undefined,
-    onUpdate: undefined,
-    orientation: 'horizontal',
-    translate: { x: 0, y: 0 },
-    pathFunc: 'diagonal',
-    pathClassFunc: undefined,
-    depthFactor: undefined,
-    collapsible: true,
-    initialDepth: undefined,
-    zoomable: true,
-    draggable: true,
-    zoom: 1,
-    scaleExtent: { min: 0.1, max: 1 },
-    nodeSize: { x: 140, y: 140 },
-    separation: { siblings: 1, nonSiblings: 2 },
-    shouldCollapseNeighborNodes: false,
-    svgClassName: '',
-    rootNodeClassName: '',
-    branchNodeClassName: '',
-    leafNodeClassName: '',
-    renderCustomNodeElement: undefined,
-    hasInteractiveNodes: false,
-    dimensions: undefined,
-    centeringTransitionDuration: 800,
-    dataKey: undefined,
-  };
+type LayoutOptions = {
+  orientation: TreeProps['orientation'];
+  nodeSize: TreeProps['nodeSize'];
+  separation: TreeProps['separation'];
+  depthFactor: TreeProps['depthFactor'];
+};
 
-  state: TreeState = {
-    dataRef: this.props.data,
-    data: Tree.assignInternalProperties(clone(this.props.data)),
-    d3: Tree.calculateD3Geometry(this.props),
-    isInitialRenderForDataset: true,
-    dataKey: this.props.dataKey,
-  };
-
-  private internalState = {
-    targetNode: null,
-  };
-
-  svgInstanceRef = `rd3t-svg-${generateId()}`;
-  gInstanceRef = `rd3t-g-${generateId()}`;
-
-  static getDerivedStateFromProps(nextProps: TreeProps, prevState: TreeState) {
-    let derivedState: Partial<TreeState> = null;
-    // Clone new data & assign internal properties if `data` object reference changed.
-    // If the dataKey was present but didn't change, then we don't need to re-render the tree
-    const dataKeyChanged = !nextProps.dataKey || prevState.dataKey !== nextProps.dataKey;
-    if (nextProps.data !== prevState.dataRef && dataKeyChanged) {
-      derivedState = {
-        dataRef: nextProps.data,
-        data: Tree.assignInternalProperties(clone(nextProps.data)),
-        isInitialRenderForDataset: true,
-        dataKey: nextProps.dataKey,
-      };
+/**
+ * Wraps a single root in an array and stamps every node with the internal id, depth, and
+ * collapsed state the tree needs. Mutates and returns `data`; callers pass a clone.
+ * With `initialDepth`, nodes at that depth and below start collapsed.
+ */
+function assignInternalProperties(
+  data: RawNodeDatum | RawNodeDatum[],
+  currentDepth = 0,
+  initialDepth?: number
+): TreeNodeDatum[] {
+  const nodes = Array.isArray(data) ? data : [data];
+  return nodes.map(n => {
+    const nodeDatum = n as TreeNodeDatum;
+    nodeDatum.__rd3t = {
+      id: generateId(),
+      depth: currentDepth,
+      collapsed: initialDepth !== undefined && currentDepth >= initialDepth,
+    };
+    if (nodeDatum.children && nodeDatum.children.length > 0) {
+      nodeDatum.children = assignInternalProperties(
+        nodeDatum.children,
+        currentDepth + 1,
+        initialDepth
+      );
     }
-    const d3 = Tree.calculateD3Geometry(nextProps);
-    if (!deepEqual(d3, prevState.d3)) {
-      derivedState = derivedState || {};
-      derivedState.d3 = d3;
+    return nodeDatum;
+  });
+}
+
+function buildInternalData(data: TreeProps['data'], initialDepth?: number): TreeNodeDatum[] {
+  return assignInternalProperties(clone(data), 0, initialDepth);
+}
+
+/** Walks the nested `nodeSet` until a node matching `nodeId` is found. */
+function findNodeById(nodeId: string, nodeSet: TreeNodeDatum[]): TreeNodeDatum | undefined {
+  for (const node of nodeSet) {
+    if (node.__rd3t.id === nodeId) return node;
+    if (node.children && node.children.length > 0) {
+      const hit = findNodeById(nodeId, node.children);
+      if (hit) return hit;
     }
-    return derivedState;
   }
+  return undefined;
+}
 
-  componentDidMount() {
-    this.bindZoomListener(this.props);
-    this.setState({ isInitialRenderForDataset: false });
-  }
-
-  componentDidUpdate(prevProps: TreeProps) {
-    if (this.props.data !== prevProps.data) {
-      // If last `render` was due to change in dataset -> mark the initial render as done.
-      this.setState({ isInitialRenderForDataset: false });
+/** Collects every node in the nested `nodeSet` at `depth`. */
+function findNodesAtDepth(depth: number, nodeSet: TreeNodeDatum[]): TreeNodeDatum[] {
+  const hits: TreeNodeDatum[] = [];
+  for (const node of nodeSet) {
+    if (node.__rd3t.depth === depth) hits.push(node);
+    if (node.children && node.children.length > 0) {
+      hits.push(...findNodesAtDepth(depth, node.children));
     }
-
-    if (
-      !deepEqual(this.props.translate, prevProps.translate) ||
-      !deepEqual(this.props.scaleExtent, prevProps.scaleExtent) ||
-      this.props.zoomable !== prevProps.zoomable ||
-      this.props.draggable !== prevProps.draggable ||
-      this.props.zoom !== prevProps.zoom
-    ) {
-      // If zoom-specific props change -> rebind listener with new values.
-      this.bindZoomListener(this.props);
-    }
-
-    if (typeof this.props.onUpdate === 'function') {
-      this.props.onUpdate({
-        node: this.internalState.targetNode ? clone(this.internalState.targetNode) : null,
-        zoom: this.state.d3.scale,
-        translate: this.state.d3.translate,
-      });
-    }
-    // Reset the last target node after we've flushed it to `onUpdate`.
-    this.internalState.targetNode = null;
   }
+  return hits;
+}
 
-  componentWillUnmount() {
-    select(`.${this.svgInstanceRef}`).on('.zoom', null);
+/** Collapses `nodeDatum` and every node below it. */
+function collapseNode(nodeDatum: TreeNodeDatum) {
+  nodeDatum.__rd3t.collapsed = true;
+  if (nodeDatum.children && nodeDatum.children.length > 0) {
+    nodeDatum.children.forEach(collapseNode);
   }
+}
 
-  /**
-   * Collapses all tree nodes with a `depth` larger than `initialDepth`.
-   *
-   * @param {array} nodeSet Array of nodes generated by `generateTree`
-   * @param {number} initialDepth Maximum initial depth the tree should render
-   */
-  setInitialTreeDepth(nodeSet: HierarchyPointNode<TreeNodeDatum>[], initialDepth: number) {
-    nodeSet.forEach(n => {
-      n.data.__rd3t.collapsed = n.depth >= initialDepth;
+function expandNode(nodeDatum: TreeNodeDatum) {
+  nodeDatum.__rd3t.collapsed = false;
+}
+
+/** Collapses every node at the same depth as `targetNode`, except `targetNode` itself. */
+function collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
+  findNodesAtDepth(targetNode.__rd3t.depth, nodeSet)
+    .filter(node => node.__rd3t.id !== targetNode.__rd3t.id)
+    .forEach(collapseNode);
+}
+
+/**
+ * The initial transform: `zoom` clamped to `scaleExtent`, because the first render writes it
+ * as an attribute instead of going through d3's zoom, which would clamp it itself.
+ */
+function calculateGeometry(zoom: number, min: number, max: number, translate: Point): Geometry {
+  let scale = zoom;
+  if (zoom > max) {
+    scale = max;
+  } else if (zoom < min) {
+    scale = min;
+  }
+  return { translate, scale };
+}
+
+/** Lays out the tree from the root of `data`, honouring collapsed nodes and `depthFactor`. */
+function generateTree(data: TreeNodeDatum[], options: LayoutOptions) {
+  const { orientation, nodeSize, separation, depthFactor } = options;
+  const tree = d3tree<TreeNodeDatum>()
+    .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
+    .separation((a, b) =>
+      a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
+        ? separation.siblings
+        : separation.nonSiblings
+    );
+
+  const rootNode = tree(hierarchy(data[0], d => (d.__rd3t.collapsed ? null : d.children)));
+  const nodes = rootNode.descendants();
+  const links = rootNode.links();
+
+  if (depthFactor !== undefined) {
+    nodes.forEach(node => {
+      node.y = node.depth * depthFactor;
     });
   }
 
-  /**
-   * bindZoomListener - If `props.zoomable`, binds a listener for
-   * "zoom" events to the SVG and sets scaleExtent to min/max
-   * specified in `props.scaleExtent`.
-   */
-  bindZoomListener(props: TreeProps) {
-    const { zoomable, scaleExtent, translate, zoom, onUpdate, hasInteractiveNodes } = props;
-    const svg = select<SVGSVGElement, unknown>(`.${this.svgInstanceRef}`);
-    const g = select<SVGGElement, unknown>(`.${this.gInstanceRef}`);
+  return { nodes, links };
+}
 
-    // Sets initial offset, so that first pan and zoom does not jump back to default [0,0] coords.
+function Tree(props: TreeProps) {
+  const {
+    data,
+    orientation = 'horizontal',
+    translate = DEFAULT_TRANSLATE,
+    pathFunc = 'diagonal',
+    pathClassFunc,
+    depthFactor,
+    collapsible = true,
+    initialDepth,
+    zoomable = true,
+    draggable = true,
+    zoom = 1,
+    scaleExtent = DEFAULT_SCALE_EXTENT,
+    nodeSize = DEFAULT_NODE_SIZE,
+    separation = DEFAULT_SEPARATION,
+    shouldCollapseNeighborNodes = false,
+    svgClassName = '',
+    rootNodeClassName = '',
+    branchNodeClassName = '',
+    leafNodeClassName = '',
+    renderCustomNodeElement,
+    hasInteractiveNodes = false,
+    dimensions,
+    centeringTransitionDuration = 800,
+    dataKey,
+    onNodeClick,
+    onNodeMouseOver,
+    onNodeMouseOut,
+    onLinkClick,
+    onLinkMouseOver,
+    onLinkMouseOut,
+    onUpdate,
+  } = props;
+  // Primitives from the object props, so effects and memos depend on values, not identities:
+  // a fresh `{ x: 0, y: 0 }` literal on every render must not rebind zoom.
+  const { x: translateX, y: translateY } = translate;
+  const { min: scaleMin, max: scaleMax } = scaleExtent;
+  const { x: nodeSizeX, y: nodeSizeY } = nodeSize;
+  const { siblings: siblingSeparation, nonSiblings: nonSiblingSeparation } = separation;
+
+  const svgRef = useRef<SVGSVGElement>(null);
+  const gRef = useRef<SVGGElement>(null);
+
+  // The latest props, for the callbacks and d3 handlers that outlive the render they were
+  // created in. React flushes this effect before it dispatches the next event.
+  const latestProps = {
+    collapsible,
+    shouldCollapseNeighborNodes,
+    draggable,
+    hasInteractiveNodes,
+    dimensions,
+    orientation,
+    zoom,
+    centeringTransitionDuration,
+    onNodeClick,
+    onNodeMouseOver,
+    onNodeMouseOut,
+    onLinkClick,
+    onLinkMouseOver,
+    onLinkMouseOut,
+    onUpdate,
+  };
+  const latest = useRef(latestProps);
+  useEffect(() => {
+    latest.current = latestProps;
+  });
+
+  // The internal tree is state because toggles and `addChildren` change it. A new `data`
+  // reference replaces it, unless `dataKey` is set and unchanged.
+  const [internal, setInternal] = useState<InternalData>(() => ({
+    source: data,
+    dataKey,
+    data: buildInternalData(data, initialDepth),
+  }));
+  let current = internal;
+  if (data !== internal.source && (!dataKey || dataKey !== internal.dataKey)) {
+    current = { source: data, dataKey, data: buildInternalData(data, initialDepth) };
+    setInternal(current);
+  }
+
+  const geometry = useMemo(
+    () => calculateGeometry(zoom, scaleMin, scaleMax, { x: translateX, y: translateY }),
+    [zoom, scaleMin, scaleMax, translateX, translateY]
+  );
+  // The live transform: d3 owns the `g` attribute after mount, so React never re-renders it.
+  const transformRef = useRef<Geometry>(geometry);
+
+  const layout = useMemo(
+    () =>
+      generateTree(current.data, {
+        orientation,
+        nodeSize: { x: nodeSizeX, y: nodeSizeY },
+        separation: { siblings: siblingSeparation, nonSiblings: nonSiblingSeparation },
+        depthFactor,
+      }),
+    [
+      current.data,
+      orientation,
+      nodeSizeX,
+      nodeSizeY,
+      siblingSeparation,
+      nonSiblingSeparation,
+      depthFactor,
+    ]
+  );
+
+  // Binds d3's zoom to the svg. The initial transform goes through a listener-less behaviour
+  // first, so setting it emits no zoom event and `onUpdate` sees no call.
+  useEffect(() => {
+    const svg = select(svgRef.current);
+    const g = select(gRef.current);
+    transformRef.current = geometry;
+
     svg.call(
       d3zoom<SVGSVGElement, unknown>().transform,
-      zoomIdentity.translate(translate.x, translate.y).scale(zoom)
+      zoomIdentity.translate(translateX, translateY).scale(zoom)
     );
-    svg.call(
-      d3zoom<SVGSVGElement, unknown>()
-        .scaleExtent(zoomable ? [scaleExtent.min, scaleExtent.max] : [zoom, zoom])
-        // TODO: break this out into a separate zoom handler fn, rather than inlining it.
-        .filter((event: any) => {
-          if (hasInteractiveNodes) {
-            return (
-              event.target.classList.contains(this.svgInstanceRef) ||
-              event.target.classList.contains(this.gInstanceRef) ||
-              event.shiftKey
-            );
-          }
-          return true;
-        })
-        .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
-          if (
-            !this.props.draggable &&
-            ['mousemove', 'touchmove', 'dblclick'].includes(event.sourceEvent.type)
-          ) {
-            return;
-          }
-
-          g.attr('transform', event.transform.toString());
-          if (typeof onUpdate === 'function') {
-            // This callback is magically called not only on "zoom", but on "drag", as well,
-            // even though event.type == "zoom".
-            // Taking advantage of this and not writing a "drag" handler.
-            onUpdate({
-              node: null,
-              zoom: event.transform.k,
-              translate: { x: event.transform.x, y: event.transform.y },
-            });
-            // TODO: remove this? Shouldn't be mutating state keys directly.
-            this.state.d3.scale = event.transform.k;
-            this.state.d3.translate = {
-              x: event.transform.x,
-              y: event.transform.y,
-            };
-          }
-        })
-    );
-  }
-
-  /**
-   * Assigns internal properties that are required for tree
-   * manipulation to each node in the `data` set and returns a new `data` array.
-   *
-   * @static
-   */
-  static assignInternalProperties(data: RawNodeDatum[], currentDepth: number = 0): TreeNodeDatum[] {
-    // Wrap the root node into an array for recursive transformations if it wasn't in one already.
-    const d = Array.isArray(data) ? data : [data];
-    return d.map(n => {
-      const nodeDatum = n as TreeNodeDatum;
-      nodeDatum.__rd3t = { id: null, depth: null, collapsed: false };
-      nodeDatum.__rd3t.id = generateId();
-      // D3@v5 compat: manually assign `depth` to node.data so we don't have
-      // to hold full node+link sets in state.
-      // TODO: avoid this extra step by checking D3's node.depth directly.
-      nodeDatum.__rd3t.depth = currentDepth;
-      // If there are children, recursively assign properties to them too.
-      if (nodeDatum.children && nodeDatum.children.length > 0) {
-        nodeDatum.children = Tree.assignInternalProperties(nodeDatum.children, currentDepth + 1);
-      }
-      return nodeDatum;
-    });
-  }
-
-  /**
-   * Recursively walks the nested `nodeSet` until a node matching `nodeId` is found.
-   */
-  findNodesById(nodeId: string, nodeSet: TreeNodeDatum[], hits: TreeNodeDatum[]) {
-    if (hits.length > 0) {
-      return hits;
-    }
-    hits = hits.concat(nodeSet.filter(node => node.__rd3t.id === nodeId));
-    nodeSet.forEach(node => {
-      if (node.children && node.children.length > 0) {
-        hits = this.findNodesById(nodeId, node.children, hits);
-      }
-    });
-    return hits;
-  }
-
-  /**
-   * Recursively walks the nested `nodeSet` until all nodes at `depth` have been found.
-   *
-   * @param {number} depth Target depth for which nodes should be returned
-   * @param {array} nodeSet Array of nested `node` objects
-   * @param {array} accumulator Accumulator for matches, passed between recursive calls
-   */
-  findNodesAtDepth(depth: number, nodeSet: TreeNodeDatum[], accumulator: TreeNodeDatum[]) {
-    accumulator = accumulator.concat(nodeSet.filter(node => node.__rd3t.depth === depth));
-    nodeSet.forEach(node => {
-      if (node.children && node.children.length > 0) {
-        accumulator = this.findNodesAtDepth(depth, node.children, accumulator);
-      }
-    });
-    return accumulator;
-  }
-
-  /**
-   * Recursively sets the internal `collapsed` property of
-   * the passed `TreeNodeDatum` and its children to `true`.
-   *
-   * @static
-   */
-  static collapseNode(nodeDatum: TreeNodeDatum) {
-    nodeDatum.__rd3t.collapsed = true;
-    if (nodeDatum.children && nodeDatum.children.length > 0) {
-      nodeDatum.children.forEach(child => {
-        Tree.collapseNode(child);
+    const behavior = d3zoom<SVGSVGElement, unknown>()
+      .scaleExtent(zoomable ? [scaleMin, scaleMax] : [zoom, zoom])
+      .filter((event: any) => {
+        if (latest.current.hasInteractiveNodes) {
+          return event.target === svgRef.current || event.target === gRef.current || event.shiftKey;
+        }
+        return true;
+      })
+      .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        if (
+          !latest.current.draggable &&
+          ['mousemove', 'touchmove', 'dblclick'].includes(event.sourceEvent.type)
+        ) {
+          return;
+        }
+        g.attr('transform', event.transform.toString());
+        const next = {
+          translate: { x: event.transform.x, y: event.transform.y },
+          scale: event.transform.k,
+        };
+        transformRef.current = next;
+        const { onUpdate: report } = latest.current;
+        if (typeof report === 'function') {
+          // d3 emits "zoom" for pans as well, so this covers dragging too.
+          report({ node: null, zoom: next.scale, translate: next.translate });
+        }
       });
-    }
-  }
+    svg.call(behavior);
 
-  /**
-   * Sets the internal `collapsed` property of
-   * the passed `TreeNodeDatum` object to `false`.
-   *
-   * @static
-   */
-  static expandNode(nodeDatum: TreeNodeDatum) {
-    nodeDatum.__rd3t.collapsed = false;
-  }
-
-  /**
-   * Collapses all nodes in `nodeSet` that are neighbors (same depth) of `targetNode`.
-   */
-  collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
-    const neighbors = this.findNodesAtDepth(targetNode.__rd3t.depth, nodeSet, []).filter(
-      node => node.__rd3t.id !== targetNode.__rd3t.id
-    );
-    neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
-  }
-
-  /**
-   * Finds the node matching `nodeId` and
-   * expands/collapses it, depending on the current state of
-   * its internal `collapsed` property.
-   * `setState` callback receives targetNode and handles
-   * `props.onClick` if defined.
-   */
-  handleNodeToggle = (nodeId: string) => {
-    const data = clone(this.state.data);
-    const matches = this.findNodesById(nodeId, data, []);
-    const targetNodeDatum = matches[0];
-
-    if (this.props.collapsible) {
-      if (targetNodeDatum.__rd3t.collapsed) {
-        Tree.expandNode(targetNodeDatum);
-        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNodeDatum, data);
-      } else {
-        Tree.collapseNode(targetNodeDatum);
-      }
-
-      this.setState({ data });
-      this.internalState.targetNode = targetNodeDatum;
-    }
-  };
-
-  handleAddChildrenToNode = (nodeId: string, childrenData: RawNodeDatum[]) => {
-    const data = clone(this.state.data);
-    const matches = this.findNodesById(nodeId, data, []);
-
-    if (matches.length > 0) {
-      const targetNodeDatum = matches[0];
-
-      const depth = targetNodeDatum.__rd3t.depth;
-      const formattedChildren = clone(childrenData).map((node: RawNodeDatum) =>
-        Tree.assignInternalProperties([node], depth + 1)
-      );
-      targetNodeDatum.children = targetNodeDatum.children || [];
-      targetNodeDatum.children.push(...formattedChildren.flat());
-
-      this.setState({ data });
-    }
-  };
-
-  /**
-   * Handles the user-defined `onNodeClick` function.
-   */
-  handleOnNodeClickCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
-    const { onNodeClick } = this.props;
-    if (onNodeClick && typeof onNodeClick === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onNodeClick(clone(hierarchyPointNode), evt);
-    }
-  };
-
-  /**
-   * Handles the user-defined `onLinkClick` function.
-   */
-  handleOnLinkClickCb: TreeLinkEventCallback = (linkSource, linkTarget, evt) => {
-    const { onLinkClick } = this.props;
-    if (onLinkClick && typeof onLinkClick === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onLinkClick(clone(linkSource), clone(linkTarget), evt);
-    }
-  };
-
-  /**
-   * Handles the user-defined `onNodeMouseOver` function.
-   */
-  handleOnNodeMouseOverCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
-    const { onNodeMouseOver } = this.props;
-    if (onNodeMouseOver && typeof onNodeMouseOver === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onNodeMouseOver(clone(hierarchyPointNode), evt);
-    }
-  };
-
-  /**
-   * Handles the user-defined `onLinkMouseOver` function.
-   */
-  handleOnLinkMouseOverCb: TreeLinkEventCallback = (linkSource, linkTarget, evt) => {
-    const { onLinkMouseOver } = this.props;
-    if (onLinkMouseOver && typeof onLinkMouseOver === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onLinkMouseOver(clone(linkSource), clone(linkTarget), evt);
-    }
-  };
-
-  /**
-   * Handles the user-defined `onNodeMouseOut` function.
-   */
-  handleOnNodeMouseOutCb: TreeNodeEventCallback = (hierarchyPointNode, evt) => {
-    const { onNodeMouseOut } = this.props;
-    if (onNodeMouseOut && typeof onNodeMouseOut === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onNodeMouseOut(clone(hierarchyPointNode), evt);
-    }
-  };
-
-  /**
-   * Handles the user-defined `onLinkMouseOut` function.
-   */
-  handleOnLinkMouseOutCb: TreeLinkEventCallback = (linkSource, linkTarget, evt) => {
-    const { onLinkMouseOut } = this.props;
-    if (onLinkMouseOut && typeof onLinkMouseOut === 'function') {
-      // Persist the SyntheticEvent for downstream handling by users.
-      evt.persist();
-      onLinkMouseOut(clone(linkSource), clone(linkTarget), evt);
-    }
-  };
-
-  /**
-   * Takes a hierarchy point node and centers the node on the screen
-   * if the dimensions parameter is passed to `Tree`.
-   *
-   * This code is adapted from Rob Schmuecker's centerNode method.
-   * Link: http://bl.ocks.org/robschmuecker/7880033
-   */
-  centerNode = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
-    const { dimensions, orientation, zoom, centeringTransitionDuration } = this.props;
-    if (dimensions) {
-      const g = select<SVGGElement, unknown>(`.${this.gInstanceRef}`);
-      const svg = select<SVGSVGElement, unknown>(`.${this.svgInstanceRef}`);
-      const scale = this.state.d3.scale;
-
-      let x: number;
-      let y: number;
-      // if the orientation is horizontal, calculate the variables inverted (x->y, y->x)
-      if (orientation === 'horizontal') {
-        y = -hierarchyPointNode.x * scale + dimensions.height / 2;
-        x = -hierarchyPointNode.y * scale + dimensions.width / 2;
-      } else {
-        // else, calculate the variables normally (x->x, y->y)
-        x = -hierarchyPointNode.x * scale + dimensions.width / 2;
-        y = -hierarchyPointNode.y * scale + dimensions.height / 2;
-      }
-      g.transition()
-        .duration(centeringTransitionDuration)
-        .attr('transform', 'translate(' + x + ',' + y + ')scale(' + scale + ')');
-      // Sets the viewport to the new center so that it does not jump back to original
-      // coordinates when dragged/zoomed
-      svg.call(
-        d3zoom<SVGSVGElement, unknown>().transform,
-        zoomIdentity.translate(x, y).scale(zoom)
-      );
-    }
-  };
-
-  /**
-   * Generates tree elements (`nodes` and `links`) by
-   * grabbing the rootNode from `this.state.data[0]`.
-   * Restricts tree depth to `props.initialDepth` if defined and if this is
-   * the initial render of the tree.
-   */
-  generateTree() {
-    const { initialDepth, depthFactor, separation, nodeSize, orientation } = this.props;
-    const { isInitialRenderForDataset } = this.state;
-    const tree = d3tree<TreeNodeDatum>()
-      .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
-      .separation((a, b) =>
-        a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
-          ? separation.siblings
-          : separation.nonSiblings
-      );
-
-    const rootNode = tree(
-      hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children))
-    );
-    let nodes = rootNode.descendants();
-    const links = rootNode.links();
-
-    // Configure nodes' `collapsed` property on first render if `initialDepth` is defined.
-    if (initialDepth !== undefined && isInitialRenderForDataset) {
-      this.setInitialTreeDepth(nodes, initialDepth);
-    }
-
-    if (depthFactor !== undefined) {
-      nodes.forEach(node => {
-        node.y = node.depth * depthFactor;
-      });
-    }
-
-    return { nodes, links };
-  }
-
-  /**
-   * Set initial zoom and position.
-   * Also limit zoom level according to `scaleExtent` on initial display. This is necessary,
-   * because the first time we are setting it as an SVG property, instead of going
-   * through D3's scaling mechanism, which would have picked up both properties.
-   *
-   * @static
-   */
-  static calculateD3Geometry(nextProps: TreeProps) {
-    let scale;
-    if (nextProps.zoom > nextProps.scaleExtent.max) {
-      scale = nextProps.scaleExtent.max;
-    } else if (nextProps.zoom < nextProps.scaleExtent.min) {
-      scale = nextProps.scaleExtent.min;
-    } else {
-      scale = nextProps.zoom;
-    }
-    return {
-      translate: nextProps.translate,
-      scale,
+    return () => {
+      svg.on('.zoom', null);
     };
-  }
+  }, [geometry, zoomable, draggable, zoom, scaleMin, scaleMax, translateX, translateY]);
+
+  // Reports each change of the internal tree through `onUpdate`: once after mount with no node,
+  // then once per toggle with the toggled node (or no node for `addChildren` and new data).
+  const lastToggledRef = useRef<TreeNodeDatum | null>(null);
+  const reportedRef = useRef<TreeNodeDatum[] | null>(null);
+  useEffect(() => {
+    if (reportedRef.current === current.data) return;
+    reportedRef.current = current.data;
+    const node = lastToggledRef.current;
+    lastToggledRef.current = null;
+    const { onUpdate: report } = latest.current;
+    if (typeof report === 'function') {
+      report({
+        node: node ? clone(node) : null,
+        zoom: transformRef.current.scale,
+        translate: transformRef.current.translate,
+      });
+    }
+  }, [current.data]);
+
+  const handleNodeToggle = useCallback((nodeId: string) => {
+    if (!latest.current.collapsible) return;
+    setInternal(prev => {
+      const nextData = clone(prev.data);
+      const target = findNodeById(nodeId, nextData);
+      if (!target) return prev;
+
+      if (target.__rd3t.collapsed) {
+        expandNode(target);
+        if (latest.current.shouldCollapseNeighborNodes) collapseNeighborNodes(target, nextData);
+      } else {
+        collapseNode(target);
+      }
+      lastToggledRef.current = target;
+      return { ...prev, data: nextData };
+    });
+  }, []);
+
+  const handleAddChildrenToNode = useCallback((nodeId: string, childrenData: RawNodeDatum[]) => {
+    setInternal(prev => {
+      const nextData = clone(prev.data);
+      const target = findNodeById(nodeId, nextData);
+      if (!target) return prev;
+
+      const depth = target.__rd3t.depth;
+      const formattedChildren = clone(childrenData).map(node =>
+        assignInternalProperties([node], depth + 1)
+      );
+      target.children = target.children || [];
+      target.children.push(...formattedChildren.flat());
+      return { ...prev, data: nextData };
+    });
+  }, []);
+
+  const handleOnNodeClickCb = useCallback<TreeNodeEventCallback>((hierarchyPointNode, evt) => {
+    const { onNodeClick: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(hierarchyPointNode), evt);
+    }
+  }, []);
+
+  const handleOnNodeMouseOverCb = useCallback<TreeNodeEventCallback>((hierarchyPointNode, evt) => {
+    const { onNodeMouseOver: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(hierarchyPointNode), evt);
+    }
+  }, []);
+
+  const handleOnNodeMouseOutCb = useCallback<TreeNodeEventCallback>((hierarchyPointNode, evt) => {
+    const { onNodeMouseOut: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(hierarchyPointNode), evt);
+    }
+  }, []);
+
+  const handleOnLinkClickCb = useCallback<TreeLinkEventCallback>((source, target, evt) => {
+    const { onLinkClick: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(source), clone(target), evt);
+    }
+  }, []);
+
+  const handleOnLinkMouseOverCb = useCallback<TreeLinkEventCallback>((source, target, evt) => {
+    const { onLinkMouseOver: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(source), clone(target), evt);
+    }
+  }, []);
+
+  const handleOnLinkMouseOutCb = useCallback<TreeLinkEventCallback>((source, target, evt) => {
+    const { onLinkMouseOut: handler } = latest.current;
+    if (typeof handler === 'function') {
+      evt.persist();
+      handler(clone(source), clone(target), evt);
+    }
+  }, []);
 
   /**
-   * Determines which additional `className` prop should be passed to the node & returns it.
+   * Centers `hierarchyPointNode` in the container when `dimensions` is set.
+   * Adapted from Rob Schmuecker's centerNode: http://bl.ocks.org/robschmuecker/7880033
    */
-  getNodeClassName = (parent: HierarchyPointNode<TreeNodeDatum>, nodeDatum: TreeNodeDatum) => {
-    const { rootNodeClassName, branchNodeClassName, leafNodeClassName } = this.props;
-    const hasParent = parent !== null && parent !== undefined;
-    if (hasParent) {
-      return nodeDatum.children ? branchNodeClassName : leafNodeClassName;
-    } else {
-      return rootNodeClassName;
-    }
-  };
-
-  render() {
-    const { nodes, links } = this.generateTree();
+  const centerNode = useCallback((hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
     const {
-      renderCustomNodeElement,
-      orientation,
-      pathFunc,
-      nodeSize,
-      depthFactor,
-      initialDepth,
-      separation,
-      svgClassName,
-      pathClassFunc,
-    } = this.props;
-    const { translate, scale } = this.state.d3;
-    const subscriptions = {
-      ...nodeSize,
-      ...separation,
-      depthFactor,
-      initialDepth,
-    };
+      dimensions: size,
+      orientation: axis,
+      zoom: level,
+      centeringTransitionDuration: duration,
+    } = latest.current;
+    if (!size) return;
+    const g = select(gRef.current);
+    const svg = select(svgRef.current);
+    const scale = transformRef.current.scale;
 
-    return (
-      <div className="rd3t-tree-container rd3t-grabbable">
-        <style>{globalCss}</style>
-        <svg
-          className={`rd3t-svg ${this.svgInstanceRef} ${svgClassName}`}
-          width="100%"
-          height="100%"
+    let x: number;
+    let y: number;
+    // A horizontal tree swaps the layout axes on screen.
+    if (axis === 'horizontal') {
+      y = -hierarchyPointNode.x * scale + size.height / 2;
+      x = -hierarchyPointNode.y * scale + size.width / 2;
+    } else {
+      x = -hierarchyPointNode.x * scale + size.width / 2;
+      y = -hierarchyPointNode.y * scale + size.height / 2;
+    }
+    g.transition().duration(duration).attr('transform', `translate(${x},${y})scale(${scale})`);
+    // Moves d3's viewport to the new center so the next drag or zoom starts from it.
+    svg.call(d3zoom<SVGSVGElement, unknown>().transform, zoomIdentity.translate(x, y).scale(level));
+  }, []);
+
+  const getNodeClassName = (
+    parent: HierarchyPointNode<TreeNodeDatum> | null,
+    nodeDatum: TreeNodeDatum
+  ) => {
+    if (parent) {
+      return nodeDatum.children ? branchNodeClassName : leafNodeClassName;
+    }
+    return rootNodeClassName;
+  };
+
+  // Node re-renders when this object changes identity, which is every render.
+  const subscriptions = { ...nodeSize, ...separation, depthFactor, initialDepth };
+
+  return (
+    <div className="rd3t-tree-container rd3t-grabbable">
+      <style>{globalCss}</style>
+      <svg
+        ref={svgRef}
+        className={['rd3t-svg', svgClassName].filter(Boolean).join(' ')}
+        width="100%"
+        height="100%"
+      >
+        <g
+          ref={gRef}
+          className="rd3t-g"
+          transform={`translate(${geometry.translate.x},${geometry.translate.y}) scale(${geometry.scale})`}
         >
-          <g
-            className={`rd3t-g ${this.gInstanceRef}`}
-            transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
-          >
-            {links.map((linkData, i) => {
-              return (
-                <Link
-                  key={'link-' + i}
-                  orientation={orientation}
-                  pathFunc={pathFunc}
-                  pathClassFunc={pathClassFunc}
-                  linkData={linkData}
-                  onClick={this.handleOnLinkClickCb}
-                  onMouseOver={this.handleOnLinkMouseOverCb}
-                  onMouseOut={this.handleOnLinkMouseOutCb}
-                />
-              );
-            })}
+          {layout.links.map((linkData, i) => (
+            <Link
+              key={`link-${i}`}
+              orientation={orientation}
+              pathFunc={pathFunc}
+              pathClassFunc={pathClassFunc}
+              linkData={linkData}
+              onClick={handleOnLinkClickCb}
+              onMouseOver={handleOnLinkMouseOverCb}
+              onMouseOut={handleOnLinkMouseOutCb}
+            />
+          ))}
 
-            {nodes.map((hierarchyPointNode, i) => {
-              const { data, x, y, parent } = hierarchyPointNode;
-              return (
-                <Node
-                  key={'node-' + i}
-                  data={data}
-                  position={{ x, y }}
-                  hierarchyPointNode={hierarchyPointNode}
-                  parent={parent}
-                  nodeClassName={this.getNodeClassName(parent, data)}
-                  renderCustomNodeElement={renderCustomNodeElement}
-                  nodeSize={nodeSize}
-                  orientation={orientation}
-                  onNodeToggle={this.handleNodeToggle}
-                  onNodeClick={this.handleOnNodeClickCb}
-                  onNodeMouseOver={this.handleOnNodeMouseOverCb}
-                  onNodeMouseOut={this.handleOnNodeMouseOutCb}
-                  handleAddChildrenToNode={this.handleAddChildrenToNode}
-                  subscriptions={subscriptions}
-                  centerNode={this.centerNode}
-                />
-              );
-            })}
-          </g>
-        </svg>
-      </div>
-    );
-  }
+          {layout.nodes.map((hierarchyPointNode, i) => {
+            const { data: nodeDatum, x, y, parent } = hierarchyPointNode;
+            return (
+              <Node
+                key={`node-${i}`}
+                data={nodeDatum}
+                position={{ x, y }}
+                hierarchyPointNode={hierarchyPointNode}
+                parent={parent}
+                nodeClassName={getNodeClassName(parent, nodeDatum)}
+                renderCustomNodeElement={renderCustomNodeElement}
+                nodeSize={nodeSize}
+                orientation={orientation}
+                onNodeToggle={handleNodeToggle}
+                onNodeClick={handleOnNodeClickCb}
+                onNodeMouseOver={handleOnNodeMouseOverCb}
+                onNodeMouseOut={handleOnNodeMouseOutCb}
+                handleAddChildrenToNode={handleAddChildrenToNode}
+                subscriptions={subscriptions}
+                centerNode={centerNode}
+              />
+            );
+          })}
+        </g>
+      </svg>
+    </div>
+  );
 }
 
 export default Tree;

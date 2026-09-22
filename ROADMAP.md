@@ -332,8 +332,18 @@ rewrite has one axis fewer. Commit 1 (`refactor: remove the legacy transitions`)
 `enableLegacyTransitions` and `transitionDuration` are gone from the props, together with
 `TransitionGroupWrapper`, the `@bkrem/react-transition-group` dependency, `componentWillLeave`
 on Node and Link, and the toggle lock; the four flag tests went with them; the oracle snapshots
-are unchanged because the flag defaulted to off. Next: Tree with hooks (with the `dequal`
-removal), Node and Link with hooks, strict types, the React 18 and 19 CI matrix.
+are unchanged because the flag defaulted to off. Commit 2 (`refactor: rewrite Tree with hooks`)
+landed: `Tree` is a function component; the internal tree is state derived from `data` and
+`dataKey` with the v3 rule; the layout is a memo; zoom binds in an effect whose dependencies are
+the primitive values of `translate`, `scaleExtent`, `zoom`, `zoomable`, and `draggable`, which
+replaces `dequal`; the live transform lives in a ref; the random instance classes are gone and
+refs replace the `d3.select` lookups. All 84 behaviour tests pass unchanged; the 15 oracle
+snapshots changed only in the `svg` and `g` class strings. Two v3 quirks went with the class:
+`initialDepth` now applies on the first render, so a server render with `initialDepth: 0`
+emits one node where v3 emitted the whole tree, and `onUpdate` after a toggle reports the live
+zoom instead of the prop values. `Tree.defaultProps` and the statics `assignInternalProperties`,
+`collapseNode`, `expandNode`, and `calculateD3Geometry` are no longer reachable on the export.
+Next: Node and Link with hooks, strict types, the React 18 and 19 CI matrix.
 
 Goal: the same v3 behaviour from function components, verified by the Phase 1 suite and oracle.
 This phase keeps the v3 prop names. The API changes come in Phase 5, so each PR here has one

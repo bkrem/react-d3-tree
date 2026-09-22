@@ -55,8 +55,8 @@ exports[`render oracle > class name props 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID svg-x" width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg svg-x" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
@@ -182,8 +182,8 @@ exports[`render oracle > default props 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
@@ -309,8 +309,8 @@ exports[`render oracle > depthFactor 300 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,-70,300,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C150,0,150,70,300,70" data-source-id="ID" data-target-id="ID">
@@ -436,8 +436,8 @@ exports[`render oracle > elbow path 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0V-70H140" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0V70H140" data-source-id="ID" data-target-id="ID">
@@ -563,8 +563,8 @@ exports[`render oracle > initialDepth 0 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <g id="ID" style="opacity: 1;" class="rd3t-node" transform="translate(0,0)">
 <circle r="15">
 </circle>
@@ -637,8 +637,8 @@ exports[`render oracle > initialDepth 1 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
@@ -736,8 +736,8 @@ exports[`render oracle > negative depthFactor, vertical 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,-70,-100,-70,-200" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C0,-100,70,-100,70,-200" data-source-id="ID" data-target-id="ID">
@@ -863,8 +863,8 @@ exports[`render oracle > nodeSize 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,-150,100,-150" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C50,0,50,150,100,150" data-source-id="ID" data-target-id="ID">
@@ -990,8 +990,8 @@ exports[`render oracle > org chart, horizontal 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,0,140,0" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M140,0C210,0,210,-140,280,-140" data-source-id="ID" data-target-id="ID">
@@ -1119,8 +1119,8 @@ exports[`render oracle > org chart, vertical 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,0,70,0,140" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,140C0,210,-140,210,-140,280" data-source-id="ID" data-target-id="ID">
@@ -1248,8 +1248,8 @@ exports[`render oracle > separation 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-280,140,-280" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,280,140,280" data-source-id="ID" data-target-id="ID">
@@ -1380,8 +1380,8 @@ exports[`render oracle > step path, vertical 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H-70 V140" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0 V70 H70 V140" data-source-id="ID" data-target-id="ID">
@@ -1507,8 +1507,8 @@ exports[`render oracle > straight path 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0L140,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0L140,70" data-source-id="ID" data-target-id="ID">
@@ -1634,8 +1634,8 @@ exports[`render oracle > vertical orientation 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(0,0) scale(1)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(0,0) scale(1)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,-70,70,-70,140" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C0,70,70,70,70,140" data-source-id="ID" data-target-id="ID">
@@ -1761,8 +1761,8 @@ exports[`render oracle > zoom and translate 1`] = `
   stroke: #000;
 }
 </style>
-<svg class="rd3t-svg rd3t-svg-ID " width="100%" height="100%">
-<g class="rd3t-g rd3t-g-ID" transform="translate(100,50) scale(0.5)">
+<svg class="rd3t-svg" width="100%" height="100%">
+<g class="rd3t-g" transform="translate(100,50) scale(0.5)">
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,-70,140,-70" data-source-id="ID" data-target-id="ID">
 </path>
 <path style="opacity: 1;" class="rd3t-link" d="M0,0C70,0,70,70,140,70" data-source-id="ID" data-target-id="ID">
