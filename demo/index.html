@@ -11,10 +11,16 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // The previous Create React App build registered a service worker on this origin. Unregister
-      // it so returning visitors get the current bundle. Remove after one release.
+      // The previous Create React App build registered a service worker scoped to this demo's
+      // path. Unregister that one, and only that one, so returning visitors get the current
+      // bundle and other sites on the same origin keep their workers. Remove after one release.
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+        navigator.serviceWorker
+          .getRegistration('/react-d3-tree/')
+          .then(reg => {
+            if (reg && new URL(reg.scope).pathname === '/react-d3-tree/') reg.unregister();
+          })
+          .catch(() => {});
       }
     </script>
   </body>

@@ -3,7 +3,12 @@ import Tree, { type TreeProps } from 'react-d3-tree';
 import type { Dataset } from '../data/datasets.js';
 import type { RenderNode } from '../nodes/renderers.jsx';
 import type { LiveStore } from '../state/liveTransform.js';
-import { effectiveScaleExtent, type PlaygroundState, type Point } from '../state/playground.js';
+import {
+  clampZoom,
+  effectiveScaleExtent,
+  type PlaygroundState,
+  type Point,
+} from '../state/playground.js';
 import { StatusBar } from './StatusBar.jsx';
 
 export interface Size {
@@ -93,7 +98,10 @@ export function TreeCanvas({
     initialDepth: state.initialDepth ?? undefined,
     zoomable: state.zoomable,
     draggable: state.draggable,
-    zoom: state.zoom,
+    // The library applies the raw zoom as its initial transform before its own clamping, so a
+    // typed `0` would scale the tree away; the props get the same clamped value the rest of the
+    // playground treats as effective.
+    zoom: clampZoom(state.zoom, state.scaleExtent),
     scaleExtent: effectiveScaleExtent(state.scaleExtent),
     nodeSize: state.nodeSize,
     separation: state.separation,
