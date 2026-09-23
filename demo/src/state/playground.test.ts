@@ -42,6 +42,18 @@ describe('reducer', () => {
     expect(back.hasInteractiveNodes).toBe(false);
   });
 
+  it('keeps hasInteractiveNodes consistent with the renderer across group resets', () => {
+    const inputs = reducer(defaults, { type: 'patch', patch: { nodeRenderer: 'inputs' } });
+    // Behaviour reset keeps the flag on while the inputs renderer is selected.
+    const behaviourReset = reducer(inputs, { type: 'reset-group', group: 'behaviour' });
+    expect(behaviourReset.hasInteractiveNodes).toBe(true);
+    expect(behaviourReset.nodeRenderer).toBe('inputs');
+    // Rendering reset returns to the default renderer and turns the flag off.
+    const renderingReset = reducer(inputs, { type: 'reset-group', group: 'rendering' });
+    expect(renderingReset.nodeRenderer).toBe('default');
+    expect(renderingReset.hasInteractiveNodes).toBe(false);
+  });
+
   it('lets a patch that sets hasInteractiveNodes itself win over the renderer rule', () => {
     const next = reducer(defaults, {
       type: 'patch',

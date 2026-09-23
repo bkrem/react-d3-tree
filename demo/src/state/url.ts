@@ -118,8 +118,9 @@ export function fromSearchParams(params: URLSearchParams): Patch {
   if (initialDepth !== null && Number.isInteger(initialDepth) && initialDepth >= 0) {
     patch.initialDepth = initialDepth;
   }
+  // The zoom field accepts 0 (the tree renders at the extent's min), so the URL does too.
   const zoom = finite(params.get('zoom'));
-  if (zoom !== null && zoom > 0) patch.zoom = zoom;
+  if (zoom !== null && zoom >= 0) patch.zoom = zoom;
   const transitionDuration = finite(params.get('transitionDuration'));
   if (transitionDuration !== null && transitionDuration >= 0) {
     patch.transitionDuration = transitionDuration;

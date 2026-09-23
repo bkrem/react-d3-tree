@@ -32,6 +32,10 @@ export function CodeDrawer({ jsx }: { jsx: string }) {
 
   const copy = () => {
     // The clipboard needs a secure context and permission; fall back to a visible failure.
+    if (!navigator.clipboard) {
+      setCopied('failed');
+      return;
+    }
     navigator.clipboard
       .writeText(jsx)
       .then(() => setCopied('copied'))

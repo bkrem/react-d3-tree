@@ -116,11 +116,16 @@ export function modifiedKeys(state: PlaygroundState): StateKey[] {
 }
 
 export function resetGroup(state: PlaygroundState, group: GroupId): PlaygroundState {
-  const next = { ...state };
+  const patch: Record<string, unknown> = {};
   for (const key of groups[group]) {
-    (next as Record<StateKey, unknown>)[key] = defaults[key];
+    patch[key] = defaults[key];
   }
-  return next;
+  // hasInteractiveNodes follows the inputs renderer; a Behaviour reset keeps it on while that
+  // renderer is selected, and a Rendering reset turns it off through applyPatch.
+  if (group === 'behaviour' && state.nodeRenderer === 'inputs') {
+    patch.hasInteractiveNodes = true;
+  }
+  return applyPatch(state, patch as Patch);
 }
 
 /** Applies a patch. Rules that keep the state consistent live here, not in the controls. */

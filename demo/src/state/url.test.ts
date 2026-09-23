@@ -85,7 +85,7 @@ describe('fromSearchParams', () => {
   it('rejects values outside the ranges the inspector allows', () => {
     const patch = fromSearchParams(
       new URLSearchParams({
-        zoom: '0',
+        zoom: '-1',
         scaleExtent: '1,0.1',
         nodeSize: '0,0',
         separation: '-1,2',
@@ -96,6 +96,11 @@ describe('fromSearchParams', () => {
     expect(patch).toEqual({});
     expect(fromSearchParams(new URLSearchParams({ scaleExtent: '0,1' }))).toEqual({});
     expect(fromSearchParams(new URLSearchParams({ initialDepth: '-1' }))).toEqual({});
+  });
+
+  it('round-trips a zoom of 0, which the zoom field accepts', () => {
+    const state = { ...defaults, zoom: 0 };
+    expect(fromSearchParams(toSearchParams(state))).toEqual({ zoom: 0 });
   });
 
   it('rejects hex, binary, octal, and separator notations', () => {
