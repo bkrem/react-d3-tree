@@ -29,11 +29,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # The lockfile holds React 19. The React 18 leg swaps the dev copy and its types after the
-      # frozen install; the smoke test's consumer follows through REACT_MAJOR.
+      # The lockfile holds React 19. The React 18 leg swaps the root's dev copy and its types after
+      # the frozen install (`-w` targets the workspace root; the demo keeps its own React 19); the
+      # smoke test's consumer follows through REACT_MAJOR.
       - name: Use React 18
         if: matrix.react-version == 18
-        run: pnpm add -D react@18.3.1 react-dom@18.3.1 @types/react@18 @types/react-dom@18
+        run: pnpm add -w -D react@18.3.1 react-dom@18.3.1 @types/react@18 @types/react-dom@18
 
       - run: pnpm lint
       - run: pnpm typecheck
@@ -44,3 +45,8 @@ jobs:
       - run: pnpm test:smoke
         env:
           REACT_MAJOR: ${{ matrix.react-version }}
+
+      # The demo consumes lib/ through the workspace link, so its build is a consumer check.
+      - run: pnpm --filter rd3t-demo typecheck
+      - run: pnpm --filter rd3t-demo test
+      - run: pnpm --filter rd3t-demo build

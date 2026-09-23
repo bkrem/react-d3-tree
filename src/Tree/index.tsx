@@ -36,6 +36,14 @@ const DEFAULT_SEPARATION = { siblings: 1, nonSiblings: 2 };
 
 type Geometry = { translate: Point; scale: number };
 
+// A mouse drag in progress: d3-zoom's mouseup handler on the window and the mousedown that
+// started the drag, so an unmount can end the drag through d3's own path.
+type MouseGesture = {
+  view: Window;
+  mouseup: (this: Window, event: MouseEvent, d: unknown) => void;
+  sourceEvent: MouseEvent;
+};
+
 /** `data` with every id filled in, plus lookups by id. Built once per `data` reference. */
 type InternalTree = {
   root: TreeNodeDatum;
@@ -190,6 +198,9 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
   // The zoom behaviour bound to the svg; programmatic transforms go through it so they report
   // like user zooms.
   const behaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  // The mouse drag d3-zoom is tracking on the window, if any; a rebind of zoom mid-drag leaves
+  // it running, so it lives outside the zoom effect.
+  const mouseGestureRef = useRef<MouseGesture | null>(null);
   // The container size, measured on mount and on every resize. A ref, because nothing
   // re-renders on resize; centering reads it at call time.
   const sizeRef = useRef({ width: 0, height: 0 });
@@ -312,6 +323,19 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
         }
         return true;
       })
+      .on('start.gesture', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        // d3-zoom serves a mouse drag through mousemove and mouseup listeners on the window,
+        // which it adds before emitting "start".
+        const sourceEvent: MouseEvent | undefined = event.sourceEvent;
+        if (sourceEvent?.type !== 'mousedown' || !sourceEvent.view) return;
+        const mouseup = select(sourceEvent.view).on('mouseup.zoom');
+        if (typeof mouseup === 'function') {
+          mouseGestureRef.current = { view: sourceEvent.view, mouseup, sourceEvent };
+        }
+      })
+      .on('end.gesture', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        if (event.sourceEvent?.type === 'mouseup') mouseGestureRef.current = null;
+      })
       .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
         // A programmatic transform has no source event.
         const sourceType: string | undefined = event.sourceEvent?.type;
@@ -342,6 +366,18 @@ const Tree = forwardRef<TreeHandle, TreeProps>(function Tree(props, ref): ReactE
       behaviorRef.current = null;
     };
   }, [geometry, zoomable, draggable, zoom, scaleMin, scaleMax, translateX, translateY]);
+
+  // Unmounting mid-drag would leave d3's window listeners reporting into a removed tree, so the
+  // unmount ends the drag the way a mouseup would.
+  useEffect(
+    () => () => {
+      const gesture = mouseGestureRef.current;
+      if (!gesture) return;
+      mouseGestureRef.current = null;
+      gesture.mouseup.call(gesture.view, gesture.sourceEvent, undefined);
+    },
+    []
+  );
 
   // Applies a collapse change: the tree's own state changes only in uncontrolled mode, and the
   // caller hears about every change in both modes.

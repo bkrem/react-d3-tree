@@ -1,39 +1,28 @@
 {
   "name": "rd3t-demo",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
-  "homepage": "https://bkrem.github.io/react-d3-tree",
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "clone": "^2.1.2",
-    "gh-pages": "^3.1.0",
-    "react": "^18.2.0",
-    "react-d3-tree": "3.6.7",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^3.4.4"
-  },
+  "type": "module",
   "scripts": {
-    "start": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "@fontsource-variable/public-sans": "^5.3.0",
+    "@fontsource-variable/spline-sans-mono": "^5.3.0",
+    "react": "^19.3.0",
+    "react-d3-tree": "workspace:*",
+    "react-dom": "^19.3.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "~5.9.3",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
   }
 }

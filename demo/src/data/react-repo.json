@@ -1,0 +1,2893 @@
+{
+  "name": ".",
+  "children": [
+    {
+      "name": "AUTHORS"
+    },
+    {
+      "name": "CHANGELOG.md"
+    },
+    {
+      "name": "CODE_OF_CONDUCT.md"
+    },
+    {
+      "name": "CONTRIBUTING.md"
+    },
+    {
+      "name": "LICENSE"
+    },
+    {
+      "name": "README.md"
+    },
+    {
+      "name": "circle.yml"
+    },
+    {
+      "name": "fixtures",
+      "children": [
+        {
+          "name": "art",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "VectorWidget.js"
+            },
+            {
+              "name": "app.js"
+            },
+            {
+              "name": "index.html"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "webpack.config.js"
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "attribute-behavior",
+          "children": [
+            {
+              "name": "AttributeTableSnapshot.md"
+            },
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "public",
+              "children": [
+                {
+                  "name": "favicon.ico"
+                },
+                {
+                  "name": "index.html"
+                },
+                {
+                  "name": "manifest.json"
+                }
+              ]
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "App.css"
+                },
+                {
+                  "name": "App.js"
+                },
+                {
+                  "name": "App.test.js"
+                },
+                {
+                  "name": "attributes.js"
+                },
+                {
+                  "name": "index.css"
+                },
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "dom",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "public",
+              "children": [
+                {
+                  "name": "favicon.ico"
+                },
+                {
+                  "name": "index.html"
+                },
+                {
+                  "name": "react-logo.svg"
+                }
+              ]
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "components",
+                  "children": [
+                    {
+                      "name": "App.js"
+                    },
+                    {
+                      "name": "Fixture.js"
+                    },
+                    {
+                      "name": "FixtureSet.js"
+                    },
+                    {
+                      "name": "Header.js"
+                    },
+                    {
+                      "name": "IssueList.js"
+                    },
+                    {
+                      "name": "TestCase.js"
+                    },
+                    {
+                      "name": "fixtures",
+                      "children": [
+                        {
+                          "name": "buttons",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "custom-elements",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "date-inputs",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            },
+                            {
+                              "name": "switch-date-test-case.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "error-handling",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "event-pooling",
+                          "children": [
+                            {
+                              "name": "hit-box.js"
+                            },
+                            {
+                              "name": "index.js"
+                            },
+                            {
+                              "name": "mouse-move.js"
+                            },
+                            {
+                              "name": "persistence.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "index.js"
+                        },
+                        {
+                          "name": "input-change-events",
+                          "children": [
+                            {
+                              "name": "InputPlaceholderFixture.js"
+                            },
+                            {
+                              "name": "RadioClickFixture.js"
+                            },
+                            {
+                              "name": "RadioGroupFixture.js"
+                            },
+                            {
+                              "name": "RadioNameChangeFixture.js"
+                            },
+                            {
+                              "name": "RangeKeyboardFixture.js"
+                            },
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "number-inputs",
+                          "children": [
+                            {
+                              "name": "NumberInputDecimal.js"
+                            },
+                            {
+                              "name": "NumberInputExtraZeroes.js"
+                            },
+                            {
+                              "name": "NumberTestCase.js"
+                            },
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "password-inputs",
+                          "children": [
+                            {
+                              "name": "PasswordTestCase.js"
+                            },
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "range-inputs",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "selects",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "text-inputs",
+                          "children": [
+                            {
+                              "name": "InputTestCase.js"
+                            },
+                            {
+                              "name": "README.md"
+                            },
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "textareas",
+                          "children": [
+                            {
+                              "name": "index.js"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "propTypes.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "index.js"
+                },
+                {
+                  "name": "polyfills.js"
+                },
+                {
+                  "name": "react-loader.js"
+                },
+                {
+                  "name": "style.css"
+                },
+                {
+                  "name": "tags.js"
+                }
+              ]
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "expiration",
+          "children": [
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "public",
+              "children": [
+                {
+                  "name": "index.html"
+                }
+              ]
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "fiber-debugger",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "public",
+              "children": [
+                {
+                  "name": "favicon.ico"
+                },
+                {
+                  "name": "index.html"
+                }
+              ]
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "App.js"
+                },
+                {
+                  "name": "Editor.js"
+                },
+                {
+                  "name": "Fibers.js"
+                },
+                {
+                  "name": "describeFibers.js"
+                },
+                {
+                  "name": "index.css"
+                },
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "fiber-triangle",
+          "children": [
+            {
+              "name": "index.html"
+            }
+          ]
+        },
+        {
+          "name": "packaging",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "babel-standalone",
+              "children": [
+                {
+                  "name": "dev.html"
+                }
+              ]
+            },
+            {
+              "name": "browserify",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "brunch",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "app",
+                      "children": [
+                        {
+                          "name": "initialize.js"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "app",
+                      "children": [
+                        {
+                          "name": "initialize.js"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "build-all.js"
+            },
+            {
+              "name": "globals",
+              "children": [
+                {
+                  "name": "dev.html"
+                },
+                {
+                  "name": "prod.html"
+                }
+              ]
+            },
+            {
+              "name": "index.html"
+            },
+            {
+              "name": "requirejs",
+              "children": [
+                {
+                  "name": "dev.html"
+                },
+                {
+                  "name": "prod.html"
+                }
+              ]
+            },
+            {
+              "name": "rjs",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "systemjs",
+              "children": [
+                {
+                  "name": "dev.html"
+                },
+                {
+                  "name": "prod.html"
+                }
+              ]
+            },
+            {
+              "name": "systemjs-builder",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "webpack",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "webpack-alias",
+              "children": [
+                {
+                  "name": "dev",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                },
+                {
+                  "name": "prod",
+                  "children": [
+                    {
+                      "name": "config.js"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "input.js"
+                    },
+                    {
+                      "name": "package.json"
+                    },
+                    {
+                      "name": "yarn.lock"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "reconciler",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "ssr",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "public",
+              "children": [
+                {
+                  "name": "favicon.ico"
+                },
+                {
+                  "name": "index.html"
+                }
+              ]
+            },
+            {
+              "name": "server",
+              "children": [
+                {
+                  "name": "index.js"
+                },
+                {
+                  "name": "render.js"
+                }
+              ]
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "components",
+                  "children": [
+                    {
+                      "name": "App.js"
+                    },
+                    {
+                      "name": "Chrome.css"
+                    },
+                    {
+                      "name": "Chrome.js"
+                    },
+                    {
+                      "name": "Page.css"
+                    },
+                    {
+                      "name": "Page.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "package.json"
+    },
+    {
+      "name": "packages",
+      "children": [
+        {
+          "name": "events",
+          "children": [
+            {
+              "name": "EventPluginHub.js"
+            },
+            {
+              "name": "EventPluginRegistry.js"
+            },
+            {
+              "name": "EventPluginUtils.js"
+            },
+            {
+              "name": "EventPropagators.js"
+            },
+            {
+              "name": "PluginModuleType.js"
+            },
+            {
+              "name": "ReactControlledComponent.js"
+            },
+            {
+              "name": "ReactEventEmitterMixin.js"
+            },
+            {
+              "name": "ReactGenericBatching.js"
+            },
+            {
+              "name": "ReactSyntheticEventType.js"
+            },
+            {
+              "name": "ResponderEventPlugin.js"
+            },
+            {
+              "name": "ResponderSyntheticEvent.js"
+            },
+            {
+              "name": "ResponderTouchHistoryStore.js"
+            },
+            {
+              "name": "SyntheticEvent.js"
+            },
+            {
+              "name": "TouchHistoryMath.js"
+            },
+            {
+              "name": "__tests__",
+              "children": [
+                {
+                  "name": "EventPluginRegistry-test.js"
+                },
+                {
+                  "name": "ResponderEventPlugin-test.js"
+                },
+                {
+                  "name": "accumulateInto-test.js"
+                }
+              ]
+            },
+            {
+              "name": "accumulate.js"
+            },
+            {
+              "name": "accumulateInto.js"
+            },
+            {
+              "name": "forEachAccumulated.js"
+            },
+            {
+              "name": "package.json"
+            }
+          ]
+        },
+        {
+          "name": "react",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "React.js"
+                },
+                {
+                  "name": "ReactBaseClasses.js"
+                },
+                {
+                  "name": "ReactChildren.js"
+                },
+                {
+                  "name": "ReactCurrentOwner.js"
+                },
+                {
+                  "name": "ReactDebugCurrentFrame.js"
+                },
+                {
+                  "name": "ReactElement.js"
+                },
+                {
+                  "name": "ReactElementValidator.js"
+                },
+                {
+                  "name": "ReactNoopUpdateQueue.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactAsyncClassComponent-test.js"
+                    },
+                    {
+                      "name": "ReactChildren-test.js"
+                    },
+                    {
+                      "name": "ReactClassEquivalence-test.js"
+                    },
+                    {
+                      "name": "ReactCoffeeScriptClass-test.coffee"
+                    },
+                    {
+                      "name": "ReactContextValidator-test.js"
+                    },
+                    {
+                      "name": "ReactES6Class-test.js"
+                    },
+                    {
+                      "name": "ReactElement-test.js"
+                    },
+                    {
+                      "name": "ReactElementClone-test.js"
+                    },
+                    {
+                      "name": "ReactElementValidator-test.js"
+                    },
+                    {
+                      "name": "ReactJSXElement-test.js"
+                    },
+                    {
+                      "name": "ReactJSXElementValidator-test.js"
+                    },
+                    {
+                      "name": "ReactPureComponent-test.js"
+                    },
+                    {
+                      "name": "ReactTypeScriptClass-test.ts"
+                    },
+                    {
+                      "name": "createReactClassIntegration-test.js"
+                    },
+                    {
+                      "name": "onlyChild-test.js"
+                    },
+                    {
+                      "name": "testDefinitions",
+                      "children": [
+                        {
+                          "name": "PropTypes.d.ts"
+                        },
+                        {
+                          "name": "React.d.ts"
+                        },
+                        {
+                          "name": "ReactDOM.d.ts"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-art",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "Circle.js"
+                },
+                {
+                  "name": "Rectangle.js"
+                },
+                {
+                  "name": "Wedge.js"
+                },
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactART.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactART-test.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-call-return",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactCallReturn.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactCallReturn-test.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-cs-renderer",
+          "children": [
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactNativeCS.js"
+                },
+                {
+                  "name": "ReactNativeCSFeatureFlags.js"
+                },
+                {
+                  "name": "ReactNativeCSTypes.js"
+                },
+                {
+                  "name": "__mocks__",
+                  "children": [
+                    {
+                      "name": "CSStatefulComponent.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactNativeCS-test.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-dom",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.fb.js"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                },
+                {
+                  "name": "server.browser.js"
+                },
+                {
+                  "name": "server.js"
+                },
+                {
+                  "name": "server.node.js"
+                },
+                {
+                  "name": "test-utils.js"
+                },
+                {
+                  "name": "unstable-native-dependencies.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "server.browser.js"
+            },
+            {
+              "name": "server.js"
+            },
+            {
+              "name": "server.node.js"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "CSSPropertyOperations-test.js"
+                    },
+                    {
+                      "name": "DOMPropertyOperations-test.js"
+                    },
+                    {
+                      "name": "EventPluginHub-test.js"
+                    },
+                    {
+                      "name": "ReactBrowserEventEmitter-test.js"
+                    },
+                    {
+                      "name": "ReactChildReconciler-test.js"
+                    },
+                    {
+                      "name": "ReactComponent-test.js"
+                    },
+                    {
+                      "name": "ReactComponentLifeCycle-test.js"
+                    },
+                    {
+                      "name": "ReactCompositeComponent-test.js"
+                    },
+                    {
+                      "name": "ReactCompositeComponentDOMMinimalism-test.js"
+                    },
+                    {
+                      "name": "ReactCompositeComponentNestedState-test.js"
+                    },
+                    {
+                      "name": "ReactCompositeComponentState-test.js"
+                    },
+                    {
+                      "name": "ReactDOM-test.js"
+                    },
+                    {
+                      "name": "ReactDOMAttribute-test.js"
+                    },
+                    {
+                      "name": "ReactDOMComponent-test.js"
+                    },
+                    {
+                      "name": "ReactDOMComponentTree-test.js"
+                    },
+                    {
+                      "name": "ReactDOMEventListener-test.js"
+                    },
+                    {
+                      "name": "ReactDOMFiber-test.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberAsync-test.js"
+                    },
+                    {
+                      "name": "ReactDOMIframe-test.js"
+                    },
+                    {
+                      "name": "ReactDOMInput-test.js"
+                    },
+                    {
+                      "name": "ReactDOMInvalidARIAHook-test.js"
+                    },
+                    {
+                      "name": "ReactDOMOption-test.js"
+                    },
+                    {
+                      "name": "ReactDOMProduction-test.js"
+                    },
+                    {
+                      "name": "ReactDOMRoot-test.js"
+                    },
+                    {
+                      "name": "ReactDOMSVG-test.js"
+                    },
+                    {
+                      "name": "ReactDOMSelect-test.js"
+                    },
+                    {
+                      "name": "ReactDOMSelection-test.js"
+                    },
+                    {
+                      "name": "ReactDOMServerIntegration-test.js"
+                    },
+                    {
+                      "name": "ReactDOMTextComponent-test.js"
+                    },
+                    {
+                      "name": "ReactDOMTextarea-test.js"
+                    },
+                    {
+                      "name": "ReactEmptyComponent-test.js"
+                    },
+                    {
+                      "name": "ReactErrorBoundaries-test.js"
+                    },
+                    {
+                      "name": "ReactEventIndependence-test.js"
+                    },
+                    {
+                      "name": "ReactIdentity-test.js"
+                    },
+                    {
+                      "name": "ReactMockedComponent-test.js"
+                    },
+                    {
+                      "name": "ReactMount-test.js"
+                    },
+                    {
+                      "name": "ReactMountDestruction-test.js"
+                    },
+                    {
+                      "name": "ReactMultiChild-test.js"
+                    },
+                    {
+                      "name": "ReactMultiChildReconcile-test.js"
+                    },
+                    {
+                      "name": "ReactMultiChildText-test.js"
+                    },
+                    {
+                      "name": "ReactRenderDocument-test.js"
+                    },
+                    {
+                      "name": "ReactServerRendering-test.js"
+                    },
+                    {
+                      "name": "ReactServerRenderingBrowser-test.js"
+                    },
+                    {
+                      "name": "ReactStatelessComponent-test.js"
+                    },
+                    {
+                      "name": "ReactTestUtils-test.js"
+                    },
+                    {
+                      "name": "ReactTreeTraversal-test.js"
+                    },
+                    {
+                      "name": "ReactUpdates-test.js"
+                    },
+                    {
+                      "name": "escapeTextContentForBrowser-test.js"
+                    },
+                    {
+                      "name": "findDOMNode-test.js"
+                    },
+                    {
+                      "name": "inputValueTracking-test.js"
+                    },
+                    {
+                      "name": "multiple-copies-of-react-test.js"
+                    },
+                    {
+                      "name": "quoteAttributeValueForBrowser-test.js"
+                    },
+                    {
+                      "name": "refs-destruction-test.js"
+                    },
+                    {
+                      "name": "refs-test.js"
+                    },
+                    {
+                      "name": "renderSubtreeIntoContainer-test.js"
+                    },
+                    {
+                      "name": "validateDOMNesting-test.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "client",
+                  "children": [
+                    {
+                      "name": "DOMPropertyOperations.js"
+                    },
+                    {
+                      "name": "ReactDOM.js"
+                    },
+                    {
+                      "name": "ReactDOMClientInjection.js"
+                    },
+                    {
+                      "name": "ReactDOMComponentTree.js"
+                    },
+                    {
+                      "name": "ReactDOMFB.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberComponent.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberInput.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberOption.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberSelect.js"
+                    },
+                    {
+                      "name": "ReactDOMFiberTextarea.js"
+                    },
+                    {
+                      "name": "ReactDOMSelection.js"
+                    },
+                    {
+                      "name": "ReactInputSelection.js"
+                    },
+                    {
+                      "name": "__tests__",
+                      "children": [
+                        {
+                          "name": "dangerouslySetInnerHTML-test.js"
+                        },
+                        {
+                          "name": "getNodeForCharacterOffset-test.js"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "getNodeForCharacterOffset.js"
+                    },
+                    {
+                      "name": "getTextContentAccessor.js"
+                    },
+                    {
+                      "name": "inputValueTracking.js"
+                    },
+                    {
+                      "name": "setInnerHTML.js"
+                    },
+                    {
+                      "name": "setTextContent.js"
+                    },
+                    {
+                      "name": "validateDOMNesting.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "events",
+                  "children": [
+                    {
+                      "name": "BeforeInputEventPlugin.js"
+                    },
+                    {
+                      "name": "BrowserEventConstants.js"
+                    },
+                    {
+                      "name": "ChangeEventPlugin.js"
+                    },
+                    {
+                      "name": "DOMEventPluginOrder.js"
+                    },
+                    {
+                      "name": "EnterLeaveEventPlugin.js"
+                    },
+                    {
+                      "name": "FallbackCompositionState.js"
+                    },
+                    {
+                      "name": "ReactBrowserEventEmitter.js"
+                    },
+                    {
+                      "name": "ReactDOMEventListener.js"
+                    },
+                    {
+                      "name": "SelectEventPlugin.js"
+                    },
+                    {
+                      "name": "SimpleEventPlugin.js"
+                    },
+                    {
+                      "name": "SyntheticAnimationEvent.js"
+                    },
+                    {
+                      "name": "SyntheticClipboardEvent.js"
+                    },
+                    {
+                      "name": "SyntheticCompositionEvent.js"
+                    },
+                    {
+                      "name": "SyntheticDragEvent.js"
+                    },
+                    {
+                      "name": "SyntheticFocusEvent.js"
+                    },
+                    {
+                      "name": "SyntheticInputEvent.js"
+                    },
+                    {
+                      "name": "SyntheticKeyboardEvent.js"
+                    },
+                    {
+                      "name": "SyntheticMouseEvent.js"
+                    },
+                    {
+                      "name": "SyntheticTouchEvent.js"
+                    },
+                    {
+                      "name": "SyntheticTransitionEvent.js"
+                    },
+                    {
+                      "name": "SyntheticUIEvent.js"
+                    },
+                    {
+                      "name": "SyntheticWheelEvent.js"
+                    },
+                    {
+                      "name": "TapEventPlugin.js"
+                    },
+                    {
+                      "name": "__tests__",
+                      "children": [
+                        {
+                          "name": "BeforeInputEventPlugin-test.js"
+                        },
+                        {
+                          "name": "ChangeEventPlugin-test.js"
+                        },
+                        {
+                          "name": "EnterLeaveEventPlugin-test.js"
+                        },
+                        {
+                          "name": "FallbackCompositionState-test.js"
+                        },
+                        {
+                          "name": "SelectEventPlugin-test.js"
+                        },
+                        {
+                          "name": "SimpleEventPlugin-test.js"
+                        },
+                        {
+                          "name": "SyntheticClipboardEvent-test.js"
+                        },
+                        {
+                          "name": "SyntheticEvent-test.js"
+                        },
+                        {
+                          "name": "SyntheticKeyboardEvent-test.js"
+                        },
+                        {
+                          "name": "SyntheticWheelEvent-test.js"
+                        },
+                        {
+                          "name": "getEventCharCode-test.js"
+                        },
+                        {
+                          "name": "getEventKey-test.js"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "getEventCharCode.js"
+                    },
+                    {
+                      "name": "getEventKey.js"
+                    },
+                    {
+                      "name": "getEventModifierState.js"
+                    },
+                    {
+                      "name": "getEventTarget.js"
+                    },
+                    {
+                      "name": "getVendorPrefixedEventName.js"
+                    },
+                    {
+                      "name": "isEventSupported.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "server",
+                  "children": [
+                    {
+                      "name": "DOMMarkupOperations.js"
+                    },
+                    {
+                      "name": "ReactDOMNodeStreamRenderer.js"
+                    },
+                    {
+                      "name": "ReactDOMServerBrowser.js"
+                    },
+                    {
+                      "name": "ReactDOMServerNode.js"
+                    },
+                    {
+                      "name": "ReactDOMStringRenderer.js"
+                    },
+                    {
+                      "name": "ReactPartialRenderer.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "shared",
+                  "children": [
+                    {
+                      "name": "CSSProperty.js"
+                    },
+                    {
+                      "name": "CSSPropertyOperations.js"
+                    },
+                    {
+                      "name": "DOMNamespaces.js"
+                    },
+                    {
+                      "name": "DOMProperty.js"
+                    },
+                    {
+                      "name": "HTMLDOMPropertyConfig.js"
+                    },
+                    {
+                      "name": "HTMLNodeType.js"
+                    },
+                    {
+                      "name": "ReactControlledValuePropTypes.js"
+                    },
+                    {
+                      "name": "ReactDOMInjection.js"
+                    },
+                    {
+                      "name": "ReactDOMInvalidARIAHook.js"
+                    },
+                    {
+                      "name": "ReactDOMNullInputValuePropHook.js"
+                    },
+                    {
+                      "name": "ReactDOMUnknownPropertyHook.js"
+                    },
+                    {
+                      "name": "SVGDOMPropertyConfig.js"
+                    },
+                    {
+                      "name": "assertValidProps.js"
+                    },
+                    {
+                      "name": "checkReact.js"
+                    },
+                    {
+                      "name": "createMicrosoftUnsafeLocalFunction.js"
+                    },
+                    {
+                      "name": "dangerousStyleValue.js"
+                    },
+                    {
+                      "name": "escapeTextContentForBrowser.js"
+                    },
+                    {
+                      "name": "isCustomComponent.js"
+                    },
+                    {
+                      "name": "omittedCloseTags.js"
+                    },
+                    {
+                      "name": "possibleStandardNames.js"
+                    },
+                    {
+                      "name": "quoteAttributeValueForBrowser.js"
+                    },
+                    {
+                      "name": "validAriaProperties.js"
+                    },
+                    {
+                      "name": "voidElementTags.js"
+                    },
+                    {
+                      "name": "warnValidStyle.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "test-utils",
+                  "children": [
+                    {
+                      "name": "ReactTestUtils.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "unstable-native-dependencies",
+                  "children": [
+                    {
+                      "name": "ReactDOMUnstableNativeDependencies.js"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "test-utils.js"
+            },
+            {
+              "name": "unstable-native-dependencies.js"
+            }
+          ]
+        },
+        {
+          "name": "react-native-renderer",
+          "children": [
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "NativeMethodsMixin.js"
+                },
+                {
+                  "name": "NativeMethodsMixinUtils.js"
+                },
+                {
+                  "name": "ReactNativeAttributePayload.js"
+                },
+                {
+                  "name": "ReactNativeBridgeEventPlugin.js"
+                },
+                {
+                  "name": "ReactNativeComponent.js"
+                },
+                {
+                  "name": "ReactNativeComponentTree.js"
+                },
+                {
+                  "name": "ReactNativeEventEmitter.js"
+                },
+                {
+                  "name": "ReactNativeEventPluginOrder.js"
+                },
+                {
+                  "name": "ReactNativeFeatureFlags.js"
+                },
+                {
+                  "name": "ReactNativeFiberErrorDialog.js"
+                },
+                {
+                  "name": "ReactNativeFiberHostComponent.js"
+                },
+                {
+                  "name": "ReactNativeFiberInspector.js"
+                },
+                {
+                  "name": "ReactNativeFiberRenderer.js"
+                },
+                {
+                  "name": "ReactNativeFrameScheduling.js"
+                },
+                {
+                  "name": "ReactNativeGlobalResponderHandler.js"
+                },
+                {
+                  "name": "ReactNativeInjection.js"
+                },
+                {
+                  "name": "ReactNativePropRegistry.js"
+                },
+                {
+                  "name": "ReactNativeRenderer.js"
+                },
+                {
+                  "name": "ReactNativeTagHandles.js"
+                },
+                {
+                  "name": "ReactNativeTypes.js"
+                },
+                {
+                  "name": "ReactNativeViewConfigRegistry.js"
+                },
+                {
+                  "name": "__mocks__",
+                  "children": [
+                    {
+                      "name": "BatchedBridge.js"
+                    },
+                    {
+                      "name": "ExceptionsManager.js"
+                    },
+                    {
+                      "name": "InitializeCore.js"
+                    },
+                    {
+                      "name": "Platform.js"
+                    },
+                    {
+                      "name": "RCTEventEmitter.js"
+                    },
+                    {
+                      "name": "RTManager.js"
+                    },
+                    {
+                      "name": "TextInputState.js"
+                    },
+                    {
+                      "name": "UIManager.js"
+                    },
+                    {
+                      "name": "View.js"
+                    },
+                    {
+                      "name": "deepDiffer.js"
+                    },
+                    {
+                      "name": "deepFreezeAndThrowOnMutationInDev.js"
+                    },
+                    {
+                      "name": "flattenStyle.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactNativeAttributePayload-test.js"
+                    },
+                    {
+                      "name": "ReactNativeEvents-test.js"
+                    },
+                    {
+                      "name": "ReactNativeMount-test.js"
+                    },
+                    {
+                      "name": "__snapshots__",
+                      "children": [
+                        {
+                          "name": "ReactNativeEvents-test.js.snap"
+                        },
+                        {
+                          "name": "ReactNativeMount-test.js.snap"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "createReactNativeComponentClass-test.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "createReactNativeComponentClass.js"
+                },
+                {
+                  "name": "findNodeHandle.js"
+                },
+                {
+                  "name": "findNumericNodeHandle.js"
+                },
+                {
+                  "name": "takeSnapshot.js"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-noop-renderer",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactNoop.js"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-reconciler",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactChildFiber.js"
+                },
+                {
+                  "name": "ReactDebugCurrentFiber.js"
+                },
+                {
+                  "name": "ReactDebugFiberPerf.js"
+                },
+                {
+                  "name": "ReactFiber.js"
+                },
+                {
+                  "name": "ReactFiberBeginWork.js"
+                },
+                {
+                  "name": "ReactFiberClassComponent.js"
+                },
+                {
+                  "name": "ReactFiberCommitWork.js"
+                },
+                {
+                  "name": "ReactFiberCompleteWork.js"
+                },
+                {
+                  "name": "ReactFiberContext.js"
+                },
+                {
+                  "name": "ReactFiberDevToolsHook.js"
+                },
+                {
+                  "name": "ReactFiberErrorLogger.js"
+                },
+                {
+                  "name": "ReactFiberExpirationTime.js"
+                },
+                {
+                  "name": "ReactFiberHostContext.js"
+                },
+                {
+                  "name": "ReactFiberHydrationContext.js"
+                },
+                {
+                  "name": "ReactFiberInstrumentation.js"
+                },
+                {
+                  "name": "ReactFiberReconciler.js"
+                },
+                {
+                  "name": "ReactFiberRoot.js"
+                },
+                {
+                  "name": "ReactFiberScheduler.js"
+                },
+                {
+                  "name": "ReactFiberStack.js"
+                },
+                {
+                  "name": "ReactFiberUpdateQueue.js"
+                },
+                {
+                  "name": "ReactPortal.js"
+                },
+                {
+                  "name": "ReactTypeOfInternalContext.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactExpiration-test.js"
+                    },
+                    {
+                      "name": "ReactFiberHostContext-test.js"
+                    },
+                    {
+                      "name": "ReactFragment-test.js"
+                    },
+                    {
+                      "name": "ReactIncremental-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalErrorHandling-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalPerf-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalReflection-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalScheduling-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalSideEffects-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalTriangle-test.js"
+                    },
+                    {
+                      "name": "ReactIncrementalUpdates-test.js"
+                    },
+                    {
+                      "name": "ReactPersistent-test.js"
+                    },
+                    {
+                      "name": "ReactTopLevelFragment-test.js"
+                    },
+                    {
+                      "name": "ReactTopLevelText-test.js"
+                    },
+                    {
+                      "name": "__snapshots__",
+                      "children": [
+                        {
+                          "name": "ReactIncrementalPerf-test.js.snap"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-rt-renderer",
+          "children": [
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactNativeRT.js"
+                },
+                {
+                  "name": "ReactNativeRTComponentTree.js"
+                },
+                {
+                  "name": "ReactNativeRTEventEmitter.js"
+                },
+                {
+                  "name": "ReactNativeRTFiberInspector.js"
+                },
+                {
+                  "name": "ReactNativeRTFiberRenderer.js"
+                },
+                {
+                  "name": "ReactNativeRTTagHandles.js"
+                },
+                {
+                  "name": "ReactNativeRTTypes.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactNativeRT-test.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "react-test-renderer",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "npm",
+              "children": [
+                {
+                  "name": "index.js"
+                },
+                {
+                  "name": "shallow.js"
+                }
+              ]
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "shallow.js"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "ReactShallowRenderer.js"
+                },
+                {
+                  "name": "ReactTestRenderer.js"
+                },
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "ReactShallowRenderer-test.js"
+                    },
+                    {
+                      "name": "ReactTestRenderer-test.js"
+                    },
+                    {
+                      "name": "ReactTestRendererTraversal-test.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "shared",
+          "children": [
+            {
+              "name": "ReactDOMFrameScheduling.js"
+            },
+            {
+              "name": "ReactElementType.js"
+            },
+            {
+              "name": "ReactErrorUtils.js"
+            },
+            {
+              "name": "ReactFeatureFlags.js"
+            },
+            {
+              "name": "ReactFiberComponentTreeHook.js"
+            },
+            {
+              "name": "ReactFiberTreeReflection.js"
+            },
+            {
+              "name": "ReactGlobalSharedState.js"
+            },
+            {
+              "name": "ReactInstanceMap.js"
+            },
+            {
+              "name": "ReactTreeTraversal.js"
+            },
+            {
+              "name": "ReactTypeOfSideEffect.js"
+            },
+            {
+              "name": "ReactTypeOfWork.js"
+            },
+            {
+              "name": "ReactTypes.js"
+            },
+            {
+              "name": "ReactVersion.js"
+            },
+            {
+              "name": "__tests__",
+              "children": [
+                {
+                  "name": "ReactDOMFrameScheduling-test.js"
+                },
+                {
+                  "name": "ReactErrorUtils-test.js"
+                },
+                {
+                  "name": "reactProdInvariant-test.js"
+                }
+              ]
+            },
+            {
+              "name": "describeComponentFrame.js"
+            },
+            {
+              "name": "getComponentName.js"
+            },
+            {
+              "name": "isTextInputElement.js"
+            },
+            {
+              "name": "lowPriorityWarning.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "reactProdInvariant.js"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "children": [
+        {
+          "name": "authors"
+        },
+        {
+          "name": "babel",
+          "children": [
+            {
+              "name": "transform-object-assign-require.js"
+            }
+          ]
+        },
+        {
+          "name": "bench",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "benchmark.js"
+            },
+            {
+              "name": "benchmarks",
+              "children": [
+                {
+                  "name": "hacker-news",
+                  "children": [
+                    {
+                      "name": "benchmark.js"
+                    },
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "generate.js"
+                    },
+                    {
+                      "name": "grayarrow.gif"
+                    },
+                    {
+                      "name": "index.html"
+                    },
+                    {
+                      "name": "logo.png"
+                    },
+                    {
+                      "name": "style.css"
+                    },
+                    {
+                      "name": "top-stories.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "pe-class-components",
+                  "children": [
+                    {
+                      "name": "benchmark.js"
+                    },
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "index.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "pe-functional-components",
+                  "children": [
+                    {
+                      "name": "benchmark.js"
+                    },
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "index.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "pe-no-components",
+                  "children": [
+                    {
+                      "name": "benchmark.js"
+                    },
+                    {
+                      "name": "build.js"
+                    },
+                    {
+                      "name": "index.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "build.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "runner.js"
+            },
+            {
+              "name": "server.js"
+            },
+            {
+              "name": "stats.js"
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "circleci",
+          "children": [
+            {
+              "name": "bench.sh"
+            },
+            {
+              "name": "build.sh"
+            },
+            {
+              "name": "check_license.sh"
+            },
+            {
+              "name": "check_modules.sh"
+            },
+            {
+              "name": "set_up_github_keys.sh"
+            },
+            {
+              "name": "test_coverage.sh"
+            },
+            {
+              "name": "test_entry_point.sh"
+            },
+            {
+              "name": "test_print_warnings.sh"
+            },
+            {
+              "name": "track_stats.sh"
+            },
+            {
+              "name": "upload_build.sh"
+            }
+          ]
+        },
+        {
+          "name": "error-codes",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "Types.js"
+            },
+            {
+              "name": "__tests__",
+              "children": [
+                {
+                  "name": "invertObject-test.js"
+                },
+                {
+                  "name": "replace-invariant-error-codes-test.js"
+                }
+              ]
+            },
+            {
+              "name": "codes.json"
+            },
+            {
+              "name": "extract-errors.js"
+            },
+            {
+              "name": "invertObject.js"
+            },
+            {
+              "name": "replace-invariant-error-codes.js"
+            }
+          ]
+        },
+        {
+          "name": "eslint",
+          "children": [
+            {
+              "name": "index.js"
+            }
+          ]
+        },
+        {
+          "name": "eslint-rules",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "__tests__",
+              "children": [
+                {
+                  "name": "no-primitive-constructors-test.js"
+                },
+                {
+                  "name": "warning-and-invariant-args-test.js"
+                }
+              ]
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "no-primitive-constructors.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "warning-and-invariant-args.js"
+            }
+          ]
+        },
+        {
+          "name": "facts-tracker",
+          "children": [
+            {
+              "name": "index.js"
+            }
+          ]
+        },
+        {
+          "name": "fiber",
+          "children": [
+            {
+              "name": "record-tests"
+            },
+            {
+              "name": "tests-failing.txt"
+            },
+            {
+              "name": "tests-passing-except-dev.txt"
+            },
+            {
+              "name": "tests-passing.txt"
+            }
+          ]
+        },
+        {
+          "name": "flow",
+          "children": [
+            {
+              "name": "environment.js"
+            },
+            {
+              "name": "react-native-host-hooks.js"
+            }
+          ]
+        },
+        {
+          "name": "git",
+          "children": [
+            {
+              "name": "pre-commit"
+            }
+          ]
+        },
+        {
+          "name": "jest",
+          "children": [
+            {
+              "name": "environment.js"
+            },
+            {
+              "name": "jest.d.ts"
+            },
+            {
+              "name": "preprocessor.js"
+            },
+            {
+              "name": "setup.js"
+            },
+            {
+              "name": "setupSpecEquivalenceReporter.js"
+            },
+            {
+              "name": "test-framework-setup.js"
+            },
+            {
+              "name": "ts-preprocessor.js"
+            }
+          ]
+        },
+        {
+          "name": "perf-counters",
+          "children": [
+            {
+              "name": "Makefile"
+            },
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "binding.gyp"
+            },
+            {
+              "name": "index.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "src",
+              "children": [
+                {
+                  "name": "hardware-counter.cpp"
+                },
+                {
+                  "name": "hardware-counter.h"
+                },
+                {
+                  "name": "jsc-perf.cpp"
+                },
+                {
+                  "name": "perf-counters.cpp"
+                },
+                {
+                  "name": "portability.h"
+                },
+                {
+                  "name": "thread-local.cpp"
+                },
+                {
+                  "name": "thread-local.h"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "prettier",
+          "children": [
+            {
+              "name": "index.js"
+            }
+          ]
+        },
+        {
+          "name": "print-warnings",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "print-warnings.js"
+            }
+          ]
+        },
+        {
+          "name": "release",
+          "children": [
+            {
+              "name": "README.md"
+            },
+            {
+              "name": "build-commands",
+              "children": [
+                {
+                  "name": "add-git-tag.js"
+                },
+                {
+                  "name": "build-artifacts.js"
+                },
+                {
+                  "name": "check-circle-ci-status.js"
+                },
+                {
+                  "name": "check-environment-variables.js"
+                },
+                {
+                  "name": "check-npm-permissions.js"
+                },
+                {
+                  "name": "check-package-dependencies.js"
+                },
+                {
+                  "name": "check-uncommitted-changes.js"
+                },
+                {
+                  "name": "install-yarn-dependencies.js"
+                },
+                {
+                  "name": "parse-build-parameters.js"
+                },
+                {
+                  "name": "print-post-build-summary.js"
+                },
+                {
+                  "name": "run-automated-tests.js"
+                },
+                {
+                  "name": "update-git.js"
+                },
+                {
+                  "name": "update-package-versions.js"
+                },
+                {
+                  "name": "update-yarn-dependencies.js"
+                },
+                {
+                  "name": "validate-version.js"
+                }
+              ]
+            },
+            {
+              "name": "build.js"
+            },
+            {
+              "name": "config.js"
+            },
+            {
+              "name": "package.json"
+            },
+            {
+              "name": "publish-commands",
+              "children": [
+                {
+                  "name": "check-build-status.js"
+                },
+                {
+                  "name": "commit-changelog.js"
+                },
+                {
+                  "name": "parse-publish-params.js"
+                },
+                {
+                  "name": "print-post-publish-summary.js"
+                },
+                {
+                  "name": "publish-to-npm.js"
+                },
+                {
+                  "name": "push-git-remote.js"
+                }
+              ]
+            },
+            {
+              "name": "publish.js"
+            },
+            {
+              "name": "utils.js"
+            },
+            {
+              "name": "yarn.lock"
+            }
+          ]
+        },
+        {
+          "name": "rollup",
+          "children": [
+            {
+              "name": "build.js"
+            },
+            {
+              "name": "bundles.js"
+            },
+            {
+              "name": "modules.js"
+            },
+            {
+              "name": "packaging.js"
+            },
+            {
+              "name": "plugins",
+              "children": [
+                {
+                  "name": "__tests__",
+                  "children": [
+                    {
+                      "name": "wrap-warning-with-env-check-test.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "sizes-plugin.js"
+                },
+                {
+                  "name": "wrap-warning-with-env-check.js"
+                }
+              ]
+            },
+            {
+              "name": "results.json"
+            },
+            {
+              "name": "shims",
+              "children": [
+                {
+                  "name": "facebook-www",
+                  "children": [
+                    {
+                      "name": "EventPluginHub.js"
+                    },
+                    {
+                      "name": "ReactBrowserEventEmitter.js"
+                    },
+                    {
+                      "name": "ReactDOMComponentTree.js"
+                    },
+                    {
+                      "name": "ReactErrorUtils.js"
+                    },
+                    {
+                      "name": "ReactFiberErrorLogger.js"
+                    },
+                    {
+                      "name": "ReactInstanceMap.js"
+                    },
+                    {
+                      "name": "TapEventPlugin.js"
+                    },
+                    {
+                      "name": "findDOMNode.js"
+                    },
+                    {
+                      "name": "renderSubtreeIntoContainer.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "react-native",
+                  "children": [
+                    {
+                      "name": "NativeMethodsMixin.js"
+                    },
+                    {
+                      "name": "ReactDebugTool.js"
+                    },
+                    {
+                      "name": "ReactGlobalSharedState.js"
+                    },
+                    {
+                      "name": "ReactNative.js"
+                    },
+                    {
+                      "name": "ReactNativeBridgeEventPlugin.js"
+                    },
+                    {
+                      "name": "ReactNativeComponentTree.js"
+                    },
+                    {
+                      "name": "ReactNativePropRegistry.js"
+                    },
+                    {
+                      "name": "ReactPerf.js"
+                    },
+                    {
+                      "name": "TouchHistoryMath.js"
+                    },
+                    {
+                      "name": "createReactNativeComponentClass.js"
+                    },
+                    {
+                      "name": "takeSnapshot.js"
+                    }
+                  ]
+                },
+                {
+                  "name": "rollup",
+                  "children": [
+                    {
+                      "name": "ReactCurrentOwner-www.js"
+                    },
+                    {
+                      "name": "ReactFeatureFlags-www.js"
+                    },
+                    {
+                      "name": "assign-umd.js"
+                    },
+                    {
+                      "name": "lowPriorityWarning-www.js"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "stats.js"
+            },
+            {
+              "name": "sync.js"
+            },
+            {
+              "name": "utils.js"
+            },
+            {
+              "name": "validate",
+              "children": [
+                {
+                  "name": "eslintignore"
+                },
+                {
+                  "name": "eslintrc.cjs.js"
+                },
+                {
+                  "name": "eslintrc.fb.js"
+                },
+                {
+                  "name": "eslintrc.rn.js"
+                },
+                {
+                  "name": "eslintrc.umd.js"
+                },
+                {
+                  "name": "index.js"
+                }
+              ]
+            },
+            {
+              "name": "wrappers.js"
+            }
+          ]
+        },
+        {
+          "name": "shared",
+          "children": [
+            {
+              "name": "__tests__",
+              "children": [
+                {
+                  "name": "evalToString-test.js"
+                }
+              ]
+            },
+            {
+              "name": "evalToString.js"
+            }
+          ]
+        },
+        {
+          "name": "tasks",
+          "children": [
+            {
+              "name": "eslint.js"
+            },
+            {
+              "name": "flow.js"
+            },
+            {
+              "name": "jest.js"
+            },
+            {
+              "name": "linc.js"
+            },
+            {
+              "name": "version-check.js"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "yarn.lock"
+    }
+  ]
+}

@@ -352,34 +352,26 @@ function CustomPathFuncTree() {
 
 ## Development
 ### Setup
-The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later; `.nvmrc` names the major that CI uses. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo is a separate npm project.
+The library uses [pnpm](https://pnpm.io/installation) 12. Development needs Node.js 22.22.2 or later, or 24.15 or later; `.nvmrc` names the major that CI uses. The version is pinned in the `packageManager` field of `package.json`. If a globally installed pnpm 10 fails with `Failed to switch pnpm to v12`, upgrade the global pnpm to version 12. The demo in `demo/` is a workspace package that imports the library from `lib/`.
 
 To set up `react-d3-tree` for local development, clone the repo and follow the steps below:
 
 ```bash
-# 1. Set up the library, create a reference to it for symlinking.
+# 1. Install everything and build the library.
 cd react-d3-tree
 pnpm install
-npm link
+pnpm build
 
-# 2. Set up the demo/playground, symlink to the local copy of `react-d3-tree`.
-cd demo
-npm i
-npm link react-d3-tree
+# 2. Start the playground.
+pnpm --filter rd3t-demo dev
 ```
 
-> **Tip:** If you'd prefer to use your own app for development instead of the demo, simply run `npm link react-d3-tree` in your app's root folder instead of the demo's :)
-
-The demo in this branch still targets the v3 API; a rebuilt demo lands separately and follows v4 in a later change.
+> **Tip:** To develop against your own app instead of the demo, run `npm link` in the repo root and `npm link react-d3-tree` in your app's root folder.
 
 ### Hot reloading
+Run the library build in watch mode in a second terminal; the playground's dev server picks up each rebuild:
 ```bash
 pnpm build:watch
-```
-
-If you're using `react-d3-tree/demo` for development, open up another terminal window in the `demo` directory and call:
-```bash
-npm start
 ```
 
 ## Contributors

@@ -657,6 +657,19 @@ describe('Tree public behavior', () => {
       expect(onTransformChange).not.toHaveBeenCalled();
     });
 
+    it('ends an active mouse gesture when the tree unmounts', () => {
+      const onTransformChange = vi.fn<OnTransformChange>();
+      const view = renderTree({ data: replacementData(), onTransformChange });
+      const svg = getSvg(view.container);
+
+      dispatch(svg, mouse('mousedown', { clientX: 10, clientY: 10 }));
+      view.unmount();
+      dispatch(window, mouse('mousemove', { clientX: 50, clientY: 60 }));
+      dispatch(window, mouse('mouseup', { clientX: 50, clientY: 60 }));
+
+      expect(onTransformChange).not.toHaveBeenCalled();
+    });
+
     it.each([
       [true, true],
       [false, false],

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>React D3 Tree playground</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // The previous Create React App build registered a service worker scoped to this demo's
+      // path. Unregister that one, and only that one, so returning visitors get the current
+      // bundle and other sites on the same origin keep their workers. Remove after one release.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .getRegistration('/react-d3-tree/')
+          .then(reg => {
+            if (reg && new URL(reg.scope).pathname === '/react-d3-tree/') reg.unregister();
+          })
+          .catch(() => {});
+      }
+    </script>
+  </body>
+</html>
