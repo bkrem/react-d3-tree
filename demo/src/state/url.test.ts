@@ -16,7 +16,7 @@ const modified: PlaygroundState = {
   centerOnClick: true,
   zoom: 0.5,
   scaleExtent: { min: 0.2, max: 3 },
-  transitionDuration: 250,
+  centeringTransitionDuration: 250,
   nodeRenderer: 'foreign-object',
 };
 
@@ -90,7 +90,7 @@ describe('fromSearchParams', () => {
         nodeSize: '0,0',
         separation: '-1,2',
         initialDepth: '1.5',
-        transitionDuration: '-5',
+        centeringTransitionDuration: '-5',
       })
     );
     expect(patch).toEqual({});

@@ -14,8 +14,8 @@ pnpm --filter rd3t-demo dev
 ```
 
 To pick up library changes as you make them, run `pnpm build:watch` in a second terminal. It
-rebuilds the ES module output only; run `pnpm build` again before a type-check, because the
-`exports` map resolves the demo's types from `lib/types`.
+emits the JavaScript and the declarations together, so the dev server and a type-check both
+follow it.
 
 ## Scripts
 
@@ -32,8 +32,8 @@ root writes them to `demo/public/docs`, which Vite copies into `demo/dist/docs`.
 
 ## Structure
 
-- `src/state/playground.ts` holds the inspector state, its defaults (taken from
-  `Tree.defaultProps`), and the reducer.
+- `src/state/playground.ts` holds the inspector state, its defaults (the library's documented
+  defaults, spelled out), and the reducer.
 - `src/state/url.ts` reads and writes the props that differ from the defaults as query
   parameters, so a configuration can be linked.
 - `src/state/jsx.ts` renders the `<Tree />` snippet the code drawer shows.

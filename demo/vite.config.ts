@@ -11,7 +11,8 @@ export default defineConfig({
   },
   resolve: {
     // `react-d3-tree` is a workspace link, so its `lib/` would otherwise resolve `react` from the
-    // repo root's node_modules (React 16, the library's dev dependency) instead of the demo's.
+    // repo root's node_modules (the library's own dev copy, React 18 on the CI legs that swap it)
+    // instead of the demo's.
     dedupe: ['react', 'react-dom'],
   },
   test: {

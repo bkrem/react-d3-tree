@@ -1,8 +1,9 @@
 # react-d3-tree v4 roadmap
 
 Status (2026-09-23): implemented on `feat/v4` through Phase 6.1, in one commit per row of the
-phase tables; 6.2 (prereleases and the release) and 6.3 (the `v3` branch and 4.0.0) wait for
-the maintainer, as do the Phase 0 pull requests. Each phase carries a status line with what
+phase tables, and Phase 0 has landed (rows 0.1 and 0.5 on `master`, row 0.6 on `feat/v4`);
+6.2 (prereleases and the release) and 6.3 (the `v3` branch and 4.0.0) wait for the maintainer,
+as do the optional 0.2, the `master` README line from 0.3, and the 0.4 policy text. Each phase carries a status line with what
 landed. "Decided" items were settled by the maintainer or while implementing; the remaining
 "Proposed" items are defaults for the steps not yet taken. The section
 [Where the code stood at the start](#where-the-code-stood-at-the-start) describes `master` at
@@ -236,6 +237,17 @@ Goal: a place to land v4 work, a test bed, and a support story for v3.
 | 0.4 | `docs/v3-support-policy` | README and release-notes text: v3 takes security and critical fixes for 6 months from the 4.0.0 release date. The `v3` branch itself is cut at the last 3.x release before 4.0.0 merges. |
 | 0.5 | `test/v4-behavior-contracts` (exists) | Open and land on `master` as part of a 3.7.x release: 36 behaviour contracts plus the four bug fixes listed under Tests. `feat/v4` already carries the branch through merge commit `e82c474`, so the later merge of `master` into `feat/v4` changes nothing for these files. |
 | 0.6 | `feat/demo-v4` (after 0.1 lands) | Adapt the rebuilt demo to the v4 API: its examples use `dimensions`, `addChildren`, and `onUpdate`, and `data` arrays. Then merge `master` into `feat/v4` so the workspace demo builds against the v4 library. |
+
+Status (2026-09-23): 0.1 and 0.5 landed on `master` (PR 540 and the contracts squash
+`ed187b2`). 0.6 landed on `feat/v4` in the other order and as two commits: `chore: merge master
+into feat/v4` (`beba1b0`) brings in the workspace demo and ports the one contracts fix that
+landed after the earlier merge (a mouse drag outliving its tree, ended on unmount), and
+`feat(demo): follow the v4 API` adapts the demo. The demo passes `centerOnClick` instead of
+`dimensions`, reports through `onTransformChange`, reads `isLeaf` and `isCollapsed` in its card
+renderer, spells out the library defaults (no `defaultProps` to read), drops the legacy
+transition controls, and remounts the tree on a dataset or `initialDepth` change, because v4
+keeps collapse state by node id across data updates. CI runs the demo's type-check, tests, and
+build on every push.
 
 Exit: `master` has the Vite demo and the contracts, `feat/v4` holds this roadmap and the
 contracts, and the demo builds against the local library through the workspace.
@@ -642,7 +654,7 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 
 | Consumer setup | v3 today | v4 | Evidence |
 | --- | --- | --- | --- |
-| ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works in Node (`consumer-import.mjs`); unverified through a bundler for v4 until the demo follows the v4 API (row 0.6) | The demo on `feat/v4` still targets v3, so no bundler has built against the v4 package yet. |
+| ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works | The workspace demo type-checks and builds with Vite 8 against the v4 `lib/` (`pnpm --filter rd3t-demo build`, 2026-09-23), and CI runs that build on every push. webpack and Next.js are unverified. |
 | `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes against the ESM-only build on Node 22.13.1 in this worktree (2026-09-23); CI runs 22 and 24. |
 | `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | Unverified: based on the d3 packages shipping `"type": "module"` only and on the smoke test's own skip logic. No such Node version was run here. |
 | Jest, ESM mode (`node --experimental-vm-modules jest`) | Works | Works | The smoke test's Jest 30 consumer passes against the packed package (2026-09-23). |

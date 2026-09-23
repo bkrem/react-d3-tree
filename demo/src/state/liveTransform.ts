@@ -1,6 +1,6 @@
 import type { Point } from './playground.js';
 
-/** The zoom and translate currently applied to the tree, as reported by `Tree`'s `onUpdate`. */
+/** The zoom and translate applied to the tree, as reported by `Tree`'s `onTransformChange`. */
 export interface LiveTransform {
   zoom: number;
   translate: Point;

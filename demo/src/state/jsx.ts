@@ -16,8 +16,6 @@ export interface JsxContext {
   rendererIdentifier: string | null;
   /** The translate in effect, whether set by hand or fitted to the container. */
   translate: Point;
-  /** The container size, when `centerOnClick` is on. */
-  dimensions: { width: number; height: number } | null;
 }
 
 const point = (p: Point) => `{{ x: ${p.x}, y: ${p.y} }}`;
@@ -37,9 +35,7 @@ export function toJsx(state: PlaygroundState, ctx: JsxContext): string {
   if (ctx.rendererIdentifier) add('renderCustomNodeElement', `{${ctx.rendererIdentifier}}`);
   if (isModified(state, 'orientation')) add('orientation', str(state.orientation));
   add('translate', point(ctx.translate));
-  if (state.centerOnClick && ctx.dimensions) {
-    add('dimensions', `{{ width: ${ctx.dimensions.width}, height: ${ctx.dimensions.height} }}`);
-  }
+  if (isModified(state, 'centerOnClick')) add('centerOnClick', bool(state.centerOnClick));
   if (isModified(state, 'centeringTransitionDuration')) {
     add('centeringTransitionDuration', num(state.centeringTransitionDuration));
   }
@@ -65,11 +61,6 @@ export function toJsx(state: PlaygroundState, ctx: JsxContext): string {
   if (isModified(state, 'shouldCollapseNeighborNodes')) {
     add('shouldCollapseNeighborNodes', bool(state.shouldCollapseNeighborNodes));
   }
-  if (isModified(state, 'enableLegacyTransitions')) {
-    add('enableLegacyTransitions', bool(state.enableLegacyTransitions));
-  }
-  if (isModified(state, 'transitionDuration'))
-    add('transitionDuration', num(state.transitionDuration));
   if (isModified(state, 'hasInteractiveNodes')) {
     add('hasInteractiveNodes', bool(state.hasInteractiveNodes));
   }

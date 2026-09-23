@@ -1,4 +1,4 @@
-import Tree, { type Orientation, type PathFunctionOption } from 'react-d3-tree';
+import type { Orientation, PathFunctionOption } from 'react-d3-tree';
 
 export type DatasetId = 'org-chart' | 'flare' | 'react-repo' | 'custom';
 export type NodeRendererId = 'default' | 'pure-svg' | 'foreign-object' | 'inputs';
@@ -24,46 +24,40 @@ export interface PlaygroundState {
   collapsible: boolean;
   zoomable: boolean;
   draggable: boolean;
-  /** Passes the container's `dimensions` to `Tree`, which centres a node when clicked. */
   centerOnClick: boolean;
   shouldCollapseNeighborNodes: boolean;
   hasInteractiveNodes: boolean;
   zoom: number;
   scaleExtent: { min: number; max: number };
-  enableLegacyTransitions: boolean;
-  transitionDuration: number;
   centeringTransitionDuration: number;
   nodeRenderer: NodeRendererId;
 }
 
 export type Patch = Partial<PlaygroundState>;
 
-const lib = Tree.defaultProps;
-
-/** The library's own defaults, so the inspector starts where a consumer with no props starts. */
+/**
+ * The library's documented defaults, so the inspector starts where a consumer with no props
+ * starts. `Tree` is a function component with no `defaultProps` to read them from; keep these in
+ * step with the `@default` tags in its `TreeProps` docs.
+ */
 export const defaults: PlaygroundState = {
   dataset: 'org-chart',
-  orientation: lib.orientation ?? 'horizontal',
-  pathFunc: typeof lib.pathFunc === 'string' ? lib.pathFunc : 'diagonal',
-  nodeSize: { x: lib.nodeSize?.x ?? 140, y: lib.nodeSize?.y ?? 140 },
-  separation: {
-    siblings: lib.separation?.siblings ?? 1,
-    nonSiblings: lib.separation?.nonSiblings ?? 2,
-  },
-  depthFactor: lib.depthFactor ?? null,
+  orientation: 'horizontal',
+  pathFunc: 'diagonal',
+  nodeSize: { x: 140, y: 140 },
+  separation: { siblings: 1, nonSiblings: 2 },
+  depthFactor: null,
   translate: null,
-  initialDepth: lib.initialDepth ?? null,
-  collapsible: lib.collapsible ?? true,
-  zoomable: lib.zoomable ?? true,
-  draggable: lib.draggable ?? true,
+  initialDepth: null,
+  collapsible: true,
+  zoomable: true,
+  draggable: true,
   centerOnClick: false,
-  shouldCollapseNeighborNodes: lib.shouldCollapseNeighborNodes ?? false,
-  hasInteractiveNodes: lib.hasInteractiveNodes ?? false,
-  zoom: lib.zoom ?? 1,
-  scaleExtent: { min: lib.scaleExtent?.min ?? 0.1, max: lib.scaleExtent?.max ?? 1 },
-  enableLegacyTransitions: lib.enableLegacyTransitions ?? false,
-  transitionDuration: lib.transitionDuration ?? 500,
-  centeringTransitionDuration: lib.centeringTransitionDuration ?? 800,
+  shouldCollapseNeighborNodes: false,
+  hasInteractiveNodes: false,
+  zoom: 1,
+  scaleExtent: { min: 0.1, max: 1 },
+  centeringTransitionDuration: 800,
   nodeRenderer: 'default',
 };
 
@@ -89,7 +83,7 @@ export const groups = {
     'hasInteractiveNodes',
   ],
   zoom: ['zoom', 'scaleExtent'],
-  animation: ['enableLegacyTransitions', 'transitionDuration', 'centeringTransitionDuration'],
+  animation: ['centeringTransitionDuration'],
   rendering: ['nodeRenderer'],
 } satisfies Record<string, StateKey[]>;
 

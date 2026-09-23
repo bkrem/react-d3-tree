@@ -177,7 +177,7 @@ export function Inspector({ state, dispatch, datasets, onLoadCustom }: Inspector
             onChange={initialDepth => set({ initialDepth })}
           />
         </Row>
-        <Hint>initialDepth applies when the data changes: pick a dataset again to see it.</Hint>
+        <Hint>Changing initialDepth remounts the tree, so it applies at once.</Hint>
       </Group>
 
       <Group title="Behaviour" {...groupProps('behaviour')}>
@@ -211,7 +211,7 @@ export function Inspector({ state, dispatch, datasets, onLoadCustom }: Inspector
           />
         </Row>
         <Hint>
-          Passes the canvas size as <code>dimensions</code>.
+          Passes <code>centerOnClick</code>; the tree measures its own container.
         </Hint>
         <Row
           label="shouldCollapseNeighborNodes"
@@ -276,34 +276,6 @@ export function Inspector({ state, dispatch, datasets, onLoadCustom }: Inspector
       </Group>
 
       <Group title="Animation" {...groupProps('animation')}>
-        <Row
-          label="enableLegacyTransitions"
-          htmlFor="enableLegacyTransitions"
-          modified={mod('enableLegacyTransitions')}
-        >
-          <Toggle
-            id="enableLegacyTransitions"
-            checked={state.enableLegacyTransitions}
-            onChange={enableLegacyTransitions => set({ enableLegacyTransitions })}
-          />
-        </Row>
-        <Row
-          label="transitionDuration"
-          htmlFor="transitionDuration"
-          modified={mod('transitionDuration')}
-        >
-          <NumberField
-            id="transitionDuration"
-            value={state.transitionDuration}
-            modified={mod('transitionDuration')}
-            step={50}
-            min={0}
-            unit="ms"
-            onChange={transitionDuration =>
-              transitionDuration !== null && set({ transitionDuration })
-            }
-          />
-        </Row>
         <Row
           label="centeringTransitionDuration"
           htmlFor="centeringTransitionDuration"

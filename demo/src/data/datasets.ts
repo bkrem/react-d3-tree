@@ -57,8 +57,8 @@ function validateNode(value: unknown, path: string): string | null {
 }
 
 /**
- * Parses pasted JSON into a dataset. Accepts a root node object or an array holding one, the two
- * shapes `Tree` takes for `data`.
+ * Parses pasted JSON into a dataset. Accepts a root node object, the shape `Tree` takes for
+ * `data`, or an array holding one, the shape a v3 app may have saved.
  */
 export function parseDatasetJson(text: string): ParseResult {
   let parsed: unknown;

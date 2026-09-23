@@ -15,8 +15,9 @@
     "noUnusedParameters": true,
     "types": ["vite/client"],
     "paths": {
-      // `react-d3-tree` is a workspace link, so `lib/types` would otherwise resolve `react` to the
-      // repo root's @types/react (16) and clash with the demo's @types/react (19).
+      // `react-d3-tree` is a workspace link, so `lib/` would otherwise resolve `react` to the repo
+      // root's @types/react, which clashes with the demo's when the two differ (React 18 on the
+      // CI legs that swap it).
       "react": ["./node_modules/@types/react"],
       "react-dom": ["./node_modules/@types/react-dom"]
     }

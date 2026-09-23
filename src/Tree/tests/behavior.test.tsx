@@ -616,13 +616,16 @@ describe('Tree public behavior', () => {
 
     it('updates the visible transform when zoom and translate props change', () => {
       const data = replacementData();
-      const view = renderTree({ data, zoom: 1, translate: { x: 0, y: 0 } });
+      const onTransformChange = vi.fn<OnTransformChange>();
+      const view = renderTree({ data, zoom: 1, translate: { x: 0, y: 0 }, onTransformChange });
 
-      view.rerender({ data, zoom: 0.6, translate: { x: 25, y: 35 } });
+      view.rerender({ data, zoom: 0.6, translate: { x: 25, y: 35 }, onTransformChange });
 
       expect(getTreeGroup(view.container).getAttribute('transform')).toBe(
         'translate(25,35) scale(0.6)'
       );
+      // A prop change is the caller's own transform, so it is applied without being reported.
+      expect(onTransformChange).not.toHaveBeenCalled();
     });
 
     it('keeps zoom interactions isolated between tree instances', () => {

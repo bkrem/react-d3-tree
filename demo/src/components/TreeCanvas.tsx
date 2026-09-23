@@ -51,6 +51,8 @@ class TreeBoundary extends Component<BoundaryProps, { error: string | null }> {
 }
 
 interface TreeCanvasProps {
+  /** Remounts the tree when it changes, which resets its collapse state. */
+  treeKey: string;
   state: PlaygroundState;
   dataset: Dataset;
   size: Size | null;
@@ -62,6 +64,7 @@ interface TreeCanvasProps {
 }
 
 export function TreeCanvas({
+  treeKey,
   state,
   dataset,
   size,
@@ -90,7 +93,7 @@ export function TreeCanvas({
     data: dataset.data,
     orientation: state.orientation,
     translate,
-    dimensions: state.centerOnClick && size ? size : undefined,
+    centerOnClick: state.centerOnClick,
     centeringTransitionDuration: state.centeringTransitionDuration,
     pathFunc: state.pathFunc,
     depthFactor: state.depthFactor ?? undefined,
@@ -98,28 +101,25 @@ export function TreeCanvas({
     initialDepth: state.initialDepth ?? undefined,
     zoomable: state.zoomable,
     draggable: state.draggable,
-    // The library applies the raw zoom as its initial transform before its own clamping, so a
-    // typed `0` would scale the tree away; the props get the same clamped value the rest of the
-    // playground treats as effective.
+    // A zoom or a scale extent being typed can hold 0 for a moment, which would scale the tree
+    // away; the props get the same clamped values the rest of the playground treats as effective.
     zoom: clampZoom(state.zoom, state.scaleExtent),
     scaleExtent: effectiveScaleExtent(state.scaleExtent),
     nodeSize: state.nodeSize,
     separation: state.separation,
     shouldCollapseNeighborNodes: state.shouldCollapseNeighborNodes,
-    enableLegacyTransitions: state.enableLegacyTransitions,
-    transitionDuration: state.transitionDuration,
     hasInteractiveNodes: state.hasInteractiveNodes,
     renderCustomNodeElement: renderNode,
     svgClassName: 'playground__svg',
     // Fires on every drag and zoom tick; the store keeps that out of React state.
-    onUpdate: ({ zoom, translate: t }) => liveStore.set({ zoom, translate: t }),
+    onTransformChange: ({ x, y, k }) => liveStore.set({ zoom: k, translate: { x, y } }),
   };
 
   return (
     <main className="canvas" ref={ref}>
       {size && (
         <TreeBoundary onReset={onReset}>
-          <Tree {...treeProps} />
+          <Tree key={treeKey} {...treeProps} />
         </TreeBoundary>
       )}
       <StatusBar

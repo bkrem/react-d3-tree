@@ -62,6 +62,8 @@ function PureSvgNode({
 
 function NodeCard({
   nodeDatum,
+  isLeaf,
+  isCollapsed,
   toggleNode,
   nodeSize,
   withInput = false,
@@ -96,9 +98,9 @@ function NodeCard({
               <option value="3">Option 3</option>
             </select>
           )}
-          {nodeDatum.children && (
+          {!isLeaf && (
             <button type="button" className="node-card__toggle" onClick={toggleNode}>
-              {nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}
+              {isCollapsed ? 'Expand' : 'Collapse'}
             </button>
           )}
         </div>

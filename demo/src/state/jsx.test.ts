@@ -6,7 +6,6 @@ const ctx: JsxContext = {
   dataIdentifier: 'orgChart',
   rendererIdentifier: null,
   translate: { x: 224, y: 345 },
-  dimensions: null,
 };
 
 describe('toJsx', () => {
@@ -46,12 +45,15 @@ describe('toJsx', () => {
     ]);
   });
 
-  it('spells out dimensions only when centring on click is on', () => {
-    const dimensions = { width: 1120, height: 690 };
-    expect(toJsx(defaults, { ...ctx, dimensions })).not.toContain('dimensions');
-    expect(toJsx({ ...defaults, centerOnClick: true }, { ...ctx, dimensions })).toContain(
-      'dimensions={{ width: 1120, height: 690 }}'
-    );
+  it('lists centerOnClick after translate when it is on', () => {
+    expect(toJsx(defaults, ctx)).not.toContain('centerOnClick');
+    expect(toJsx({ ...defaults, centerOnClick: true }, ctx).split('\n')).toEqual([
+      '<Tree',
+      '  data={orgChart}',
+      '  translate={{ x: 224, y: 345 }}',
+      '  centerOnClick={true}',
+      '/>',
+    ]);
   });
 
   it('lists the zoom settings the canvas applies, not the typed values', () => {
