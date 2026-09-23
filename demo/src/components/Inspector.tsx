@@ -173,6 +173,7 @@ export function Inspector({ state, dispatch, datasets, onLoadCustom }: Inspector
             emptyMeans="all"
             min={0}
             step={1}
+            integer
             onChange={initialDepth => set({ initialDepth })}
           />
         </Row>

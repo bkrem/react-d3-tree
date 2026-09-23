@@ -137,11 +137,16 @@ interface NumberFieldProps {
   step?: number;
   min?: number;
   max?: number;
+  /** Only whole numbers reach `onChange`. */
+  integer?: boolean;
   unit?: string;
   ariaLabel?: string;
 }
 
-/** A numeric input that reports finite numbers, and `null` for an empty field when that's allowed. */
+/**
+ * A numeric input that reports finite numbers within its bounds, and `null` for an empty field
+ * when that's allowed. Out-of-range text stays in the field until blur and never reaches the state.
+ */
 export function NumberField({
   id,
   value,
@@ -151,6 +156,7 @@ export function NumberField({
   step,
   min,
   max,
+  integer = false,
   unit,
   ariaLabel,
 }: NumberFieldProps) {
@@ -163,6 +169,8 @@ export function NumberField({
     setText(value === null ? '' : String(value));
   }
 
+  // The HTML attributes only decorate the field; a typed value outside the bounds still fires
+  // change events, so the bounds are enforced here before the state sees the value.
   const commit = (next: string) => {
     setText(next);
     if (next.trim() === '') {
@@ -170,7 +178,11 @@ export function NumberField({
       return;
     }
     const n = Number(next);
-    if (Number.isFinite(n)) onChange(n);
+    if (!Number.isFinite(n)) return;
+    if (min !== undefined && n < min) return;
+    if (max !== undefined && n > max) return;
+    if (integer && !Number.isInteger(n)) return;
+    onChange(n);
   };
 
   return (

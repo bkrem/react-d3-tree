@@ -54,6 +54,15 @@ describe('toJsx', () => {
     );
   });
 
+  it('lists the zoom settings the canvas applies, not the typed values', () => {
+    expect(toJsx({ ...defaults, zoom: 0 }, ctx)).toContain('zoom={0.1}');
+    // 5 clamps to the default max of 1, so the snippet omits it.
+    expect(toJsx({ ...defaults, zoom: 5 }, ctx)).not.toContain('zoom=');
+    const extent = toJsx({ ...defaults, scaleExtent: { min: 2, max: 1 } }, ctx);
+    expect(extent).toContain('scaleExtent={{ min: 2, max: 2 }}');
+    expect(extent).toContain('zoom={2}');
+  });
+
   it('writes depthFactor and the zoom settings when set', () => {
     const jsx = toJsx(
       { ...defaults, depthFactor: -250, zoom: 0.5, scaleExtent: { min: 0.1, max: 4 } },

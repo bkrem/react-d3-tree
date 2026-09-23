@@ -1,4 +1,12 @@
-import { isModified, type PlaygroundState, type Point } from './playground.js';
+import {
+  clampZoom,
+  defaults,
+  effectiveScaleExtent,
+  isModified,
+  sameValue,
+  type PlaygroundState,
+  type Point,
+} from './playground.js';
 
 /** Values the canvas resolves at runtime and the snippet has to spell out. */
 export interface JsxContext {
@@ -41,9 +49,13 @@ export function toJsx(state: PlaygroundState, ctx: JsxContext): string {
   if (state.initialDepth !== null) add('initialDepth', num(state.initialDepth));
   if (isModified(state, 'zoomable')) add('zoomable', bool(state.zoomable));
   if (isModified(state, 'draggable')) add('draggable', bool(state.draggable));
-  if (isModified(state, 'zoom')) add('zoom', num(state.zoom));
-  if (isModified(state, 'scaleExtent')) {
-    add('scaleExtent', `{{ min: ${state.scaleExtent.min}, max: ${state.scaleExtent.max} }}`);
+  // The canvas normalises the zoom settings before handing them to Tree; the snippet lists the
+  // same values, so pasting it reproduces the view rather than what was typed.
+  const zoom = clampZoom(state.zoom, state.scaleExtent);
+  const scaleExtent = effectiveScaleExtent(state.scaleExtent);
+  if (zoom !== defaults.zoom) add('zoom', num(zoom));
+  if (!sameValue(scaleExtent, defaults.scaleExtent)) {
+    add('scaleExtent', `{{ min: ${scaleExtent.min}, max: ${scaleExtent.max} }}`);
   }
   if (isModified(state, 'nodeSize')) add('nodeSize', point(state.nodeSize));
   if (isModified(state, 'separation')) {
