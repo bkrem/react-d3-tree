@@ -1,9 +1,9 @@
 # react-d3-tree v4 roadmap
 
 Status (2026-09-23): implemented on `feat/v4` through Phase 6.1, in one commit per row of the
-phase tables, and Phase 0 has landed (rows 0.1 and 0.5 on `master`, row 0.6 on `feat/v4`);
-6.2 (prereleases and the release) and 6.3 (the `v3` branch and 4.0.0) wait for the maintainer,
-as do the optional 0.2, the `master` README line from 0.3, and the 0.4 policy text. Each phase carries a status line with what
+phase tables, and the Phase 0 rows that gate v4 have landed (0.1 and 0.5 on `master`, 0.6 on
+`feat/v4`); 6.2 (prereleases and the release) and 6.3 (the `v3` branch and 4.0.0) wait for the
+maintainer, as do the optional 0.2, the `master` README line from 0.3, and the 0.4 policy text. Each phase carries a status line with what
 landed. "Decided" items were settled by the maintainer or while implementing; the remaining
 "Proposed" items are defaults for the steps not yet taken. The section
 [Where the code stood at the start](#where-the-code-stood-at-the-start) describes `master` at
