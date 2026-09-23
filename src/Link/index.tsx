@@ -156,8 +156,8 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
         onClick={this.handleOnClick}
         onMouseOver={this.handleOnMouseOver}
         onMouseOut={this.handleOnMouseOut}
-        data-source-id={linkData.source.id}
-        data-target-id={linkData.target.id}
+        data-source-id={linkData.source.data ? linkData.source.data.__rd3t.id : linkData.source.id}
+        data-target-id={linkData.target.data ? linkData.target.data.__rd3t.id : linkData.target.id}
       />
     );
   }
