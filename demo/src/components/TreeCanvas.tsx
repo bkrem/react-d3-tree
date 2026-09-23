@@ -3,7 +3,7 @@ import Tree, { type TreeProps } from 'react-d3-tree';
 import type { Dataset } from '../data/datasets.js';
 import type { RenderNode } from '../nodes/renderers.jsx';
 import type { LiveStore } from '../state/liveTransform.js';
-import type { PlaygroundState, Point } from '../state/playground.js';
+import { effectiveScaleExtent, type PlaygroundState, type Point } from '../state/playground.js';
 import { StatusBar } from './StatusBar.jsx';
 
 export interface Size {
@@ -94,7 +94,7 @@ export function TreeCanvas({
     zoomable: state.zoomable,
     draggable: state.draggable,
     zoom: state.zoom,
-    scaleExtent: state.scaleExtent,
+    scaleExtent: effectiveScaleExtent(state.scaleExtent),
     nodeSize: state.nodeSize,
     separation: state.separation,
     shouldCollapseNeighborNodes: state.shouldCollapseNeighborNodes,

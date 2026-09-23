@@ -126,11 +126,33 @@ export function resetGroup(state: PlaygroundState, group: GroupId): PlaygroundSt
 /** Applies a patch. Rules that keep the state consistent live here, not in the controls. */
 export function applyPatch(state: PlaygroundState, patch: Patch): PlaygroundState {
   const next = { ...state, ...patch };
-  // Inputs inside a node need the D3 zoom and drag handlers out of the way.
-  if (patch.nodeRenderer === 'inputs' && state.nodeRenderer !== 'inputs') {
-    next.hasInteractiveNodes = true;
+  // Inputs inside a node need the D3 zoom and drag handlers out of the way, so choosing that
+  // renderer turns hasInteractiveNodes on and leaving it turns it back off, unless the same patch
+  // sets the flag itself.
+  if (patch.hasInteractiveNodes === undefined && patch.nodeRenderer !== undefined) {
+    if (patch.nodeRenderer === 'inputs' && state.nodeRenderer !== 'inputs') {
+      next.hasInteractiveNodes = true;
+    } else if (patch.nodeRenderer !== 'inputs' && state.nodeRenderer === 'inputs') {
+      next.hasInteractiveNodes = defaults.hasInteractiveNodes;
+    }
   }
   return next;
+}
+
+/**
+ * The scale extent the tree gets. A field being typed can hold `0` or a min above the max for a
+ * moment; the library would render a blank canvas or flip between the two values, so the props
+ * get a safe version while the state keeps what was typed.
+ */
+export function effectiveScaleExtent(extent: PlaygroundState['scaleExtent']) {
+  const min = Math.max(extent.min, 0.01);
+  return { min, max: Math.max(extent.max, min) };
+}
+
+/** The zoom the library applies: `zoom` clamped into the effective scale extent. */
+export function clampZoom(zoom: number, extent: PlaygroundState['scaleExtent']): number {
+  const { min, max } = effectiveScaleExtent(extent);
+  return Math.min(Math.max(zoom, min), max);
 }
 
 export type Action =

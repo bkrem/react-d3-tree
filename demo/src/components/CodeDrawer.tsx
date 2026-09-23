@@ -22,17 +22,22 @@ function highlight(jsx: string): ReactNode[] {
 }
 
 export function CodeDrawer({ jsx }: { jsx: string }) {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<'copied' | 'failed' | null>(null);
 
   useEffect(() => {
     if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 1500);
+    const t = setTimeout(() => setCopied(null), 1500);
     return () => clearTimeout(t);
   }, [copied]);
 
   const copy = () => {
-    navigator.clipboard.writeText(jsx).then(() => setCopied(true));
+    // The clipboard needs a secure context and permission; fall back to a visible failure.
+    navigator.clipboard
+      .writeText(jsx)
+      .then(() => setCopied('copied'))
+      .catch(() => setCopied('failed'));
   };
+  const label = copied === 'copied' ? 'Copied' : copied === 'failed' ? "Couldn't copy" : 'Copy';
 
   return (
     <details className="code" open>
@@ -43,7 +48,7 @@ export function CodeDrawer({ jsx }: { jsx: string }) {
         </pre>
         <p className="code__note">Only props that differ from the defaults are listed.</p>
         <button type="button" className="code__copy" onClick={copy} aria-live="polite">
-          {copied ? 'Copied' : 'Copy'}
+          {label}
         </button>
       </div>
     </details>

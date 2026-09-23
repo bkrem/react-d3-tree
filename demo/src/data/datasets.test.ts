@@ -68,6 +68,15 @@ describe('parseDatasetJson', () => {
     });
   });
 
+  it('reports a tree nested too deeply instead of throwing', () => {
+    const depth = 20000;
+    const text = `${'{"name":"n","children":['.repeat(depth)}{"name":"leaf"}${']}'.repeat(depth)}`;
+    expect(parseDatasetJson(text)).toEqual({
+      ok: false,
+      error: 'The tree is nested too deeply to render',
+    });
+  });
+
   it('rejects arrays that do not hold exactly one root', () => {
     expect(parseDatasetJson('[]')).toEqual({
       ok: false,

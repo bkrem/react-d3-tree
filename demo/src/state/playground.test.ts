@@ -1,5 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { defaults, isModified, modifiedKeys, reducer } from './playground.js';
+import {
+  clampZoom,
+  defaults,
+  effectiveScaleExtent,
+  isModified,
+  modifiedKeys,
+  reducer,
+} from './playground.js';
+
+describe('effectiveScaleExtent and clampZoom', () => {
+  it('keeps a valid extent as it is', () => {
+    expect(effectiveScaleExtent({ min: 0.1, max: 1 })).toEqual({ min: 0.1, max: 1 });
+    expect(clampZoom(0.5, { min: 0.1, max: 1 })).toBe(0.5);
+  });
+
+  it('lifts a zero min and a max below the min, so the tree never gets a blank or flipping extent', () => {
+    expect(effectiveScaleExtent({ min: 0, max: 0 })).toEqual({ min: 0.01, max: 0.01 });
+    expect(effectiveScaleExtent({ min: 2, max: 1 })).toEqual({ min: 2, max: 2 });
+    expect(clampZoom(1, { min: 2, max: 1 })).toBe(2);
+    expect(clampZoom(0, { min: 0.1, max: 1 })).toBe(0.1);
+    expect(clampZoom(5, { min: 0.1, max: 1 })).toBe(1);
+  });
+});
 
 describe('reducer', () => {
   it('applies a patch', () => {
@@ -8,13 +30,24 @@ describe('reducer', () => {
     expect(modifiedKeys(next)).toEqual(['orientation']);
   });
 
-  it('turns on hasInteractiveNodes when the inputs renderer is chosen', () => {
+  it('turns hasInteractiveNodes on with the inputs renderer and off again when leaving it', () => {
     const next = reducer(defaults, { type: 'patch', patch: { nodeRenderer: 'inputs' } });
     expect(next.hasInteractiveNodes).toBe(true);
     // Choosing it again, or turning the flag off afterwards, is left alone.
     const off = reducer(next, { type: 'patch', patch: { hasInteractiveNodes: false } });
     expect(off.hasInteractiveNodes).toBe(false);
     expect(reducer(off, { type: 'patch', patch: { nodeRenderer: 'inputs' } })).toEqual(off);
+    // Leaving the renderer restores the default.
+    const back = reducer(next, { type: 'patch', patch: { nodeRenderer: 'default' } });
+    expect(back.hasInteractiveNodes).toBe(false);
+  });
+
+  it('lets a patch that sets hasInteractiveNodes itself win over the renderer rule', () => {
+    const next = reducer(defaults, {
+      type: 'patch',
+      patch: { nodeRenderer: 'inputs', hasInteractiveNodes: false },
+    });
+    expect(next.hasInteractiveNodes).toBe(false);
   });
 
   it('resets one group and leaves the others', () => {

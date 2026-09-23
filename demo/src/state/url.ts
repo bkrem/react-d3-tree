@@ -28,20 +28,16 @@ const booleanKeys = [
   'enableLegacyTransitions',
 ] as const satisfies readonly StateKey[];
 
-const numberKeys = [
-  'depthFactor',
-  'initialDepth',
-  'zoom',
-  'transitionDuration',
-  'centeringTransitionDuration',
-] as const satisfies readonly StateKey[];
-
 type BooleanKey = (typeof booleanKeys)[number];
-type NumberKey = (typeof numberKeys)[number];
+
+/** Plain decimal notation only: no hex, binary, octal, or numeric separators. */
+const DECIMAL = /^-?\d+(\.\d+)?([eE][+-]?\d+)?$/;
 
 const finite = (s: string | null): number | null => {
-  if (s === null || s.trim() === '') return null;
-  const n = Number(s);
+  if (s === null) return null;
+  const t = s.trim();
+  if (!DECIMAL.test(t)) return null;
+  const n = Number(t);
   return Number.isFinite(n) ? n : null;
 };
 
@@ -56,6 +52,12 @@ const pair = (s: string | null): [number, number] | null => {
 
 const oneOf = <T extends string>(allowed: readonly T[], s: string | null): T | null =>
   s !== null && (allowed as readonly string[]).includes(s) ? (s as T) : null;
+
+const bool = (s: string | null): boolean | null => {
+  if (s === '1' || s === 'true') return true;
+  if (s === '0' || s === 'false') return false;
+  return null;
+};
 
 function encode(state: PlaygroundState, key: StateKey): string | null {
   const value = state[key];
@@ -89,7 +91,10 @@ export function toSearchParams(state: PlaygroundState): URLSearchParams {
   return params;
 }
 
-/** The props a query string sets. Unknown keys and malformed values are ignored. */
+/**
+ * The props a query string sets. Unknown keys, malformed values, and values outside the ranges
+ * the inspector allows are ignored.
+ */
 export function fromSearchParams(params: URLSearchParams): Patch {
   const patch: Patch = {};
 
@@ -103,22 +108,41 @@ export function fromSearchParams(params: URLSearchParams): Patch {
   if (nodeRenderer) patch.nodeRenderer = nodeRenderer;
 
   for (const key of booleanKeys) {
-    const v = params.get(key);
-    if (v === '1' || v === '0') patch[key as BooleanKey] = v === '1';
+    const v = bool(params.get(key));
+    if (v !== null) patch[key as BooleanKey] = v;
   }
-  for (const key of numberKeys) {
-    const n = finite(params.get(key));
-    if (n !== null) patch[key as NumberKey] = n;
+
+  const depthFactor = finite(params.get('depthFactor'));
+  if (depthFactor !== null) patch.depthFactor = depthFactor;
+  const initialDepth = finite(params.get('initialDepth'));
+  if (initialDepth !== null && Number.isInteger(initialDepth) && initialDepth >= 0) {
+    patch.initialDepth = initialDepth;
+  }
+  const zoom = finite(params.get('zoom'));
+  if (zoom !== null && zoom > 0) patch.zoom = zoom;
+  const transitionDuration = finite(params.get('transitionDuration'));
+  if (transitionDuration !== null && transitionDuration >= 0) {
+    patch.transitionDuration = transitionDuration;
+  }
+  const centeringTransitionDuration = finite(params.get('centeringTransitionDuration'));
+  if (centeringTransitionDuration !== null && centeringTransitionDuration >= 0) {
+    patch.centeringTransitionDuration = centeringTransitionDuration;
   }
 
   const nodeSize = pair(params.get('nodeSize'));
-  if (nodeSize) patch.nodeSize = { x: nodeSize[0], y: nodeSize[1] };
+  if (nodeSize && nodeSize[0] >= 1 && nodeSize[1] >= 1) {
+    patch.nodeSize = { x: nodeSize[0], y: nodeSize[1] };
+  }
   const translate = pair(params.get('translate'));
   if (translate) patch.translate = { x: translate[0], y: translate[1] };
   const separation = pair(params.get('separation'));
-  if (separation) patch.separation = { siblings: separation[0], nonSiblings: separation[1] };
+  if (separation && separation[0] >= 0 && separation[1] >= 0) {
+    patch.separation = { siblings: separation[0], nonSiblings: separation[1] };
+  }
   const scaleExtent = pair(params.get('scaleExtent'));
-  if (scaleExtent) patch.scaleExtent = { min: scaleExtent[0], max: scaleExtent[1] };
+  if (scaleExtent && scaleExtent[0] > 0 && scaleExtent[1] >= scaleExtent[0]) {
+    patch.scaleExtent = { min: scaleExtent[0], max: scaleExtent[1] };
+  }
 
   return patch;
 }

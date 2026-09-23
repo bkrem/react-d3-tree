@@ -77,10 +77,19 @@ export function parseDatasetJson(text: string): ParseResult {
     }
     root = parsed[0];
   }
-  const problem = validateNode(root, 'root');
-  if (problem) return { ok: false, error: problem };
-  return {
-    ok: true,
-    dataset: dataset('custom', 'Pasted JSON', 'customData', root as RawNodeDatum),
-  };
+  // Validation and counting recurse, as the library's layout does; a tree nested thousands of
+  // levels deep overflows the stack, so report that instead of throwing out of the click handler.
+  try {
+    const problem = validateNode(root, 'root');
+    if (problem) return { ok: false, error: problem };
+    return {
+      ok: true,
+      dataset: dataset('custom', 'Pasted JSON', 'customData', root as RawNodeDatum),
+    };
+  } catch (error) {
+    if (error instanceof RangeError) {
+      return { ok: false, error: 'The tree is nested too deeply to render' };
+    }
+    throw error;
+  }
 }

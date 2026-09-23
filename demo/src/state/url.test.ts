@@ -74,4 +74,42 @@ describe('fromSearchParams', () => {
   it('reads an empty query as no changes', () => {
     expect(fromSearchParams(new URLSearchParams())).toEqual({});
   });
+
+  it('accepts true and false as well as 1 and 0 for booleans', () => {
+    const patch = fromSearchParams(
+      new URLSearchParams({ collapsible: 'false', zoomable: 'true', draggable: '0' })
+    );
+    expect(patch).toEqual({ collapsible: false, zoomable: true, draggable: false });
+  });
+
+  it('rejects values outside the ranges the inspector allows', () => {
+    const patch = fromSearchParams(
+      new URLSearchParams({
+        zoom: '0',
+        scaleExtent: '1,0.1',
+        nodeSize: '0,0',
+        separation: '-1,2',
+        initialDepth: '1.5',
+        transitionDuration: '-5',
+      })
+    );
+    expect(patch).toEqual({});
+    expect(fromSearchParams(new URLSearchParams({ scaleExtent: '0,1' }))).toEqual({});
+    expect(fromSearchParams(new URLSearchParams({ initialDepth: '-1' }))).toEqual({});
+  });
+
+  it('rejects hex, binary, octal, and separator notations', () => {
+    const patch = fromSearchParams(
+      new URLSearchParams({
+        zoom: '0x1',
+        depthFactor: '0b11',
+        initialDepth: '0o7',
+        nodeSize: '1_0,2',
+      })
+    );
+    expect(patch).toEqual({});
+    expect(fromSearchParams(new URLSearchParams({ depthFactor: '-2.5e2' }))).toEqual({
+      depthFactor: -250,
+    });
+  });
 });

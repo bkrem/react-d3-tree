@@ -8,7 +8,7 @@ import { builtInDatasets, type Dataset } from './data/datasets.js';
 import { nodeRenderers } from './nodes/renderers.jsx';
 import { toJsx } from './state/jsx.js';
 import { createLiveStore } from './state/liveTransform.js';
-import { applyPatch, defaults, reducer, type Point } from './state/playground.js';
+import { applyPatch, clampZoom, defaults, reducer, type Point } from './state/playground.js';
 import { fromSearchParams, writeUrl } from './state/url.js';
 
 /** Where the root goes when no translate is set: a fifth in from the left, or a sixth down. */
@@ -49,10 +49,15 @@ export function App() {
   // `Tree` re-derives its transform from the `translate` and `zoom` props on every render, which
   // would snap a dragged tree back whenever another control changes. Once a gesture settles, the
   // live transform becomes the state, so the props, the URL, and the snippet match the view.
-  const effective = useRef({ translate, zoom: state.zoom });
+  //
+  // `Tree` also reports its derived transform after every prop change. That echo is what the
+  // props already say (zoom clamped into the scale extent), so it is not committed: committing it
+  // would pin a fitted translate, overwrite a zoom while it is being typed, and, with a scale
+  // extent whose min exceeds its max, flip between two values forever.
+  const expected = useRef({ translate, zoom: clampZoom(state.zoom, state.scaleExtent) });
   useEffect(() => {
-    effective.current = { translate, zoom: state.zoom };
-  }, [translate, state.zoom]);
+    expected.current = { translate, zoom: clampZoom(state.zoom, state.scaleExtent) };
+  }, [translate, state.zoom, state.scaleExtent]);
   useEffect(() => {
     let timer: number | undefined;
     const unsubscribe = liveStore.subscribe(() => {
@@ -64,11 +69,11 @@ export function App() {
           translate: { x: round(live.translate.x), y: round(live.translate.y) },
           zoom: round(live.zoom, 3),
         };
-        const current = effective.current;
+        const echo = expected.current;
         if (
-          next.zoom === current.zoom &&
-          next.translate.x === current.translate.x &&
-          next.translate.y === current.translate.y
+          next.zoom === round(echo.zoom, 3) &&
+          next.translate.x === round(echo.translate.x) &&
+          next.translate.y === round(echo.translate.y)
         ) {
           return;
         }
