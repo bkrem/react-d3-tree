@@ -72,6 +72,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
     isTransitioning: false,
   };
 
+  private activeZoomMouseGesture: {
+    view: Window;
+    mouseup: (...args: any[]) => void;
+    sourceEvent: MouseEvent;
+  } = null;
+
   svgInstanceRef = `rd3t-svg-${generateId()}`;
   gInstanceRef = `rd3t-g-${generateId()}`;
 
@@ -131,6 +137,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
     this.internalState.targetNode = null;
   }
 
+  componentWillUnmount() {
+    select(`.${this.svgInstanceRef}`).on('.zoom', null);
+    if (this.activeZoomMouseGesture) {
+      const { view, mouseup, sourceEvent } = this.activeZoomMouseGesture;
+      this.activeZoomMouseGesture = null;
+      mouseup.call(view, sourceEvent);
+    }
+  }
+
   /**
    * Collapses all tree nodes with a `depth` larger than `initialDepth`.
    *
@@ -170,6 +185,19 @@ class Tree extends React.Component<TreeProps, TreeState> {
           }
           return true;
         })
+        .on('start.cleanup', (event: any) => {
+          const sourceEvent = event.sourceEvent;
+          if (sourceEvent?.type === 'mousedown' && sourceEvent.view) {
+            const mouseup = select(sourceEvent.view).on('mouseup.zoom');
+            if (typeof mouseup === 'function') {
+              this.activeZoomMouseGesture = {
+                view: sourceEvent.view,
+                mouseup,
+                sourceEvent,
+              };
+            }
+          }
+        })
         .on('zoom', (event: any) => {
           if (
             !this.props.draggable &&
@@ -194,6 +222,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
               x: event.transform.x,
               y: event.transform.y,
             };
+          }
+        })
+        .on('end.cleanup', (event: any) => {
+          if (event.sourceEvent?.type === 'mouseup') {
+            this.activeZoomMouseGesture = null;
           }
         })
     );
@@ -339,6 +372,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       const formattedChildren = clone(childrenData).map((node: RawNodeDatum) =>
         Tree.assignInternalProperties([node], depth + 1)
       );
+      targetNodeDatum.children = targetNodeDatum.children || [];
       targetNodeDatum.children.push(...formattedChildren.flat());
 
       this.setState({ data });
@@ -481,7 +515,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       this.setInitialTreeDepth(nodes, initialDepth);
     }
 
-    if (depthFactor) {
+    if (depthFactor !== undefined) {
       nodes.forEach(node => {
         node.y = node.depth * depthFactor;
       });
