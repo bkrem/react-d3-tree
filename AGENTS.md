@@ -4,7 +4,7 @@ This file provides guidance to AI coding agents working with this repository.
 
 ## Repository purpose
 
-`react-d3-tree` is a React component that renders hierarchical data (org charts, family trees, file directories) as an interactive SVG tree graph, built on D3's `tree` layout from `d3-hierarchy`. It ships to npm as a library consumed by other React apps. The `demo/` directory holds a Create React App playground deployed to GitHub Pages.
+`react-d3-tree` is a React component that renders hierarchical data (org charts, family trees, file directories) as an interactive SVG tree graph, built on D3's `tree` layout from `d3-hierarchy`. It ships to npm as a library consumed by other React apps. The `demo/` directory holds the playground, a Vite app in the pnpm workspace that consumes the library through `workspace:*` and deploys to GitHub Pages through the `Pages` workflow.
 
 ## Backwards compatibility
 
@@ -37,7 +37,8 @@ The build emits four artifacts under `lib/`: CommonJS (`lib/cjs`), ES modules (`
 
 ## Tech stack
 
-- pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.2 or later, or 24.15 or later: the highest `engines.node` floor among the dev dependencies (`jsdom`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a separate npm project.
+- pnpm 12 as the package manager, pinned through `packageManager` in `package.json`. Development needs Node 22.22.2 or later, or 24.15 or later: the highest `engines.node` floor among the dev dependencies (`jsdom`). pnpm doesn't enforce engine ranges by default, so an older Node installs with no error but runs tooling outside its supported range. When a dev dependency raises its floor, update this line and the README. The `demo/` app is a workspace package (`pnpm-workspace.yaml`), so one lockfile covers both and `pnpm install` at the root installs it.
+- Demo (`demo/`): Vite 8 with `@vitejs/plugin-react`, React 19, TypeScript, plain CSS with custom properties, fonts self-hosted from `@fontsource-variable` packages. It depends on `react-d3-tree` through `workspace:*`, so it imports the repo's own `lib/` and needs a `pnpm build` first. `vite.config.ts` sets `base` to `/react-d3-tree/`, injects the library version as `__RD3T_VERSION__`, and dedupes `react` and `react-dom`, because the workspace link would otherwise resolve them from the root's React 16 dev dependency. `demo/tsconfig.json` maps `react` and `react-dom` to the demo's `@types` for the same reason.
 - TypeScript 5.9 (source), compiled with `tsc`. Keep the `~5.9` range: TypeScript 6 deprecates `target: es5` and TypeScript 7 removes it, and the CJS build must keep that target within v3.
 - React 16–19 (peer dependency). Dev and test dependencies pin React 16 for the enzyme adapter.
 - D3 modules: `d3-hierarchy`, `d3-selection`, `d3-shape`, `d3-zoom`.
@@ -76,11 +77,21 @@ pnpm test:smoke
 # Check package.json and the type entry points with publint and attw (needs a prior build)
 pnpm check:package
 
-# Lint src/, scripts/, and test/
+# Lint src/, scripts/, test/, and the demo
 pnpm lint
 
 # Generate API docs into demo/public/docs
 pnpm build:docs
+
+# Build the library, the docs, and the demo into demo/dist
+pnpm build:demo
+
+# Demo scripts (each needs a prior `pnpm build`)
+pnpm --filter rd3t-demo dev        # Vite dev server
+pnpm --filter rd3t-demo build      # production build into demo/dist
+pnpm --filter rd3t-demo preview    # serve demo/dist locally
+pnpm --filter rd3t-demo typecheck  # tsc --noEmit
+pnpm --filter rd3t-demo test       # Vitest for the demo's pure modules
 ```
 
 `pnpm fmt` formats the repo with oxfmt and `pnpm fmt:check` reports unformatted files; CI runs the check.
@@ -101,42 +112,43 @@ pnpm links only declared dependencies into `node_modules`. Declare every importe
 - Vite parses JSX by file extension, so a test that contains JSX takes the `.test.jsx` extension; a test without JSX keeps `.test.js`. Both tsconfigs and `typedoc.json` exclude `*.test.jsx`; without that, `allowJs` would compile a test into `lib/`.
 - Two test placements coexist: a `tests/` subfolder (for example `src/Tree/tests/index.test.jsx`) and colocated tests (`src/Node/index.test.jsx`). Shared fixtures live in `src/Tree/tests/mockData.js`.
 - `pnpm test` runs with `--coverage` (v8) and enforces thresholds: statements 90, branches 84, functions 90, lines 88. Coverage counts library source only (`src/**/*.{ts,tsx}` minus tests and fixtures). Additions that drop coverage below these thresholds fail the run, so add tests alongside new code. Vitest fails the run on an uncaught exception during a test, so a jsdom gap shows up as an error, not as a silently passing test.
+- The demo has its own Vitest config (the `test` block in `demo/vite.config.ts`) for its pure modules: the state reducer, the URL and JSX codecs, and the dataset parser. Those tests are `.test.ts` files next to the modules and run with `pnpm --filter rd3t-demo test` in the `node` environment. No coverage thresholds apply to the demo.
 - Tests import `src/` and never load `lib/`. `pnpm test:smoke` (`scripts/smoke-test.js`) covers the published package: it packs the build with npm, the way the publish workflow does, installs the tarball plus React into a temporary npm project, and renders a tree through both `exports` entry points with the consumers in `scripts/smoke/`. On Node versions that can't `require()` ES modules, it skips the `require()` check, because the d3 dependencies are ESM-only. It also asserts that the tarball holds only `lib/`, `package.json`, `README.md`, and `LICENSE`.
 - `pnpm check:package` (`scripts/check-package.js`) runs publint and attw (Are the types wrong?) against the build. Every finding fails CI. To accept one deliberately, add it to the script's allowlist pinned to its location, with the reason; the same finding at another location still fails.
 
 ## Code style and conventions
 
 - In-repo imports use explicit `.js` extensions even from `.ts`/`.tsx` files (for example `import Node from '../Node/index.js'`). This keeps the emitted ESM valid. `tsc` resolves a `./x.js` import to `./x.ts` or `./x.tsx` without extra config, and Vite does the same during testing. Don't add `baseUrl` or a `paths` mapping to the tsconfigs: under pnpm's symlinked `node_modules` they make `tsc` emit a broken `import("node_modules/@types/…")` specifier into `lib/types`. Keep the `.js` extension on every relative import; omitting it produces ESM output whose imports fail to resolve at runtime in native ESM consumers.
-- oxfmt settings (`.oxfmtrc.json`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`. Markdown, `package.json`, `pnpm-lock.yaml`, `demo/`, and build output are excluded. The reformat commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to hide it from `git blame`.
-- oxlint (`.oxlintrc.json`) lints `src/`, `scripts/`, and `test/`, TypeScript included. The `correctness` category is an error; the `react`, `jsx-a11y`, `import`, `typescript`, and `vitest` plugins are on. `pnpm lint` runs in CI and must exit 0; warnings are allowed. Don't change library behavior to satisfy a lint rule: downgrade or disable the rule instead. The React class-component rules (`no-did-mount-set-state`, `no-did-update-set-state`, `no-direct-mutation-state`) are warnings because `Tree` and `Node` use those patterns.
+- oxfmt settings (`.oxfmtrc.json`): 100-character line width, single quotes, ES5 trailing commas, two-space indent, `arrowParens: avoid`. Markdown, `package.json`, `pnpm-lock.yaml`, `demo/dist`, `demo/public`, the demo's JSON fixtures under `demo/src/data`, and build output are excluded. The reformat commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to hide it from `git blame`.
+- oxlint (`.oxlintrc.json`) lints `src/`, `scripts/`, `test/`, `demo/src/`, and `demo/vite.config.ts`, TypeScript included. The `correctness` category is an error; the `react`, `jsx-a11y`, `import`, `typescript`, and `vitest` plugins are on. `pnpm lint` runs in CI and must exit 0; warnings are allowed. Don't change library behavior to satisfy a lint rule: downgrade or disable the rule instead. The React class-component rules (`no-did-mount-set-state`, `no-did-update-set-state`, `no-direct-mutation-state`) are warnings because `Tree` and `Node` use those patterns.
 - oxlint reads ignore files from parent directories. In a worktree nested inside a checkout that still has an `.eslintignore` with `*.ts`, a directory walk skips every TypeScript file; pass `--ignore-path <empty file>` or name the files explicitly to lint them.
 - Source is TypeScript; keep new components and modules in `.ts`/`.tsx` and write their tests as `.js` or `.test.jsx` (see Testing).
-- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxlint, oxfmt, and `vitest related --run` on staged files under `src/`, oxlint and oxfmt on staged files under `scripts/` and `test/`, and oxfmt on staged JSON and YAML files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
+- The pre-commit hook (`.husky/pre-commit`, configured in `.lintstagedrc.json`) runs oxlint, oxfmt, and `vitest related --run` on staged files under `src/`, oxlint and oxfmt on staged files under `scripts/`, `test/`, and the demo's TypeScript, and oxfmt on staged JSON and YAML files. The `prepare` script runs `husky`, which points git's `core.hooksPath` at `.husky/_`. That setting is per repository, so it applies to every worktree of the clone. `npm pack` also runs `prepare`; set `HUSKY=0` to stop husky from changing the git config.
 
 ## Development workflow
 
-To develop the library against the demo playground, symlink the local build into the demo (the demo otherwise depends on the published package):
+The demo imports the library from `lib/` through the workspace link, so no `npm link` step is needed:
 
 ```bash
 # In the repo root
 pnpm install
-npm link
-
-# In demo/ (an npm project)
-cd demo
-npm i
-npm link react-d3-tree
+pnpm build
+pnpm --filter rd3t-demo dev
 ```
 
-For hot reloading, run `pnpm build:watch` in the repo root and `npm start` in `demo/` in a second terminal. To develop against your own app instead of the demo, run `npm link react-d3-tree` in that app's root.
+For hot reloading, run `pnpm build:watch` in the repo root in a second terminal. It emits the ES module output only; run `pnpm build` again before a demo type-check, because the `exports` map resolves the demo's types from `lib/types`. To develop against your own app instead of the demo, run `npm link` in the repo root and `npm link react-d3-tree` in that app's root.
 
-CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, and `pnpm test:smoke`. Match that sequence locally before pushing.
+The demo's state lives in `demo/src/state/playground.ts`, with defaults taken from `Tree.defaultProps`. Props that differ from the defaults sync to the query string (`demo/src/state/url.ts`) and appear in the copyable `<Tree />` snippet (`demo/src/state/jsx.ts`). When a `Tree` prop is added to the library, add it to the state, the inspector, and both codecs.
+
+CI (`.github/workflows/build.yml`) runs on every push and pull request against Node 22 and 24 with `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm fmt:check`, `pnpm build`, `pnpm check:package`, `pnpm test`, `pnpm test:smoke`, and then the demo's `typecheck`, `test`, and `build`. Match that sequence locally before pushing.
 
 Feature work lands through pull requests against `master`.
 
 ## Releases
 
 Publishing a GitHub release runs `.github/workflows/publish.yml`, which stages the version on npm through trusted publishing (OIDC, no token). The maintainer approves the staged version with 2FA before it goes live. To cut, verify, or follow up on a release, follow `.agents/skills/npm-release/SKILL.md`.
+
+The demo deploys separately and only on request: `.github/workflows/pages.yml` (`workflow_dispatch`) builds the library, the docs, and the demo from the dispatched ref and deploys `demo/dist` to GitHub Pages. The repository's Pages source must be set to "GitHub Actions" for the deploy job to succeed.
 
 ## Agent skills
 

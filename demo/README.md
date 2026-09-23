@@ -1,68 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# react-d3-tree playground
 
-## Available Scripts
+The interactive demo at https://bkrem.github.io/react-d3-tree/. A Vite app in TypeScript that
+renders `react-d3-tree` from this repository's `lib/` through the pnpm workspace link.
 
-In the project directory, you can run:
+## Develop
 
-### `yarn start`
+From the repository root:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+pnpm install
+pnpm build          # emits lib/, which the demo imports
+pnpm --filter rd3t-demo dev
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+To pick up library changes as you make them, run `pnpm build:watch` in a second terminal. It
+rebuilds the ES module output only; run `pnpm build` again before a type-check, because the
+`exports` map resolves the demo's types from `lib/types`.
 
-### `yarn test`
+## Scripts
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+pnpm --filter rd3t-demo dev        # Vite dev server
+pnpm --filter rd3t-demo build      # production build into demo/dist
+pnpm --filter rd3t-demo preview    # serve demo/dist locally
+pnpm --filter rd3t-demo typecheck  # tsc --noEmit
+pnpm --filter rd3t-demo test       # Vitest, pure modules only
+```
 
-### `yarn build`
+The API docs that the top bar links to are TypeDoc output. `pnpm build:docs` at the repository
+root writes them to `demo/public/docs`, which Vite copies into `demo/dist/docs`.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Structure
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- `src/state/playground.ts` holds the inspector state, its defaults (taken from
+  `Tree.defaultProps`), and the reducer.
+- `src/state/url.ts` reads and writes the props that differ from the defaults as query
+  parameters, so a configuration can be linked.
+- `src/state/jsx.ts` renders the `<Tree />` snippet the code drawer shows.
+- `src/data/` holds the datasets and the parser for pasted JSON.
+- `src/nodes/renderers.tsx` holds the custom node renderers offered under Rendering.
+- `src/components/` holds the layout: top bar, tree canvas, code drawer, inspector.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deploy
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+The `Pages` workflow (`.github/workflows/pages.yml`) builds the library, the docs, and the demo,
+and deploys `demo/dist` to GitHub Pages. Run it from the Actions tab or with
+`gh workflow run pages.yml`.

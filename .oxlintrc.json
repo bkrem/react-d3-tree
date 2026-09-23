@@ -27,5 +27,5 @@
       }
     }
   ],
-  "ignorePatterns": ["lib", "coverage", "demo", "node_modules"]
+  "ignorePatterns": ["lib", "coverage", "demo/dist", "demo/public", "node_modules"]
 }

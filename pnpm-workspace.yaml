@@ -9,3 +9,7 @@ allowBuilds:
 # See https://github.com/inikulin/parse5/issues/1260
 overrides:
   cheerio: 1.0.0-rc.12
+
+# Workspace packages. The demo depends on the library through `workspace:*`.
+packages:
+  - demo

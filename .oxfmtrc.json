@@ -7,5 +7,14 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "sortPackageJson": false,
-  "ignorePatterns": ["package.json", "pnpm-lock.yaml", "*.md", "demo", "lib", "coverage"]
+  "ignorePatterns": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "*.md",
+    "demo/dist",
+    "demo/public",
+    "demo/src/data/*.json",
+    "lib",
+    "coverage"
+  ]
 }

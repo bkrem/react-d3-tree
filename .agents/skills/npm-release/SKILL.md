@@ -23,7 +23,7 @@ Three parts of the setup live outside this repo, on npmjs.com:
 
 - "Cut a release", "publish 3.7.0", "ship a release candidate".
 - "Verify the staged package", "is the staged version safe to approve?"
-- "Update the demo to the new version."
+- "Deploy the demo for the new version."
 
 ## When not to use
 
@@ -40,7 +40,7 @@ Three parts of the setup live outside this repo, on npmjs.com:
 ## Decision points
 
 - **Stable or prerelease?** A prerelease needs an identifier made of lowercase letters, digits, and hyphens, starting with a letter: `3.7.0-rc.0`, `3.7.0-next.1`. The identifier becomes the dist-tag. `3.7.0-0` and `3.7.0-RC.1` fail the workflow. Stable versions publish under `latest`.
-- **Deploy the demo?** Only when asked. The demo consumes the published package, so deploy after approval.
+- **Deploy the demo?** Only when asked. The demo builds from the repository source at the dispatched ref, so deploy from `master` once the release commit is there and the version is approved.
 
 ## Default workflow
 
@@ -54,7 +54,7 @@ Full commands and expected output are in [WORKFLOWS.md](./WORKFLOWS.md). Run eve
 6. **Verify the staged tarball.** Run `.agents/skills/npm-release/scripts/reproduce-shasum.sh` on the tag. The shasum must equal the one in the run log. Run `.agents/skills/npm-release/scripts/compare-tarballs.sh` against the previous version and explain every difference from the merged changes.
 7. **Hand over for approval.** Give the maintainer the stage id, the shasum to match on the **Staged Packages** tab, and the approve command. Stop until they confirm.
 8. **Verify the published version.** Run `.agents/skills/npm-release/scripts/verify-published.sh <version> <dist-tag>`. On a Node version that can't `require()` ES modules, the script skips the `require()` check, as `pnpm test:smoke` does.
-9. **Optional: deploy the demo.** Pin the demo to the exact version, build the docs and the demo, verify the build, commit, deploy, and check the live site.
+9. **Optional: deploy the demo.** Build the docs and the demo locally, verify the build, dispatch the `Pages` workflow on `master`, and check the live site.
 
 ## Validation checklist
 

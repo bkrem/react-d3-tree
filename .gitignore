@@ -36,7 +36,7 @@ stats.json
 # Build outputs
 dist
 lib
-demo/build
+demo/dist
 demo/public/docs
 
 # macOS metadata
