@@ -1,6 +1,6 @@
 {
   "name": "react-d3-tree",
-  "version": "3.7.0-rc.1",
+  "version": "4.0.0-next.0",
   "description": "React component to create interactive D3 tree hierarchies",
   "author": "Ben Kremer",
   "license": "MIT",
