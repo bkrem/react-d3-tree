@@ -468,9 +468,10 @@ Ordered by the demand on the issue tracker and by what each item needs from the 
    with a CSS `transition` on `transform` (styles set through `style`, not the attribute; check
    Safari on `<g>` elements). Second, animate enter and exit: keep the previous layout in a ref,
    render leaving nodes from a short-lived list until their transition ends, and start entering
-   nodes at their parent's position. Measure every step against `demo/src/examples/hugeTree.js`
-   (1,871 nodes) with a benchmark page in the demo before choosing between CSS transitions and
-   `d3-transition` on refs. Interruptions (toggle during a transition) must not lock the tree the
+   nodes at their parent's position. Measure every step with a benchmark page in the demo before
+   choosing between CSS transitions and `d3-transition` on refs. The page needs a large dataset
+   of its own: the Vite demo's largest is the React repository at 863 nodes, and the rebuild
+   deleted the 1,871-node `hugeTree.js` (still in git history before `1b65329`). Interruptions (toggle during a transition) must not lock the tree the
    way `isTransitioning` does in v3.
 2. **Large-tree rendering (4.x).** Only run the layout for expanded nodes (already true), then
    virtualise: skip rendering nodes outside the viewport using the current transform and the
@@ -721,8 +722,13 @@ Peer dependencies: `react` and `react-dom` at `^18.0.0 || ^19.0.0`.
 - **Animations on SVG `<g>` through CSS.** Browser support for `transition: transform` on SVG
   elements is broad but Safari has had quirks. The 4.1 benchmark page settles CSS versus
   `d3-transition` with measurements, not assumptions.
-- **`ResizeObserver` timing.** The first measurement arrives after mount; `centerNode` called
-  before then must either queue or use the last known size. Decide in PR 5.4.
+- **Handle calls before the tree's effects run.** Settled in PR 5.4: the tree measures its
+  container in a mount effect and centers from the last measured size. The zoom behaviour binds
+  in a later mount effect, so any call that reaches it sees a measured container, but until it
+  binds `centerNode` and `setTransform` do nothing. A caller's `useEffect` runs after the
+  tree's, so a call from there centers as expected. A call from a caller's `useLayoutEffect` on
+  the first commit is silently ignored (checked with a throwaway test on 2026-09-27). Open:
+  document this on `TreeHandle`, or queue the call until the behaviour binds.
 - **Coverage thresholds during the rewrite.** Each PR must hold the thresholds on its own, so
   large PRs that delete tested code (4.2) must add the replacement tests in the same PR.
 
