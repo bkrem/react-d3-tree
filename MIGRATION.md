@@ -10,9 +10,9 @@ in `scripts/smoke/`.
 
 - React 18 or 19. React 16 and 17 stay on v3.
 - The package is ESM only.
-  - `import Tree from 'react-d3-tree'` works in every bundler and in Node.
-  - `require('react-d3-tree')` works on Node 22.12 or later, which loads ES modules through
-    `require()`. `scripts/smoke/consumer-require.cjs` proves it in CI.
+  - `import Tree from 'react-d3-tree'` works in every bundler and in Node 14 or later.
+  - `require('react-d3-tree')` works on Node 20.19 or later, or 22.12 or later, which load ES
+    modules through `require()`. `scripts/smoke/consumer-require.cjs` proves it in CI.
   - A TypeScript file compiled as CommonJS needs `module: "nodenext"` (TypeScript 5.8 or later);
     `node16` rejects an ES module from a CommonJS file.
   - Jest loads the package in ESM mode: `node --experimental-vm-modules node_modules/jest/bin/jest.js`,

@@ -58,9 +58,9 @@ React D3 Tree is a [React](https://react.dev/) component that lets you represent
 npm i --save react-d3-tree
 ```
 
-The package needs React 18 or 19 and ships as ES modules only. `import` works everywhere;
-`require()` works on Node 22.12 or later. For Jest and TypeScript CommonJS setups, see the
-[migration guide](https://github.com/bkrem/react-d3-tree/blob/master/MIGRATION.md#requirements).
+The package needs React 18 or 19 and ships as ES modules only. `import` works in every bundler
+and in Node 14 or later; `require()` works on Node 20.19 or later, or 22.12 or later. For Jest
+and TypeScript CommonJS setups, see the [migration guide](https://github.com/bkrem/react-d3-tree/blob/master/MIGRATION.md#requirements).
 
 ## Usage
 ```jsx

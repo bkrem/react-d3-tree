@@ -41,9 +41,6 @@
     "build:demo": "pnpm run build && pnpm run build:docs && pnpm --filter rd3t-demo build"
   },
   "packageManager": "pnpm@12.4.2",
-  "engines": {
-    "node": "^22.22.2 || >=24.15.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/bkrem/react-d3-tree.git"

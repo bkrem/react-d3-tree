@@ -62,6 +62,7 @@ v4 is the next major line of the library. It has five goals:
 | Compile settings | `target: ES2020`, `module: NodeNext`, `jsx: react-jsx`, `strict: true`. One `tsconfig.json` for the library build; `tsconfig.test.json` and `tsconfig.scripts.json` extend it with `noEmit`. | Decided (Phases 2.1, 2.4, 4.3) |
 | TypeScript version | `~6.0` from Phase 2.3 on, pinned by TypeDoc 0.28's peer range; TypeScript 7 when TypeDoc supports it. | Decided |
 | Entry points | Keep both `export default Tree` and `export { Tree }`. | Decided (unchanged through Phase 5) |
+| Node floor | No `engines` field, as in v3. The package itself needs Node 14 or later for `import` in Node and Node 20.19 or later, or 22.12 or later, for `require()`; bundled apps don't depend on the consumer's Node at all (see the consumer matrix). `engines` ships to consumers, so the development floor (22.22.2 or 24.15) stays in `.nvmrc`, `AGENTS.md`, and the README. | Decided (2026-09-27, before 4.0.0-next.0) |
 | Prereleases | `4.0.0-next.N` on the `next` dist-tag. `publish.yml` already derives the tag from the version. | Proposed |
 | Branching | Integration branch `feat/v4`, cut from `master` at `905437b` on 2026-09-23. Work lands on it in PR-sized commits, one per row of the phase tables, so any row can be split into its own PR on request. One final PR takes it to `master` at 4.0.0, after the `v3` branch is cut. | Decided |
 
@@ -663,7 +664,9 @@ Each row says what a consumer setup gets today and after v4, and where the evide
 | --- | --- | --- | --- |
 | ESM app through a bundler (Vite, webpack 5, Next.js) | Works | Works | The workspace demo type-checks and builds with Vite 8 against the v4 `lib/` (`pnpm --filter rd3t-demo build`, 2026-09-23), and CI runs that build on every push. webpack and Next.js are unverified. |
 | `require()` on Node 22 or 24 | Works, through `require(esm)` of the d3 packages | Works, through `require(esm)` of the package itself | `consumer-require.cjs` passes against the ESM-only build on Node 22.13.1 in this worktree (2026-09-23); CI runs 22 and 24. |
-| `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | Unverified: based on the d3 packages shipping `"type": "module"` only and on the smoke test's own skip logic. No such Node version was run here. |
+| `require()` on Node 20.19 | Works, through `require(esm)` of the d3 packages | Works | `consumer-require.cjs` passes against the packed package on Node 20.19.0 (2026-09-27). The v3 column is unverified. |
+| `require()` on a Node version without `require(esm)` | Fails on `require("d3-selection")` | Fails on the package itself | `consumer-require.cjs` fails with `ERR_REQUIRE_ESM` against the packed package on Node 14.20 through 20.18.3 (2026-09-27). The v3 column is unverified: based on the d3 packages shipping `"type": "module"` only. |
+| `import` in Node 14 to 20 | Works | Works | `consumer-import.mjs` renders against the packed package with React 18.3.1 on Node 14.20, 16.19, 18.20, 20.10, and 20.19 (2026-09-27). Node 12.22 fails on the ES2020 `?.` syntax. The v3 column is unverified. |
 | Jest, ESM mode (`node --experimental-vm-modules jest`) | Works | Works | The smoke test's Jest 30 consumer passes against the packed package (2026-09-23). |
 | Jest with the default CommonJS transform | Needs `transformIgnorePatterns` for the d3 packages | Needs it for `react-d3-tree` too | Unverified: not exercised. The migration guide points at ESM mode. |
 | Server rendering (Next.js, Remix) | Renders, but every node and link is at opacity 0 and at its parent's position until the client mounts; ids differ between server and client | Renders the final layout with deterministic ids | `src/Tree/tests/server.test.tsx` (Phase 4, commit 3) asserts that `renderToString` output equals the mounted markup for three prop sets. Not run inside a Next.js or Remix app. |
@@ -704,9 +707,10 @@ Peer dependencies: `react` and `react-dom` at `^18.0.0 || ^19.0.0`.
 - **Node below 22.18 on a developer machine.** Once the scripts are `.ts`, `pnpm build`,
   `pnpm check:package`, and `pnpm test:smoke` fail with a syntax error on any Node before
   22.18.0. This machine's `PATH` Node is 22.13.1, below the repo's documented floor already,
-  while 24.16.0 is installed under nvm. The `.nvmrc` and `engines` range from PR 2.5 turn that
-  into a clear message. Unverified: whether pnpm 12 can be told to enforce `engines` at install
-  time; check its `engineStrict` setting in that PR.
+  while 24.16.0 is installed under nvm. PR 2.5 put the development floor in `.nvmrc` and in
+  `engines.node`, but `engines` ships in the tarball and would have applied it to consumers,
+  so it was removed before 4.0.0-next.0 (see Decisions). The development floor lives in
+  `.nvmrc` and the docs only; nothing enforces it at install time.
 - **TypeScript 7.** Not tried: TypeDoc 0.28.20 declares a peer range of 5.0.x to 6.0.x. Revisit
   when TypeDoc adds 7.
 - **`sideEffects: false` and the bare `import 'd3-transition'`.** The package declares itself

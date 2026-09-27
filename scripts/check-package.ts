@@ -25,9 +25,10 @@ type AttwProblem = {
 const knownPublint = new Set<string>([]);
 // Entries look like 'FallbackCondition at . (node16-cjs)' or 'FalseESM at <types file>'.
 const knownAttw = new Set<string>([
-  // The package is ESM-only, so a CommonJS `require()` resolves to an ES module. Node 22.12 and
-  // later load it through `require(esm)`, which the smoke test's CommonJS consumer proves. attw's
-  // `esm-only` profile ignores this finding in its table but still lists it in the JSON.
+  // The package is ESM-only, so a CommonJS `require()` resolves to an ES module. Node 20.19 or
+  // later, and 22.12 or later, load it through `require(esm)`, which the smoke test's CommonJS
+  // consumer proves. attw's `esm-only` profile ignores this finding in its table but still lists
+  // it in the JSON.
   'CJSResolvesToESM at . (node16-cjs)',
 ]);
 
