@@ -48,7 +48,9 @@ echo; echo "=== 3. Fresh install by dist-tag ==="
 mkdir -p "$work/consumer"
 cd "$work/consumer"
 npm init -y > /dev/null 2>&1
-npm install "$name@$dist_tag" react react-dom --silent --no-fund > /dev/null 2>&1
+# Revalidate cached packuments: a dist-tag moves at approval, and a packument cached before it
+# still resolves the tag to the previous version.
+npm install "$name@$dist_tag" react react-dom --prefer-online --silent --no-fund > /dev/null 2>&1
 installed="$(node -p "require('./node_modules/$name/package.json').version")"
 if [ "$installed" = "$version" ]; then echo "ok    $name@$dist_tag installs $installed"; else echo "FAIL  $name@$dist_tag installs $installed, expected $version"; exit 1; fi
 # The d3 dependencies are ESM-only, so `require()` needs a Node version that can load ES modules.
