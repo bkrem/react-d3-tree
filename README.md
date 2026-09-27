@@ -1,7 +1,7 @@
 <h1 align="center">React D3 Tree</h1>
 
 <p align="center">
-  <a href="#buildstatus">
+  <a href="https://github.com/bkrem/react-d3-tree/actions/workflows/build.yml">
     <img alt="build status" src="https://github.com/bkrem/react-d3-tree/workflows/Build/badge.svg">
   </a>
   <a href="https://www.npmjs.com/package/react-d3-tree">
