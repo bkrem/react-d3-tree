@@ -12,29 +12,39 @@ import {
 } from '../types/common.js';
 
 /**
- * Receives the tree's own layout node, not a copy: read it, don't change it. After the next
- * layout its coordinates are stale.
+ * Handler for node events. Receives the node and the event.
+ *
+ * The node is the tree's own layout node, not a copy: read it, don't change it. Its coordinates
+ * are stale after the next layout, so copy what you keep.
  */
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
 ) => void;
 
-/** Receives the tree's own layout nodes for both ends of the link, not copies. */
+/**
+ * Handler for link events. Receives the link's source node, target node, and the event.
+ *
+ * Both nodes are the tree's own layout nodes, not copies.
+ */
 export type TreeLinkEventCallback = (
   sourceNode: HierarchyPointNode<TreeNodeDatum>,
   targetNode: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
 ) => void;
 
-/** One node's collapse or expansion, as reported by `onCollapsedChange`. */
+/**
+ * One node's collapse or expansion, as `onCollapsedChange` reports it.
+ */
 export type CollapsedChange = { id: string; collapsed: boolean };
 
-/** The zoom transform: a translation in pixels and a scale factor. */
+/**
+ * The zoom transform: `x` and `y` translate the tree in pixels, and `k` is the zoom level.
+ */
 export type TreeTransform = { x: number; y: number; k: number };
 
 /**
- * The methods a `ref` on `Tree` exposes.
+ * The methods that a `ref` on `Tree` exposes.
  *
  * ```tsx
  * const tree = useRef<TreeHandle>(null);
@@ -44,227 +54,218 @@ export type TreeTransform = { x: number; y: number; k: number };
  */
 export interface TreeHandle {
   /**
-   * Centers the node with `id` in the container, using the container size the tree measured.
-   * Animates over `options.duration` milliseconds, or `centeringTransitionDuration` by default;
-   * a duration of 0 applies the transform at once.
+   * Moves the node with `id` to the center of the tree's container. The move takes
+   * `options.duration` milliseconds, or {@link TreeProps.centeringTransitionDuration} if unset;
+   * `0` moves it at once.
    */
   centerNode(id: string, options?: { duration?: number }): void;
-  /** Collapses or expands the node with `id`. Works even when `collapsible` is false. */
+  /**
+   * Expands or collapses the node with `id`, even if {@link TreeProps.collapsible} is `false`.
+   */
   toggleNode(id: string): void;
-  /** Expands every node. */
+  /**
+   * Expands every node.
+   */
   expandAll(): void;
-  /** Collapses every node, so only the root is visible. */
+  /**
+   * Collapses every node, so that only the root node shows.
+   */
   collapseAll(): void;
-  /** Collapses every node at `depth` or deeper and expands the rest. */
+  /**
+   * Collapses every node at `depth` or deeper and expands the rest. The root node has depth `0`.
+   */
   expandToDepth(depth: number): void;
   /**
-   * Sets the zoom transform. Animates over `options.duration` milliseconds; without a duration
-   * the transform applies at once. The change reports through the same callbacks as a user
-   * zoom.
+   * Sets the zoom transform. The change takes `options.duration` milliseconds, or applies at
+   * once if unset. {@link TreeProps.onTransformChange} reports it like a user zoom.
    */
   setTransform(transform: TreeTransform, options?: { duration?: number }): void;
-  /** The current zoom transform. */
+  /**
+   * Returns the current zoom transform.
+   */
   getTransform(): TreeTransform;
 }
 
 /**
- * Props accepted by the `Tree` component. Only `data` is required.
+ * Props accepted by the `Tree` component. `data` is the only required prop.
  */
 export interface TreeProps {
   /**
-   * The root node object, in which child nodes (also of type `RawNodeDatum`)
-   * are recursively defined in the `children` key.
+   * The root node. Each node lists its child nodes in `children`.
    *
-   * Every node's `<g>` carries its id in a `data-id` attribute, and every link's `<path>`
-   * carries the ids of its endpoints in `data-source-id` and `data-target-id`. A node without
-   * an `id` gets its path in the tree.
+   * `Tree` gives each node element a `data-id` attribute that holds the node's id, and each link
+   * `data-source-id` and `data-target-id` attributes. A node without an `id` gets its path in the
+   * tree.
    */
   data: RawNodeDatum;
 
   /**
-   * Custom render function that will be used for every node in the tree.
-   *
-   * The function is passed `CustomNodeElementProps` as its first argument.
-   * `react-d3-tree` expects the function to return a `ReactElement`.
-   *
-   * See the `RenderCustomNodeElementFn` type for more details. Without it, every node renders
-   * as a circle with the node's name and attributes as labels.
+   * Renders each node in place of the default node. `Tree` calls it with
+   * `CustomNodeElementProps` and renders the returned SVG element. The default node is a circle
+   * with the node's name and attributes as labels.
    */
   renderCustomNodeElement?: RenderCustomNodeElementFn;
 
   /**
-   * Called when a node is clicked.
+   * Called with the node and the event when a node is clicked. The default node calls it on a
+   * click on its circle.
    */
   onNodeClick?: TreeNodeEventCallback;
 
   /**
-   * Called when mouse enters the space belonging to a node.
+   * Called with the node and the event when the pointer moves onto a node.
    */
   onNodeMouseOver?: TreeNodeEventCallback;
 
   /**
-   * Called when mouse leaves the space belonging to a node.
+   * Called with the node and the event when the pointer leaves a node.
    */
   onNodeMouseOut?: TreeNodeEventCallback;
 
   /**
-   * Called when a link is clicked.
+   * Called with the link's source node, target node, and the event when a link is clicked.
    */
   onLinkClick?: TreeLinkEventCallback;
 
   /**
-   * Called when mouse enters the space belonging to a link.
+   * Called with the link's source node, target node, and the event when the pointer moves onto
+   * a link.
    */
   onLinkMouseOver?: TreeLinkEventCallback;
 
   /**
-   * Called when mouse leaves the space belonging to a link.
+   * Called with the link's source node, target node, and the event when the pointer leaves a
+   * link.
    */
   onLinkMouseOut?: TreeLinkEventCallback;
 
   /**
-   * Called with the new zoom transform on every zoom or pan tick and after every programmatic
-   * transform (`centerNode`, `setTransform`, centering on click). Nothing fires on mount;
-   * `getTransform` on the ref handle reads the current transform.
+   * Called with the new zoom transform on each zoom or pan, and after each transform set through
+   * the ref handle or by centering a clicked node. It isn't called on the first render or when
+   * the `translate` and `zoom` props change; to read the transform at any time, call
+   * `getTransform` on the ref handle.
    */
   onTransformChange?: (transform: TreeTransform) => void;
 
   /**
-   * Determines along which axis the tree is oriented.
+   * The direction in which the tree grows: `horizontal` grows left to right, `vertical` grows
+   * top to bottom. To reverse the direction, pass a negative {@link TreeProps.depthFactor}.
    *
-   * `horizontal` - Tree expands along x-axis (left-to-right).
-   *
-   * `vertical` - Tree expands along y-axis (top-to-bottom).
-   *
-   * Additionally, passing a negative value to {@link TreeProps.depthFactor | depthFactor} will
-   * invert the tree's direction (i.e. right-to-left, bottom-to-top).
-   *
-   * @default 'horizontal'
+   * @defaultValue `'horizontal'`
    */
   orientation?: Orientation;
 
   /**
-   * Translates the graph along the x/y axis by the specified amount of pixels.
+   * Moves the tree along the x and y axes, in pixels. At `{ x: 0, y: 0 }`, the root node sits
+   * in the top-left corner of the SVG.
    *
-   * By default, the graph will render in the top-left corner of the SVG canvas.
-   *
-   * @default { x: 0, y: 0 }
+   * @defaultValue `{ x: 0, y: 0 }`
    */
   translate?: Point;
 
   /**
-   * Centers a node in the container when it is clicked. The tree measures its container
-   * itself, so nothing else is needed. Off by default. `centerNode` on the ref handle centers a
-   * node at any other time.
+   * Whether a clicked node moves to the center of the view. `Tree` measures its container, so no
+   * size is needed. To center a node at any other time, call `centerNode` on the ref handle.
    *
-   * @default false
+   * @defaultValue `false`
    */
   centerOnClick?: boolean;
 
   /**
-   * The duration (in milliseconds) of the animation that centers a node. 0 applies the change
-   * at once.
+   * The duration, in milliseconds, of the move that centers a node, on click or through
+   * `centerNode`. `0` moves it at once.
    *
-   * @default 800
+   * @defaultValue `800`
    */
   centeringTransitionDuration?: number;
 
   /**
-   * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
-   * `PathFunctionOption` or a user-defined `PathFunction`.
+   * How links are drawn: one of the `PathFunctionOption` values, or a `PathFunction` that returns
+   * the link's SVG path. For the path syntax, see
+   * {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d | the `d` attribute}.
    *
-   * See the `PathFunction` type for more information.
-   *
-   * For details on draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
-   *
-   * @default 'diagonal'
+   * @defaultValue `'diagonal'`
    */
   pathFunc?: PathFunctionOption | PathFunction;
 
   /**
-   * Allows for additional className(s) to be passed to links.
-   *
-   * Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
-   * Expects a `className` string to be returned.
-   *
-   * See the `PathClassFunction` type for more information.
+   * Returns extra class names for a link. `Tree` calls it for each link with the link's
+   * `TreeLinkDatum` and the tree's `orientation`.
    */
   pathClassFunc?: PathClassFunction;
 
   /**
-   * Determines the spacing between parent & child nodes.
-   *
-   * **Tip: Negative values invert the tree's direction.**
-   *
-   * `node.y = node.depth * depthFactor`
-   *
-   * Example: `depthFactor: 0` renders all nodes on the same height (since node.y === 0 for all).
-   *
-   * Without it, the depth spacing comes from `nodeSize`.
+   * The distance, in pixels, between depth levels: each node sits at `node.depth * depthFactor`
+   * along the depth axis. A negative value reverses the tree's direction; `0` puts every node on
+   * the same level. If unset, {@link TreeProps.nodeSize} sets the distance.
    */
   depthFactor?: number;
 
   /**
-   * Determines whether a click on a node collapses or expands it. `toggleNode` on the ref
-   * handle works regardless.
+   * Whether nodes expand and collapse when clicked. `toggleNode` on the ref handle works either
+   * way.
    *
-   * @default true
+   * @defaultValue `true`
    */
   collapsible?: boolean;
 
   /**
-   * The depth at and below which nodes start collapsed. Without it, the tree renders to full
-   * depth. The rule applies when the tree first sees a node: at mount, and for nodes that a
-   * `data` update introduces. Ignored when `collapsed` is set.
+   * Collapses every node at this depth or deeper. The root node has depth `0`. If unset, every
+   * node starts expanded.
+   *
+   * The rule applies when `Tree` first sees a node: on the first render, and for nodes that a
+   * `data` update adds. `Tree` ignores it while {@link TreeProps.collapsed} is set.
    */
   initialDepth?: number;
 
   /**
-   * The ids of the collapsed nodes, when the caller owns the collapse state. The tree renders
-   * exactly this set and reports every requested change through `onCollapsedChange` without
-   * changing anything itself. Only nodes with children collapse: a leaf's id in the set has no
-   * effect, and the tree never reports one.
+   * The ids of the collapsed nodes, if you manage the collapse state yourself. `Tree` renders
+   * exactly this set and reports each requested change through
+   * {@link TreeProps.onCollapsedChange} without changing anything itself. Only nodes with
+   * children collapse: a leaf node's id in the set has no effect, and `Tree` never reports one.
    *
-   * Without it, the tree owns the state: it seeds the state from `initialDepth`, keeps it
-   * across `data` updates for the ids that survive them, and applies the `initialDepth` rule to
-   * ids that are new. To reset it for a new dataset, remount the tree with a `key`.
+   * If unset, `Tree` manages the state: it starts from {@link TreeProps.initialDepth}, keeps
+   * the state across `data` updates for the nodes that remain, and applies `initialDepth` to
+   * nodes that are new. To reset the state for new `data`, remount `Tree` with a new `key`.
    */
   collapsed?: Iterable<string>;
 
   /**
-   * Called with the next collapsed set and the change that asked for it whenever a click asks
-   * for a toggle (or, with `shouldCollapseNeighborNodes`, for the neighbours to collapse as
-   * well). `change` is `null` for a wholesale change. In uncontrolled mode the tree applies the
-   * change itself as well.
+   * Called with the next set of collapsed ids and the change that caused it, each time nodes
+   * expand or collapse, from a click or through the ref handle. With
+   * {@link TreeProps.shouldCollapseNeighborNodes}, the set also holds the neighbors that
+   * collapse. `change` is `null` for `expandAll`, `collapseAll`, and `expandToDepth`, which
+   * change many nodes at once. If {@link TreeProps.collapsed} is unset, `Tree` also applies the
+   * change itself.
    */
   onCollapsedChange?: (collapsed: Set<string>, change: CollapsedChange | null) => void;
 
   /**
-   * Toggles ability to zoom in/out on the Tree by scaling it according to `scaleExtent`.
+   * Whether the user can zoom the tree, within {@link TreeProps.scaleExtent}.
    *
-   * @default true
+   * @defaultValue `true`
    */
   zoomable?: boolean;
 
   /**
-   * Toggles ability to drag the Tree.
+   * Whether the user can drag the tree to pan it.
    *
-   * @default true
+   * @defaultValue `true`
    */
   draggable?: boolean;
 
   /**
-   * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
+   * The starting zoom level, limited to {@link TreeProps.scaleExtent}.
    *
-   * @default 1
+   * @defaultValue `1`
    */
   zoom?: number;
 
   /**
-   * Sets the minimum/maximum extent to which the tree can be scaled if `zoomable` is true. A
-   * missing key takes its default.
+   * The smallest and largest zoom levels when {@link TreeProps.zoomable} is `true`. A missing key
+   * takes its default.
    *
-   * @default { min: 0.1, max: 1 }
+   * @defaultValue `{ min: 0.1, max: 1 }`
    */
   scaleExtent?: {
     min?: number;
@@ -272,9 +273,9 @@ export interface TreeProps {
   };
 
   /**
-   * The amount of space each node element occupies.
+   * The space, in pixels, that each node takes up: `x` horizontally, `y` vertically.
    *
-   * @default { x: 140, y: 140 }
+   * @defaultValue `{ x: 140, y: 140 }`
    */
   nodeSize?: {
     x: number;
@@ -282,10 +283,11 @@ export interface TreeProps {
   };
 
   /**
-   * Sets separation between neighboring nodes, differentiating between siblings (same parent node)
-   * and non-siblings. A missing key takes its default.
+   * The space between neighboring nodes, as a multiple of {@link TreeProps.nodeSize}: `siblings`
+   * for nodes with the same parent, `nonSiblings` for nodes with different parents. A missing
+   * key takes its default.
    *
-   * @default { siblings: 1, nonSiblings: 2 }
+   * @defaultValue `{ siblings: 1, nonSiblings: 2 }`
    */
   separation?: {
     siblings?: number;
@@ -293,48 +295,46 @@ export interface TreeProps {
   };
 
   /**
-   * If a node is currently being expanded, all other nodes at the same depth will be collapsed.
+   * Whether expanding a node collapses the other nodes at the same depth.
    *
-   * @default false
+   * @defaultValue `false`
    */
   shouldCollapseNeighborNodes?: boolean;
 
   /**
-   * Allows for additional className(s) to be passed to the `svg` element wrapping the tree.
+   * Extra class names for the tree's `svg` element, which always has the `rd3t-svg` class.
    *
-   * @default ''
+   * @defaultValue `''`
    */
   svgClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to the root node.
+   * Extra class names for the root node.
    *
-   * @default ''
+   * @defaultValue `''`
    */
   rootNodeClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to all branch nodes (nodes with children).
+   * Extra class names for nodes with children.
    *
-   * @default ''
+   * @defaultValue `''`
    */
   branchNodeClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to all leaf nodes (nodes without children,
-   * including an empty `children` array).
+   * Extra class names for nodes without children. An empty `children` array counts as no
+   * children.
    *
-   * @default ''
+   * @defaultValue `''`
    */
   leafNodeClassName?: string;
 
   /**
-   * Disables drag/pan/zoom D3 events when hovering over a node.
-   * Useful for cases where D3 events interfere when interacting with inputs or other interactive elements on a node.
+   * Limits dragging and zooming to the tree's background, so that inputs and other controls
+   * inside nodes work. To drag or zoom from anywhere, hold Shift.
    *
-   * **Tip:** Holding the `Shift` key while hovering over a node re-enables the D3 events.
-   *
-   * @default false
+   * @defaultValue `false`
    */
   hasInteractiveNodes?: boolean;
 }

@@ -62,7 +62,7 @@ v4 is the next major line of the library. It has five goals:
 | Compile settings | `target: ES2020`, `module: NodeNext`, `jsx: react-jsx`, `strict: true`. One `tsconfig.json` for the library build; `tsconfig.test.json` and `tsconfig.scripts.json` extend it with `noEmit`. | Decided (Phases 2.1, 2.4, 4.3) |
 | TypeScript version | `~6.0` from Phase 2.3 on, pinned by TypeDoc 0.28's peer range; TypeScript 7 when TypeDoc supports it. | Decided |
 | Entry points | Keep both `export default Tree` and `export { Tree }`. | Decided (unchanged through Phase 5) |
-| Node floor | No `engines` field, as in v3. The package itself needs Node 14 or later for `import` in Node and Node 20.19 or later, or 22.12 or later, for `require()`; bundled apps don't depend on the consumer's Node at all (see the consumer matrix). `engines` ships to consumers, so the development floor (22.22.2 or 24.15) stays in `.nvmrc`, `AGENTS.md`, and the README. | Decided (2026-09-27, before 4.0.0-next.0) |
+| Node floor | No `engines` field, as in v3. The package itself needs Node 14 or later for `import` in Node and Node 20.19 or later, or 22.12 or later, for `require()`; bundled apps don't depend on the consumer's Node at all (see the consumer matrix). `engines` ships to consumers, so the development floor (22.22.2 or 24.15) stays in `.nvmrc`, `AGENTS.md`, and `CONTRIBUTING.md`. | Decided (2026-09-27, before 4.0.0-next.0) |
 | Prereleases | `4.0.0-next.N` on the `next` dist-tag. `publish.yml` already derives the tag from the version. | Proposed |
 | Branching | Integration branch `feat/v4`, cut from `master` at `905437b` on 2026-09-23. Work lands on it in PR-sized commits, one per row of the phase tables, so any row can be split into its own PR on request. One final PR takes it to `master` at 4.0.0, after the `v3` branch is cut. | Decided |
 
@@ -460,11 +460,19 @@ taught the `Pages` workflow to build a second ref under a sub-path in the same d
 a deploy replaces the whole site; the preview follows `feat/v4` each time `Pages` runs from
 `master`. Its top bar and docs read the version in `package.json` until the 4.0.0-next.0 bump.
 
+Status (2026-09-27, after 4.0.0-next.0): `master`'s README and API docs rewrite (PR 543) is
+merged into `feat/v4`. The README follows its task-based structure with the v4 API, links the
+playground and the API reference under `/react-d3-tree/next/` until 4.0.0, links the migration
+guide relatively, and tells readers to install `react-d3-tree@next`. The prop docs use
+`@defaultValue` tags and `{@link}` references, as on `master`, and the development setup
+lives in `CONTRIBUTING.md`. 4.0.0-next.0 shipped the earlier README; the next prerelease
+carries this one.
+
 | PR | Branch | Work |
 | --- | --- | --- |
 | 6.1 | `docs/v4-migration` | `MIGRATION.md` (v3 to v4) with one entry per row of the parity table, each with a before and after snippet. README rewritten for the v4 API and the React 18 floor. TypeDoc comments stop linking to `Tree.defaultProps.*` (a function component has no `defaultProps`) and use `@default` tags instead. `AGENTS.md` updated for the new build, tests, and the v3 branch. |
 | 6.2 | release | `4.0.0-next.0` from `feat/v4` through the existing release skill; the `next` dist-tag replaces the stale 3.3.3. Test the prerelease in the demo and in a fresh Vite app and a fresh Next.js app. Iterate `next.N` as needed. |
-| 6.3 | `chore/v3-branch` | Cut `v3` from `master` at the last 3.x release. Merge `feat/v4` into `master`. Release 4.0.0 with the release notes and the v3 end-of-support date. Swap the Pages demos: in the merge, change the `pages.yml` input defaults to `extra-ref: v3` and `extra-path: v3`, update the deploy docs in `demo/README.md`, `AGENTS.md`, and the release skill to match, then dispatch `Pages` from `master` so v4 serves at `/react-d3-tree/` and v3 at `/react-d3-tree/v3/` for the support window. |
+| 6.3 | `chore/v3-branch` | Cut `v3` from `master` at the last 3.x release. Merge `feat/v4` into `master`. Release 4.0.0 with the release notes and the v3 end-of-support date. Swap the Pages demos: in the merge, change the `pages.yml` input defaults to `extra-ref: v3` and `extra-path: v3`, update the deploy docs in `demo/README.md`, `AGENTS.md`, and the release skill to match, then dispatch `Pages` from `master` so v4 serves at `/react-d3-tree/` and v3 at `/react-d3-tree/v3/` for the support window. In the README, point the playground and API reference links from `/react-d3-tree/next/` to `/react-d3-tree/`, remove the `react-d3-tree@next` install line, and point the v3 docs link at the `v3` branch. |
 
 ### 4.x backlog
 
@@ -745,7 +753,7 @@ Peer dependencies: `react` and `react-dom` at `^18.0.0 || ^19.0.0`.
 ## Out of scope
 
 - A React Native or SolidJS port (issues 505, 509).
-- Flat-data adapters (`d3.stratify` wrappers); the README keeps pointing at d3 for that.
+- Flat-data adapters (`d3.stratify` wrappers).
 - A minimap, PDF export, or a search API (issues 511, 515, 480). Each is a consumer-side feature
   that the handle and stable ids make possible without library changes.
 - Changing the CSS class names or the `<style>` injection approach.

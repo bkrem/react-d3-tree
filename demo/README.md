@@ -1,6 +1,6 @@
 # react-d3-tree playground
 
-The interactive demo at https://bkrem.github.io/react-d3-tree/. A Vite app in TypeScript that
+The [interactive demo](https://bkrem.github.io/react-d3-tree/): a Vite app in TypeScript that
 renders `react-d3-tree` from this repository's `lib/` through the pnpm workspace link.
 
 ## Develop
