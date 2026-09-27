@@ -1,11 +1,25 @@
 # Builds the library, the API docs, and the demo, then deploys demo/dist to GitHub Pages.
 # Manual only: the demo is deployed when the maintainer asks, after a release is approved.
 # Requires the repository's Pages source to be "GitHub Actions" (Settings → Pages).
+#
+# A Pages deploy replaces the whole site, so a second demo can only go live in the same
+# deploy. The `extra-ref` input builds that ref's demo and docs under a sub-path of the site:
+# by default `feat/v4` under /react-d3-tree/next/. `extra-ref: none` deploys the dispatched
+# ref's demo alone; an empty value doesn't, because the dispatch fills in the default.
 
 name: Pages
 
 on:
   workflow_dispatch:
+    inputs:
+      extra-ref:
+        description: Branch or tag to deploy under the sub-path as well, or none for one demo.
+        type: string
+        default: feat/v4
+      extra-path:
+        description: Sub-path for the extra demo, one lowercase segment such as next or v3.
+        type: string
+        default: next
 
 permissions:
   contents: read
@@ -34,11 +48,55 @@ jobs:
       - run: pnpm build:docs
       - run: pnpm --filter rd3t-demo build
 
+      # The sub-path becomes a directory in demo/dist, so it must not clobber the main build.
+      - name: Check the extra demo's sub-path
+        if: inputs.extra-ref != 'none'
+        env:
+          EXTRA_PATH: ${{ inputs.extra-path }}
+        run: |
+          if ! [[ "$EXTRA_PATH" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+            echo "::error::extra-path must be one lowercase segment, got '$EXTRA_PATH'"
+            exit 1
+          fi
+          if [ -e "demo/dist/$EXTRA_PATH" ]; then
+            echo "::error::demo/dist/$EXTRA_PATH already exists in the main build"
+            exit 1
+          fi
+
+      - name: Check out ${{ inputs.extra-ref }}
+        if: inputs.extra-ref != 'none'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.extra-ref }}
+          path: extra
+
+      # The checkout carries its own pnpm-workspace.yaml and lockfile, so pnpm installs it as a
+      # separate workspace. Vite's --base puts its assets and docs link under the sub-path.
+      - name: Build ${{ inputs.extra-ref }} under /react-d3-tree/${{ inputs.extra-path }}/
+        if: inputs.extra-ref != 'none'
+        working-directory: extra
+        env:
+          BASE: /react-d3-tree/${{ inputs.extra-path }}/
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          pnpm build:docs
+          pnpm --filter rd3t-demo build --base="$BASE"
+
+      - name: Add the extra demo to the site
+        if: inputs.extra-ref != 'none'
+        env:
+          EXTRA_PATH: ${{ inputs.extra-path }}
+        run: cp -R extra/demo/dist "demo/dist/$EXTRA_PATH"
+
       - uses: actions/upload-pages-artifact@v5
         with:
           path: demo/dist
 
+  # Only the default branch deploys, which the `github-pages` environment also enforces. A
+  # dispatch from another branch builds and uploads the artifact, so the build can be checked.
   deploy:
+    if: github.ref_name == github.event.repository.default_branch
     needs: build
     runs-on: ubuntu-latest
 

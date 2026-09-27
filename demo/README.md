@@ -46,3 +46,18 @@ root writes them to `demo/public/docs`, which Vite copies into `demo/dist/docs`.
 The `Pages` workflow (`.github/workflows/pages.yml`) builds the library, the docs, and the demo,
 and deploys `demo/dist` to GitHub Pages. Run it from the Actions tab or with
 `gh workflow run pages.yml`.
+
+A deploy replaces the whole site, so the workflow can carry a second demo in the same deploy.
+The `extra-ref` input names the branch or tag to build, `feat/v4` by default, and `extra-path`
+names the sub-path it lands under, `next` by default. With the defaults, the site serves this
+branch's demo at `/react-d3-tree/` and the v4 demo at `/react-d3-tree/next/`, each with its own
+API docs. `extra-ref=none` deploys one demo; an empty value falls back to the default:
+
+```bash
+gh workflow run pages.yml --ref master                                          # both demos
+gh workflow run pages.yml --ref master -f extra-ref=none                        # this demo only
+gh workflow run pages.yml --ref master -f extra-ref=<ref> -f extra-path=<name>  # another pair
+```
+
+Only the default branch deploys. A run started from another branch builds the site and uploads
+it as the `github-pages` artifact without deploying it.
