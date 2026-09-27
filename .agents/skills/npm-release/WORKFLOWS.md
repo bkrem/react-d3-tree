@@ -123,11 +123,13 @@ grep -ohE 'react-d3-tree - v[^<"]*' demo/dist/docs/index.html | sort -u   # v<ve
 
 Check the built demo in a browser (`pnpm --filter rd3t-demo preview`, then `http://localhost:4173/react-d3-tree/`): the top bar shows `v<version>`, the tree renders, a node collapses and expands, and the console has no errors.
 
-After the maintainer's yes, deploy with the `Pages` workflow, which runs the same build on the dispatched ref and deploys `demo/dist`:
+After the maintainer's yes, deploy with the `Pages` workflow, which runs the same build on the dispatched ref and deploys `demo/dist`. By default it also builds `feat/v4` into `/react-d3-tree/next/` in the same deploy, because a deploy replaces the whole site; pass `-f extra-ref=none` to deploy the one demo:
 
 ```bash
 gh workflow run pages.yml --ref master
 gh run watch "$(gh run list --workflow pages.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
 ```
+
+With the second demo on, also check that `https://bkrem.github.io/react-d3-tree/next/` loads and that its top bar links to `next/docs/`.
 
 The workflow's deploy job needs the repository's Pages source set to **GitHub Actions** (Settings → Pages → Build and deployment); it fails with a clear error otherwise. The site is live when the run succeeds and `https://bkrem.github.io/react-d3-tree/` references the new `assets/index-*.js`. The old Create React App build registered a service worker; `demo/index.html` unregisters it, so returning visitors get the new bundle on their next load.

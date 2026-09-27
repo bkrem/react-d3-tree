@@ -148,7 +148,7 @@ Feature work lands through pull requests against `master`.
 
 Publishing a GitHub release runs `.github/workflows/publish.yml`, which stages the version on npm through trusted publishing (OIDC, no token). The maintainer approves the staged version with 2FA before it goes live. To cut, verify, or follow up on a release, follow `.agents/skills/npm-release/SKILL.md`.
 
-The demo deploys separately and only on request: `.github/workflows/pages.yml` (`workflow_dispatch`) builds the library, the docs, and the demo from the dispatched ref and deploys `demo/dist` to GitHub Pages. The repository's Pages source must be set to "GitHub Actions" for the deploy job to succeed.
+The demo deploys separately and only on request: `.github/workflows/pages.yml` (`workflow_dispatch`) builds the library, the docs, and the demo from the dispatched ref and deploys `demo/dist` to GitHub Pages. Its `extra-ref` input, `feat/v4` by default, builds a second ref's demo and docs into the same deploy under the `extra-path` sub-path, `next` by default, because a deploy replaces the whole site; `extra-ref: none` deploys one demo (an empty value falls back to the default). Only the default branch deploys; a dispatch from another branch builds and uploads the artifact without deploying. The repository's Pages source must be set to "GitHub Actions" for the deploy job to succeed.
 
 ## Agent skills
 
