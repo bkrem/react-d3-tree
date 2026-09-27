@@ -1,21 +1,25 @@
-Thank you for taking the time to report an issue with react-d3-tree!  
+Delete any sections that don't apply.
 
-Feel free to delete any questions that do not apply.
+## Is this a bug report or a feature request?
 
-## Are you reporting a bug, or opening a feature request?
-[Replace with your answer]
-  
-## What is the actual behavior/output?
-[Replace with your answer if relevant]
+[Your answer]
 
-## What is the behavior/output you expect?
-[Replace with your answer if relevant]
+## What happens?
 
-## Can you consistently reproduce the issue/create a reproduction case (e.g. on https://codesandbox.io)?
-[Replace with your answer if relevant]
+[Your answer]
 
-## What version of react-d3-tree are you using?
-[Replace with your answer]
+## What do you expect to happen?
 
-## If react-d3-tree crashed with a traceback, please paste the full traceback below.
-[Replace with your traceback]
+[Your answer]
+
+## How can we reproduce it?
+
+[Steps, or a link to a reproduction, for example on [CodeSandbox](https://codesandbox.io)]
+
+## Which version of react-d3-tree are you using?
+
+[Your answer]
+
+## Error output
+
+[If react-d3-tree threw an error, paste the full error message and stack trace]

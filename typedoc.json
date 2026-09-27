@@ -2,5 +2,6 @@
   "entryPoints": ["./src"],
   "exclude": ["**/tests/*", "**/*.test.js", "**/*.test.jsx"],
   "out": "demo/public/docs",
-  "includeVersion": true
+  "includeVersion": true,
+  "highlightLanguages": ["bash", "css", "javascript", "json", "jsx", "tsx", "typescript"]
 }
