@@ -267,9 +267,10 @@ export interface TreeProps {
   hasInteractiveNodes?: boolean;
 
   /**
-   * Identifies the tree that `data` describes. If `data` changes and `dataKey` stays the same,
-   * `Tree` treats the change as an update to the same tree and keeps its state, such as which
-   * nodes are collapsed. If `dataKey` changes or is unset, new `data` resets the tree.
+   * Identifies the tree that `data` describes. While `dataKey` stays the same, `Tree` ignores new
+   * `data` and keeps rendering its current tree, including nodes added with `addChildren` and
+   * which nodes are collapsed. To render new `data`, change `dataKey` or leave it unset; `Tree`
+   * then resets to the new `data`.
    */
   dataKey?: string;
 }
