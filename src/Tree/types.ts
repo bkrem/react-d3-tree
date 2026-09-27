@@ -11,11 +11,17 @@ import {
   TreeNodeDatum,
 } from '../types/common.js';
 
+/**
+ * Handler for node events. Receives the node and the event.
+ */
 export type TreeNodeEventCallback = (
   node: HierarchyPointNode<TreeNodeDatum>,
   event: SyntheticEvent
 ) => any;
 
+/**
+ * Handler for link events. Receives the link's source node, target node, and the event.
+ */
 export type TreeLinkEventCallback = (
   sourceNode: HierarchyPointNode<TreeNodeDatum>,
   targetNode: HierarchyPointNode<TreeNodeDatum>,
@@ -23,110 +29,83 @@ export type TreeLinkEventCallback = (
 ) => any;
 
 /**
- * Props accepted by the `Tree` component.
- *
- * {@link Tree.defaultProps | Default Props}
+ * Props accepted by the `Tree` component. `data` is the only required prop.
  */
 export interface TreeProps {
   /**
-   * The root node object, in which child nodes (also of type `RawNodeDatum`)
-   * are recursively defined in the `children` key.
+   * The root node. Each node lists its child nodes in `children`. If you pass an array, `Tree`
+   * renders only its first element.
    *
-   * `react-d3-tree` will automatically attach a unique `id` attribute to each node in the DOM,
-   * as well as `data-source-id` & `data-target-id` attributes to each link connecting two nodes.
+   * `Tree` gives each node element a unique `id` attribute, and each link `data-source-id` and
+   * `data-target-id` attributes.
    */
   data: RawNodeDatum[] | RawNodeDatum;
 
   /**
-   * Custom render function that will be used for every node in the tree.
-   *
-   * The function is passed `CustomNodeElementProps` as its first argument.
-   * `react-d3-tree` expects the function to return a `ReactElement`.
-   *
-   * See the `RenderCustomNodeElementFn` type for more details.
-   *
-   * {@link Tree.defaultProps.renderCustomNodeElement | Default value}
+   * Renders each node in place of the default node. `Tree` calls it with
+   * `CustomNodeElementProps` and renders the returned SVG element.
    */
   renderCustomNodeElement?: RenderCustomNodeElementFn;
 
   /**
-   * Called when a node is clicked.
-   *
-   * {@link Tree.defaultProps.onNodeClick | Default value}
+   * Called with the node and the event when a node is clicked. The default node calls it on a
+   * click on its circle.
    */
   onNodeClick?: TreeNodeEventCallback;
 
   /**
-   * Called when mouse enters the space belonging to a node.
-   *
-   * {@link Tree.defaultProps.onNodeMouseOver | Default value}
+   * Called with the node and the event when the pointer moves onto a node.
    */
   onNodeMouseOver?: TreeNodeEventCallback;
 
   /**
-   * Called when mouse leaves the space belonging to a node.
-   *
-   * {@link Tree.defaultProps.onNodeMouseOut | Default value}
+   * Called with the node and the event when the pointer leaves a node.
    */
   onNodeMouseOut?: TreeNodeEventCallback;
 
   /**
-   * Called when a link is clicked.
-   *
-   * {@link Tree.defaultProps.onLinkClick | Default value}
+   * Called with the link's source node, target node, and the event when a link is clicked.
    */
   onLinkClick?: TreeLinkEventCallback;
 
   /**
-   * Called when mouse enters the space belonging to a link.
-   *
-   * {@link Tree.defaultProps.onLinkMouseOver | Default value}
+   * Called with the link's source node, target node, and the event when the pointer moves onto
+   * a link.
    */
   onLinkMouseOver?: TreeLinkEventCallback;
 
   /**
-   * Called when mouse leaves the space belonging to a link.
-   *
-   * {@link Tree.defaultProps.onLinkMouseOut | Default value}
+   * Called with the link's source node, target node, and the event when the pointer leaves a
+   * link.
    */
   onLinkMouseOut?: TreeLinkEventCallback;
 
   /**
-   * Called when the inner D3 component updates. That is - on every zoom or translate event,
-   * or when tree branches are toggled.
-   *
-   * {@link Tree.defaultProps.onUpdate | Default value}
+   * Called after each zoom or pan, and after each update of the tree, such as a node toggle.
+   * `node` is the toggled node, or `null` if no node was toggled.
    */
   onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => any;
 
   /**
-   * Determines along which axis the tree is oriented.
+   * The direction in which the tree grows: `horizontal` grows left to right, `vertical` grows
+   * top to bottom. To reverse the direction, pass a negative {@link TreeProps.depthFactor}.
    *
-   * `horizontal` - Tree expands along x-axis (left-to-right).
-   *
-   * `vertical` - Tree expands along y-axis (top-to-bottom).
-   *
-   * Additionally, passing a negative value to {@link TreeProps.depthFactor | depthFactor} will
-   * invert the tree's direction (i.e. right-to-left, bottom-to-top).
-   *
-   * {@link Tree.defaultProps.orientation | Default value}
+   * @defaultValue `'horizontal'`
    */
   orientation?: Orientation;
 
   /**
-   * Translates the graph along the x/y axis by the specified amount of pixels.
+   * Moves the tree along the x and y axes, in pixels. At `{ x: 0, y: 0 }`, the root node sits
+   * in the top-left corner of the SVG.
    *
-   * By default, the graph will render in the top-left corner of the SVG canvas.
-   *
-   * {@link Tree.defaultProps.translate | Default value}
+   * @defaultValue `{ x: 0, y: 0 }`
    */
   translate?: Point;
 
   /**
-   * Enables the centering of nodes on click by providing the dimensions of the tree container,
-   * e.g. via {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect | `getBoundingClientRect()`}.
-   *
-   * If dimensions are given: node will center on click. If not, node will not center on click.
+   * The width and height of the tree's container, for example from
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect | `getBoundingClientRect()`}.
+   * If set, a clicked node moves to the center of the view.
    */
   dimensions?: {
     width: number;
@@ -134,90 +113,73 @@ export interface TreeProps {
   };
 
   /**
-   * Sets the time (in milliseconds) for the transition to center a node once clicked.
+   * The duration, in milliseconds, of the move that centers a clicked node. Needs
+   * {@link TreeProps.dimensions}.
    *
-   * {@link Tree.defaultProps.centeringTransitionDuration | Default value}
+   * @defaultValue `800`
    */
   centeringTransitionDuration?: number;
 
   /**
-   * The draw function (or `d`) used to render `path`/`link` elements. Accepts a predefined
-   * `PathFunctionOption` or a user-defined `PathFunction`.
+   * How links are drawn: one of the `PathFunctionOption` values, or a `PathFunction` that returns
+   * the link's SVG path. For the path syntax, see
+   * {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d | the `d` attribute}.
    *
-   * See the `PathFunction` type for more information.
-   *
-   * For details on draw functions, see: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
-   *
-   * {@link Tree.defaultProps.pathFunc | Default value}
+   * @defaultValue `'diagonal'`
    */
   pathFunc?: PathFunctionOption | PathFunction;
 
   /**
-   * Allows for additional className(s) to be passed to links.
-   *
-   * Each link calls `pathClassFunc` with its own `TreeLinkDatum` and the tree's current `orientation`.
-   * Expects a `className` string to be returned.
-   *
-   * See the `PathClassFunction` type for more information.
-   *
-   * {@link Tree.defaultProps.pathClassFunc | Default value}
+   * Returns extra class names for a link. `Tree` calls it for each link with the link's
+   * `TreeLinkDatum` and the tree's `orientation`.
    */
   pathClassFunc?: PathClassFunction;
 
   /**
-   * Determines the spacing between parent & child nodes.
-   *
-   * **Tip: Negative values invert the tree's direction.**
-   *
-   * `node.y = node.depth * depthFactor`
-   *
-   * Example: `depthFactor: 0` renders all nodes on the same height (since node.y === 0 for all).
-   *
-   * {@link Tree.defaultProps.depthFactor | Default value}
+   * The distance, in pixels, between depth levels: each node sits at `node.depth * depthFactor`
+   * along the depth axis. A negative value reverses the tree's direction; `0` puts every node on
+   * the same level. If unset, {@link TreeProps.nodeSize} sets the distance.
    */
   depthFactor?: number;
 
   /**
-   * Determines whether the tree's nodes can collapse/expand.
+   * Whether nodes expand and collapse when clicked.
    *
-   * {@link Tree.defaultProps.collapsible | Default value}
+   * @defaultValue `true`
    */
   collapsible?: boolean;
 
   /**
-   * Sets the maximum node depth to which the tree is expanded on its initial render.
-   *
-   * By default, the tree renders to full depth.
-   *
-   * {@link Tree.defaultProps.initialDepth | Default value}
+   * Collapses every node at this depth or deeper on the first render. The root node has depth
+   * `0`. If unset, every node starts expanded.
    */
   initialDepth?: number;
 
   /**
-   * Toggles ability to zoom in/out on the Tree by scaling it according to `scaleExtent`.
+   * Whether the user can zoom the tree, within {@link TreeProps.scaleExtent}.
    *
-   * {@link Tree.defaultProps.zoomable | Default value}
+   * @defaultValue `true`
    */
   zoomable?: boolean;
 
   /**
-   * Toggles ability to drag the Tree.
+   * Whether the user can drag the tree to pan it.
    *
-   * {@link Tree.defaultProps.draggable | Default value}
+   * @defaultValue `true`
    */
   draggable?: boolean;
 
   /**
-   * A floating point number to set the initial zoom level. It is constrained by `scaleExtent`.
+   * The starting zoom level, limited to {@link TreeProps.scaleExtent}.
    *
-   * {@link Tree.defaultProps.zoom | Default value}
+   * @defaultValue `1`
    */
   zoom?: number;
 
   /**
-   * Sets the minimum/maximum extent to which the tree can be scaled if `zoomable` is true.
+   * The smallest and largest zoom levels when {@link TreeProps.zoomable} is `true`.
    *
-   * {@link Tree.defaultProps.scaleExtent | Default value}
+   * @defaultValue `{ min: 0.1, max: 1 }`
    */
   scaleExtent?: {
     min?: number;
@@ -225,9 +187,9 @@ export interface TreeProps {
   };
 
   /**
-   * The amount of space each node element occupies.
+   * The space, in pixels, that each node takes up: `x` horizontally, `y` vertically.
    *
-   * {@link Tree.defaultProps.nodeSize | Default value}
+   * @defaultValue `{ x: 140, y: 140 }`
    */
   nodeSize?: {
     x: number;
@@ -235,10 +197,10 @@ export interface TreeProps {
   };
 
   /**
-   * Sets separation between neighboring nodes, differentiating between siblings (same parent node)
-   * and non-siblings.
+   * The space between neighboring nodes, as a multiple of {@link TreeProps.nodeSize}: `siblings`
+   * for nodes with the same parent, `nonSiblings` for nodes with different parents.
    *
-   * {@link Tree.defaultProps.separation | Default value}
+   * @defaultValue `{ siblings: 1, nonSiblings: 2 }`
    */
   separation?: {
     siblings?: number;
@@ -246,77 +208,68 @@ export interface TreeProps {
   };
 
   /**
-   * If a node is currently being expanded, all other nodes at the same depth will be collapsed.
+   * Whether expanding a node collapses the other nodes at the same depth.
    *
-   * {@link Tree.defaultProps.shouldCollapseNeighborNodes | Default value}
+   * @defaultValue `false`
    */
   shouldCollapseNeighborNodes?: boolean;
 
   /**
-   * Allows for additional className(s) to be passed to the `svg` element wrapping the tree.
+   * Extra class names for the tree's `svg` element.
    *
-   * {@link Tree.defaultProps.svgClassName | Default value}
+   * @defaultValue `''`
    */
   svgClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to the root node.
+   * Extra class names for the root node.
    *
-   * {@link Tree.defaultProps.rootNodeClassName | Default value}
+   * @defaultValue `''`
    */
   rootNodeClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to all branch nodes (nodes with children).
+   * Extra class names for nodes with children.
    *
-   * {@link Tree.defaultProps.branchNodeClassName | Default value}
+   * @defaultValue `''`
    */
   branchNodeClassName?: string;
 
   /**
-   * Allows for additional className(s) to be passed to all leaf nodes (nodes without children).
+   * Extra class names for nodes without children.
    *
-   * {@link Tree.defaultProps.leafNodeClassName | Default value}
+   * @defaultValue `''`
    */
   leafNodeClassName?: string;
 
   /**
-   * Enables/disables legacy transitions using `react-transition-group`.
+   * Animates nodes as they expand and collapse, using `react-transition-group`. Can slow down
+   * large trees.
    *
-   * **Note:** This flag is considered legacy and **usage is discouraged for large trees**,
-   * as responsiveness may suffer.
-   *
-   * `enableLegacyTransitions` will be deprecated once a suitable
-   * replacement for transitions has been found.
-   *
-   * {@link Tree.defaultProps.enableLegacyTransitions | Default value}
+   * @defaultValue `false`
    */
   enableLegacyTransitions?: boolean;
 
   /**
-   * Sets the animation duration (in milliseconds) of each expansion/collapse of a tree node.
-   * Requires `enableLegacyTransition` to be `true`.
+   * The duration, in milliseconds, of the expand and collapse animation. Needs
+   * {@link TreeProps.enableLegacyTransitions}.
    *
-   * {@link Tree.defaultProps.transitionDuration | Default value}
+   * @defaultValue `500`
    */
   transitionDuration?: number;
 
   /**
-   * Disables drag/pan/zoom D3 events when hovering over a node.
-   * Useful for cases where D3 events interfere when interacting with inputs or other interactive elements on a node.
+   * Limits dragging and zooming to the tree's background, so that inputs and other controls
+   * inside nodes work. To drag or zoom from anywhere, hold Shift.
    *
-   * **Tip:** Holding the `Shift` key while hovering over a node re-enables the D3 events.
-   *
-   * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
+   * @defaultValue `false`
    */
   hasInteractiveNodes?: boolean;
 
   /**
-   * Indicates the tree being represented by the data. If the dataKey changes, then we should re-render the tree.
-   * If the data changes but the dataKey keeps being the same, then it's a change (like adding children to a node) for the same tree,
-   * so we shouldn't re-render the tree.
-   *
-   * {@link Tree.defaultProps.dataKey | Default value}
+   * Identifies the tree that `data` describes. If `data` changes and `dataKey` stays the same,
+   * `Tree` treats the change as an update to the same tree and keeps its state, such as which
+   * nodes are collapsed. If `dataKey` changes or is unset, new `data` resets the tree.
    */
   dataKey?: string;
 }

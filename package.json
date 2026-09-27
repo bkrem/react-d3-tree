@@ -28,7 +28,7 @@
   "main": "lib/cjs/index.js",
   "types": "lib/types/index.d.ts",
   "scripts": {
-    "build:docs": "rimraf ./docs && typedoc",
+    "build:docs": "rimraf demo/public/docs && typedoc",
     "build:cjs": "tsc -p tsconfig.json && node scripts/mark-cjs.js",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build": "rimraf lib && pnpm run build:cjs && pnpm run build:esm",

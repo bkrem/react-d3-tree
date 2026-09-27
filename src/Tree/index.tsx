@@ -235,8 +235,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Assigns internal properties that are required for tree
    * manipulation to each node in the `data` set and returns a new `data` array.
-   *
-   * @static
    */
   static assignInternalProperties(data: RawNodeDatum[], currentDepth: number = 0): TreeNodeDatum[] {
     // Wrap the root node into an array for recursive transformations if it wasn't in one already.
@@ -293,8 +291,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Recursively sets the internal `collapsed` property of
    * the passed `TreeNodeDatum` and its children to `true`.
-   *
-   * @static
    */
   static collapseNode(nodeDatum: TreeNodeDatum) {
     nodeDatum.__rd3t.collapsed = true;
@@ -308,8 +304,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Sets the internal `collapsed` property of
    * the passed `TreeNodeDatum` object to `false`.
-   *
-   * @static
    */
   static expandNode(nodeDatum: TreeNodeDatum) {
     nodeDatum.__rd3t.collapsed = false;
@@ -529,8 +523,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * Also limit zoom level according to `scaleExtent` on initial display. This is necessary,
    * because the first time we are setting it as an SVG property, instead of going
    * through D3's scaling mechanism, which would have picked up both properties.
-   *
-   * @static
    */
   static calculateD3Geometry(nextProps: TreeProps) {
     let scale;
